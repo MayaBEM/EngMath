@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Role Play English Quest | Bright EngMath</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito',sans-serif;background:#EEF6FF;color:#2C3E50;min-height:100vh}
+
+  /* ── NAV ── */
+  .nav{background:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;
+       box-shadow:0 2px 12px rgba(74,144,217,.15);position:sticky;top:0;z-index:100}
+  .nav-logo{font-size:1.15rem;font-weight:900;color:#4A90D9;display:flex;align-items:center;gap:8px}
+  .nav-logo span{font-size:1.3rem}
+  .back-btn{background:#EEF6FF;border:2px solid #4A90D9;color:#4A90D9;border-radius:30px;
+            padding:6px 18px;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;
+            cursor:pointer;transition:.2s}
+  .back-btn:hover{background:#4A90D9;color:#fff}
+  .hidden{display:none!important}
+
+  /* ── HERO ── */
+  .hero{background:linear-gradient(135deg,#4A90D9 0%,#52C47B 100%);color:#fff;
+        padding:48px 20px 60px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:-40px;right:-40px;width:220px;height:220px;
+                background:rgba(255,255,255,.1);border-radius:50%}
+  .hero::after{content:'';position:absolute;bottom:-60px;left:-30px;width:180px;height:180px;
+               background:rgba(255,255,255,.08);border-radius:50%}
+  .hero-emoji{font-size:4rem;margin-bottom:12px;display:block;position:relative;z-index:1}
+  .hero h1{font-size:2rem;font-weight:900;line-height:1.2;margin-bottom:8px;position:relative;z-index:1}
+  .hero h1 .highlight{color:#FFE566}
+  .hero-sub{font-size:1.05rem;opacity:.92;margin-bottom:6px;position:relative;z-index:1}
+  .hero-tag{display:inline-block;background:rgba(255,255,255,.22);border-radius:20px;
+            padding:4px 14px;font-size:.85rem;font-weight:700;position:relative;z-index:1}
+  .hero-actions{margin-top:28px;display:flex;gap:12px;justify-content:center;
+                flex-wrap:wrap;position:relative;z-index:1}
+  .btn-hero{background:#fff;color:#4A90D9;border:none;border-radius:30px;
+            padding:14px 32px;font-family:'Nunito',sans-serif;font-size:1.05rem;
+            font-weight:800;cursor:pointer;transition:.2s;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+  .btn-hero:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.2)}
+
+  /* ── PROGRESS ── */
+  .progress-section{background:#fff;padding:16px 20px;border-bottom:1px solid #E8F0FE}
+  .progress-label{display:flex;justify-content:space-between;align-items:center;
+                  font-size:.9rem;font-weight:700;color:#5D6D7E;margin-bottom:8px}
+  .progress-bar-bg{background:#EEF6FF;border-radius:10px;height:12px;overflow:hidden}
+  .progress-bar-fill{background:linear-gradient(90deg,#4A90D9,#52C47B);height:100%;
+                     border-radius:10px;transition:.5s}
+  .stars-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .star-badge{width:32px;height:32px;border-radius:50%;background:#E8F0FE;
+              display:flex;align-items:center;justify-content:center;font-size:1rem;
+              transition:.3s}
+  .star-badge.earned{background:linear-gradient(135deg,#FFD700,#FFA500);
+                     box-shadow:0 2px 8px rgba(255,165,0,.4)}
+
+  /* ── SITUATION GRID ── */
+  .section-title{text-align:center;padding:28px 20px 4px;font-size:1.3rem;
+                 font-weight:800;color:#2C3E50}
+  .section-sub{text-align:center;color:#7F8C8D;font-size:.9rem;margin-bottom:20px}
+  .situations-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+                   gap:16px;padding:0 16px 40px;max-width:900px;margin:0 auto}
+  .sit-card{background:#fff;border-radius:20px;padding:20px 14px;text-align:center;
+            cursor:pointer;transition:.25s;box-shadow:0 3px 12px rgba(0,0,0,.07);
+            border:2.5px solid transparent;position:relative}
+  .sit-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+  .sit-card.done{border-color:#52C47B}
+  .sit-card-done-badge{position:absolute;top:8px;right:10px;font-size:1rem}
+  .sit-icon{font-size:2.4rem;margin-bottom:10px;display:block}
+  .sit-num{font-size:.7rem;font-weight:800;color:#fff;background:#4A90D9;
+           border-radius:20px;padding:2px 8px;display:inline-block;margin-bottom:6px}
+  .sit-title{font-size:.95rem;font-weight:800;color:#2C3E50;margin-bottom:4px}
+  .sit-title-th{font-size:.78rem;color:#7F8C8D;font-weight:600}
+
+  /* ── SITUATION DETAIL ── */
+  .detail-header{padding:20px;background:#fff;border-bottom:1px solid #E8F0FE}
+  .detail-title{font-size:1.5rem;font-weight:900;color:#2C3E50;display:flex;
+                align-items:center;gap:10px}
+  .detail-goal{margin-top:6px;font-size:.88rem;color:#7F8C8D;background:#EEF6FF;
+               display:inline-block;padding:4px 12px;border-radius:20px;font-weight:600}
+  .tabs{display:flex;gap:0;border-bottom:2px solid #E8F0FE;background:#fff;
+        overflow-x:auto}
+  .tab-btn{padding:12px 20px;font-family:'Nunito',sans-serif;font-size:.9rem;
+           font-weight:700;cursor:pointer;border:none;background:none;color:#7F8C8D;
+           white-space:nowrap;transition:.2s;border-bottom:3px solid transparent;
+           margin-bottom:-2px}
+  .tab-btn.active{color:#4A90D9;border-bottom-color:#4A90D9}
+  .tab-content{padding:16px;max-width:720px;margin:0 auto}
+
+  /* ── VOCAB ── */
+  .vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+  .vocab-card{background:#fff;border-radius:14px;padding:14px 16px;
+              box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:4px solid #4A90D9}
+  .vocab-en{font-size:1rem;font-weight:700;color:#2C3E50}
+  .vocab-th{font-size:.88rem;color:#7F8C8D;margin-top:4px}
+  .vocab-header{font-size:1.1rem;font-weight:800;color:#4A90D9;margin-bottom:14px;
+                display:flex;align-items:center;gap:8px}
+
+  /* ── ROLE PLAY ── */
+  .roleplay-header{display:flex;align-items:center;justify-content:space-between;
+                   flex-wrap:wrap;gap:10px;margin-bottom:16px}
+  .roleplay-title{font-size:1.1rem;font-weight:800;color:#4A90D9;
+                  display:flex;align-items:center;gap:8px}
+  .toggle-th-btn{background:#EEF6FF;border:2px solid #4A90D9;color:#4A90D9;
+                 border-radius:20px;padding:5px 14px;font-family:'Nunito',sans-serif;
+                 font-size:.82rem;font-weight:700;cursor:pointer;transition:.2s}
+  .toggle-th-btn:hover{background:#4A90D9;color:#fff}
+  .convo-line{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start}
+  .convo-line.right{flex-direction:row-reverse}
+  .convo-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;
+                justify-content:center;font-size:1.3rem;flex-shrink:0;font-weight:800}
+  .convo-avatar.left{background:#E3F2FD}
+  .convo-avatar.right{background:#E8F5E9}
+  .convo-bubble{background:#fff;border-radius:16px;padding:12px 16px;
+                box-shadow:0 2px 8px rgba(0,0,0,.07);max-width:calc(100% - 60px);flex:1}
+  .convo-line.left .convo-bubble{border-top-left-radius:4px}
+  .convo-line.right .convo-bubble{border-top-right-radius:4px}
+  .convo-role{font-size:.72rem;font-weight:800;color:#4A90D9;margin-bottom:4px;
+              text-transform:uppercase;letter-spacing:.5px}
+  .convo-line.right .convo-role{color:#52C47B;text-align:right}
+  .convo-en{font-size:.97rem;font-weight:700;color:#2C3E50;line-height:1.4}
+  .convo-th{font-size:.83rem;color:#7F8C8D;margin-top:5px;line-height:1.4;
+            font-style:italic}
+  .listen-btn{background:none;border:1.5px solid #B0BEC5;border-radius:20px;
+              padding:3px 10px;font-size:.75rem;color:#7F8C8D;cursor:pointer;
+              margin-top:6px;font-family:'Nunito',sans-serif;font-weight:600;
+              transition:.2s}
+  .listen-btn:hover{background:#EEF6FF;border-color:#4A90D9;color:#4A90D9}
+  .practice-banner{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;
+                   border-radius:14px;padding:16px 20px;margin-bottom:20px;
+                   display:flex;align-items:center;gap:14px}
+  .practice-banner-text{font-size:.9rem;font-weight:700}
+  .practice-banner-sub{font-size:.8rem;opacity:.85;margin-top:2px}
+
+  /* ── QUIZ ── */
+  .quiz-header{font-size:1.1rem;font-weight:800;color:#4A90D9;margin-bottom:16px;
+               display:flex;align-items:center;gap:8px}
+  .quiz-progress{background:#EEF6FF;border-radius:10px;height:8px;margin-bottom:20px;overflow:hidden}
+  .quiz-progress-fill{background:linear-gradient(90deg,#4A90D9,#52C47B);height:100%;
+                      border-radius:10px;transition:.4s}
+  .quiz-q{background:#fff;border-radius:18px;padding:20px;margin-bottom:16px;
+          box-shadow:0 2px 10px rgba(0,0,0,.07)}
+  .quiz-q-num{font-size:.75rem;font-weight:800;color:#4A90D9;margin-bottom:8px;
+              text-transform:uppercase;letter-spacing:.5px}
+  .quiz-sentence{font-size:1.05rem;font-weight:700;color:#2C3E50;margin-bottom:16px;
+                 line-height:1.6}
+  .quiz-blank{display:inline-block;border-bottom:3px solid #4A90D9;min-width:80px;
+              text-align:center;color:#4A90D9;font-weight:800}
+  .options-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .opt-btn{background:#EEF6FF;border:2.5px solid #D6E9FF;border-radius:12px;
+           padding:12px 10px;font-family:'Nunito',sans-serif;font-size:.95rem;
+           font-weight:700;cursor:pointer;transition:.2s;color:#2C3E50;text-align:center}
+  .opt-btn:hover:not(:disabled){background:#D6E9FF;border-color:#4A90D9;color:#4A90D9}
+  .opt-btn.correct{background:#E8F5E9;border-color:#52C47B;color:#2E7D32}
+  .opt-btn.wrong{background:#FFEBEE;border-color:#E57373;color:#C62828}
+  .opt-btn:disabled{cursor:default}
+  .feedback-box{border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.88rem;
+                font-weight:700;display:flex;align-items:flex-start;gap:8px}
+  .feedback-box.correct{background:#E8F5E9;color:#2E7D32}
+  .feedback-box.wrong{background:#FFEBEE;color:#C62828}
+  .feedback-icon{font-size:1.1rem;flex-shrink:0}
+  .feedback-text{flex:1}
+  .feedback-explain{font-weight:600;color:#546E7A;margin-top:4px;font-size:.83rem}
+  .next-q-btn{display:block;margin:16px auto 0;background:#4A90D9;color:#fff;
+              border:none;border-radius:30px;padding:12px 32px;
+              font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+              cursor:pointer;transition:.2s}
+  .next-q-btn:hover{background:#357ABD;transform:translateY(-1px)}
+
+  /* ── RESULT ── */
+  .result-view{text-align:center;padding:40px 20px;max-width:500px;margin:0 auto}
+  .result-emoji{font-size:5rem;display:block;margin-bottom:16px;animation:bounce .6s ease infinite alternate}
+  @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+  .result-msg{font-size:1.6rem;font-weight:900;color:#2C3E50;margin-bottom:8px}
+  .result-score{font-size:3.5rem;font-weight:900;color:#4A90D9;margin:12px 0}
+  .result-sub{font-size:1rem;color:#7F8C8D;margin-bottom:24px;font-weight:600}
+  .stars-display{display:flex;justify-content:center;gap:10px;margin-bottom:28px}
+  .stars-display span{font-size:2.2rem}
+  .result-encourage{background:linear-gradient(135deg,#EEF6FF,#E8F5E9);
+                    border-radius:16px;padding:16px 20px;margin-bottom:24px;
+                    font-size:1rem;font-weight:700;color:#2C3E50}
+  .result-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+  .btn-green{background:#52C47B;color:#fff;border:none;border-radius:30px;
+             padding:12px 26px;font-family:'Nunito',sans-serif;font-size:.95rem;
+             font-weight:800;cursor:pointer;transition:.2s}
+  .btn-green:hover{background:#3DAF65;transform:translateY(-1px)}
+  .btn-outline{background:#fff;color:#4A90D9;border:2.5px solid #4A90D9;
+               border-radius:30px;padding:11px 24px;font-family:'Nunito',sans-serif;
+               font-size:.95rem;font-weight:800;cursor:pointer;transition:.2s}
+  .btn-outline:hover{background:#EEF6FF}
+
+  /* ── FOOTER ── */
+  footer{background:#2C3E50;color:#fff;text-align:center;padding:20px;
+         font-size:.85rem;margin-top:40px}
+  footer strong{color:#FFE566}
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:480px){
+    .hero h1{font-size:1.5rem}
+    .situations-grid{grid-template-columns:repeat(2,1fr)}
+    .options-grid{grid-template-columns:1fr 1fr}
+    .vocab-grid{grid-template-columns:1fr}
+    .result-score{font-size:2.8rem}
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-logo"><span>🌟</span> Bright EngMath</div>
+  <button class="back-btn hidden" id="backBtn" onclick="goHome()">← Back to Home</button>
+</nav>
+
+<!-- ══════════════ HOME VIEW ══════════════ -->
+<div id="homeView">
+  <div class="hero">
+    <span class="hero-emoji">🗣️</span>
+    <h1>Role Play <span class="highlight">English Quest</span></h1>
+    <p class="hero-sub">ฝึกพูดอังกฤษผ่าน 10 สถานการณ์ในชีวิตจริง</p>
+    <span class="hero-tag">📚 สำหรับนักเรียนชั้น ป.5 | Interactive + Fun!</span>
+    <div class="hero-actions">
+      <button class="btn-hero" onclick="document.getElementById('situationsSection').scrollIntoView({behavior:'smooth'})">
+        🚀 Start Learning!
+      </button>
+    </div>
+  </div>
+
+  <div class="progress-section" id="progressSection">
+    <div class="progress-label">
+      <span>🏆 My Progress</span>
+      <span id="progressText">0 / 10 Situations</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="stars-row" id="starsRow"></div>
+  </div>
+
+  <div id="situationsSection">
+    <h2 class="section-title">📍 Choose Your Situation</h2>
+    <p class="section-sub">เลือกสถานการณ์ที่อยากฝึก แล้วเริ่มเลย!</p>
+    <div class="situations-grid" id="sitGrid"></div>
+  </div>
+</div>
+
+<!-- ══════════════ DETAIL VIEW ══════════════ -->
+<div id="detailView" class="hidden">
+  <div class="detail-header">
+    <div class="detail-title">
+      <span id="detailIcon"></span>
+      <div>
+        <div id="detailTitle"></div>
+        <div id="detailTitleTH" style="font-size:.85rem;color:#7F8C8D;font-weight:600;margin-top:2px"></div>
+      </div>
+    </div>
+    <div class="detail-goal" id="detailGoal"></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('vocab')">📖 Vocabulary</button>
+    <button class="tab-btn" onclick="showTab('roleplay')">🎭 Role Play</button>
+    <button class="tab-btn" onclick="showTab('quiz')">✏️ Quiz</button>
+  </div>
+
+  <div class="tab-content">
+    <!-- VOCAB TAB -->
+    <div id="tabVocab">
+      <div class="vocab-header">📖 Key Words & Phrases</div>
+      <div class="vocab-grid" id="vocabGrid"></div>
+      <div style="margin-top:20px;text-align:center">
+        <button class="btn-hero" style="background:#4A90D9;color:#fff;font-size:.9rem;padding:11px 28px"
+          onclick="showTab('roleplay')">
+          Next: Role Play 🎭
+        </button>
+      </div>
+    </div>
+
+    <!-- ROLEPLAY TAB -->
+    <div id="tabRoleplay" class="hidden">
+      <div class="practice-banner">
+        <span style="font-size:2rem">🎙️</span>
+        <div>
+          <div class="practice-banner-text">Practice Speaking!</div>
+          <div class="practice-banner-sub">อ่านออกเสียงตามบทสนทนาด้านล่าง แล้วลองฝึกกับเพื่อน!</div>
+        </div>
+      </div>
+      <div class="roleplay-header">
+        <div class="roleplay-title">🎭 Role Play Conversation</div>
+        <button class="toggle-th-btn" id="toggleThBtn" onclick="toggleThai()">🇹🇭 Hide Thai</button>
+      </div>
+      <div id="convoArea"></div>
+      <div style="margin-top:20px;text-align:center">
+        <button class="btn-hero" style="background:#52C47B;color:#fff;font-size:.9rem;padding:11px 28px"
+          onclick="showTab('quiz')">
+          Ready for Quiz! ✏️
+        </button>
+      </div>
+    </div>
+
+    <!-- QUIZ TAB -->
+    <div id="tabQuiz" class="hidden">
+      <div class="quiz-header">✏️ Fill in the Blank Quiz</div>
+      <div class="quiz-progress">
+        <div class="quiz-progress-fill" id="quizProgFill" style="width:0%"></div>
+      </div>
+      <div id="quizArea"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ RESULT VIEW ══════════════ -->
+<div id="resultView" class="hidden">
+  <div class="result-view">
+    <span class="result-emoji" id="resultEmoji">🎉</span>
+    <div class="result-msg" id="resultMsg">Great Job!</div>
+    <div class="result-score" id="resultScore">5 / 5</div>
+    <div class="result-sub" id="resultSub">You answered all questions correctly!</div>
+    <div class="stars-display" id="resultStars"></div>
+    <div class="result-encourage" id="resultEncourage"></div>
+    <div class="result-actions">
+      <button class="btn-outline" onclick="retryQuiz()">🔄 Try Again</button>
+      <button class="btn-green" onclick="nextSituation()">Next Situation ➡️</button>
+      <button class="btn-outline" onclick="goHome()">🏠 Back to Home</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Created with ❤️ by <strong>Bright EngMath</strong> | Role Play English Quest
+</footer>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════
+const situations = [
+{
+  id:0, icon:'🛍️', color:'#FFE0B2',
+  title:'At a Shop', titleTH:'ที่ร้านค้า',
+  goal:'ฝึกถามราคา เลือกสินค้า และจ่ายเงิน',
+  roles:['Customer 🧒','Shopkeeper 🏪'],
+  vocabulary:[
+    {en:'How much is it?',th:'ราคาเท่าไหร่คะ/ครับ'},
+    {en:"I'd like this, please.",th:'เอาอันนี้ค่ะ/ครับ'},
+    {en:'Can I have...?',th:'ขอ...ได้ไหมคะ/ครับ'},
+    {en:"That's too expensive.",th:'แพงเกินไปค่ะ/ครับ'},
+    {en:"I'll take it.",th:'เอาเลยค่ะ/ครับ'},
+    {en:'Do you have...?',th:'มี...ไหมคะ/ครับ'},
+    {en:"Here's the money.",th:'นี่เงินค่ะ/ครับ'},
+    {en:'Keep the change.',th:'ไม่ต้องทอนค่ะ/ครับ'}
+  ],
+  conversation:[
+    {role:'Customer',roleTH:'ลูกค้า',side:'left',avatar:'🧒',
+     en:'Excuse me. How much is this pencil?',th:'ขอโทษนะคะ ดินสอแท่งนี้ราคาเท่าไหร่คะ'},
+    {role:'Shopkeeper',roleTH:'พนักงานร้าน',side:'right',avatar:'🏪',
+     en:"It's 10 baht.",th:'ราคา 10 บาทค่ะ'},
+    {role:'Customer',roleTH:'ลูกค้า',side:'left',avatar:'🧒',
+     en:'Do you have a red one?',th:'มีสีแดงไหมคะ'},
+    {role:'Shopkeeper',roleTH:'พนักงานร้าน',side:'right',avatar:'🏪',
+     en:'Yes, we do. Here you go.',th:'มีค่ะ นี่เลยค่ะ'},
+    {role:'Customer',roleTH:'ลูกค้า',side:'left',avatar:'🧒',
+     en:"Great! I'll take two, please.",th:'ดีเลยค่ะ เอา 2 แท่งค่ะ'},
+    {role:'Shopkeeper',roleTH:'พนักงานร้าน',side:'right',avatar:'🏪',
+     en:"That's 20 baht, please.",th:'รวมทั้งหมด 20 บาทค่ะ'},
+    {role:'Customer',roleTH:'ลูกค้า',side:'left',avatar:'🧒',
+     en:"Here's 50 baht.",th:'นี่ 50 บาทค่ะ'},
+    {role:'Shopkeeper',roleTH:'พนักงานร้าน',side:'right',avatar:'🏪',
+     en:"Here's your change. Thank you!",th:'นี่เงินทอนค่ะ ขอบคุณค่ะ'}
+  ],
+  quiz:[
+    {q:'How ______ is this pencil?',blank:'much',opts:['many','much','old','far'],
+     explain:"ใช้ 'How much' เพื่อถามราคาสิ่งของ"},
+    {q:"I'll ______ two pencils, please.",blank:'take',opts:['give','take','make','buy'],
+     explain:"'I'll take...' เป็นสำนวนธรรมชาติเวลาเลือกซื้อสินค้า"},
+    {q:'______ you have a red one?',blank:'Do',opts:['Are','Is','Do','Can'],
+     explain:"ใช้ 'Do you have...?' เพื่อถามว่ามีสินค้าหรือเปล่า"},
+    {q:"Here ______ 50 baht.",blank:'is',opts:['are','is','am','be'],
+     explain:"ใช้ 'Here is + เงิน' เมื่อยื่นเงินให้"},
+    {q:'______ me. How much is this?',blank:'Excuse',opts:['Sorry','Excuse','Pardon','Hello'],
+     explain:"ใช้ 'Excuse me' เพื่อเรียกพนักงานหรือขอความสนใจ"}
+  ]
+},
+{
+  id:1, icon:'🍽️', color:'#FFECB3',
+  title:'At a Restaurant', titleTH:'ที่ร้านอาหาร',
+  goal:'ฝึกสั่งอาหาร ถามเมนู และขอน้ำ',
+  roles:['Customer 🧒','Waiter 🤵'],
+  vocabulary:[
+    {en:"I'd like..., please.",th:'ขอ...ค่ะ/ครับ'},
+    {en:'Can I see the menu?',th:'ขอดูเมนูได้ไหมคะ/ครับ'},
+    {en:'What do you recommend?',th:'แนะนำอะไรดีคะ/ครับ'},
+    {en:'Can I have some water?',th:'ขอน้ำด้วยได้ไหมคะ/ครับ'},
+    {en:'The bill, please.',th:'คิดเงินด้วยค่ะ/ครับ'},
+    {en:'This is delicious!',th:'อร่อยมากเลยค่ะ/ครับ'},
+    {en:"I'm full.",th:'อิ่มแล้วค่ะ/ครับ'},
+    {en:'Enjoy your meal!',th:'ทานให้อร่อยนะคะ/ครับ'}
+  ],
+  conversation:[
+    {role:'Waiter',roleTH:'พนักงาน',side:'right',avatar:'🤵',
+     en:'Good afternoon! Can I help you?',th:'สวัสดีตอนบ่ายค่ะ รับอะไรดีคะ'},
+    {role:'Customer',roleTH:'ลูกค้า',side:'left',avatar:'🧒',
+     en:'Hi! Can I see the menu, please?',th:'สวัสดีค่ะ ขอดูเมนูได้ไหมคะ'},
+    {role:'Waiter',roleTH:'พนักงาน',side:'right',avatar:'🤵',
+     en:'Of course! Here you go.',th:'ได้เลยค่ะ นี่เมนูค่ะ'},
+    {role:'Customer',roleTH:'ลูกค้า',side:'left',avatar:'🧒',
+     en:"I'd like fried rice, please. And can I have some water?",
+     th:'ขอข้าวผัดค่ะ และขอน้ำด้วยได้ไหมคะ'},
+    {role:'Waiter',roleTH:'พนักงาน',side:'right',avatar:'🤵',
+     en:'Sure! Anything else?',th:'ได้เลยค่ะ รับอะไรเพิ่มอีกไหมคะ'},
+    {role:'Customer',roleTH:'ลูกค้า',side:'left',avatar:'🧒',
+     en:"No, that's all. Thank you!",th:'ไม่ต้องแล้วค่ะ ขอบคุณค่ะ'},
+    {role:'Waiter',roleTH:'พนักงาน',side:'right',avatar:'🤵',
+     en:'Enjoy your meal!',th:'ทานให้อร่อยนะคะ'},
+    {role:'Customer',roleTH:'ลูกค้า',side:'left',avatar:'🧒',
+     en:'This is delicious! The bill, please.',th:'อร่อยมากเลยค่ะ คิดเงินด้วยนะคะ'}
+  ],
+  quiz:[
+    {q:"______ like fried rice, please.",blank:"I'd",opts:["I'm","I'd","I'll","I've"],
+     explain:"ใช้ 'I'd like...' เพื่อสั่งอาหารอย่างสุภาพ"},
+    {q:'Can I see the ______, please?',blank:'menu',opts:['food','menu','list','book'],
+     explain:"'Menu' คือรายการอาหาร ใช้ถามขอดูเมนู"},
+    {q:'Can I have ______ water?',blank:'some',opts:['any','some','a','the'],
+     explain:"ใช้ 'some' กับคำนามนับไม่ได้ (uncountable noun) เช่น water"},
+    {q:'The ______, please.',blank:'bill',opts:['menu','bill','money','check'],
+     explain:"'The bill, please.' ใช้เมื่อต้องการคิดเงิน"},
+    {q:'This is ______!',blank:'delicious',opts:['delicious','beautiful','wonderful','amazing'],
+     explain:"'Delicious' = อร่อยมาก ใช้บอกว่าอาหารอร่อย"}
+  ]
+},
+{
+  id:2, icon:'🏫', color:'#E1F5FE',
+  title:'At School', titleTH:'ที่โรงเรียน',
+  goal:'ฝึกขออนุญาต ถามคำถาม และบอกว่ายังไม่เข้าใจ',
+  roles:['Student 🧒','Teacher 👩‍🏫'],
+  vocabulary:[
+    {en:'May I come in?',th:'ขอเข้าห้องได้ไหมคะ/ครับ'},
+    {en:"I don't understand.",th:'ยังไม่เข้าใจค่ะ/ครับ'},
+    {en:'Can you explain again?',th:'ช่วยอธิบายอีกครั้งได้ไหมคะ/ครับ'},
+    {en:'May I go to the bathroom?',th:'ขอไปห้องน้ำได้ไหมคะ/ครับ'},
+    {en:'I have a question.',th:'มีคำถามค่ะ/ครับ'},
+    {en:'Excuse me, teacher.',th:'ขอโทษค่ะ/ครับ คุณครู'},
+    {en:'Can you say that again?',th:'พูดอีกครั้งได้ไหมคะ/ครับ'},
+    {en:'Thank you for teaching us.',th:'ขอบคุณที่สอนนักเรียนค่ะ/ครับ'}
+  ],
+  conversation:[
+    {role:'Student',roleTH:'นักเรียน',side:'left',avatar:'🧒',
+     en:'Excuse me, teacher. May I come in?',th:'ขอโทษค่ะ คุณครู ขอเข้าห้องได้ไหมคะ'},
+    {role:'Teacher',roleTH:'ครู',side:'right',avatar:'👩‍🏫',
+     en:'Yes, come in. Why are you late?',th:'ได้ เข้ามาได้เลย มาสายเพราะอะไรคะ'},
+    {role:'Student',roleTH:'นักเรียน',side:'left',avatar:'🧒',
+     en:"I'm sorry, teacher. The bus was late.",th:'ขอโทษค่ะ คุณครู รถเมล์มาช้าค่ะ'},
+    {role:'Teacher',roleTH:'ครู',side:'right',avatar:'👩‍🏫',
+     en:"It's okay. Please sit down.",th:'ไม่เป็นไรค่ะ นั่งที่ได้เลย'},
+    {role:'Student',roleTH:'นักเรียน',side:'left',avatar:'🧒',
+     en:"Excuse me, teacher. I don't understand question 3.",
+     th:'ขอโทษค่ะ คุณครู ยังไม่เข้าใจข้อ 3 ค่ะ'},
+    {role:'Teacher',roleTH:'ครู',side:'right',avatar:'👩‍🏫',
+     en:"No problem! I'll explain again.",th:'ไม่เป็นไรค่ะ ครูจะอธิบายอีกครั้งนะคะ'},
+    {role:'Student',roleTH:'นักเรียน',side:'left',avatar:'🧒',
+     en:'May I go to the bathroom, please?',th:'ขอไปห้องน้ำได้ไหมคะ คุณครู'},
+    {role:'Teacher',roleTH:'ครู',side:'right',avatar:'👩‍🏫',
+     en:'Yes, you may. Be quick, please.',th:'ได้ค่ะ รีบกลับมาด้วยนะคะ'}
+  ],
+  quiz:[
+    {q:'May I ______ in?',blank:'come',opts:['go','come','get','walk'],
+     explain:"'May I come in?' ใช้เมื่อขออนุญาตเข้าห้องเรียน"},
+    {q:"I ______ understand this question.",blank:"don't",opts:["doesn't","don't","didn't","won't"],
+     explain:"ใช้ 'don't' กับประธาน I ในปัจจุบัน"},
+    {q:'______ you explain again?',blank:'Can',opts:['Do','Will','Can','Are'],
+     explain:"'Can you...?' ใช้ขอร้องให้ช่วยทำสิ่งต่าง ๆ"},
+    {q:'May I go to the ______?',blank:'bathroom',opts:['library','bathroom','office','gym'],
+     explain:"'May I go to the bathroom?' ใช้ขออนุญาตไปห้องน้ำ"},
+    {q:'I have a ______.',blank:'question',opts:['problem','question','answer','test'],
+     explain:"'I have a question.' ใช้เมื่ออยากถามคำถาม"}
+  ]
+},
+{
+  id:3, icon:'📚', color:'#F3E5F5',
+  title:'At the Library', titleTH:'ที่ห้องสมุด',
+  goal:'ฝึกถามหาหนังสือ ยืมหนังสือ และถามวันคืน',
+  roles:['Student 🧒','Librarian 👩‍💼'],
+  vocabulary:[
+    {en:"I'm looking for...",th:'กำลังหา...อยู่ค่ะ/ครับ'},
+    {en:'Can I borrow this book?',th:'ขอยืมหนังสือเล่มนี้ได้ไหมคะ/ครับ'},
+    {en:'When is it due?',th:'ต้องคืนวันไหนคะ/ครับ'},
+    {en:'Do I need a library card?',th:'ต้องใช้บัตรห้องสมุดไหมคะ/ครับ'},
+    {en:'Where is the... section?',th:'ส่วน...อยู่ที่ไหนคะ/ครับ'},
+    {en:"Can you help me find...?",th:'ช่วยหา...ให้หน่อยได้ไหมคะ/ครับ'},
+    {en:"I'd like to return this.",th:'ขอคืนหนังสือเล่มนี้ค่ะ/ครับ'},
+    {en:'Please be quiet.',th:'ช่วยเงียบ ๆ หน่อยนะคะ/ครับ'}
+  ],
+  conversation:[
+    {role:'Student',roleTH:'นักเรียน',side:'left',avatar:'🧒',
+     en:'Excuse me. Can you help me find a science book?',
+     th:'ขอโทษค่ะ ช่วยหาหนังสือวิทยาศาสตร์ให้หน่อยได้ไหมคะ'},
+    {role:'Librarian',roleTH:'บรรณารักษ์',side:'right',avatar:'👩‍💼',
+     en:'Sure! Science books are in Aisle 3.',th:'ได้เลยค่ะ หนังสือวิทยาศาสตร์อยู่แถวที่ 3 ค่ะ'},
+    {role:'Student',roleTH:'นักเรียน',side:'left',avatar:'🧒',
+     en:'Thank you! Can I borrow this book?',th:'ขอบคุณค่ะ ขอยืมหนังสือเล่มนี้ได้ไหมคะ'},
+    {role:'Librarian',roleTH:'บรรณารักษ์',side:'right',avatar:'👩‍💼',
+     en:'Yes. Do you have your library card?',th:'ได้ค่ะ มีบัตรห้องสมุดไหมคะ'},
+    {role:'Student',roleTH:'นักเรียน',side:'left',avatar:'🧒',
+     en:'Yes, here it is. When is it due?',th:'มีค่ะ นี่เลยค่ะ ต้องคืนวันไหนคะ'},
+    {role:'Librarian',roleTH:'บรรณารักษ์',side:'right',avatar:'👩‍💼',
+     en:'It is due in 2 weeks — on the 15th.',th:'ต้องคืนใน 2 สัปดาห์ค่ะ วันที่ 15'},
+    {role:'Student',roleTH:'นักเรียน',side:'left',avatar:'🧒',
+     en:'Great, thank you so much!',th:'โอเคค่ะ ขอบคุณมากค่ะ'},
+    {role:'Librarian',roleTH:'บรรณารักษ์',side:'right',avatar:'👩‍💼',
+     en:'You are welcome. Enjoy reading!',th:'ยินดีค่ะ อ่านให้สนุกนะคะ'}
+  ],
+  quiz:[
+    {q:'Can I ______ this book?',blank:'borrow',opts:['read','borrow','take','use'],
+     explain:"'Borrow' แปลว่า ยืม ใช้เมื่อต้องการยืมหนังสือจากห้องสมุด"},
+    {q:'______ is it due?',blank:'When',opts:['What','When','Where','How'],
+     explain:"'When is it due?' ถามว่าต้องคืนวันไหน"},
+    {q:'Science books are in ______ 3.',blank:'Aisle',opts:['Row','Aisle','Line','Lane'],
+     explain:"'Aisle' แปลว่า ช่องทาง/แถว ในร้านหรือห้องสมุด"},
+    {q:'Do you have your library ______?',blank:'card',opts:['book','pass','card','ticket'],
+     explain:"'Library card' คือบัตรห้องสมุด ใช้ยืมหนังสือ"},
+    {q:"I'd like to ______ this book.",blank:'return',opts:['give','return','bring','put'],
+     explain:"'Return' แปลว่า คืน ใช้เมื่อนำหนังสือไปส่งคืน"}
+  ]
+},
+{
+  id:4, icon:'🏥', color:'#FFCDD2',
+  title:'At the Clinic', titleTH:'ที่คลินิก',
+  goal:'ฝึกบอกอาการป่วยแบบง่าย ๆ',
+  roles:['Patient 🧒','Doctor 👨‍⚕️'],
+  vocabulary:[
+    {en:"I don't feel well.",th:'ไม่ค่อยสบายค่ะ/ครับ'},
+    {en:'I have a headache.',th:'ปวดหัวค่ะ/ครับ'},
+    {en:'I have a fever.',th:'มีไข้ค่ะ/ครับ'},
+    {en:'My stomach hurts.',th:'ปวดท้องค่ะ/ครับ'},
+    {en:'I have a cold.',th:'เป็นหวัดค่ะ/ครับ'},
+    {en:'I feel dizzy.',th:'รู้สึกวิงเวียนค่ะ/ครับ'},
+    {en:'I need medicine.',th:'ต้องการยาค่ะ/ครับ'},
+    {en:'Take this twice a day.',th:'ทานยานี้วันละ 2 ครั้ง'}
+  ],
+  conversation:[
+    {role:'Doctor',roleTH:'คุณหมอ',side:'right',avatar:'👨‍⚕️',
+     en:"Hello! What's the matter?",th:'สวัสดีค่ะ มีอาการอะไรบ้างคะ'},
+    {role:'Patient',roleTH:'คนไข้',side:'left',avatar:'🧒',
+     en:"I don't feel well. I have a headache and a fever.",
+     th:'ไม่ค่อยสบายค่ะ ปวดหัวและมีไข้ด้วยค่ะ'},
+    {role:'Doctor',roleTH:'คุณหมอ',side:'right',avatar:'👨‍⚕️',
+     en:"I'm sorry to hear that. How long have you felt this way?",
+     th:'เสียใจด้วยนะคะ เป็นมานานแค่ไหนแล้วคะ'},
+    {role:'Patient',roleTH:'คนไข้',side:'left',avatar:'🧒',
+     en:'Since yesterday. My stomach hurts a little, too.',
+     th:'ตั้งแต่เมื่อวานค่ะ ปวดท้องนิดหน่อยด้วยค่ะ'},
+    {role:'Doctor',roleTH:'คุณหมอ',side:'right',avatar:'👨‍⚕️',
+     en:"Okay. Let me check. Open your mouth, please.",th:'โอเคค่ะ ให้หมอตรวจดูนะคะ อ้าปากได้เลยค่ะ'},
+    {role:'Patient',roleTH:'คนไข้',side:'left',avatar:'🧒',
+     en:'Do I need medicine?',th:'ต้องทานยาไหมคะ'},
+    {role:'Doctor',roleTH:'คุณหมอ',side:'right',avatar:'👨‍⚕️',
+     en:"Yes. Take this medicine twice a day. Drink lots of water.",
+     th:'ใช่ค่ะ ทานยานี้วันละ 2 ครั้งนะคะ ดื่มน้ำเยอะ ๆ ด้วย'},
+    {role:'Patient',roleTH:'คนไข้',side:'left',avatar:'🧒',
+     en:'Thank you, doctor.',th:'ขอบคุณค่ะ คุณหมอ'}
+  ],
+  quiz:[
+    {q:"I ______ feel well.",blank:"don't",opts:["am not","don't","didn't","won't"],
+     explain:"'I don't feel well.' ใช้บอกว่าไม่สบาย"},
+    {q:'I have a ______.',blank:'fever',opts:['cold','fever','cough','headache'],
+     explain:"'I have a fever.' = มีไข้ ใช้บอกอาการ"},
+    {q:'My stomach ______.',blank:'hurts',opts:['hurts','aches','pains','burns'],
+     explain:"'My stomach hurts.' = ปวดท้อง ใช้ hurts กับ stomach"},
+    {q:'Take this ______ a day.',blank:'twice',opts:['once','twice','three','two'],
+     explain:"'Twice a day' = วันละ 2 ครั้ง"},
+    {q:'I ______ a headache.',blank:'have',opts:['have','feel','get','am'],
+     explain:"ใช้ 'have' บอกอาการ เช่น I have a headache, I have a cold"}
+  ]
+},
+{
+  id:5, icon:'🗺️', color:'#DCEDC8',
+  title:'Asking for Directions', titleTH:'ถามทาง',
+  goal:'ฝึกถามทางและเข้าใจคำบอกทางง่าย ๆ',
+  roles:['Visitor 🧒','Local Person 😊'],
+  vocabulary:[
+    {en:'Where is...?',th:'...อยู่ที่ไหนคะ/ครับ'},
+    {en:'Turn left.',th:'เลี้ยวซ้าย'},
+    {en:'Turn right.',th:'เลี้ยวขวา'},
+    {en:'Go straight.',th:'ตรงไป'},
+    {en:'Next to',th:'ติดกับ'},
+    {en:'Across from',th:'ตรงข้ามกับ'},
+    {en:'How far is it?',th:'ไกลแค่ไหนคะ/ครับ'},
+    {en:"You can't miss it.",th:'ไม่พลาดแน่นอน'}
+  ],
+  conversation:[
+    {role:'Visitor',roleTH:'นักท่องเที่ยว',side:'left',avatar:'🧒',
+     en:'Excuse me. Where is the post office?',th:'ขอโทษค่ะ ที่ทำการไปรษณีย์อยู่ที่ไหนคะ'},
+    {role:'Local',roleTH:'คนในพื้นที่',side:'right',avatar:'😊',
+     en:"It's not far. Go straight for two blocks.",th:'ไม่ไกลค่ะ ตรงไปสองช่วงตึก'},
+    {role:'Visitor',roleTH:'นักท่องเที่ยว',side:'left',avatar:'🧒',
+     en:'And then?',th:'แล้วก็'},
+    {role:'Local',roleTH:'คนในพื้นที่',side:'right',avatar:'😊',
+     en:'Turn right at the traffic light.',th:'เลี้ยวขวาที่ไฟแดง'},
+    {role:'Visitor',roleTH:'นักท่องเที่ยว',side:'left',avatar:'🧒',
+     en:'Is it next to the bank?',th:'มันอยู่ติดกับธนาคารใช่ไหมคะ'},
+    {role:'Local',roleTH:'คนในพื้นที่',side:'right',avatar:'😊',
+     en:"Yes! It's right across from the school.",th:"ใช่ค่ะ อยู่ตรงข้ามโรงเรียนพอดีเลย"},
+    {role:'Visitor',roleTH:'นักท่องเที่ยว',side:'left',avatar:'🧒',
+     en:'How far is it from here?',th:'ไกลจากที่นี่แค่ไหนคะ'},
+    {role:'Local',roleTH:'คนในพื้นที่',side:'right',avatar:'😊',
+     en:"About 5 minutes walking. You can't miss it!",th:'เดินประมาณ 5 นาทีค่ะ ไม่พลาดแน่นอน'}
+  ],
+  quiz:[
+    {q:'______ straight for two blocks.',blank:'Go',opts:['Turn','Walk','Go','Move'],
+     explain:"'Go straight' = ตรงไป ใช้บอกทิศทาง"},
+    {q:'Turn ______ at the traffic light.',blank:'right',opts:['left','right','back','front'],
+     explain:"'Turn right' = เลี้ยวขวา"},
+    {q:"It's ______ from the school.",blank:'across',opts:['next','across','near','beside'],
+     explain:"'Across from' = ตรงข้ามกับ"},
+    {q:"It's next ______ the bank.",blank:'to',opts:['by','to','at','of'],
+     explain:"'Next to' = ติดกับ ต้องใช้ 'to' ตามหลัง"},
+    {q:'How ______ is it from here?',blank:'far',opts:['long','much','far','big'],
+     explain:"'How far' ใช้ถามระยะทาง"}
+  ]
+},
+{
+  id:6, icon:'🤝', color:'#E0F2F1',
+  title:'Making New Friends', titleTH:'ทำความรู้จักเพื่อนใหม่',
+  goal:'ฝึกแนะนำตัว ถามชื่อ อายุ และงานอดิเรก',
+  roles:['Student A 🧒','Student B 👦'],
+  vocabulary:[
+    {en:"What's your name?",th:'ชื่ออะไรคะ/ครับ'},
+    {en:'Nice to meet you!',th:'ยินดีที่ได้รู้จักค่ะ/ครับ'},
+    {en:'Where are you from?',th:'มาจากไหนคะ/ครับ'},
+    {en:'How old are you?',th:'อายุเท่าไหร่คะ/ครับ'},
+    {en:'What do you like?',th:'ชอบอะไรคะ/ครับ'},
+    {en:'My hobby is...',th:'งานอดิเรกของฉันคือ...'},
+    {en:'Do you want to be friends?',th:'เป็นเพื่อนกันได้ไหมคะ/ครับ'},
+    {en:"Let's play together!",th:'มาเล่นด้วยกันเถอะ!'}
+  ],
+  conversation:[
+    {role:'Student A',roleTH:'นักเรียน A',side:'left',avatar:'🧒',
+     en:"Hi! I'm Nong. What's your name?",th:'สวัสดีค่ะ หนูชื่อน้องค่ะ เธอชื่ออะไรคะ'},
+    {role:'Student B',roleTH:'นักเรียน B',side:'right',avatar:'👦',
+     en:"Hi! I'm Tom. Nice to meet you!",th:'สวัสดีครับ ผมชื่อทอมครับ ยินดีที่ได้รู้จักครับ'},
+    {role:'Student A',roleTH:'นักเรียน A',side:'left',avatar:'🧒',
+     en:'Nice to meet you, too! How old are you?',th:'ยินดีที่ได้รู้จักเหมือนกันค่ะ อายุเท่าไหร่คะ'},
+    {role:'Student B',roleTH:'นักเรียน B',side:'right',avatar:'👦',
+     en:"I'm 11. And you?",th:'11 ปีครับ แล้วเธอล่ะคะ'},
+    {role:'Student A',roleTH:'นักเรียน A',side:'left',avatar:'🧒',
+     en:"I'm 11, too! Where are you from?",th:'11 ปีเหมือนกันเลยค่ะ เธอมาจากไหนคะ'},
+    {role:'Student B',roleTH:'นักเรียน B',side:'right',avatar:'👦',
+     en:"I'm from Chiang Mai. What do you like?",th:'มาจากเชียงใหม่ครับ เธอชอบอะไรคะ'},
+    {role:'Student A',roleTH:'นักเรียน A',side:'left',avatar:'🧒',
+     en:'I like drawing. My hobby is painting!',th:'หนูชอบวาดรูปค่ะ งานอดิเรกคือการระบายสีค่ะ'},
+    {role:'Student B',roleTH:'นักเรียน B',side:'right',avatar:'👦',
+     en:"Cool! Do you want to be friends? Let's play together!",
+     th:'เยี่ยมมากครับ เป็นเพื่อนกันได้ไหมครับ มาเล่นด้วยกันเถอะ'}
+  ],
+  quiz:[
+    {q:"What's your ______?",blank:'name',opts:['name','age','school','hobby'],
+     explain:"'What's your name?' ใช้ถามชื่อเมื่อรู้จักกันครั้งแรก"},
+    {q:'Nice to ______ you!',blank:'meet',opts:['see','meet','know','find'],
+     explain:"'Nice to meet you!' ใช้เมื่อพบกันครั้งแรก"},
+    {q:'How ______ are you?',blank:'old',opts:['big','old','tall','long'],
+     explain:"'How old are you?' ใช้ถามอายุ"},
+    {q:'Where are you ______?',blank:'from',opts:['from','going','living','staying'],
+     explain:"'Where are you from?' ใช้ถามว่าอยู่ที่ไหนหรือมาจากไหน"},
+    {q:'My ______ is drawing.',blank:'hobby',opts:['job','hobby','sport','skill'],
+     explain:"'My hobby is...' ใช้บอกงานอดิเรก"}
+  ]
+},
+{
+  id:7, icon:'🛒', color:'#E8EAF6',
+  title:'At the Supermarket', titleTH:'ที่ซูเปอร์มาร์เก็ต',
+  goal:'ฝึกถามว่าสินค้าอยู่ตรงไหน และซื้อของใช้',
+  roles:['Customer 🧒','Staff 👷'],
+  vocabulary:[
+    {en:'Where can I find...?',th:'...อยู่ที่ไหนคะ/ครับ'},
+    {en:"It's in Aisle 3.",th:'อยู่ที่แถวที่ 3 ค่ะ/ครับ'},
+    {en:'It is on sale.',th:'ลดราคาอยู่ค่ะ/ครับ'},
+    {en:'How much does this cost?',th:'ราคาเท่าไหร่คะ/ครับ'},
+    {en:'Is this fresh?',th:'สดไหมคะ/ครับ'},
+    {en:'I need a shopping basket.',th:'ต้องการตะกร้าค่ะ/ครับ'},
+    {en:'Can I pay by card?',th:'ชำระด้วยบัตรได้ไหมคะ/ครับ'},
+    {en:'Thank you for your help.',th:'ขอบคุณที่ช่วยค่ะ/ครับ'}
+  ],
+  conversation:[
+    {role:'Customer',roleTH:'ลูกค้า',side:'left',avatar:'🧒',
+     en:'Excuse me. Where can I find the milk?',th:'ขอโทษค่ะ นมอยู่ที่ไหนคะ'},
+    {role:'Staff',roleTH:'พนักงาน',side:'right',avatar:'👷',
+     en:"It's in Aisle 4, near the juice.",th:'อยู่ที่แถวที่ 4 ค่ะ ใกล้ ๆ กับน้ำผลไม้'},
+    {role:'Customer',roleTH:'ลูกค้า',side:'left',avatar:'🧒',
+     en:'Is this milk fresh?',th:'นมนี้สดไหมคะ'},
+    {role:'Staff',roleTH:'พนักงาน',side:'right',avatar:'👷',
+     en:'Yes, it is. The expiry date is next week.',th:'สดค่ะ วันหมดอายุสัปดาห์หน้าค่ะ'},
+    {role:'Customer',roleTH:'ลูกค้า',side:'left',avatar:'🧒',
+     en:"Great! How much does this cost?",th:'ดีเลยค่ะ ราคาเท่าไหร่คะ'},
+    {role:'Staff',roleTH:'พนักงาน',side:'right',avatar:'👷',
+     en:"It's 35 baht. It's on sale today!",th:'35 บาทค่ะ วันนี้ลดราคาด้วยค่ะ'},
+    {role:'Customer',roleTH:'ลูกค้า',side:'left',avatar:'🧒',
+     en:"I'll take two. Can I pay by card?",th:'เอา 2 กล่องค่ะ ชำระด้วยบัตรได้ไหมคะ'},
+    {role:'Staff',roleTH:'พนักงาน',side:'right',avatar:'👷',
+     en:'Yes, of course! This way, please.',th:'ได้เลยค่ะ มาทางนี้ได้เลยค่ะ'}
+  ],
+  quiz:[
+    {q:'Where can I ______ the milk?',blank:'find',opts:['see','find','buy','get'],
+     explain:"'Where can I find...?' ใช้ถามว่าสินค้าอยู่ที่ไหน"},
+    {q:"It's in ______ 4.",blank:'Aisle',opts:['Row','Aisle','Line','Floor'],
+     explain:"'Aisle' = ช่องทาง/แถวในซูเปอร์มาร์เก็ต"},
+    {q:'Is this milk ______?',blank:'fresh',opts:['good','fresh','new','clean'],
+     explain:"'Fresh' = สด ใช้ถามเกี่ยวกับความสดของอาหาร"},
+    {q:"It's ______ sale today.",blank:'on',opts:['in','on','at','for'],
+     explain:"'On sale' = ลดราคา ต้องใช้ 'on'"},
+    {q:'Can I ______ by card?',blank:'pay',opts:['give','pay','buy','use'],
+     explain:"'Can I pay by card?' ใช้ถามว่าจ่ายด้วยบัตรได้ไหม"}
+  ]
+},
+{
+  id:8, icon:'📞', color:'#FFF8E1',
+  title:'On the Phone', titleTH:'คุยโทรศัพท์',
+  goal:'ฝึกทักทาย ขอคุยกับใครบางคน และฝากข้อความ',
+  roles:['Caller 🧒','Receiver 😊'],
+  vocabulary:[
+    {en:'Hello, this is...',th:'สวัสดีค่ะ/ครับ นี่คือ...'},
+    {en:'Can I speak to...?',th:'ขอคุยกับ...ได้ไหมคะ/ครับ'},
+    {en:'Hold on, please.',th:'รอสักครู่นะคะ/ครับ'},
+    {en:"I'll call back later.",th:'จะโทรกลับทีหลังค่ะ/ครับ'},
+    {en:'Can I leave a message?',th:'ฝากข้อความได้ไหมคะ/ครับ'},
+    {en:'Sorry, wrong number.',th:'ขอโทษค่ะ/ครับ โทรผิดเบอร์'},
+    {en:"I can't hear you well.",th:'ได้ยินไม่ค่อยชัดค่ะ/ครับ'},
+    {en:'Goodbye!',th:'ลาก่อนค่ะ/ครับ'}
+  ],
+  conversation:[
+    {role:'Caller',roleTH:'ผู้โทร',side:'left',avatar:'🧒',
+     en:'Hello! This is Nong. Can I speak to Tom?',
+     th:'สวัสดีค่ะ นี่คือน้องค่ะ ขอคุยกับทอมได้ไหมคะ'},
+    {role:'Receiver',roleTH:'ผู้รับสาย',side:'right',avatar:'😊',
+     en:'Hi, Nong! Hold on, please. I will call him.',
+     th:'สวัสดีน้อง รอสักครู่นะคะ จะไปเรียกให้'},
+    {role:'Caller',roleTH:'ผู้โทร',side:'left',avatar:'🧒',
+     en:'Thank you!',th:'ขอบคุณค่ะ'},
+    {role:'Receiver',roleTH:'ผู้รับสาย',side:'right',avatar:'😊',
+     en:"Sorry, Tom is not here right now.",th:'ขอโทษนะคะ ตอนนี้ทอมไม่อยู่ค่ะ'},
+    {role:'Caller',roleTH:'ผู้โทร',side:'left',avatar:'🧒',
+     en:'Oh, I see. Can I leave a message?',th:'อ๋อ เข้าใจค่ะ ฝากข้อความได้ไหมคะ'},
+    {role:'Receiver',roleTH:'ผู้รับสาย',side:'right',avatar:'😊',
+     en:'Of course! What is the message?',th:'ได้เลยค่ะ ฝากอะไรไว้คะ'},
+    {role:'Caller',roleTH:'ผู้โทร',side:'left',avatar:'🧒',
+     en:"Please tell him to call me back. My number is 08-1234-5678.",
+     th:'บอกให้เขาโทรกลับมาด้วยนะคะ เบอร์โทรคือ 08-1234-5678 ค่ะ'},
+    {role:'Receiver',roleTH:'ผู้รับสาย',side:'right',avatar:'😊',
+     en:"Got it! I'll tell him. Goodbye!",th:'รับทราบค่ะ จะบอกให้นะคะ ลาก่อนค่ะ'}
+  ],
+  quiz:[
+    {q:'Hello! This ______ Nong.',blank:'is',opts:['am','is','are','be'],
+     explain:"'This is...' ใช้แนะนำตัวตอนรับโทรศัพท์"},
+    {q:'Can I ______ to Tom?',blank:'speak',opts:['talk','speak','call','phone'],
+     explain:"'Can I speak to...?' ใช้ขอคุยกับบุคคลที่ต้องการ"},
+    {q:'______ on, please.',blank:'Hold',opts:['Wait','Hold','Stay','Keep'],
+     explain:"'Hold on, please.' = รอสักครู่นะ ใช้ตอนรอโทรศัพท์"},
+    {q:'Can I leave a ______?',blank:'message',opts:['note','word','message','letter'],
+     explain:"'Leave a message' = ฝากข้อความ"},
+    {q:"I'll call ______ later.",blank:'back',opts:['again','back','return','soon'],
+     explain:"'Call back' = โทรกลับ"}
+  ]
+},
+{
+  id:9, icon:'🎂', color:'#FCE4EC',
+  title:'At a Birthday Party', titleTH:'งานวันเกิด',
+  goal:'ฝึกอวยพรวันเกิด ชวนเล่น และขอบคุณ',
+  roles:['Guest 🧒','Birthday Child 🎂'],
+  vocabulary:[
+    {en:'Happy Birthday!',th:'สุขสันต์วันเกิดนะ!'},
+    {en:'Make a wish!',th:'อธิษฐานได้เลย!'},
+    {en:'Blow out the candles!',th:'เป่าเทียนได้เลย!'},
+    {en:'What a lovely gift!',th:'ของขวัญสวยมากเลย!'},
+    {en:'Thank you for coming!',th:'ขอบคุณที่มางานนะ!'},
+    {en:"Let's play!",th:'มาเล่นด้วยกันเถอะ!'},
+    {en:'Enjoy the party!',th:'สนุกกับงานปาร์ตี้นะ!'},
+    {en:'Have some cake!',th:'กินเค้กด้วยนะ!'}
+  ],
+  conversation:[
+    {role:'Guest',roleTH:'แขกผู้มาร่วมงาน',side:'left',avatar:'🧒',
+     en:'Happy Birthday, May! This gift is for you.',th:'สุขสันต์วันเกิดนะ เมย์! นี่ของขวัญสำหรับเธอค่ะ'},
+    {role:'Birthday Child',roleTH:'เจ้าของวันเกิด',side:'right',avatar:'🎂',
+     en:"Wow! Thank you so much! What a lovely gift!",
+     th:'ว้าว ขอบคุณมากเลยนะ ของขวัญสวยมากเลย!'},
+    {role:'Guest',roleTH:'แขกผู้มาร่วมงาน',side:'left',avatar:'🧒',
+     en:'I hope you like it! When do we eat the cake?',
+     th:'หวังว่าเธอจะชอบนะ แล้วเมื่อไหร่จะกินเค้กคะ'},
+    {role:'Birthday Child',roleTH:'เจ้าของวันเกิด',side:'right',avatar:'🎂',
+     en:'Soon! Let me blow out the candles first!',th:'เดี๋ยวนะ ขอเป่าเทียนก่อนนะ'},
+    {role:'Guest',roleTH:'แขกผู้มาร่วมงาน',side:'left',avatar:'🧒',
+     en:'Make a wish! Close your eyes!',th:'อธิษฐานได้เลย หลับตาซะ!'},
+    {role:'Birthday Child',roleTH:'เจ้าของวันเกิด',side:'right',avatar:'🎂',
+     en:'Okay! (blows out candles) Yay!',th:'โอเค! (เป่าเทียน) เย้!'},
+    {role:'Guest',roleTH:'แขกผู้มาร่วมงาน',side:'left',avatar:'🧒',
+     en:"Let's have some cake! Then let's play!",th:'มากินเค้กกันเถอะ แล้วค่อยไปเล่นด้วยกัน!'},
+    {role:'Birthday Child',roleTH:'เจ้าของวันเกิด',side:'right',avatar:'🎂',
+     en:'Thank you for coming to my party! Enjoy!',th:'ขอบคุณที่มางานนะ สนุกกันได้เลย!'}
+  ],
+  quiz:[
+    {q:'______ Birthday!',blank:'Happy',opts:['Merry','Happy','Good','Lovely'],
+     explain:"'Happy Birthday!' ใช้อวยพรวันเกิด"},
+    {q:'Make a ______!',blank:'wish',opts:['wish','hope','dream','want'],
+     explain:"'Make a wish' = ตั้งความปรารถนา/อธิษฐาน ตอนเป่าเทียนวันเกิด"},
+    {q:'Blow ______ the candles!',blank:'out',opts:['up','out','off','away'],
+     explain:"'Blow out' = เป่า(เทียน)ให้ดับ"},
+    {q:'Thank you for ______!',blank:'coming',opts:['being','coming','going','staying'],
+     explain:"'Thank you for coming!' ขอบคุณที่มาร่วมงาน"},
+    {q:"Let's have ______ cake!",blank:'some',opts:['a','the','some','any'],
+     explain:"'Have some cake' = กินเค้ก 'some' ใช้กับสิ่งของที่ไม่ได้ระบุจำนวน"}
+  ]
+}
+];
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+let currentSit = 0;
+let currentTab = 'vocab';
+let showThai = true;
+let quizAnswers = [];
+let currentQ = 0;
+let quizScore = 0;
+let completed = new Array(situations.length).fill(false);
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+function init(){
+  renderStarsRow();
+  renderSituationGrid();
+  updateProgress();
+}
+
+function renderStarsRow(){
+  const row = document.getElementById('starsRow');
+  row.innerHTML = situations.map((_,i)=>
+    `<div class="star-badge ${completed[i]?'earned':''}" id="star${i}" title="${situations[i].title}">
+      ${completed[i]?'⭐':'·'}
+    </div>`).join('');
+}
+
+function updateProgress(){
+  const done = completed.filter(Boolean).length;
+  document.getElementById('progressText').textContent = `${done} / ${situations.length} Situations`;
+  document.getElementById('progressFill').style.width = `${(done/situations.length)*100}%`;
+  renderStarsRow();
+  renderSituationGrid();
+}
+
+function renderSituationGrid(){
+  const grid = document.getElementById('sitGrid');
+  grid.innerHTML = situations.map((s,i)=>`
+    <div class="sit-card ${completed[i]?'done':''}" onclick="openSituation(${i})"
+         style="border-top:4px solid ${s.color}">
+      ${completed[i]?'<div class="sit-card-done-badge">✅</div>':''}
+      <span class="sit-icon">${s.icon}</span>
+      <div class="sit-num">${i+1}</div>
+      <div class="sit-title">${s.title}</div>
+      <div class="sit-title-th">${s.titleTH}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════
+function openSituation(idx){
+  currentSit = idx;
+  currentTab = 'vocab';
+  showThai = true;
+  quizAnswers = [];
+  currentQ = 0;
+  quizScore = 0;
+  const s = situations[idx];
+
+  document.getElementById('detailIcon').textContent = s.icon;
+  document.getElementById('detailTitle').textContent = s.title;
+  document.getElementById('detailTitleTH').textContent = s.titleTH;
+  document.getElementById('detailGoal').textContent = '🎯 ' + s.goal;
+
+  renderVocab(s);
+  renderConversation(s);
+  renderQuiz(s);
+
+  document.getElementById('homeView').classList.add('hidden');
+  document.getElementById('detailView').classList.remove('hidden');
+  document.getElementById('resultView').classList.add('hidden');
+  document.getElementById('backBtn').classList.remove('hidden');
+  showTab('vocab');
+  window.scrollTo(0,0);
+}
+
+function goHome(){
+  document.getElementById('homeView').classList.remove('hidden');
+  document.getElementById('detailView').classList.add('hidden');
+  document.getElementById('resultView').classList.add('hidden');
+  document.getElementById('backBtn').classList.add('hidden');
+  updateProgress();
+  window.scrollTo(0,0);
+}
+
+function showTab(tab){
+  currentTab = tab;
+  ['vocab','roleplay','quiz'].forEach(t=>{
+    document.getElementById('tab'+capitalize(t)).classList.toggle('hidden', t!==tab);
+    document.querySelectorAll('.tab-btn').forEach((btn,i)=>{
+      btn.classList.toggle('active', ['vocab','roleplay','quiz'][i]===tab);
+    });
+  });
+}
+
+function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+
+// ═══════════════════════════════════════════════════════
+//  VOCAB
+// ═══════════════════════════════════════════════════════
+function renderVocab(s){
+  document.getElementById('vocabGrid').innerHTML =
+    s.vocabulary.map(v=>`
+      <div class="vocab-card">
+        <div class="vocab-en">💬 ${v.en}</div>
+        <div class="vocab-th">🇹🇭 ${v.th}</div>
+      </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  CONVERSATION
+// ═══════════════════════════════════════════════════════
+function renderConversation(s){
+  document.getElementById('toggleThBtn').textContent = '🇹🇭 Hide Thai';
+  showThai = true;
+  document.getElementById('convoArea').innerHTML =
+    s.conversation.map((line,i)=>`
+      <div class="convo-line ${line.side}" id="line${i}">
+        <div class="convo-avatar ${line.side}">${line.avatar}</div>
+        <div class="convo-bubble">
+          <div class="convo-role">${line.role} · ${line.roleTH}</div>
+          <div class="convo-en">${line.en}</div>
+          <div class="convo-th" id="th${i}">${line.th}</div>
+          <button class="listen-btn" onclick="speakLine('${escQ(line.en)}')">🔊 Listen</button>
+        </div>
+      </div>`).join('');
+}
+
+function escQ(s){return s.replace(/'/g,"\\'")}
+
+function toggleThai(){
+  showThai = !showThai;
+  const s = situations[currentSit];
+  s.conversation.forEach((_,i)=>{
+    const el = document.getElementById('th'+i);
+    if(el) el.style.display = showThai?'':'none';
+  });
+  document.getElementById('toggleThBtn').textContent =
+    showThai ? '🇹🇭 Hide Thai' : '🇹🇭 Show Thai';
+}
+
+function speakLine(text){
+  if('speechSynthesis' in window){
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'en-US';
+    utt.rate = 0.85;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utt);
+  } else {
+    alert('🔊 Listen feature: "' + text + '"\n\n(Speech not supported in this browser)');
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  QUIZ
+// ═══════════════════════════════════════════════════════
+function renderQuiz(s){
+  currentQ = 0;
+  quizScore = 0;
+  quizAnswers = new Array(s.quiz.length).fill(null);
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const s = situations[currentSit];
+  const q = s.quiz[currentQ];
+  const pct = (currentQ/s.quiz.length)*100;
+  document.getElementById('quizProgFill').style.width = pct+'%';
+
+  const display = q.q.replace('______',
+    '<span class="quiz-blank">______</span>');
+
+  document.getElementById('quizArea').innerHTML = `
+    <div style="font-size:.85rem;color:#7F8C8D;font-weight:700;margin-bottom:8px">
+      Question ${currentQ+1} of ${s.quiz.length}
+    </div>
+    <div class="quiz-q">
+      <div class="quiz-q-num">✏️ Fill in the blank</div>
+      <div class="quiz-sentence">${display}</div>
+      <div class="options-grid" id="optsGrid">
+        ${q.opts.map(opt=>`
+          <button class="opt-btn" onclick="selectAnswer('${escQ(opt)}')">${opt}</button>
+        `).join('')}
+      </div>
+      <div id="feedbackArea"></div>
+      <button class="next-q-btn hidden" id="nextQBtn" onclick="nextQuestion()">
+        ${currentQ < s.quiz.length-1 ? 'Next Question ➡️' : 'See Results 🏆'}
+      </button>
+    </div>`;
+}
+
+function selectAnswer(chosen){
+  const s = situations[currentSit];
+  const q = s.quiz[currentQ];
+  const correct = chosen === q.blank;
+  quizAnswers[currentQ] = chosen;
+  if(correct) quizScore++;
+
+  // Disable all buttons
+  document.querySelectorAll('.opt-btn').forEach(btn=>{
+    btn.disabled = true;
+    if(btn.textContent.trim() === q.blank) btn.classList.add('correct');
+    else if(btn.textContent.trim() === chosen && !correct) btn.classList.add('wrong');
+  });
+
+  document.getElementById('feedbackArea').innerHTML = `
+    <div class="feedback-box ${correct?'correct':'wrong'}">
+      <span class="feedback-icon">${correct?'✅':'❌'}</span>
+      <div class="feedback-text">
+        <div>${correct ? 'Great job! Correct answer!' : 'Not quite! The answer is: <strong>'+q.blank+'</strong>'}</div>
+        <div class="feedback-explain">💡 ${q.explain}</div>
+      </div>
+    </div>`;
+
+  document.getElementById('nextQBtn').classList.remove('hidden');
+
+  // Update progress bar
+  const pct = ((currentQ+1)/s.quiz.length)*100;
+  document.getElementById('quizProgFill').style.width = pct+'%';
+}
+
+function nextQuestion(){
+  const s = situations[currentSit];
+  if(currentQ < s.quiz.length-1){
+    currentQ++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  RESULT
+// ═══════════════════════════════════════════════════════
+function showResult(){
+  const s = situations[currentSit];
+  const total = s.quiz.length;
+  const pct = quizScore/total;
+
+  let emoji, msg, encourage;
+  if(pct===1){
+    emoji='🌟'; msg='Perfect Score!';
+    encourage='Excellent! You answered every question correctly! You are a star! ⭐';
+  } else if(pct>=0.8){
+    emoji='🎉'; msg='Great Job!';
+    encourage='Amazing work! You are almost perfect. Keep it up! 💪';
+  } else if(pct>=0.6){
+    emoji='😊'; msg='Nice Try!';
+    encourage="Good effort! You're getting better. Try again to get a perfect score! 🔄";
+  } else {
+    emoji='💪'; msg='Keep Practicing!';
+    encourage="Don't give up! Read the conversation again and try the quiz once more. You can do it! 🌈";
+  }
+
+  // Stars display
+  const starsCount = pct===1?3:pct>=0.6?2:1;
+  const starsHTML = ['⭐','⭐','⭐'].map((_,i)=>
+    `<span style="opacity:${i<starsCount?1:.25}">${i<starsCount?'⭐':'☆'}</span>`).join('');
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('resultScore').textContent = `${quizScore} / ${total}`;
+  document.getElementById('resultSub').textContent =
+    `You got ${quizScore} out of ${total} questions right!`;
+  document.getElementById('resultStars').innerHTML = starsHTML;
+  document.getElementById('resultEncourage').textContent = encourage;
+
+  if(pct >= 0.6){
+    completed[currentSit] = true;
+  }
+
+  document.getElementById('detailView').classList.add('hidden');
+  document.getElementById('resultView').classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+
+function retryQuiz(){
+  const s = situations[currentSit];
+  currentQ = 0;
+  quizScore = 0;
+  quizAnswers = new Array(s.quiz.length).fill(null);
+  document.getElementById('resultView').classList.add('hidden');
+  document.getElementById('detailView').classList.remove('hidden');
+  showTab('quiz');
+  renderQuiz(s);
+  window.scrollTo(0,0);
+}
+
+function nextSituation(){
+  const next = (currentSit+1) % situations.length;
+  openSituation(next);
+}
+
+// ─── Boot ───
+init();
+</script>
+</body>
+</html>
