@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.3 Lowest Common Multiples — Year 7</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
+
+/* ══════════════════════════════════════
+   TOKENS & RESET
+══════════════════════════════════════ */
+:root {
+  --blue:#3B82F6; --blue-l:#DBEAFE; --blue-d:#1D4ED8;
+  --yellow:#F59E0B; --yellow-l:#FEF3C7; --yellow-d:#B45309;
+  --green:#10B981; --green-l:#D1FAE5; --green-d:#065F46;
+  --red:#EF4444; --red-l:#FEE2E2; --red-d:#991B1B;
+  --purple:#8B5CF6; --purple-l:#EDE9FE;
+  --bg:#F0F7FF; --card:#FFFFFF; --navy:#1E3A5F; --text:#334155;
+  --gray:#94A3B8; --border:#E2E8F0;
+  --shadow:0 4px 20px rgba(59,130,246,.12);
+  --shadow-lg:0 8px 40px rgba(59,130,246,.18);
+  --r:16px; --r-lg:24px; --r-xl:32px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;overflow-x:hidden}
+
+/* ══ SCREENS ══ */
+.page{display:none}
+.page.active{display:block}
+
+/* ══ TYPOGRAPHY ══ */
+h1{font-size:clamp(1.7rem,5vw,2.8rem);font-weight:900;color:var(--navy);line-height:1.2}
+h2{font-size:clamp(1.2rem,3.5vw,1.7rem);font-weight:800;color:var(--navy)}
+h3{font-size:1.1rem;font-weight:700;color:var(--navy)}
+p{line-height:1.75;color:var(--text)}
+
+/* ══ LAYOUT ══ */
+.container{max-width:820px;margin:0 auto;padding:0 20px}
+.section{padding:32px 0}
+
+/* ══ CARD ══ */
+.card{background:var(--card);border-radius:var(--r-lg);padding:28px 24px;
+  box-shadow:var(--shadow);border:1.5px solid var(--border)}
+.card+.card{margin-top:20px}
+
+/* ══ BUTTONS ══ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 28px;border-radius:50px;font-size:1rem;font-weight:700;
+  cursor:pointer;border:none;transition:.2s;letter-spacing:.2px}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.05)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;
+  box-shadow:0 4px 18px rgba(59,130,246,.4)}
+.btn-yellow{background:linear-gradient(135deg,var(--yellow),var(--yellow-d));color:#fff;
+  box-shadow:0 4px 18px rgba(245,158,11,.35)}
+.btn-green{background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;
+  box-shadow:0 4px 18px rgba(16,185,129,.35)}
+.btn-outline{background:#fff;color:var(--blue);border:2.5px solid var(--blue)}
+.btn-lg{padding:18px 40px;font-size:1.15rem}
+.btn-sm{padding:9px 20px;font-size:.88rem}
+.btn-full{width:100%;display:flex}
+
+/* ══ BADGE / CHIP ══ */
+.badge{display:inline-block;padding:4px 14px;border-radius:20px;
+  font-size:.78rem;font-weight:700}
+.badge-blue{background:var(--blue-l);color:var(--blue-d)}
+.badge-yellow{background:var(--yellow-l);color:var(--yellow-d)}
+.badge-green{background:var(--green-l);color:var(--green-d)}
+.badge-purple{background:var(--purple-l);color:var(--purple)}
+
+/* ══ MULTIPLE TILES ══ */
+.multiples{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.mt{min-width:44px;height:44px;border-radius:12px;display:flex;
+  align-items:center;justify-content:center;font-weight:700;font-size:.9rem}
+.mt-blue{background:var(--blue-l);color:var(--blue-d)}
+.mt-yellow{background:var(--yellow-l);color:var(--yellow-d)}
+.mt-common{background:linear-gradient(135deg,#A7F3D0,#6EE7B7);color:var(--green-d);
+  border:2px solid var(--green);transform:scale(1.1)}
+.mt-lcm{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;
+  border:3px solid var(--yellow);box-shadow:0 0 0 4px rgba(245,158,11,.3);
+  transform:scale(1.2);font-size:1rem}
+
+/* ══ TIP CARD ══ */
+.tip-card{display:flex;gap:16px;align-items:flex-start;
+  background:linear-gradient(135deg,#F0F7FF,#DBEAFE);
+  border-radius:var(--r);padding:20px;border-left:5px solid var(--blue);margin-bottom:14px}
+.tip-num{width:36px;height:36px;background:var(--blue);color:#fff;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:.9rem;flex-shrink:0}
+.tip-body{flex:1}
+
+/* ══ EXAMPLE BOX ══ */
+.example-box{background:linear-gradient(135deg,var(--yellow-l),#FDE68A);
+  border-radius:var(--r);padding:18px 20px;border-left:5px solid var(--yellow);margin:14px 0}
+.example-box .label{font-size:.78rem;font-weight:700;color:var(--yellow-d);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+
+/* ══ STEP BOXES (guided practice) ══ */
+.step-box{background:var(--blue-l);border-radius:12px;padding:14px 18px;margin:8px 0;
+  border-left:4px solid var(--blue)}
+.step-box .step-label{font-size:.75rem;font-weight:700;color:var(--blue-d);
+  text-transform:uppercase;margin-bottom:4px}
+
+/* ══ GUIDED PRACTICE ══ */
+.gp-card{background:var(--card);border-radius:var(--r-lg);padding:26px 22px;
+  box-shadow:var(--shadow);border:2px solid var(--border);margin-bottom:16px;
+  transition:.3s}
+.gp-card.answered{border-color:var(--green)}
+.gp-input-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0}
+.gp-input{padding:12px 18px;border-radius:12px;border:2.5px solid var(--border);
+  font-size:1rem;font-weight:700;width:120px;text-align:center;
+  font-family:'Poppins',sans-serif;outline:none;transition:.2s}
+.gp-input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(59,130,246,.15)}
+.gp-input.correct{border-color:var(--green);background:var(--green-l)}
+.gp-input.wrong{border-color:var(--red);background:var(--red-l)}
+.gp-feedback{display:none;margin-top:14px;border-radius:var(--r);padding:16px 18px}
+.gp-feedback.show{display:block}
+.gp-feedback.ok{background:var(--green-l);border:1.5px solid var(--green)}
+.gp-feedback.ng{background:var(--red-l);border:1.5px solid var(--red)}
+
+/* ══ PROGRESS BAR ══ */
+.pbar-wrap{background:var(--blue-l);border-radius:50px;height:12px;overflow:hidden;
+  margin:8px 0}
+.pbar-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));
+  border-radius:50px;transition:width .5s ease}
+
+/* ══ QUIZ ══ */
+.quiz-header{background:var(--card);border-radius:var(--r-lg);padding:18px 22px;
+  margin-bottom:20px;box-shadow:var(--shadow);border:1.5px solid var(--border)}
+.quiz-meta{display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.q-counter{font-size:.88rem;font-weight:700;color:var(--gray)}
+.q-score-badge{background:var(--yellow-l);color:var(--yellow-d);
+  padding:6px 18px;border-radius:20px;font-weight:800;font-size:.88rem}
+
+.quiz-card{background:var(--card);border-radius:var(--r-lg);padding:28px 24px;
+  box-shadow:var(--shadow-lg);border:1.5px solid var(--border);margin-bottom:16px}
+.q-type-badge{margin-bottom:14px}
+.q-text{font-size:1.15rem;font-weight:700;color:var(--navy);line-height:1.6;margin-bottom:22px}
+
+/* choices */
+.choices{display:grid;gap:12px}
+.choice-btn{width:100%;padding:15px 20px;border-radius:14px;
+  border:2.5px solid var(--border);background:var(--card);
+  text-align:left;font-size:1rem;font-weight:600;cursor:pointer;
+  display:flex;align-items:center;gap:14px;transition:.18s;
+  color:var(--navy);font-family:'Poppins',sans-serif}
+.choice-btn:hover:not(:disabled){border-color:var(--blue);
+  background:var(--blue-l);transform:translateX(4px)}
+.choice-lbl{width:34px;height:34px;border-radius:50%;
+  background:var(--bg);color:var(--gray);font-weight:800;font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  border:2px solid var(--border)}
+.choice-btn.selected .choice-lbl{background:var(--blue);color:#fff;border-color:var(--blue)}
+.choice-btn.selected{border-color:var(--blue);background:var(--blue-l)}
+.choice-btn.correct{border-color:var(--green)!important;background:var(--green-l)!important}
+.choice-btn.correct .choice-lbl{background:var(--green)!important;color:#fff!important;border-color:var(--green)!important}
+.choice-btn.wrong{border-color:var(--red)!important;background:var(--red-l)!important}
+.choice-btn.wrong .choice-lbl{background:var(--red)!important;color:#fff!important;border-color:var(--red)!important}
+.choice-btn:disabled{cursor:default;transform:none!important}
+
+/* feedback */
+.q-feedback{display:none;border-radius:var(--r);padding:16px 20px;margin:14px 0}
+.q-feedback.show{display:block}
+.q-feedback.ok{background:var(--green-l);border:1.5px solid var(--green)}
+.q-feedback.ng{background:var(--red-l);border:1.5px solid var(--red)}
+.fb-title{font-weight:800;font-size:1rem;margin-bottom:4px}
+.fb-exp{font-size:.9rem;color:var(--text);line-height:1.6}
+
+/* ══ RESULTS ══ */
+.score-ring-wrap{display:flex;justify-content:center;margin:24px 0}
+.score-ring{width:140px;height:140px;border-radius:50%;
+  border:8px solid var(--blue-l);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;position:relative;
+  background:var(--card);box-shadow:var(--shadow-lg)}
+.score-ring .big{font-size:2.2rem;font-weight:900;color:var(--navy)}
+.score-ring .small{font-size:.78rem;font-weight:600;color:var(--gray)}
+
+.review-item{display:flex;gap:14px;align-items:flex-start;padding:12px 16px;
+  border-bottom:1px solid var(--border)}
+.review-item:last-child{border-bottom:none}
+.review-item.ok{background:rgba(16,185,129,.05)}
+.review-item.ng{background:rgba(239,68,68,.05)}
+.ri-icon{font-size:1.1rem;flex-shrink:0;margin-top:2px}
+.ri-q{font-weight:700;font-size:.88rem;color:var(--navy);margin-bottom:2px}
+.ri-a{font-size:.82rem;color:var(--gray)}
+
+/* ══ HERO ══ */
+.hero{background:linear-gradient(135deg,#1E3A5F 0%,#1D4ED8 50%,#3B82F6 100%);
+  color:#fff;padding:64px 20px 80px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40%;left:-20%;
+  width:140%;height:200%;
+  background:radial-gradient(ellipse at 30% 40%,rgba(255,255,255,.08) 0%,transparent 60%),
+    radial-gradient(ellipse at 70% 60%,rgba(245,158,11,.12) 0%,transparent 60%);
+  pointer-events:none}
+.hero h1{color:#fff;margin-bottom:12px}
+.hero .sub{font-size:1.1rem;opacity:.9;margin-bottom:8px;font-weight:500}
+.hero .intro{max-width:580px;margin:0 auto 32px;font-size:.95rem;
+  opacity:.85;line-height:1.8}
+.hero-badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+.hero-badge{padding:6px 18px;border-radius:20px;
+  background:rgba(255,255,255,.15);backdrop-filter:blur(4px);
+  color:#fff;font-size:.82rem;font-weight:700;border:1px solid rgba(255,255,255,.25)}
+
+/* ══ SECTION HEADER ══ */
+.sec-header{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.sec-icon{width:48px;height:48px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.sec-icon-blue{background:var(--blue-l)}
+.sec-icon-yellow{background:var(--yellow-l)}
+.sec-icon-green{background:var(--green-l)}
+.sec-icon-purple{background:var(--purple-l)}
+
+/* ══ ANIMATIONS ══ */
+@keyframes pop{0%{transform:scale(.7);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes confetti{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(60px) rotate(360deg);opacity:0}}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(59,130,246,.4)}100%{box-shadow:0 0 0 16px rgba(59,130,246,0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+.anim-pop{animation:pop .35s cubic-bezier(.34,1.56,.64,1)}
+.anim-shake{animation:shake .35s ease}
+.anim-fade{animation:fadeUp .4s ease}
+
+.confetti-piece{position:fixed;width:10px;height:10px;border-radius:2px;
+  animation:confetti .8s ease forwards;pointer-events:none;z-index:999}
+
+/* ══ NAV BAR ══ */
+.navbar{background:var(--card);border-bottom:1.5px solid var(--border);
+  padding:14px 20px;position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.nav-title{font-weight:800;color:var(--navy);font-size:.95rem}
+.nav-steps{display:flex;gap:6px;flex-wrap:wrap}
+.nav-step{padding:5px 14px;border-radius:20px;font-size:.78rem;font-weight:700;
+  background:var(--bg);color:var(--gray);cursor:pointer;border:1.5px solid var(--border);
+  transition:.2s}
+.nav-step.done{background:var(--green-l);color:var(--green-d);border-color:var(--green)}
+.nav-step.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* ══ TOOLTIP / DEFINITION ══ */
+.def-box{background:linear-gradient(135deg,#F0F7FF,#DBEAFE);
+  border-radius:var(--r);padding:20px 22px;
+  border:2px solid var(--blue);margin:16px 0;position:relative}
+.def-box::before{content:'📘 Definition';position:absolute;top:-12px;left:18px;
+  background:var(--blue);color:#fff;font-size:.72rem;font-weight:700;
+  padding:3px 12px;border-radius:10px;letter-spacing:.3px}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:600px){
+  .hero{padding:44px 16px 60px}
+  .card,.quiz-card,.gp-card{padding:20px 16px}
+  .choices{gap:10px}
+  .gp-input-row{gap:8px}
+  .tip-card{flex-direction:column;gap:10px}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════ -->
+<nav class="navbar" id="navbar" style="display:none">
+  <span class="nav-title">📐 1.3 LCM — Year 7</span>
+  <div class="nav-steps">
+    <span class="nav-step" id="ns-home" onclick="goTo('home')">🏠 Home</span>
+    <span class="nav-step" id="ns-learn" onclick="goTo('learn')">📖 Learn</span>
+    <span class="nav-step" id="ns-tips" onclick="goTo('tips')">💡 Tips</span>
+    <span class="nav-step" id="ns-practice" onclick="goTo('practice')">✏️ Practice</span>
+    <span class="nav-step" id="ns-quiz" onclick="startQuizConfirm()">🎯 Quiz</span>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════
+     PAGE 1 — HOME
+════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="container">
+      <p style="font-size:.82rem;font-weight:700;opacity:.7;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">📐 Cambridge Lower Secondary · Unit 1 · Section 1.3</p>
+      <h1>Lowest Common Multiples</h1>
+      <p class="sub">Master the LCM — one step at a time 🚀</p>
+      <p class="intro">In this quiz, you will practise finding the <strong>Lowest Common Multiple</strong>, also called the <strong>LCM</strong>. The LCM is useful when comparing cycles, repeated events, fractions, and problem-solving questions.</p>
+      <div class="hero-badges">
+        <span class="hero-badge">📖 2 Learning Sections</span>
+        <span class="hero-badge">💡 5 Study Tips</span>
+        <span class="hero-badge">✏️ 5 Guided Practice</span>
+        <span class="hero-badge">🎯 20 Quiz Questions</span>
+      </div>
+      <button class="btn btn-yellow btn-lg" onclick="goTo('learn')">Start Learning ➜</button>
+      <p style="margin-top:20px;font-size:.8rem;opacity:.65;font-weight:600">✏️ Created by Bright EngMath</p>
+    </div>
+  </div>
+
+  <div class="container section">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+      <div class="card" style="text-align:center;border-top:4px solid var(--blue)">
+        <div style="font-size:2.5rem;margin-bottom:10px">📖</div>
+        <h3>Learn</h3>
+        <p style="font-size:.9rem;margin:8px 0 16px">Understand multiples and the LCM with clear examples.</p>
+        <button class="btn btn-outline btn-sm" onclick="goTo('learn')">Study Now</button>
+      </div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--yellow)">
+        <div style="font-size:2.5rem;margin-bottom:10px">💡</div>
+        <h3>Tips & Methods</h3>
+        <p style="font-size:.9rem;margin:8px 0 16px">5 useful tips including prime factorisation method.</p>
+        <button class="btn btn-outline btn-sm" onclick="goTo('tips')">Read Tips</button>
+      </div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--green)">
+        <div style="font-size:2.5rem;margin-bottom:10px">✏️</div>
+        <h3>Guided Practice</h3>
+        <p style="font-size:.9rem;margin:8px 0 16px">Try 5 questions with step-by-step worked solutions.</p>
+        <button class="btn btn-outline btn-sm" onclick="goTo('practice')">Practice Now</button>
+      </div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--purple)">
+        <div style="font-size:2.5rem;margin-bottom:10px">🎯</div>
+        <h3>Quiz</h3>
+        <p style="font-size:.9rem;margin:8px 0 16px">20 questions — test yourself and track your score!</p>
+        <button class="btn btn-primary btn-sm" onclick="startQuizConfirm()">Start Quiz</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 2 — LEARN
+════════════════════════════════════════ -->
+<div id="page-learn" class="page">
+  <div class="container section">
+
+    <!-- Section A: What is a Multiple? -->
+    <div class="sec-header">
+      <div class="sec-icon sec-icon-blue">📘</div>
+      <div>
+        <span class="badge badge-blue">Section 1</span>
+        <h2 style="margin-top:4px">What is a Multiple?</h2>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="def-box" style="margin-top:20px">
+        <p>A <strong>multiple</strong> is the result of multiplying a number by <strong>1, 2, 3, 4, 5,</strong> and so on. Multiples of a number go on forever — they never stop!</p>
+      </div>
+
+      <div class="example-box">
+        <div class="label">Example — Multiples of 4</div>
+        <p style="margin-bottom:10px">4 × 1 = 4 &nbsp;·&nbsp; 4 × 2 = 8 &nbsp;·&nbsp; 4 × 3 = 12 &nbsp;·&nbsp; 4 × 4 = 16 &nbsp;·&nbsp; 4 × 5 = 20 &nbsp;·&nbsp; …</p>
+        <div class="multiples">
+          <div class="mt mt-blue">4</div><div class="mt mt-blue">8</div>
+          <div class="mt mt-blue">12</div><div class="mt mt-blue">16</div>
+          <div class="mt mt-blue">20</div><div class="mt mt-blue">24</div>
+          <div class="mt mt-blue">28</div><div class="mt mt-blue">32</div>
+          <div class="mt" style="background:#F1F5F9;color:#94A3B8">…</div>
+        </div>
+      </div>
+
+      <div class="example-box" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-color:var(--yellow)">
+        <div class="label" style="color:var(--yellow-d)">Example — Multiples of 6</div>
+        <p style="margin-bottom:10px">6 × 1 = 6 &nbsp;·&nbsp; 6 × 2 = 12 &nbsp;·&nbsp; 6 × 3 = 18 &nbsp;·&nbsp; 6 × 4 = 24 &nbsp;·&nbsp; 6 × 5 = 30 &nbsp;·&nbsp; …</p>
+        <div class="multiples">
+          <div class="mt mt-yellow">6</div><div class="mt mt-yellow">12</div>
+          <div class="mt mt-yellow">18</div><div class="mt mt-yellow">24</div>
+          <div class="mt mt-yellow">30</div><div class="mt mt-yellow">36</div>
+          <div class="mt" style="background:#F1F5F9;color:#94A3B8">…</div>
+        </div>
+      </div>
+
+      <div class="card" style="background:#F8FAFC;border:none;margin-top:18px">
+        <h3 style="margin-bottom:12px">✅ Quick Check</h3>
+        <p>Is 20 a multiple of 4?</p>
+        <p style="margin-top:8px">4 × 5 = <strong>20</strong> ✓ &nbsp; Yes! Because 4 divides exactly into 20 with no remainder.</p>
+        <p style="margin-top:10px">Is 14 a multiple of 4?</p>
+        <p style="margin-top:8px">14 ÷ 4 = 3 remainder 2 &nbsp; ✗ &nbsp; No! There is a remainder, so 14 is NOT a multiple of 4.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:32px"></div>
+
+    <!-- Section B: What is the LCM? -->
+    <div class="sec-header">
+      <div class="sec-icon sec-icon-yellow">🔍</div>
+      <div>
+        <span class="badge badge-yellow">Section 2</span>
+        <h2 style="margin-top:4px">What is the LCM?</h2>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="def-box" style="margin-top:20px">
+        <p>The <strong>Lowest Common Multiple (LCM)</strong> is the <strong>smallest number</strong> that appears in the multiple lists of two or more numbers. It is the first multiple that both numbers share.</p>
+      </div>
+
+      <div class="example-box">
+        <div class="label">Worked Example — Find the LCM of 4 and 6</div>
+        <div class="step-box">
+          <div class="step-label">Step 1 — List multiples of 4</div>
+          <div class="multiples">
+            <div class="mt mt-blue">4</div><div class="mt mt-blue">8</div>
+            <div class="mt mt-common">12</div><div class="mt mt-blue">16</div>
+            <div class="mt mt-blue">20</div><div class="mt mt-common">24</div>
+            <div class="mt" style="background:#E2E8F0;color:#94A3B8">…</div>
+          </div>
+        </div>
+        <div class="step-box" style="background:var(--yellow-l);border-color:var(--yellow)">
+          <div class="step-label" style="color:var(--yellow-d)">Step 2 — List multiples of 6</div>
+          <div class="multiples">
+            <div class="mt mt-yellow">6</div><div class="mt mt-common">12</div>
+            <div class="mt mt-yellow">18</div><div class="mt mt-common">24</div>
+            <div class="mt mt-yellow">30</div>
+            <div class="mt" style="background:#E2E8F0;color:#94A3B8">…</div>
+          </div>
+        </div>
+        <div class="step-box" style="background:var(--green-l);border-color:var(--green)">
+          <div class="step-label" style="color:var(--green-d)">Step 3 — Find common multiples (appear in BOTH lists)</div>
+          <div class="multiples">
+            <div class="mt mt-common">12</div><div class="mt mt-common">24</div>
+            <div class="mt" style="background:#E2E8F0;color:#94A3B8">…</div>
+          </div>
+          <p style="font-size:.88rem;margin-top:8px;color:var(--green-d)">Common multiples of 4 and 6 are: <strong>12, 24, 36, …</strong></p>
+        </div>
+        <div class="step-box" style="background:var(--blue-l);border-color:var(--blue-d)">
+          <div class="step-label" style="color:var(--blue-d)">Step 4 — Choose the LOWEST (smallest) common multiple</div>
+          <div class="multiples">
+            <div class="mt mt-lcm">12</div>
+          </div>
+          <p style="margin-top:10px;font-size:1rem;font-weight:700;color:var(--navy)">∴ LCM of 4 and 6 = <span style="color:var(--blue-d);font-size:1.2rem">12</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
+      <button class="btn btn-outline" onclick="goTo('home')">← Back to Home</button>
+      <button class="btn btn-primary" onclick="goTo('tips')">Next: Tips & Methods ➜</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 3 — TIPS
+════════════════════════════════════════ -->
+<div id="page-tips" class="page">
+  <div class="container section">
+    <div class="sec-header">
+      <div class="sec-icon sec-icon-yellow">💡</div>
+      <div>
+        <span class="badge badge-yellow">Study Tips</span>
+        <h2 style="margin-top:4px">How to Find the LCM</h2>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">1</div>
+      <div class="tip-body">
+        <h3>List multiples carefully</h3>
+        <p style="margin-top:6px;font-size:.93rem">Start with the smaller number and list its multiples. Look for the <strong>first number that appears in both lists</strong>. Don't skip any multiples or you might miss the LCM!</p>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">2</div>
+      <div class="tip-body">
+        <h3>Choose the LOWEST common multiple</h3>
+        <p style="margin-top:6px;font-size:.93rem">Do not pick just any common multiple. The LCM must be the <strong>smallest</strong> common multiple. For example, 12 and 24 are both common multiples of 4 and 6, but the LCM is <strong>12</strong>.</p>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">3</div>
+      <div class="tip-body">
+        <h3>If one number is a multiple of the other</h3>
+        <p style="margin-top:6px;font-size:.93rem">If one number divides exactly into the other, the larger number is automatically the LCM — no listing needed!</p>
+        <div class="example-box" style="margin-top:12px;padding:12px 16px">
+          <div class="label">Example</div>
+          <p style="font-size:.9rem">LCM of 5 and 10: Since 10 = 5 × 2, the LCM is simply <strong>10</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">4</div>
+      <div class="tip-body">
+        <h3>Use prime factorisation for bigger numbers</h3>
+        <p style="margin-top:6px;font-size:.93rem">For large numbers, listing every multiple takes too long. Instead, use <strong>prime factorisation</strong>:</p>
+        <div class="example-box" style="margin-top:12px;padding:14px 18px">
+          <div class="label">Worked Example — LCM of 12 and 18</div>
+          <div class="step-box" style="margin-top:10px">
+            <div class="step-label">Step 1 — Prime factorise each number</div>
+            <p style="font-size:.9rem">12 = 2² × 3 &nbsp;&nbsp;&nbsp; 18 = 2 × 3²</p>
+          </div>
+          <div class="step-box">
+            <div class="step-label">Step 2 — Take the HIGHEST power of each prime</div>
+            <p style="font-size:.9rem">Highest power of 2: <strong>2²</strong> &nbsp;&nbsp; Highest power of 3: <strong>3²</strong></p>
+          </div>
+          <div class="step-box">
+            <div class="step-label">Step 3 — Multiply</div>
+            <p style="font-size:.9rem">LCM = 2² × 3² = 4 × 9 = <strong>36</strong></p>
+          </div>
+          <p style="font-size:.9rem;font-weight:700;margin-top:8px;color:var(--navy)">∴ LCM of 12 and 18 = 36</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">5</div>
+      <div class="tip-body">
+        <h3>Spot word problems using LCM</h3>
+        <p style="margin-top:6px;font-size:.93rem">In word problems, look for <strong>repeated events</strong> or cycles. Key words that mean you need LCM:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+          <span class="badge badge-blue">"every … seconds/days"</span>
+          <span class="badge badge-yellow">"flash again together"</span>
+          <span class="badge badge-green">"ring at the same time"</span>
+          <span class="badge badge-purple">"repeat together"</span>
+        </div>
+        <div class="example-box" style="margin-top:12px;padding:12px 16px">
+          <div class="label">Example</div>
+          <p style="font-size:.9rem">Two buses depart every 4 and 6 minutes. LCM(4, 6) = 12 → they depart together every <strong>12 minutes</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
+      <button class="btn btn-outline" onclick="goTo('learn')">← Back to Learn</button>
+      <button class="btn btn-primary" onclick="goTo('practice')">Next: Guided Practice ➜</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 4 — GUIDED PRACTICE
+════════════════════════════════════════ -->
+<div id="page-practice" class="page">
+  <div class="container section">
+    <div class="sec-header">
+      <div class="sec-icon sec-icon-green">✏️</div>
+      <div>
+        <span class="badge badge-green">Guided Practice</span>
+        <h2 style="margin-top:4px">Try It Yourself!</h2>
+      </div>
+    </div>
+    <p style="margin-bottom:24px;color:var(--gray)">Work out each answer, type it in, and click <strong>Check</strong> to see the full worked solution.</p>
+
+    <!-- GP 1 -->
+    <div class="gp-card" id="gp1">
+      <span class="badge badge-blue" style="margin-bottom:10px">Question 1</span>
+      <h3>Find the LCM of 3 and 4.</h3>
+      <div class="gp-input-row">
+        <span style="font-weight:600">LCM =</span>
+        <input class="gp-input" id="gp1-in" type="number" placeholder="?" onkeydown="if(event.key==='Enter')checkGP(1)">
+        <button class="btn btn-primary btn-sm" onclick="checkGP(1)">Check ✓</button>
+      </div>
+      <div class="gp-feedback" id="gp1-fb">
+        <div class="step-box"><div class="step-label">Multiples of 3</div>3, 6, 9, <strong>12</strong>, 15, 18, …</div>
+        <div class="step-box"><div class="step-label">Multiples of 4</div>4, 8, <strong>12</strong>, 16, 20, …</div>
+        <div class="step-box" style="background:var(--green-l);border-color:var(--green)"><div class="step-label" style="color:var(--green-d)">First common multiple</div><strong>12</strong> → ∴ LCM(3, 4) = <strong>12</strong> ✓</div>
+      </div>
+    </div>
+
+    <!-- GP 2 -->
+    <div class="gp-card" id="gp2">
+      <span class="badge badge-blue" style="margin-bottom:10px">Question 2</span>
+      <h3>Find the LCM of 6 and 9.</h3>
+      <div class="gp-input-row">
+        <span style="font-weight:600">LCM =</span>
+        <input class="gp-input" id="gp2-in" type="number" placeholder="?" onkeydown="if(event.key==='Enter')checkGP(2)">
+        <button class="btn btn-primary btn-sm" onclick="checkGP(2)">Check ✓</button>
+      </div>
+      <div class="gp-feedback" id="gp2-fb">
+        <div class="step-box"><div class="step-label">Multiples of 6</div>6, 12, <strong>18</strong>, 24, 30, …</div>
+        <div class="step-box"><div class="step-label">Multiples of 9</div>9, <strong>18</strong>, 27, 36, …</div>
+        <div class="step-box" style="background:var(--green-l);border-color:var(--green)"><div class="step-label" style="color:var(--green-d)">First common multiple</div><strong>18</strong> → ∴ LCM(6, 9) = <strong>18</strong> ✓</div>
+      </div>
+    </div>
+
+    <!-- GP 3 -->
+    <div class="gp-card" id="gp3">
+      <span class="badge badge-blue" style="margin-bottom:10px">Question 3</span>
+      <h3>Find the LCM of 8 and 12.</h3>
+      <div class="gp-input-row">
+        <span style="font-weight:600">LCM =</span>
+        <input class="gp-input" id="gp3-in" type="number" placeholder="?" onkeydown="if(event.key==='Enter')checkGP(3)">
+        <button class="btn btn-primary btn-sm" onclick="checkGP(3)">Check ✓</button>
+      </div>
+      <div class="gp-feedback" id="gp3-fb">
+        <div class="step-box"><div class="step-label">Multiples of 8</div>8, 16, <strong>24</strong>, 32, …</div>
+        <div class="step-box"><div class="step-label">Multiples of 12</div>12, <strong>24</strong>, 36, …</div>
+        <div class="step-box" style="background:var(--green-l);border-color:var(--green)"><div class="step-label" style="color:var(--green-d)">First common multiple</div><strong>24</strong> → ∴ LCM(8, 12) = <strong>24</strong> ✓</div>
+      </div>
+    </div>
+
+    <!-- GP 4 -->
+    <div class="gp-card" id="gp4">
+      <span class="badge badge-blue" style="margin-bottom:10px">Question 4</span>
+      <h3>Find the LCM of 10 and 15.</h3>
+      <div class="gp-input-row">
+        <span style="font-weight:600">LCM =</span>
+        <input class="gp-input" id="gp4-in" type="number" placeholder="?" onkeydown="if(event.key==='Enter')checkGP(4)">
+        <button class="btn btn-primary btn-sm" onclick="checkGP(4)">Check ✓</button>
+      </div>
+      <div class="gp-feedback" id="gp4-fb">
+        <div class="step-box"><div class="step-label">Multiples of 10</div>10, 20, <strong>30</strong>, 40, …</div>
+        <div class="step-box"><div class="step-label">Multiples of 15</div>15, <strong>30</strong>, 45, …</div>
+        <div class="step-box" style="background:var(--green-l);border-color:var(--green)"><div class="step-label" style="color:var(--green-d)">First common multiple</div><strong>30</strong> → ∴ LCM(10, 15) = <strong>30</strong> ✓</div>
+      </div>
+    </div>
+
+    <!-- GP 5 -->
+    <div class="gp-card" id="gp5">
+      <span class="badge badge-yellow" style="margin-bottom:10px">Word Problem</span>
+      <h3>Two lights flash every 4 seconds and every 6 seconds. After how many seconds will they flash together again?</h3>
+      <div class="gp-input-row">
+        <span style="font-weight:600">Answer =</span>
+        <input class="gp-input" id="gp5-in" type="number" placeholder="? sec" onkeydown="if(event.key==='Enter')checkGP(5)">
+        <span style="font-weight:600">seconds</span>
+        <button class="btn btn-primary btn-sm" onclick="checkGP(5)">Check ✓</button>
+      </div>
+      <div class="gp-feedback" id="gp5-fb">
+        <div class="step-box"><div class="step-label">Identify the method</div>Two lights flash at regular intervals → use LCM to find when they flash together.</div>
+        <div class="step-box"><div class="step-label">LCM of 4 and 6</div>Multiples of 4: 4, 8, <strong>12</strong>, … &nbsp; Multiples of 6: 6, <strong>12</strong>, … → LCM = 12</div>
+        <div class="step-box" style="background:var(--green-l);border-color:var(--green)"><div class="step-label" style="color:var(--green-d)">Answer</div>The two lights will flash together again after <strong>12 seconds</strong> ✓</div>
+      </div>
+    </div>
+
+    <div id="gp-all-done" style="display:none" class="card anim-fade" style="text-align:center;border:2px solid var(--green);margin-top:12px">
+      <div style="font-size:2rem;margin-bottom:8px">🎉</div>
+      <h3 style="color:var(--green-d)">All practice questions completed!</h3>
+      <p style="margin:8px 0 16px;font-size:.93rem">Great work! You're ready for the quiz.</p>
+      <button class="btn btn-primary btn-lg" onclick="startQuizConfirm()">Start the Quiz 🎯</button>
+    </div>
+
+    <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap" id="gp-nav">
+      <button class="btn btn-outline" onclick="goTo('tips')">← Back to Tips</button>
+      <button class="btn btn-primary" onclick="startQuizConfirm()">Start Quiz 🎯</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 5 — QUIZ
+════════════════════════════════════════ -->
+<div id="page-quiz" class="page">
+  <div class="container" style="padding-top:24px;padding-bottom:40px">
+
+    <!-- Quiz header -->
+    <div class="quiz-header">
+      <div class="quiz-meta">
+        <span class="q-counter" id="q-counter">Question 1 of 20</span>
+        <span class="q-score-badge" id="q-score-badge">⭐ Score: 0</span>
+      </div>
+      <div class="pbar-wrap">
+        <div class="pbar-fill" id="q-pbar" style="width:0%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px">
+        <span style="font-size:.75rem;color:var(--gray)" id="q-correct-count">✅ 0 correct</span>
+        <span style="font-size:.75rem;color:var(--gray)" id="q-wrong-count">❌ 0 wrong</span>
+      </div>
+    </div>
+
+    <!-- Quiz question card -->
+    <div class="quiz-card anim-fade" id="quiz-card">
+      <div class="q-type-badge" id="q-type-badge"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="choices" id="q-choices"></div>
+      <div class="q-feedback" id="q-feedback">
+        <div class="fb-title" id="fb-title"></div>
+        <div class="fb-exp" id="fb-exp"></div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-full" id="btn-next" style="display:none" onclick="nextQuestion()">
+      Next Question ➜
+    </button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE 6 — RESULTS
+════════════════════════════════════════ -->
+<div id="page-results" class="page">
+  <div class="container" style="padding:32px 20px 60px">
+
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="font-size:3rem;margin-bottom:8px" id="r-deco">🏆</div>
+      <h1 id="r-title">Outstanding!</h1>
+      <p style="color:var(--gray);margin-top:4px">1.3 Lowest Common Multiples — Year 7</p>
+    </div>
+
+    <div class="score-ring-wrap">
+      <div class="score-ring" id="score-ring">
+        <span class="big" id="r-score">0/20</span>
+        <span class="small" id="r-pct">0%</span>
+      </div>
+    </div>
+
+    <div class="card" style="text-align:center;margin-bottom:20px">
+      <div id="r-badge" class="badge" style="font-size:1rem;padding:10px 28px;margin-bottom:12px"></div>
+      <p id="r-msg" style="font-size:.95rem;line-height:1.7"></p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+      <div class="card" style="text-align:center;border-top:4px solid var(--green);padding:16px 10px">
+        <div style="font-size:1.8rem;font-weight:900;color:var(--green-d)" id="r-correct">0</div>
+        <div style="font-size:.75rem;color:var(--gray);margin-top:2px">Correct ✅</div>
+      </div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--red);padding:16px 10px">
+        <div style="font-size:1.8rem;font-weight:900;color:var(--red-d)" id="r-wrong">0</div>
+        <div style="font-size:.75rem;color:var(--gray);margin-top:2px">Wrong ❌</div>
+      </div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--blue);padding:16px 10px">
+        <div style="font-size:1.8rem;font-weight:900;color:var(--blue-d)" id="r-pct-stat">0%</div>
+        <div style="font-size:.75rem;color:var(--gray);margin-top:2px">Accuracy</div>
+      </div>
+    </div>
+
+    <!-- Review -->
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="background:var(--bg);padding:14px 20px;font-weight:800;font-size:.88rem;
+        color:var(--gray);text-transform:uppercase;letter-spacing:.5px;
+        border-bottom:1.5px solid var(--border)">
+        📋 Question Review
+      </div>
+      <div id="r-review" style="max-height:340px;overflow-y:auto"></div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px">
+      <button class="btn btn-outline" style="flex:1;min-width:140px" onclick="goTo('learn')">📖 Review Notes</button>
+      <button class="btn btn-yellow" style="flex:1;min-width:140px" onclick="restartQuiz()">🔄 Try Again</button>
+      <button class="btn btn-primary" style="flex:1;min-width:140px" onclick="goTo('home')">🏠 Home</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
+<script>
+/* ── QUIZ DATA ── */
+const QUIZ = [
+  {type:'Find the LCM',
+   q:'What is the LCM of 2 and 3?',
+   ch:['3','4','5','6'],ans:3,
+   exp:'Multiples of 2: 2, 4, 6. Multiples of 3: 3, 6. The first number in both lists is 6, so LCM = 6.'},
+  {type:'Find the LCM',
+   q:'What is the LCM of 4 and 6?',
+   ch:['8','10','12','24'],ans:2,
+   exp:'12 is the smallest number that is a multiple of both 4 and 6. Multiples of 4: 4, 8, 12. Multiples of 6: 6, 12.'},
+  {type:'Find the LCM',
+   q:'What is the LCM of 5 and 10?',
+   ch:['5','10','15','20'],ans:1,
+   exp:'10 is already a multiple of 5 (5 × 2 = 10), so the LCM is simply 10.'},
+  {type:'Find the LCM',
+   q:'What is the LCM of 3 and 4?',
+   ch:['6','8','12','16'],ans:2,
+   exp:'Multiples of 3: 3, 6, 9, 12. Multiples of 4: 4, 8, 12. First common multiple = 12.'},
+  {type:'Find the LCM',
+   q:'What is the LCM of 6 and 8?',
+   ch:['12','18','24','48'],ans:2,
+   exp:'Multiples of 6: 6, 12, 18, 24. Multiples of 8: 8, 16, 24. First common multiple = 24.'},
+  {type:'Find the LCM',
+   q:'What is the LCM of 7 and 2?',
+   ch:['7','9','12','14'],ans:3,
+   exp:'Multiples of 7: 7, 14. Multiples of 2: 2, 4, 6, 8, 10, 12, 14. First common multiple = 14.'},
+  {type:'Find the LCM',
+   q:'What is the LCM of 9 and 6?',
+   ch:['12','15','18','24'],ans:2,
+   exp:'Multiples of 9: 9, 18. Multiples of 6: 6, 12, 18. First common multiple = 18.'},
+  {type:'LCM of 3 Numbers',
+   q:'What is the LCM of 4, 5, and 10?',
+   ch:['10','15','20','40'],ans:2,
+   exp:'LCM(5, 10) = 10. LCM(10, 4): multiples of 10: 10, 20. Multiples of 4: 4, 8, 12, 16, 20. LCM = 20.'},
+  {type:'LCM of 3 Numbers',
+   q:'What is the LCM of 2, 3, and 5?',
+   ch:['10','15','20','30'],ans:3,
+   exp:'2, 3, and 5 are all prime and different. LCM = 2 × 3 × 5 = 30.'},
+  {type:'LCM of 3 Numbers',
+   q:'What is the LCM of 3, 6, and 9?',
+   ch:['9','12','18','27'],ans:2,
+   exp:'Multiples of 9: 9, 18. Multiples of 6: 6, 12, 18. Multiples of 3: 3, 6, 9, 12, 15, 18. First common multiple = 18.'},
+  {type:'Common Multiples',
+   q:'Which number is a common multiple of 4 and 6?',
+   ch:['10','12','14','16'],ans:1,
+   exp:'Multiples of 4: 4, 8, 12, 16, … Multiples of 6: 6, 12, 18, … 12 appears in both lists.'},
+  {type:'Find the LCM',
+   q:'Which number is the Lowest Common Multiple of 5 and 8?',
+   ch:['20','30','40','50'],ans:2,
+   exp:'Multiples of 5: 5, 10, 15, 20, 25, 30, 35, 40. Multiples of 8: 8, 16, 24, 32, 40. LCM = 40.'},
+  {type:'Identify Multiples',
+   q:'Which list shows multiples of 3?',
+   ch:['3, 6, 9, 12','2, 4, 6, 8','5, 10, 15, 20','4, 8, 12, 16'],ans:0,
+   exp:'3 × 1 = 3, 3 × 2 = 6, 3 × 3 = 9, 3 × 4 = 12. Option A shows all multiples of 3.'},
+  {type:'Identify Multiples',
+   q:'Which number is NOT a multiple of 6?',
+   ch:['12','18','24','28'],ans:3,
+   exp:'28 ÷ 6 = 4 remainder 4. Since there is a remainder, 28 is NOT a multiple of 6.'},
+  {type:'Find the LCM',
+   q:'What is the LCM of 10 and 12?',
+   ch:['20','30','60','120'],ans:2,
+   exp:'Multiples of 12: 12, 24, 36, 48, 60. Multiples of 10: 10, 20, 30, 40, 50, 60. First common multiple = 60.'},
+  {type:'Find the LCM',
+   q:'What is the LCM of 8 and 12?',
+   ch:['16','24','36','48'],ans:1,
+   exp:'Multiples of 8: 8, 16, 24. Multiples of 12: 12, 24. First common multiple = 24.'},
+  {type:'Word Problem',
+   q:'Two bells ring every 4 minutes and 6 minutes. If they ring together now, when will they ring together again?',
+   ch:['6 minutes','8 minutes','10 minutes','12 minutes'],ans:3,
+   exp:'We need LCM(4, 6). Multiples of 4: 4, 8, 12. Multiples of 6: 6, 12. LCM = 12 minutes.'},
+  {type:'Word Problem',
+   q:'Sam jogs every 3 days. Tom jogs every 5 days. If they both jog today, after how many days will they next jog on the same day?',
+   ch:['8 days','10 days','15 days','20 days'],ans:2,
+   exp:'We need LCM(3, 5). Since 3 and 5 share no common factors, LCM = 3 × 5 = 15 days.'},
+  {type:'Word Problem',
+   q:'A red light flashes every 6 seconds. A blue light flashes every 9 seconds. When will they flash together again?',
+   ch:['12 seconds','15 seconds','18 seconds','27 seconds'],ans:2,
+   exp:'LCM(6, 9). Multiples of 6: 6, 12, 18. Multiples of 9: 9, 18. LCM = 18 seconds.'},
+  {type:'Find the LCM',
+   q:'What is the LCM of 12 and 15?',
+   ch:['30','45','60','90'],ans:2,
+   exp:'Multiples of 15: 15, 30, 45, 60. Multiples of 12: 12, 24, 36, 48, 60. LCM = 60.'},
+];
+
+const TYPE_COLORS = {
+  'Find the LCM':'badge-blue',
+  'LCM of 3 Numbers':'badge-purple',
+  'Common Multiples':'badge-yellow',
+  'Identify Multiples':'badge-yellow',
+  'Word Problem':'badge-green',
+};
+
+/* ── STATE ── */
+let curQ=0, qScore=0, qCorrect=0, qWrong=0, qAnswered=false, qResults=[];
+let clickReady=false;
+let gpDone=[false,false,false,false,false];
+
+/* ── AUDIO ── */
+const AC=new (window.AudioContext||window.webkitAudioContext)();
+function beep(freq,dur,type='sine',gain=.3){
+  try{
+    const o=AC.createOscillator(),g=AC.createGain();
+    o.connect(g);g.connect(AC.destination);
+    o.type=type;o.frequency.value=freq;
+    g.gain.setValueAtTime(gain,AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+dur);
+    o.start();o.stop(AC.currentTime+dur);
+  }catch(e){}
+}
+function playCorrect(){beep(523,.1);setTimeout(()=>beep(659,.1),100);setTimeout(()=>beep(784,.2),200);}
+function playWrong(){beep(250,.15,'sawtooth',.25);setTimeout(()=>beep(200,.25,'sawtooth',.2),150);}
+
+/* ── CONFETTI ── */
+function confetti(){
+  const colors=['#3B82F6','#F59E0B','#10B981','#8B5CF6','#EF4444','#F97316'];
+  for(let i=0;i<18;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText=`left:${20+Math.random()*60}%;top:20%;
+      background:${colors[i%colors.length]};
+      transform:rotate(${Math.random()*360}deg);
+      animation-delay:${Math.random()*.3}s;
+      width:${8+Math.random()*8}px;height:${8+Math.random()*8}px`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1200);
+  }
+}
+
+/* ── NAVIGATION ── */
+function goTo(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById('navbar').style.display= page==='home'?'none':'flex';
+  // update nav steps
+  document.querySelectorAll('.nav-step').forEach(s=>s.classList.remove('active'));
+  const ns=document.getElementById('ns-'+page);
+  if(ns)ns.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startQuizConfirm(){
+  curQ=0;qScore=0;qCorrect=0;qWrong=0;qResults=[];
+  clickReady=false;
+  loadQuestion();
+  goTo('quiz');
+}
+
+function restartQuiz(){startQuizConfirm();}
+
+/* ── GUIDED PRACTICE ── */
+const GP_ANS={1:12,2:18,3:24,4:30,5:12};
+function checkGP(n){
+  const input=document.getElementById(`gp${n}-in`);
+  const fb=document.getElementById(`gp${n}-fb`);
+  const val=parseInt(input.value);
+  if(isNaN(val)){input.focus();return;}
+  input.disabled=true;
+  if(val===GP_ANS[n]){
+    input.classList.add('correct');
+    fb.className='gp-feedback show ok';
+    document.getElementById(`gp${n}`).classList.add('answered');
+    playCorrect();confetti();
+    gpDone[n-1]=true;
+    document.getElementById('ns-practice').classList.add('done');
+    if(gpDone.every(Boolean)){
+      setTimeout(()=>{
+        document.getElementById('gp-all-done').style.display='block';
+        document.getElementById('gp-nav').style.display='none';
+      },400);
+    }
+  } else {
+    input.classList.add('wrong');
+    fb.className='gp-feedback show ng';
+    fb.innerHTML=`<div style="font-weight:700;margin-bottom:6px">❌ Not quite! The answer is <strong>${GP_ANS[n]}</strong>. Here's how:</div>`+fb.innerHTML;
+    playWrong();
+    input.classList.add('anim-shake');
+    setTimeout(()=>input.classList.remove('anim-shake'),400);
+    setTimeout(()=>{input.classList.remove('wrong');input.disabled=false;input.value='';input.focus();},1400);
+    fb.className='gp-feedback show ng';
+  }
+}
+
+/* ── QUIZ ── */
+function loadQuestion(){
+  qAnswered=false; clickReady=false;
+  setTimeout(()=>{clickReady=true;},400);
+
+  const q=QUIZ[curQ],tot=QUIZ.length;
+  const pct=Math.round((curQ/tot)*100);
+
+  document.getElementById('q-counter').textContent=`Question ${curQ+1} of ${tot}`;
+  document.getElementById('q-score-badge').textContent=`⭐ Score: ${qScore}`;
+  document.getElementById('q-pbar').style.width=pct+'%';
+  document.getElementById('q-correct-count').textContent=`✅ ${qCorrect} correct`;
+  document.getElementById('q-wrong-count').textContent=`❌ ${qWrong} wrong`;
+
+  // type badge
+  const tb=document.getElementById('q-type-badge');
+  tb.innerHTML=`<span class="badge ${TYPE_COLORS[q.type]||'badge-blue'}">${q.type}</span>`;
+
+  document.getElementById('q-text').textContent=q.q;
+
+  // choices
+  const cc=document.getElementById('q-choices');
+  cc.innerHTML='';
+  const lbl=['A','B','C','D'];
+  q.ch.forEach((c,i)=>{
+    const btn=document.createElement('button');
+    btn.className='choice-btn';
+    btn.innerHTML=`<div class="choice-lbl">${lbl[i]}</div><span>${c}</span>`;
+    btn.onclick=()=>selectAnswer(i);
+    cc.appendChild(btn);
+  });
+
+  // reset feedback
+  document.getElementById('q-feedback').className='q-feedback';
+  document.getElementById('btn-next').style.display='none';
+
+  // animate card
+  const card=document.getElementById('quiz-card');
+  card.classList.remove('anim-fade');
+  void card.offsetWidth;
+  card.classList.add('anim-fade');
+}
+
+function selectAnswer(i){
+  if(qAnswered||!clickReady)return;
+  qAnswered=true;
+  const q=QUIZ[curQ];
+  const ok=i===q.ans;
+  if(ok){qScore+=5;qCorrect++;}else{qWrong++;}
+  qResults.push({q:q.q,ok,ua:q.ch[i],ca:q.ch[q.ans],exp:q.exp});
+
+  // style buttons
+  const btns=document.querySelectorAll('.choice-btn');
+  btns.forEach(b=>b.disabled=true);
+  btns[i].classList.add(ok?'correct':'wrong');
+  if(!ok)btns[q.ans].classList.add('correct');
+
+  // feedback
+  const fb=document.getElementById('q-feedback');
+  fb.className=`q-feedback show ${ok?'ok':'ng'}`;
+  document.getElementById('fb-title').textContent=ok?'✅ Correct! Well done! 🌟':'❌ Not quite!';
+  document.getElementById('fb-exp').textContent=q.exp;
+
+  // score update
+  document.getElementById('q-score-badge').textContent=`⭐ Score: ${qScore}`;
+  document.getElementById('q-correct-count').textContent=`✅ ${qCorrect} correct`;
+  document.getElementById('q-wrong-count').textContent=`❌ ${qWrong} wrong`;
+
+  // sound & effects
+  if(ok){playCorrect();if(qCorrect%5===0)confetti();}
+  else playWrong();
+
+  // next button
+  const nb=document.getElementById('btn-next');
+  nb.style.display='flex';
+  nb.textContent=curQ+1<QUIZ.length?'Next Question ➜':'See My Results 🎉';
+}
+
+function nextQuestion(){
+  curQ++;
+  if(curQ<QUIZ.length){loadQuestion();}
+  else{showResults();}
+}
+
+/* ── RESULTS ── */
+function showResults(){
+  const tot=QUIZ.length;
+  const pct=Math.round((qCorrect/tot)*100);
+  let deco,title,badge,badgeCls,msg;
+  if(pct>=90){
+    deco='🏆';title='Excellent!';badge='18–20 / 20 · Outstanding';badgeCls='badge-green';
+    msg='You are very confident with Lowest Common Multiples. Excellent work — you understood every method and applied it correctly!';
+  } else if(pct>=70){
+    deco='🎉';title='Great Job!';badge='14–17 / 20 · Great';badgeCls='badge-blue';
+    msg='Great job! Review the questions you found tricky and try listing multiples more carefully next time.';
+  } else if(pct>=50){
+    deco='👍';title='Good Effort!';badge='10–13 / 20 · Good';badgeCls='badge-yellow';
+    msg='Good effort! Practise listing multiples more carefully. Go back to the Learning section and try again.';
+  } else {
+    deco='📚';title='Keep Practising!';badge='0–9 / 20 · Needs Review';badgeCls='badge-purple';
+    msg='Keep practising! Review the examples in the Learn and Tips sections, then try the quiz again. You can do it!';
+  }
+
+  document.getElementById('r-deco').textContent=deco;
+  document.getElementById('r-title').textContent=title;
+  document.getElementById('r-score').textContent=`${qCorrect}/${tot}`;
+  document.getElementById('r-pct').textContent=`${pct}%`;
+  document.getElementById('r-pct-stat').textContent=`${pct}%`;
+  document.getElementById('r-correct').textContent=qCorrect;
+  document.getElementById('r-wrong').textContent=qWrong;
+  const rb=document.getElementById('r-badge');
+  rb.textContent=badge; rb.className=`badge ${badgeCls}`;
+  document.getElementById('r-msg').textContent=msg;
+
+  // ring animation
+  const ring=document.getElementById('score-ring');
+  const angle=pct*3.6;
+  ring.style.border=`8px solid ${pct>=70?'var(--green)':pct>=50?'var(--yellow)':'var(--red)'}`;
+  ring.style.animation='pulse-ring 1.5s ease infinite';
+
+  // review list
+  const rl=document.getElementById('r-review');
+  rl.innerHTML='';
+  qResults.forEach((r,idx)=>{
+    const d=document.createElement('div');
+    d.className=`review-item ${r.ok?'ok':'ng'}`;
+    const qShort=r.q.length>55?r.q.substring(0,55)+'…':r.q;
+    d.innerHTML=`<div class="ri-icon">${r.ok?'✅':'❌'}</div>
+      <div>
+        <div class="ri-q">Q${idx+1}: ${qShort}</div>
+        <div class="ri-a">${r.ok?'Correct: '+r.ca:'Your answer: '+r.ua+' → Correct: '+r.ca}</div>
+      </div>`;
+    rl.appendChild(d);
+  });
+
+  if(pct>=70)confetti();
+  goTo('results');
+  document.getElementById('ns-quiz').classList.add('done');
+}
+
+/* ── MARK DONE in NAVBAR ── */
+document.getElementById('ns-learn').addEventListener('click',()=>{
+  document.getElementById('ns-learn').classList.add('done');
+});
+</script>
+</body>
+</html>

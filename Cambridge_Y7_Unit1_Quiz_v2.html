@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cambridge Year 7 Math – Unit 1: Integers Quiz</title>
+<style>
+  :root {
+    --navy:#1A3557; --blue:#2E86AB; --green:#1B7A4B; --red:#B03A2E;
+    --orange:#E07B00; --purple:#6C3483;
+    --lb:#D6EAF8; --lg:#D5F5E3; --lr:#FADBD8; --lo:#FDEBD0;
+    --grey:#F4F6F7; --white:#fff; --text:#1a1a2e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef2f7;color:var(--text);min-height:100vh}
+
+  /* ── Screens ── */
+  .screen{display:none;min-height:100vh}
+  .screen.active{display:flex;flex-direction:column}
+
+  /* ══ HOME SCREEN ══ */
+  #homeScreen{align-items:center;justify-content:flex-start;padding:30px 20px;background:#eef2f7}
+  .home-header{text-align:center;margin-bottom:28px;max-width:560px;width:100%}
+  .home-header .ico{font-size:3rem;margin-bottom:8px}
+  .home-header h1{font-size:1.5rem;font-weight:800;color:var(--navy)}
+  .home-header p{color:#555;font-size:.9rem;margin-top:6px;line-height:1.6}
+  .sets-grid{display:flex;flex-direction:column;gap:14px;max-width:560px;width:100%}
+  .set-card{background:#fff;border-radius:16px;padding:20px 22px;
+            box-shadow:0 4px 16px rgba(0,0,0,.09);cursor:pointer;
+            border:3px solid transparent;transition:.2s;display:flex;align-items:center;gap:16px}
+  .set-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.13)}
+  .set-card.s1{border-color:#2E86AB}.set-card.s2{border-color:#1B7A4B}.set-card.s3{border-color:#E07B00}
+  .set-ico{width:54px;height:54px;border-radius:12px;display:flex;align-items:center;
+           justify-content:center;font-size:1.7rem;flex-shrink:0}
+  .set-ico.c1{background:#D6EAF8}.set-ico.c2{background:#D5F5E3}.set-ico.c3{background:#FDEBD0}
+  .set-info h3{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:4px}
+  .set-info p{font-size:.82rem;color:#666;line-height:1.4}
+  .set-badge{display:inline-block;margin-top:6px;padding:3px 10px;border-radius:10px;
+             font-size:.72rem;font-weight:700;color:#fff}
+  .sb1{background:#2E86AB}.sb2{background:#1B7A4B}.sb3{background:#E07B00}
+  .footer-note{max-width:560px;width:100%;margin-top:18px;text-align:center;
+               font-size:.78rem;color:#999;font-style:italic}
+
+  /* ══ START SCREEN ══ */
+  #startScreen{align-items:center;justify-content:center;padding:30px 20px}
+  .start-card{background:#fff;border-radius:20px;padding:36px 32px;max-width:520px;width:100%;
+              box-shadow:0 8px 32px rgba(0,0,0,.12);text-align:center}
+  .start-icon{font-size:3rem;margin-bottom:12px}
+  .start-card h1{font-size:1.45rem;font-weight:800;color:var(--navy);margin-bottom:6px}
+  .start-card p{color:#555;font-size:.9rem;line-height:1.6;margin-bottom:20px}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+  .info-box{background:var(--grey);border-radius:12px;padding:14px;text-align:center}
+  .info-box .val{font-size:1.5rem;font-weight:800;color:var(--navy)}
+  .info-box .lbl{font-size:.75rem;color:#777;margin-top:3px}
+  .level-select{display:flex;gap:10px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
+  .lvl-btn{padding:8px 18px;border-radius:20px;border:2px solid var(--blue);
+           background:#fff;color:var(--blue);font-weight:700;font-size:.88rem;cursor:pointer;transition:.2s}
+  .lvl-btn.active,.lvl-btn:hover{background:var(--blue);color:#fff}
+  .btn-start{width:100%;padding:15px;border-radius:12px;border:none;
+             background:linear-gradient(135deg,var(--blue),var(--navy));
+             color:#fff;font-size:1.05rem;font-weight:800;cursor:pointer;transition:.2s}
+  .btn-start:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(42,82,152,.3)}
+  .btn-back-home{width:100%;margin-top:10px;padding:11px;border-radius:12px;border:2px solid #ccc;
+                 background:#fff;color:#666;font-size:.9rem;font-weight:700;cursor:pointer}
+  .btn-back-home:hover{background:#f5f5f5}
+
+  /* ══ QUIZ SCREEN ══ */
+  #quizScreen{background:#eef2f7}
+  .quiz-top{background:#fff;padding:13px 20px;display:flex;align-items:center;gap:12px;
+            box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .btn-home-quiz{padding:7px 14px;border-radius:8px;border:2px solid #ddd;background:#fff;
+                 color:#555;font-size:.82rem;font-weight:700;cursor:pointer;flex-shrink:0;transition:.2s}
+  .btn-home-quiz:hover{background:#eef2f7;border-color:#aaa}
+  .q-counter{font-size:.85rem;font-weight:700;color:var(--navy);white-space:nowrap}
+  .prog-track{flex:1;height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden}
+  .prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));
+             border-radius:4px;transition:width .4s ease}
+  .score-live{font-size:.85rem;font-weight:700;color:var(--green);white-space:nowrap}
+
+  .quiz-body{flex:1;padding:24px 18px;display:flex;flex-direction:column;align-items:center}
+  .section-tag{font-size:.75rem;font-weight:700;padding:4px 14px;border-radius:20px;
+               color:#fff;margin-bottom:14px;align-self:flex-start;max-width:560px;width:100%}
+  .q-card{background:#fff;border-radius:16px;padding:26px 26px 20px;
+          max-width:560px;width:100%;box-shadow:0 4px 16px rgba(0,0,0,.1);margin-bottom:16px}
+  .q-card h2{font-size:1.08rem;font-weight:700;color:var(--navy);line-height:1.6;margin-bottom:6px}
+  .q-card .hint{font-size:.82rem;color:#888;margin-bottom:18px;font-style:italic}
+  .choices{display:flex;flex-direction:column;gap:10px}
+  .choice{padding:13px 18px;border-radius:10px;border:2px solid #e0e0e0;
+          background:#fff;text-align:left;font-size:.95rem;cursor:pointer;
+          transition:.18s;font-weight:500;color:var(--text)}
+  .choice:hover:not(:disabled){border-color:var(--blue);background:var(--lb);color:var(--navy)}
+  .choice.correct{border-color:var(--green)!important;background:var(--lg)!important;color:var(--green)!important;font-weight:700}
+  .choice.wrong{border-color:var(--red)!important;background:var(--lr)!important;color:var(--red)!important}
+  .choice:disabled{cursor:default}
+
+  .feedback-box{max-width:560px;width:100%;border-radius:12px;padding:14px 18px;
+                margin-bottom:14px;display:none}
+  .feedback-box.correct{background:var(--lg);border:2px solid #a8dfbf;display:block}
+  .feedback-box.wrong{background:var(--lr);border:2px solid #f5b8b0;display:block}
+  .fb-title{font-weight:800;font-size:.95rem;margin-bottom:4px}
+  .fb-exp{font-size:.88rem;line-height:1.55;color:#333}
+
+  .btn-next{max-width:560px;width:100%;padding:14px;border-radius:12px;border:none;
+            background:var(--navy);color:#fff;font-size:1rem;font-weight:800;
+            cursor:pointer;display:none;transition:.2s}
+  .btn-next:hover{background:var(--blue)}
+  .btn-next.show{display:block}
+
+  /* ══ RESULT SCREEN ══ */
+  #resultScreen{align-items:center;justify-content:center;padding:30px 20px;background:#eef2f7}
+  .result-card{background:#fff;border-radius:20px;padding:32px 28px;max-width:520px;
+               width:100%;box-shadow:0 8px 32px rgba(0,0,0,.12);text-align:center}
+  .result-emoji{font-size:4rem;margin-bottom:10px}
+  .result-card h2{font-size:1.5rem;font-weight:800;color:var(--navy);margin-bottom:5px}
+  .result-card .res-sub{color:#555;font-size:.9rem;margin-bottom:16px}
+  .result-score{font-size:3.5rem;font-weight:900;color:var(--navy);margin:12px 0 2px}
+  .result-pct{font-size:1.1rem;color:#777;margin-bottom:16px}
+  .grade-badge{display:inline-block;padding:8px 24px;border-radius:20px;
+               font-weight:800;font-size:.95rem;margin-bottom:20px}
+  .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+  .stat-box{background:var(--grey);border-radius:12px;padding:14px 8px}
+  .stat-box .sv{font-size:1.5rem;font-weight:800}
+  .stat-box .sl{font-size:.72rem;color:#777;margin-top:2px}
+  .review-list{text-align:left;max-height:240px;overflow-y:auto;margin-bottom:18px}
+  .review-item{padding:10px 13px;border-radius:8px;margin-bottom:6px;font-size:.85rem;
+               display:flex;gap:10px;align-items:flex-start}
+  .review-item.ok{background:var(--lg)}.review-item.ng{background:var(--lr)}
+  .review-icon{font-size:1rem;flex-shrink:0}
+  .review-text .rt{font-weight:700;margin-bottom:2px}
+  .review-text .ra{color:#555}
+  .btn-row{display:flex;gap:10px}
+  .btn-retry{flex:1;padding:13px;border-radius:10px;border:2px solid var(--navy);
+             background:#fff;color:var(--navy);font-weight:800;font-size:.92rem;cursor:pointer}
+  .btn-retry:hover{background:var(--navy);color:#fff}
+  .btn-home-res{flex:1;padding:13px;border-radius:10px;border:none;
+                background:var(--navy);color:#fff;font-weight:800;font-size:.92rem;cursor:pointer}
+  .btn-home-res:hover{background:var(--blue)}
+
+  @media(max-width:420px){
+    .start-card,.result-card{padding:24px 18px}
+    .q-card{padding:18px 16px}
+    .btn-row{flex-direction:column}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     HOME SCREEN
+══════════════════════════════════════════════ -->
+<div id="homeScreen" class="screen active">
+  <div class="home-header">
+    <div class="ico">🧮</div>
+    <h1>Cambridge Lower Secondary · Stage 7</h1>
+    <p>Unit 1: Integers &nbsp;|&nbsp; Choose a quiz set to begin.<br>
+       Read each question carefully and take your time before answering.</p>
+  </div>
+
+  <div class="sets-grid">
+    <!-- Set 1 -->
+    <div class="set-card s1" onclick="pickSet(1)">
+      <div class="set-ico c1">📘</div>
+      <div class="set-info">
+        <h3>ชุดที่ 1 — Integers &amp; Number Properties</h3>
+        <p>Ordering integers · Factors &amp; multiples · Primes · Squares &amp; roots · HCF · LCM · BIDMAS</p>
+        <span class="set-badge sb1">15 Questions · 3 Levels</span>
+      </div>
+    </div>
+    <!-- Set 2 -->
+    <div class="set-card s2" onclick="pickSet(2)">
+      <div class="set-ico c2">📗</div>
+      <div class="set-info">
+        <h3>ชุดที่ 2 — BIDMAS &amp; Integer Operations</h3>
+        <p>Order of operations · Powers &amp; indices · Negative number calculations · Prime factorisation · LCM of 3 numbers</p>
+        <span class="set-badge sb2">15 Questions · 3 Levels</span>
+      </div>
+    </div>
+    <!-- Set 3 -->
+    <div class="set-card s3" onclick="pickSet(3)">
+      <div class="set-ico c3">📙</div>
+      <div class="set-info">
+        <h3>ชุดที่ 3 — HCF, LCM &amp; Mixed Challenge</h3>
+        <p>HCF of 3 numbers · LCM of 3 numbers · Consecutive integers · Complex BIDMAS · Problem solving</p>
+        <span class="set-badge sb3">15 Questions · 3 Levels</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="footer-note">✏️ Created by Bright EngMath &nbsp;·&nbsp; Cambridge Lower Secondary Mathematics Stage 7</p>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     START SCREEN
+══════════════════════════════════════════════ -->
+<div id="startScreen" class="screen">
+  <div class="start-card">
+    <div class="start-icon" id="startIcon">🧮</div>
+    <h1 id="startTitle">Unit 1: Integers Quiz</h1>
+    <p id="startDesc">Cambridge Lower Secondary Mathematics · Stage 7</p>
+
+    <div class="info-grid">
+      <div class="info-box"><div class="val" id="qCount">15</div><div class="lbl">Questions</div></div>
+      <div class="info-box"><div class="val">⏳</div><div class="lbl">Think freely — no timer!</div></div>
+    </div>
+
+    <p style="font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:10px">Choose level:</p>
+    <div class="level-select">
+      <button class="lvl-btn" onclick="setLevel('A',event)">⭐ Easy (A)</button>
+      <button class="lvl-btn active" onclick="setLevel('ALL',event)">⭐⭐ Mixed</button>
+      <button class="lvl-btn" onclick="setLevel('BC',event)">⭐⭐⭐ Hard (B+C)</button>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">Start Quiz →</button>
+    <button class="btn-back-home" onclick="goHome()">🏠 Back to Home</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     QUIZ SCREEN
+══════════════════════════════════════════════ -->
+<div id="quizScreen" class="screen">
+  <div class="quiz-top">
+    <button class="btn-home-quiz" onclick="goHome()">🏠 Home</button>
+    <div class="q-counter" id="qCounter">1 / 15</div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    <div class="score-live" id="scoreLive">✅ 0</div>
+  </div>
+
+  <div class="quiz-body">
+    <div class="section-tag" id="sectionTag"></div>
+    <div class="q-card">
+      <h2 id="qText"></h2>
+      <div class="hint" id="qHint"></div>
+      <div class="choices" id="choices"></div>
+    </div>
+    <div class="feedback-box" id="feedbackBox">
+      <div class="fb-title" id="fbTitle"></div>
+      <div class="fb-exp" id="fbExp"></div>
+    </div>
+    <button class="btn-next" id="btnNext" onclick="nextQuestion()">Next →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     RESULT SCREEN
+══════════════════════════════════════════════ -->
+<div id="resultScreen" class="screen">
+  <div class="result-card">
+    <div class="result-emoji" id="resEmoji">🎉</div>
+    <h2 id="resTitle">Quiz Complete!</h2>
+    <p class="res-sub" id="resSubtitle"></p>
+    <div class="result-score" id="resScore">0/15</div>
+    <div class="result-pct" id="resPct">0%</div>
+    <div class="grade-badge" id="resBadge"></div>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="sv" id="stCorrect" style="color:var(--green)">0</div>
+        <div class="sl">Correct ✅</div>
+      </div>
+      <div class="stat-box">
+        <div class="sv" id="stWrong" style="color:var(--red)">0</div>
+        <div class="sl">Wrong ❌</div>
+      </div>
+    </div>
+    <div class="review-list" id="reviewList"></div>
+    <div class="btn-row">
+      <button class="btn-retry" onclick="retryQuiz()">🔄 Retry</button>
+      <button class="btn-home-res" onclick="goHome()">🏠 Home</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  QUESTION BANKS
+// ═══════════════════════════════════════════════════
+
+/* ── ชุดที่ 1: Integers & Number Properties ── */
+const SET1 = [
+  // SECTION A — Easy
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Which of the following is NOT an integer?",
+    hint:"Integers are whole numbers only — no decimals or fractions.",
+    choices:["−7","0","3.5","15"], answer:2,
+    exp:"3.5 is a decimal, not a whole number. Integers include negatives, zero, and positive whole numbers." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Put these integers in order from smallest to largest:\n−5,  3,  −12,  0,  7",
+    hint:"Think of the number line — left is smaller.",
+    choices:["−5, −12, 0, 3, 7","−12, −5, 0, 3, 7","0, −5, −12, 3, 7","−12, 0, −5, 3, 7"], answer:1,
+    exp:"On the number line: −12 is furthest left (smallest), then −5, 0, 3, 7 (largest)." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Which is the largest value among these four integers?",
+    hint:"On a number line, right = larger. Closer to 0 means larger for negatives.",
+    choices:["−8","−3","−20","−15"], answer:1,
+    exp:"−3 is closest to zero, so it is the largest. All others are further left (more negative)." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"How many factors does 36 have?",
+    hint:"Factors of 36: 1, 2, 3, 4, 6, 9, 12, 18, 36",
+    choices:["6","7","8","9"], answer:3,
+    exp:"Factors of 36: 1, 2, 3, 4, 6, 9, 12, 18, 36 — that is 9 factors." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Which number is a factor of 60?",
+    hint:"A factor divides exactly into 60 with no remainder.",
+    choices:["7","9","11","15"], answer:3,
+    exp:"60 ÷ 15 = 4 exactly. The others do not divide evenly into 60." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Which of these is a prime number?",
+    hint:"A prime has exactly 2 factors: 1 and itself.",
+    choices:["1","9","17","21"], answer:2,
+    exp:"17 has exactly 2 factors (1 and 17). 1 has only 1 factor. 9 = 3×3, 21 = 3×7 — both composite." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"What is 4²?",
+    hint:"4² means 4 × 4",
+    choices:["8","12","16","64"], answer:2,
+    exp:"4² = 4 × 4 = 16. It is NOT 4 × 2 = 8." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"What is √49?",
+    hint:"Which number multiplied by itself gives 49?",
+    choices:["6","7","8","9"], answer:1,
+    exp:"7 × 7 = 49, so √49 = 7." },
+  // SECTION B — Medium
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"What is the HCF (Highest Common Factor) of 12 and 18?",
+    hint:"List factors of both numbers and find the largest shared one.",
+    choices:["2","3","6","9"], answer:2,
+    exp:"Factors of 12: 1,2,3,4,6,12. Factors of 18: 1,2,3,6,9,18. Largest common = 6." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"What is the LCM (Lowest Common Multiple) of 4 and 6?",
+    hint:"List multiples of each and find the first match.",
+    choices:["8","10","12","24"], answer:2,
+    exp:"Multiples of 4: 4,8,12… Multiples of 6: 6,12… First match = 12." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"84 written as a product of prime factors is:",
+    hint:"Divide by 2, then 3, then continue with primes.",
+    choices:["2 × 42","2² × 3 × 7","2 × 3 × 14","4 × 21"], answer:1,
+    exp:"84÷2=42, 42÷2=21, 21÷3=7. So 84 = 2×2×3×7 = 2²×3×7." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Calculate: &nbsp; 3 + 4 × 2 − 1",
+    hint:"BIDMAS: multiplication before addition/subtraction.",
+    choices:["9","10","13","14"], answer:1,
+    exp:"BIDMAS: multiply first → 4×2=8. Then: 3+8−1 = 10." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Calculate: &nbsp; (10 − 4)² ÷ 4",
+    hint:"Brackets first, then indices, then division.",
+    choices:["4","6","9","16"], answer:2,
+    exp:"Brackets: 10−4=6. Indices: 6²=36. Division: 36÷4=9." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Calculate: &nbsp; −6 + (−4)",
+    hint:"Adding a negative means subtracting.",
+    choices:["10","2","−2","−10"], answer:3,
+    exp:"−6 + (−4) = −6 − 4 = −10. Adding a negative is the same as subtracting." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Calculate: &nbsp; −24 ÷ (−6)",
+    hint:"Two negatives divided = positive.",
+    choices:["−4","4","−18","18"], answer:1,
+    exp:"Negative ÷ negative = positive. −24 ÷ (−6) = +4." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Bus A leaves every 12 minutes, Bus B every 18 minutes. They leave together now. How many minutes until they leave together again?",
+    hint:"This is a Lowest Common Multiple problem.",
+    choices:["6","24","30","36"], answer:3,
+    exp:"LCM(12,18) = 36. They will next depart together in 36 minutes." },
+  // SECTION C — Challenging
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"Calculate: &nbsp; (−2)³",
+    hint:"(−2)³ = (−2) × (−2) × (−2). Count the negative signs!",
+    choices:["8","−8","6","−6"], answer:1,
+    exp:"(−2)³ = (−2)×(−2)×(−2) = 4×(−2) = −8. Odd power of a negative = negative." },
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"Temperature was −8°C at midnight. By noon it rose 15°C. By 6 p.m. it fell 7°C. What was the temperature at 6 p.m.?",
+    hint:"Calculate step by step: midnight → noon → 6 p.m.",
+    choices:["0°C","7°C","−7°C","8°C"], answer:0,
+    exp:"Midnight→Noon: −8+15 = +7°C. Noon→6pm: 7−7 = 0°C." },
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"'The product of two prime numbers is always odd.' Is this TRUE or FALSE?",
+    hint:"Think: is 2 a prime number? What happens when you multiply by 2?",
+    choices:["TRUE — both primes are odd","FALSE — 2 × 3 = 6 (even)","TRUE — primes are never even","FALSE — primes cannot be multiplied"], answer:1,
+    exp:"FALSE. 2 is prime. 2 × 3 = 6, which is even. So the statement is false." },
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"Calculate: &nbsp; (−3)² − 2³ + 5 × (−2)",
+    hint:"BIDMAS: indices first, then ×, then + and −.",
+    choices:["−9","9","1","−1"], answer:0,
+    exp:"(−3)²=9, 2³=8, 5×(−2)=−10. Then: 9−8+(−10) = 9−8−10 = −9." },
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"A number N has exactly 8 factors and is divisible by both 6 and 10. What is N?",
+    hint:"Find LCM(6,10) first, then check factor count.",
+    choices:["20","24","30","60"], answer:2,
+    exp:"LCM(6,10)=30. Factors of 30: 1,2,3,5,6,10,15,30 — exactly 8 ✓. 60 has 12 factors." },
+];
+
+/* ── ชุดที่ 2: BIDMAS & Integer Operations ── */
+const SET2 = [
+  // SECTION A — Easy
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Calculate: &nbsp; 5 + 3 × 2",
+    hint:"BIDMAS: multiplication before addition.",
+    choices:["16","11","13","10"], answer:1,
+    exp:"BIDMAS: 3×2=6 first. Then 5+6 = 11." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Which of these is a prime number?",
+    hint:"A prime has exactly 2 factors: 1 and itself. Check each option.",
+    choices:["27","33","41","49"], answer:2,
+    exp:"41 is prime (factors: 1 and 41 only). 27=3³, 33=3×11, 49=7² — all composite." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Which integer is between −3 and +1?",
+    hint:"Think of the number line between −3 and +1.",
+    choices:["−5","−4","−2","2"], answer:2,
+    exp:"−2 sits between −3 and +1 on the number line. −5 and −4 are less than −3." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"True or False — 1 is a prime number.",
+    hint:"How many factors does 1 have?",
+    choices:["TRUE — it only divides by 1 and itself","FALSE — 1 has only ONE factor","TRUE — all odd numbers are prime","FALSE — 1 is a negative number"], answer:1,
+    exp:"FALSE. 1 has only ONE factor (itself). Primes must have exactly 2 factors. 1 is not prime." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"What is 5²?",
+    hint:"5² means 5 × 5",
+    choices:["10","15","25","30"], answer:2,
+    exp:"5² = 5 × 5 = 25." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"What is √144?",
+    hint:"Which number multiplied by itself gives 144?",
+    choices:["11","12","13","14"], answer:1,
+    exp:"12 × 12 = 144, so √144 = 12." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"What is 2³?",
+    hint:"2³ means 2 × 2 × 2",
+    choices:["6","8","10","12"], answer:1,
+    exp:"2³ = 2 × 2 × 2 = 4 × 2 = 8." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Which pair are BOTH prime numbers?",
+    hint:"Remember: 1 is NOT prime. Check each pair.",
+    choices:["2 and 4","3 and 9","5 and 7","11 and 15"], answer:2,
+    exp:"5 and 7 are both prime. 4=2², 9=3², 15=3×5 — all composite." },
+  // SECTION B — Medium
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Calculate: &nbsp; (6 + 2)² − 3 × 4",
+    hint:"Brackets first, then indices, then multiplication, then subtraction.",
+    choices:["48","52","44","60"], answer:1,
+    exp:"Brackets: 6+2=8. Indices: 8²=64. Multiplication: 3×4=12. Then 64−12 = 52." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Calculate: &nbsp; −5 − (−9)",
+    hint:"Subtracting a negative is the same as adding.",
+    choices:["−14","14","4","−4"], answer:2,
+    exp:"−5 − (−9) = −5 + 9 = 4. Subtracting a negative = adding the positive." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"What is the HCF (Highest Common Factor) of 30 and 45?",
+    hint:"List factors of both: 30 and 45.",
+    choices:["5","10","15","30"], answer:2,
+    exp:"Factors of 30: 1,2,3,5,6,10,15,30. Factors of 45: 1,3,5,9,15,45. HCF = 15." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"What is the LCM (Lowest Common Multiple) of 6 and 9?",
+    hint:"List multiples of 6 and 9 until you find the first match.",
+    choices:["3","9","18","54"], answer:2,
+    exp:"Multiples of 6: 6,12,18… Multiples of 9: 9,18… First match = 18. LCM = 18." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Write 72 as a product of prime factors.",
+    hint:"Divide 72 repeatedly by prime numbers.",
+    choices:["8 × 9","2² × 18","2³ × 3²","2 × 4 × 9"], answer:2,
+    exp:"72÷2=36, 36÷2=18, 18÷2=9, 9÷3=3, 3÷3=1. So 72 = 2³ × 3²." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Calculate: &nbsp; 3 + 12 ÷ 4 × 2 − 1",
+    hint:"BIDMAS: do ÷ and × from left to right before + and −.",
+    choices:["7","8","9","10"], answer:1,
+    exp:"12÷4=3, then 3×2=6. Then 3+6−1 = 8." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"What is the LCM of 12, 18 and 24?",
+    hint:"Use prime factorisation: take the highest power of each prime factor.",
+    choices:["36","48","72","144"], answer:2,
+    exp:"12=2²×3, 18=2×3², 24=2³×3. LCM = 2³×3² = 8×9 = 72." },
+  // SECTION C — Challenging
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"Calculate: &nbsp; (−3)² + 2³ − (−4) × 3",
+    hint:"Work through BIDMAS: indices first, then ×, then + and −.",
+    choices:["5","−5","29","−29"], answer:2,
+    exp:"(−3)²=9, 2³=8, (−4)×3=−12. Then 9+8−(−12) = 9+8+12 = 29." },
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"Find the HCF of 48 and 60 using prime factorisation.",
+    hint:"48 = 2⁴ × 3. Find the prime factors of 60, then find common factors.",
+    choices:["6","12","24","4"], answer:1,
+    exp:"48=2⁴×3. 60=2²×3×5. HCF = lowest powers of shared primes = 2²×3 = 12." },
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"At 6 a.m. the temperature was −12°C. It rose 3°C every 2 hours. What was the temperature at 12 noon?",
+    hint:"Count how many 2-hour periods there are between 6 a.m. and noon.",
+    choices:["−3°C","3°C","−9°C","−6°C"], answer:0,
+    exp:"6 a.m. to noon = 6 hours = 3 periods of 2 hours. Rise = 3×3 = 9°C. Temperature = −12+9 = −3°C." },
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"Calculate: &nbsp; 2⁴ − (−1)³ × 3²",
+    hint:"Indices first: work out each power. Then multiply. Then subtract.",
+    choices:["7","25","−25","−7"], answer:1,
+    exp:"2⁴=16, (−1)³=−1, 3²=9. Then (−1)×9=−9. Finally 16−(−9) = 16+9 = 25." },
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"What is the largest prime factor of 210?",
+    hint:"Write 210 as a product of prime factors to find all prime factors.",
+    choices:["5","7","10","21"], answer:1,
+    exp:"210 = 2×3×5×7. The prime factors are 2, 3, 5 and 7. The largest is 7." },
+];
+
+/* ── ชุดที่ 3: HCF, LCM & Mixed Challenge ── */
+const SET3 = [
+  // SECTION A — Easy
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"What is 6² − 4²?",
+    hint:"Calculate 6² and 4² separately, then subtract.",
+    choices:["10","16","20","4"], answer:2,
+    exp:"6²=36, 4²=16. Then 36−16 = 20." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Which number is NOT a factor of 48?",
+    hint:"Check which number does not divide exactly into 48.",
+    choices:["6","8","7","16"], answer:2,
+    exp:"48÷6=8 ✓, 48÷8=6 ✓, 48÷16=3 ✓. But 48÷7 is not a whole number, so 7 is not a factor." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Calculate: &nbsp; −3 × (−4)",
+    hint:"Negative × negative = positive.",
+    choices:["−12","−7","7","12"], answer:3,
+    exp:"Negative × negative = positive. −3 × (−4) = +12." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"What is √225?",
+    hint:"Which number multiplied by itself gives 225?",
+    choices:["13","14","15","16"], answer:2,
+    exp:"15 × 15 = 225, so √225 = 15." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Which of these is a composite (non-prime) number?",
+    hint:"A composite number has MORE than 2 factors.",
+    choices:["13","17","23","27"], answer:3,
+    exp:"27 = 3³ = 3×3×3. It has more than 2 factors, so it is composite. The others are all prime." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Order these from greatest to smallest: &nbsp; −1, −8, 3, −4",
+    hint:"On the number line, right = larger.",
+    choices:["3, −1, −4, −8","−8, −4, −1, 3","3, −4, −1, −8","−1, 3, −4, −8"], answer:0,
+    exp:"From right to left on the number line: 3 (largest), then −1, then −4, then −8 (smallest)." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"Which number is a multiple of BOTH 3 and 4?",
+    hint:"It must appear in both the 3-times table and the 4-times table.",
+    choices:["18","20","24","30"], answer:2,
+    exp:"24 ÷ 3 = 8 ✓ and 24 ÷ 4 = 6 ✓. So 24 is a multiple of both 3 and 4." },
+  { section:"A", tag:"⭐ Section A — Easy", tagColor:"#2E86AB",
+    q:"What is (−2)⁴?",
+    hint:"(−2)⁴ = (−2) × (−2) × (−2) × (−2). Count the signs.",
+    choices:["16","−16","8","−8"], answer:0,
+    exp:"(−2)⁴ = [(−2)×(−2)] × [(−2)×(−2)] = 4×4 = 16. Even power of a negative = positive." },
+  // SECTION B — Medium
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Calculate: &nbsp; 5² − (3 + 1)² + 8 ÷ 2",
+    hint:"Brackets first, then indices, then ÷, then + and −.",
+    choices:["9","13","17","21"], answer:1,
+    exp:"Brackets: (3+1)=4. Indices: 5²=25, 4²=16. Division: 8÷2=4. Then 25−16+4 = 13." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Write 120 as a product of prime factors.",
+    hint:"Divide 120 repeatedly by 2, then by 3, then by 5.",
+    choices:["2 × 60","4 × 30","2³ × 3 × 5","2² × 5 × 6"], answer:2,
+    exp:"120÷2=60, 60÷2=30, 30÷2=15, 15÷3=5, 5÷5=1. So 120 = 2³×3×5." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Calculate: &nbsp; (−5)² − (−3)³",
+    hint:"Calculate each power separately, paying attention to negative signs.",
+    choices:["−2","2","52","−52"], answer:2,
+    exp:"(−5)²=25 and (−3)³=−27. Then 25−(−27) = 25+27 = 52." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Two events occur every 15 minutes and 20 minutes. They happen at the same time now. After how many minutes will they happen together again?",
+    hint:"This is a Lowest Common Multiple (LCM) problem.",
+    choices:["5","35","60","300"], answer:2,
+    exp:"LCM(15,20): 15=3×5, 20=2²×5. LCM=2²×3×5=60. They coincide again in 60 minutes." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Calculate: &nbsp; −3 × 4 + 18 ÷ (−6)",
+    hint:"BIDMAS: × and ÷ before + and −.",
+    choices:["−15","15","−9","9"], answer:0,
+    exp:"−3×4=−12 and 18÷(−6)=−3. Then −12+(−3) = −15." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Find the HCF of 16, 24 and 40.",
+    hint:"Write each as prime factors: 16=2⁴, 24=2³×3, 40=2³×5. Find the common factor.",
+    choices:["4","8","16","2"], answer:1,
+    exp:"16=2⁴, 24=2³×3, 40=2³×5. The only shared prime factor is 2³ = 8. HCF = 8." },
+  { section:"B", tag:"⭐⭐ Section B — Medium", tagColor:"#E07B00",
+    q:"Calculate: &nbsp; 7 × (−2)³ + 3²",
+    hint:"Indices first: (−2)³ and 3². Then multiply. Then add.",
+    choices:["−47","47","−65","65"], answer:0,
+    exp:"(−2)³=−8. 3²=9. Then 7×(−8)=−56. Finally −56+9 = −47." },
+  // SECTION C — Challenging
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"What is the LCM of 12, 18 and 30?",
+    hint:"Use prime factorisation: 12=2²×3, 18=2×3², 30=2×3×5. Take highest powers.",
+    choices:["60","90","180","360"], answer:2,
+    exp:"12=2²×3, 18=2×3², 30=2×3×5. LCM=2²×3²×5=4×9×5=180." },
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"The product of two consecutive integers is 182. What are the two integers?",
+    hint:"Try pairs of consecutive integers: 12×13, 13×14, 14×15…",
+    choices:["12 and 13","13 and 14","14 and 15","11 and 12"], answer:1,
+    exp:"13 × 14 = 182 ✓. So the two consecutive integers are 13 and 14." },
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"How many whole numbers less than 50 have a square root that is a prime number?",
+    hint:"If √N = prime p, then N = p². Find all prime p where p² < 50.",
+    choices:["2","3","4","5"], answer:2,
+    exp:"p=2→N=4, p=3→N=9, p=5→N=25, p=7→N=49 — all less than 50. That is 4 numbers." },
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"Calculate: &nbsp; (2³ + 1)² − √100",
+    hint:"Work from the inside out using BIDMAS.",
+    choices:["61","71","81","91"], answer:1,
+    exp:"Inside brackets: 2³=8, 8+1=9. Then 9²=81. √100=10. Finally 81−10 = 71." },
+  { section:"C", tag:"⭐⭐⭐ Section C — Challenging", tagColor:"#B03A2E",
+    q:"A number between 200 and 250 has only 3 as its prime factor. What is the number?",
+    hint:"Powers of 3: 3¹=3, 3²=9, 3³=27, 3⁴=81, 3⁵=243, 3⁶=729.",
+    choices:["210","225","243","248"], answer:2,
+    exp:"3⁵ = 243 (between 200 and 250) and its only prime factor is 3. 210=2×3×5×7, 225=3²×5², 248=2³×31." },
+];
+
+// ═══════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════
+let selectedSet   = 1;     // 1, 2 or 3
+let selectedLevel = 'ALL'; // 'A', 'ALL', 'BC'
+let questions     = [];
+let current       = 0;
+let score         = 0;
+let results       = [];
+let answered      = false;
+
+const SET_META = {
+  1:{ icon:'📘', title:'ชุดที่ 1 — Integers & Number Properties',
+      desc:'Cambridge Lower Secondary Mathematics · Stage 7', data:SET1 },
+  2:{ icon:'📗', title:'ชุดที่ 2 — BIDMAS & Integer Operations',
+      desc:'Cambridge Lower Secondary Mathematics · Stage 7', data:SET2 },
+  3:{ icon:'📙', title:'ชุดที่ 3 — HCF, LCM & Mixed Challenge',
+      desc:'Cambridge Lower Secondary Mathematics · Stage 7', data:SET3 },
+};
+
+// ═══════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goHome() {
+  selectedLevel = 'ALL';
+  showScreen('homeScreen');
+}
+
+function pickSet(n) {
+  selectedSet   = n;
+  selectedLevel = 'ALL';
+  const m = SET_META[n];
+  document.getElementById('startIcon').textContent  = m.icon;
+  document.getElementById('startTitle').textContent = m.title;
+  document.getElementById('startDesc').textContent  = m.desc;
+  // Reset level buttons
+  document.querySelectorAll('.lvl-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lvl-btn')[1].classList.add('active'); // Mixed default
+  const pool = filterQ('ALL');
+  document.getElementById('qCount').textContent = Math.min(pool.length, 15);
+  showScreen('startScreen');
+}
+
+// ═══════════════════════════════════════════════════
+//  SETUP
+// ═══════════════════════════════════════════════════
+function setLevel(l, evt) {
+  selectedLevel = l;
+  document.querySelectorAll('.lvl-btn').forEach(b => b.classList.remove('active'));
+  evt.target.classList.add('active');
+  document.getElementById('qCount').textContent = Math.min(filterQ(l).length, 15);
+}
+
+function filterQ(l) {
+  const data = SET_META[selectedSet].data;
+  if (l === 'A')  return data.filter(q => q.section === 'A');
+  if (l === 'BC') return data.filter(q => q.section !== 'A');
+  return data;
+}
+
+function shuffle(arr) {
+  let a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  const pool = shuffle(filterQ(selectedLevel));
+  questions = pool.slice(0, Math.min(15, pool.length));
+  current = 0; score = 0; results = []; answered = false;
+  showScreen('quizScreen');
+  loadQuestion();
+}
+
+// ═══════════════════════════════════════════════════
+//  QUIZ LOGIC
+// ═══════════════════════════════════════════════════
+function loadQuestion() {
+  answered = false;
+  const q     = questions[current];
+  const total = questions.length;
+
+  // Header
+  document.getElementById('qCounter').textContent     = `${current + 1} / ${total}`;
+  document.getElementById('progFill').style.width     = `${(current / total) * 100}%`;
+  document.getElementById('scoreLive').textContent    = `✅ ${score}`;
+
+  // Section tag
+  const tag = document.getElementById('sectionTag');
+  tag.textContent       = q.tag;
+  tag.style.background  = q.tagColor;
+
+  // Question
+  document.getElementById('qText').innerHTML = q.q.replace(/\n/g, '<br>');
+  document.getElementById('qHint').textContent = '💡 ' + q.hint;
+
+  // Choices
+  const cDiv = document.getElementById('choices');
+  cDiv.innerHTML = '';
+  q.choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.innerHTML = `<span style="font-weight:800;margin-right:10px;color:#aaa">${['A','B','C','D'][i]}</span>${c}`;
+    btn.onclick = () => selectAnswer(i);
+    cDiv.appendChild(btn);
+  });
+
+  // Reset feedback
+  document.getElementById('feedbackBox').className = 'feedback-box';
+  document.getElementById('btnNext').classList.remove('show');
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+
+  const q    = questions[current];
+  const btns = document.querySelectorAll('.choice');
+  btns.forEach(b => b.disabled = true);
+  btns[idx].classList.add(idx === q.answer ? 'correct' : 'wrong');
+  if (idx !== q.answer) btns[q.answer].classList.add('correct');
+
+  const correct = idx === q.answer;
+  if (correct) score++;
+
+  results.push({
+    q: q.q, correct,
+    userAns: q.choices[idx],
+    correctAns: q.choices[q.answer],
+    exp: q.exp
+  });
+
+  // Feedback
+  const fb = document.getElementById('feedbackBox');
+  fb.className = `feedback-box ${correct ? 'correct' : 'wrong'}`;
+  document.getElementById('fbTitle').textContent = correct ? '✅ Correct!' : '❌ Incorrect';
+  document.getElementById('fbExp').textContent   = q.exp;
+
+  document.getElementById('scoreLive').textContent = `✅ ${score}`;
+
+  // Next button
+  const nxt = document.getElementById('btnNext');
+  nxt.classList.add('show');
+  nxt.textContent = current + 1 < questions.length ? 'Next Question →' : 'See Results →';
+}
+
+function nextQuestion() {
+  current++;
+  if (current < questions.length) loadQuestion();
+  else showResults();
+}
+
+// ═══════════════════════════════════════════════════
+//  RESULTS
+// ═══════════════════════════════════════════════════
+function showResults() {
+  showScreen('resultScreen');
+  const total = questions.length;
+  const pct   = Math.round(score / total * 100);
+
+  let emoji, title, badge, badgeColor, badgeBg;
+  if (pct >= 90)      { emoji='🏆'; title='Outstanding!';       badge='A+ Excellent';   badgeColor='#0a5931'; badgeBg='#D5F5E3'; }
+  else if (pct >= 75) { emoji='🎉'; title='Great job!';         badge='A Good';         badgeColor='#1B5E20'; badgeBg='#E8F5E9'; }
+  else if (pct >= 60) { emoji='👍'; title='Well done!';         badge='B Keep going';   badgeColor='#E07B00'; badgeBg='#FDEBD0'; }
+  else if (pct >= 40) { emoji='📚'; title='Keep practising!';   badge='C Needs work';   badgeColor='#7B341E'; badgeBg='#FADBD8'; }
+  else                { emoji='💡'; title="Let's review!";      badge='Study more';     badgeColor='#4A235A'; badgeBg='#E8DAEF'; }
+
+  document.getElementById('resEmoji').textContent    = emoji;
+  document.getElementById('resTitle').textContent    = title;
+  document.getElementById('resSubtitle').textContent = SET_META[selectedSet].title;
+  document.getElementById('resScore').textContent    = `${score}/${total}`;
+  document.getElementById('resPct').textContent      = `${pct}%`;
+  const badgeEl = document.getElementById('resBadge');
+  badgeEl.textContent       = badge;
+  badgeEl.style.background  = badgeBg;
+  badgeEl.style.color       = badgeColor;
+  document.getElementById('stCorrect').textContent = score;
+  document.getElementById('stWrong').textContent   = total - score;
+
+  // Review list
+  const rl = document.getElementById('reviewList');
+  rl.innerHTML = '<div style="font-size:.78rem;font-weight:700;color:#888;margin-bottom:8px;text-transform:uppercase;letter-spacing:.6px">Review All Answers</div>';
+  results.forEach((r, i) => {
+    const d = document.createElement('div');
+    d.className = `review-item ${r.correct ? 'ok' : 'ng'}`;
+    const raw = r.q.replace(/<[^>]+>/g, '').replace(/\n/g, ' ');
+    const qShort = raw.length > 60 ? raw.substring(0, 60) + '…' : raw;
+    d.innerHTML = `
+      <div class="review-icon">${r.correct ? '✅' : '❌'}</div>
+      <div class="review-text">
+        <div class="rt">Q${i+1}: ${qShort}</div>
+        <div class="ra">${r.correct ? 'Correct: ' + r.correctAns
+          : 'Your answer: ' + r.userAns + ' → Correct: ' + r.correctAns}</div>
+      </div>`;
+    rl.appendChild(d);
+  });
+}
+
+function retryQuiz() { startQuiz(); }
+
+// ═══════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════
+// Show home screen on load — nothing extra needed.
+</script>
+</body>
+</html>

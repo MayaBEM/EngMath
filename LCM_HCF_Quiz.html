@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LCM & HCF Practice Quiz — Year 7</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1A3557;--blue:#2E86AB;--green:#1B7A4B;--red:#B03A2E;--orange:#E07B00;
+  --purple:#6C3483;--lb:#D6EAF8;--lg:#D5F5E3;--lr:#FADBD8;--lo:#FDEBD0;
+  --bg:#EEF2F7;--card:#fff;--text:#1a1a2e;--grey:#666;--border:#e0e0e0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;
+     display:flex;flex-direction:column}
+
+/* ── SCREENS ── */
+.screen{display:none;flex-direction:column;flex:1;min-height:100vh}
+.screen.active{display:flex}
+
+/* ── TOP BAR ── */
+.top-bar{background:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;
+         box-shadow:0 2px 8px rgba(0,0,0,.08);position:sticky;top:0;z-index:100}
+.top-bar-title{font-size:.9rem;font-weight:800;color:var(--navy)}
+.btn-home{padding:7px 16px;border-radius:8px;border:2px solid var(--border);background:#fff;
+          color:var(--navy);font-size:.82rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;
+          transition:.2s}
+.btn-home:hover{background:var(--bg);border-color:#aaa}
+
+/* ══ HOME SCREEN ══ */
+#homeScreen{align-items:center;justify-content:flex-start;background:var(--bg)}
+.home-body{width:100%;max-width:560px;padding:30px 20px 60px;margin:0 auto}
+.home-hero{text-align:center;margin-bottom:28px}
+.home-ico{font-size:3.5rem;margin-bottom:12px}
+.home-hero h1{font-size:1.6rem;font-weight:900;color:var(--navy);margin-bottom:6px;line-height:1.3}
+.home-hero p{color:var(--grey);font-size:.92rem;line-height:1.6;margin-bottom:20px}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.chip{padding:6px 16px;border-radius:20px;font-size:.82rem;font-weight:700;
+      background:var(--lb);color:var(--navy)}
+.chip.green-chip{background:var(--lg);color:var(--green)}
+
+.section-info{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.sec-card{background:#fff;border-radius:14px;padding:14px 18px;display:flex;align-items:center;
+          gap:14px;box-shadow:0 3px 10px rgba(0,0,0,.07)}
+.sec-dot{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;
+         justify-content:center;font-size:1.4rem;flex-shrink:0}
+.sec-dot.a{background:#D6EAF8}.sec-dot.b{background:#FDEBD0}.sec-dot.c{background:#FADBD8}
+.sec-info h4{font-size:.95rem;font-weight:800;color:var(--navy);margin-bottom:2px}
+.sec-info p{font-size:.8rem;color:var(--grey)}
+.sec-badge{margin-left:auto;padding:3px 10px;border-radius:10px;font-size:.72rem;font-weight:800;color:#fff;white-space:nowrap}
+
+.diff-label{font-size:.85rem;font-weight:800;color:var(--navy);margin-bottom:10px;text-align:center}
+.diff-row{display:flex;gap:10px;margin-bottom:22px;justify-content:center}
+.diff-btn{flex:1;max-width:140px;padding:10px 8px;border-radius:12px;border:2px solid var(--border);
+          background:#fff;text-align:center;cursor:pointer;transition:.2s;font-family:'Nunito',sans-serif}
+.diff-btn:hover,.diff-btn.active{border-color:var(--blue);background:var(--lb)}
+.diff-btn .di{font-size:1.2rem;margin-bottom:4px}
+.diff-btn .dl{font-size:.78rem;font-weight:800;color:var(--navy)}
+.diff-btn .ds{font-size:.7rem;color:var(--grey);margin-top:2px}
+
+.btn-start{width:100%;padding:16px;border-radius:14px;border:none;
+           background:linear-gradient(135deg,var(--blue),var(--navy));
+           color:#fff;font-size:1.1rem;font-weight:900;cursor:pointer;
+           font-family:'Nunito',sans-serif;transition:.2s;letter-spacing:.4px}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(42,82,152,.35)}
+
+/* ══ QUIZ SCREEN ══ */
+#quizScreen{background:var(--bg)}
+.quiz-header{background:#fff;padding:14px 18px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-header-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.q-counter{font-size:.84rem;font-weight:800;color:var(--navy);white-space:nowrap}
+.prog-track{flex:1;height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:4px;transition:width .5s ease}
+.score-live{font-size:.84rem;font-weight:800;color:var(--green);white-space:nowrap}
+
+.quiz-body{flex:1;padding:20px 16px 40px;display:flex;flex-direction:column;align-items:center}
+.section-tag{font-size:.73rem;font-weight:800;padding:5px 14px;border-radius:20px;color:#fff;
+             margin-bottom:14px;align-self:flex-start;max-width:560px;width:100%}
+.q-card{background:#fff;border-radius:18px;padding:24px 22px 20px;max-width:560px;width:100%;
+        box-shadow:0 4px 18px rgba(0,0,0,.09);margin-bottom:14px}
+.q-text{font-size:1.05rem;font-weight:700;color:var(--navy);line-height:1.65;margin-bottom:14px}
+.hint-wrap{margin-bottom:6px}
+.btn-hint{padding:5px 14px;border-radius:8px;border:1.5px solid var(--border);background:#fff;
+          font-size:.78rem;font-weight:700;color:var(--grey);cursor:pointer;font-family:'Nunito',sans-serif}
+.btn-hint:hover{background:var(--bg)}
+.hint-box{display:none;margin-top:8px;padding:10px 14px;border-radius:10px;
+          background:#FDFBE4;border:1.5px solid #F4D03F;font-size:.85rem;color:#7D6608;line-height:1.5}
+.hint-box.show{display:block}
+
+.choices{display:flex;flex-direction:column;gap:10px;max-width:560px;width:100%}
+.choice-btn{padding:14px 18px;border-radius:12px;border:2.5px solid var(--border);background:#fff;
+            text-align:left;font-size:.95rem;cursor:pointer;transition:.18s;
+            font-family:'Nunito',sans-serif;font-weight:600;color:var(--text);display:flex;gap:12px;align-items:flex-start}
+.choice-btn:hover:not(:disabled){border-color:var(--blue);background:var(--lb);color:var(--navy)}
+.choice-btn.selected{border-color:var(--blue);background:var(--lb);color:var(--navy)}
+.choice-btn.correct{border-color:var(--green)!important;background:var(--lg)!important;
+                    color:var(--green)!important;font-weight:700}
+.choice-btn.wrong{border-color:var(--red)!important;background:var(--lr)!important;color:var(--red)!important}
+.choice-btn:disabled{cursor:default}
+.choice-lbl{font-weight:900;color:#bbb;min-width:18px;flex-shrink:0;transition:color .2s}
+.choice-btn.correct .choice-lbl{color:var(--green)}
+.choice-btn.wrong   .choice-lbl{color:var(--red)}
+.choice-btn.selected .choice-lbl{color:var(--blue)}
+
+.feedback-box{max-width:560px;width:100%;border-radius:14px;padding:14px 18px;
+              display:none;margin-top:14px}
+.feedback-box.show{display:block}
+.feedback-box.fb-correct{background:var(--lg);border:2px solid #82C9A0}
+.feedback-box.fb-wrong{background:var(--lr);border:2px solid #F1948A}
+.fb-title{font-size:.95rem;font-weight:900;margin-bottom:5px}
+.fb-exp{font-size:.88rem;line-height:1.6;color:#333}
+
+.btn-next{max-width:560px;width:100%;padding:15px;border-radius:13px;border:none;
+          background:var(--navy);color:#fff;font-size:1rem;font-weight:800;
+          cursor:pointer;display:none;font-family:'Nunito',sans-serif;transition:.2s;margin-top:14px}
+.btn-next:hover{background:var(--blue)}
+.btn-next.show{display:block}
+
+/* ══ RESULT SCREEN ══ */
+#resultScreen{align-items:center;justify-content:flex-start;background:var(--bg)}
+.result-body{width:100%;max-width:540px;padding:30px 20px 60px;margin:0 auto}
+.result-card{background:#fff;border-radius:20px;padding:32px 26px;
+             box-shadow:0 8px 32px rgba(0,0,0,.12);text-align:center;margin-bottom:16px}
+.res-emoji{font-size:4rem;margin-bottom:10px}
+.res-title{font-size:1.6rem;font-weight:900;color:var(--navy);margin-bottom:4px}
+.res-sub{color:var(--grey);font-size:.88rem;margin-bottom:18px}
+.res-score{font-size:3.8rem;font-weight:900;color:var(--navy);line-height:1}
+.res-pct{font-size:1.1rem;color:var(--grey);margin-top:4px;margin-bottom:14px}
+.grade-badge{display:inline-block;padding:8px 26px;border-radius:20px;
+             font-weight:900;font-size:.95rem;margin-bottom:22px}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
+.stat-box{background:var(--bg);border-radius:12px;padding:14px 8px;text-align:center}
+.stat-v{font-size:1.5rem;font-weight:900}
+.stat-l{font-size:.7rem;color:var(--grey);margin-top:3px}
+.sec-scores{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px}
+.sec-score-box{border-radius:12px;padding:12px 6px;text-align:center}
+.sec-score-box .sv{font-size:1.2rem;font-weight:900}
+.sec-score-box .sl{font-size:.68rem;font-weight:700;margin-top:2px}
+.btn-row{display:flex;gap:10px}
+.btn-retry{flex:1;padding:13px;border-radius:12px;border:2px solid var(--navy);
+           background:#fff;color:var(--navy);font-weight:800;font-size:.92rem;
+           cursor:pointer;font-family:'Nunito',sans-serif;transition:.2s}
+.btn-retry:hover{background:var(--navy);color:#fff}
+.btn-review{flex:1;padding:13px;border-radius:12px;border:2px solid var(--blue);
+            background:#fff;color:var(--blue);font-weight:800;font-size:.92rem;
+            cursor:pointer;font-family:'Nunito',sans-serif;transition:.2s}
+.btn-review:hover{background:var(--blue);color:#fff}
+
+/* ══ REVIEW SCREEN ══ */
+#reviewScreen{align-items:center;background:var(--bg)}
+.review-body{width:100%;max-width:560px;padding:20px 16px 60px;margin:0 auto}
+.review-list-items{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.review-item{background:#fff;border-radius:12px;padding:13px 16px;
+             display:flex;gap:12px;align-items:flex-start;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.review-item.ri-ok{border-left:4px solid var(--green)}
+.review-item.ri-ng{border-left:4px solid var(--red)}
+.ri-ico{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.ri-body .ri-q{font-size:.87rem;font-weight:700;color:var(--navy);margin-bottom:4px;line-height:1.4}
+.ri-body .ri-a{font-size:.81rem;color:var(--grey);line-height:1.4}
+.ri-sec{margin-left:auto;flex-shrink:0}
+.ri-sec span{font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:8px;color:#fff}
+.btn-back-result{width:100%;padding:13px;border-radius:12px;border:none;
+                 background:var(--navy);color:#fff;font-weight:800;font-size:.95rem;
+                 cursor:pointer;font-family:'Nunito',sans-serif}
+.btn-back-result:hover{background:var(--blue)}
+
+/* ── FOOTER ── */
+.credit{text-align:center;font-size:.75rem;color:#aaa;padding:16px 0;font-weight:600;
+        background:transparent}
+
+/* ── CONFETTI ── */
+.confetti-p{position:fixed;width:10px;height:10px;border-radius:3px;
+            animation:fall linear forwards;pointer-events:none;z-index:999}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+                100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* ── EXAM CARD ── */
+.exam-card{max-width:100%!important;background:linear-gradient(135deg,#EDE7F6,#D7BDE2);
+           border-color:#9B59B6!important;padding:14px 20px;display:flex;align-items:center;gap:14px;
+           margin-bottom:22px;text-align:left}
+.exam-card .di{font-size:1.4rem;flex-shrink:0}
+.exam-card .dl{font-size:.95rem;font-weight:900;color:#6C3483}
+.exam-card .ds{font-size:.8rem;color:#7D3C98;margin-top:2px}
+.exam-card.active{border-color:#6C3483!important;background:linear-gradient(135deg,#D7BDE2,#A569BD)!important}
+.exam-card.active .dl,.exam-card.active .ds{color:#fff}
+.or-sep{display:flex;align-items:center;gap:12px;margin:0 0 14px}
+.or-sep::before,.or-sep::after{content:'';flex:1;height:1px;background:var(--border)}
+.or-sep span{font-size:.72rem;font-weight:800;color:#aaa}
+
+/* ── MISC ── */
+.divider{height:1px;background:var(--border);margin:12px 0}
+
+@media(max-width:480px){
+  .home-hero h1{font-size:1.35rem}
+  .diff-row{gap:6px}
+  .q-text{font-size:.98rem}
+  .choice-btn{font-size:.9rem;padding:12px 14px}
+  .btn-row{flex-direction:column}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .sec-scores{grid-template-columns:repeat(3,1fr);gap:6px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     HOME SCREEN
+══════════════════════════════════════════════ -->
+<div id="homeScreen" class="screen active">
+  <div class="top-bar">
+    <div class="top-bar-title">🔢 LCM &amp; HCF Quiz</div>
+    <div style="font-size:.72rem;color:var(--grey);font-weight:700">Cambridge · Year 7</div>
+  </div>
+
+  <div class="home-body">
+    <div class="home-hero">
+      <div class="home-ico">🧮</div>
+      <h1>LCM &amp; HCF<br>Practice Quiz</h1>
+      <p>Cambridge Lower Secondary Mathematics · Year 7<br>
+         Practise, understand and review — at your own pace.</p>
+      <div class="chips">
+        <span class="chip">📋 30 Questions</span>
+        <span class="chip green-chip">⏳ No Timer — Think Freely!</span>
+      </div>
+    </div>
+
+    <div class="section-info">
+      <div class="sec-card">
+        <div class="sec-dot a">📘</div>
+        <div class="sec-info">
+          <h4>Section A — Focus</h4>
+          <p>Multiples, factors, LCM & HCF basics</p>
+        </div>
+        <span class="sec-badge" style="background:var(--blue)">Q 1–10</span>
+      </div>
+      <div class="sec-card">
+        <div class="sec-dot b">📙</div>
+        <div class="sec-info">
+          <h4>Section B — Practice</h4>
+          <p>Three numbers, fractions, word problems</p>
+        </div>
+        <span class="sec-badge" style="background:var(--orange)">Q 11–22</span>
+      </div>
+      <div class="sec-card">
+        <div class="sec-dot c">📕</div>
+        <div class="sec-info">
+          <h4>Section C — Challenge</h4>
+          <p>Reasoning, conjecture & problem-solving</p>
+        </div>
+        <span class="sec-badge" style="background:var(--red)">Q 23–30</span>
+      </div>
+    </div>
+
+    <p class="diff-label">Choose Mode:</p>
+    <div class="diff-row">
+      <div class="diff-btn" onclick="setMode('A',this)">
+        <div class="di">⭐</div>
+        <div class="dl">Easy</div>
+        <div class="ds">Section A only</div>
+      </div>
+      <div class="diff-btn active" onclick="setMode('ALL',this)">
+        <div class="di">⭐⭐</div>
+        <div class="dl">Mixed</div>
+        <div class="ds">All 30 questions</div>
+      </div>
+      <div class="diff-btn" onclick="setMode('C',this)">
+        <div class="di">⭐⭐⭐</div>
+        <div class="dl">Challenge</div>
+        <div class="ds">Section C only</div>
+      </div>
+    </div>
+
+    <button class="btn-start" onclick="startQuiz()">Start Quiz →</button>
+
+    <div class="or-sep"><span>OR</span></div>
+
+    <div class="diff-btn exam-card" onclick="setMode('EXAM',this); startQuiz();" style="cursor:pointer">
+      <div class="di">🎯</div>
+      <div style="flex:1">
+        <div class="dl">Exam Practice</div>
+        <div class="ds">25 questions — simulate the real test</div>
+      </div>
+      <span style="font-size:.72rem;font-weight:900;padding:3px 10px;border-radius:10px;
+                   background:#9B59B6;color:#fff;white-space:nowrap">Start →</span>
+    </div>
+
+  </div>
+  <div class="credit">✏️ Created by Bright EngMath</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     QUIZ SCREEN
+══════════════════════════════════════════════ -->
+<div id="quizScreen" class="screen">
+  <div class="top-bar">
+    <div class="top-bar-title">🔢 LCM &amp; HCF Quiz</div>
+    <button class="btn-home" onclick="confirmHome()">🏠 Home</button>
+  </div>
+
+  <div class="quiz-header">
+    <div class="quiz-header-top">
+      <div class="q-counter" id="qCounter">1 / 30</div>
+      <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+      <div class="score-live" id="scoreLive">✅ 0</div>
+    </div>
+  </div>
+
+  <div class="quiz-body">
+    <div class="section-tag" id="sectionTag">Section A</div>
+
+    <div class="q-card">
+      <div class="q-text" id="qText"></div>
+      <div class="hint-wrap">
+        <button class="btn-hint" id="btnHint" onclick="toggleHint()">💡 Show Hint</button>
+        <div class="hint-box" id="hintBox"></div>
+      </div>
+    </div>
+
+    <div class="choices" id="choices"></div>
+
+    <div class="feedback-box" id="feedbackBox">
+      <div class="fb-title" id="fbTitle"></div>
+      <div class="fb-exp"  id="fbExp"></div>
+    </div>
+
+    <button class="btn-next" id="btnNext" onclick="nextQuestion()">Next Question →</button>
+  </div>
+  <div class="credit">✏️ Created by Bright EngMath</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     RESULT SCREEN
+══════════════════════════════════════════════ -->
+<div id="resultScreen" class="screen">
+  <div class="top-bar">
+    <div class="top-bar-title">🔢 LCM &amp; HCF Quiz</div>
+    <button class="btn-home" onclick="goHome()">🏠 Home</button>
+  </div>
+
+  <div class="result-body">
+    <div class="result-card">
+      <div class="res-emoji" id="resEmoji">🏆</div>
+      <div class="res-title" id="resTitle">Outstanding!</div>
+      <div class="res-sub" id="resSub">Cambridge Lower Secondary · LCM &amp; HCF Quiz</div>
+      <div class="res-score" id="resScore">0/30</div>
+      <div class="res-pct"  id="resPct">0%</div>
+      <div class="grade-badge" id="resBadge">A+ Excellent</div>
+
+      <div class="sec-scores">
+        <div class="sec-score-box" style="background:#D6EAF8">
+          <div class="sv" id="secA" style="color:var(--blue)">-</div>
+          <div class="sl" style="color:var(--blue)">Section A<br>/10</div>
+        </div>
+        <div class="sec-score-box" style="background:#FDEBD0">
+          <div class="sv" id="secB" style="color:var(--orange)">-</div>
+          <div class="sl" style="color:var(--orange)">Section B<br>/12</div>
+        </div>
+        <div class="sec-score-box" style="background:#FADBD8">
+          <div class="sv" id="secC" style="color:var(--red)">-</div>
+          <div class="sl" style="color:var(--red)">Section C<br>/8</div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-v" id="stCorrect" style="color:var(--green)">0</div>
+          <div class="stat-l">Correct ✅</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-v" id="stWrong" style="color:var(--red)">0</div>
+          <div class="stat-l">Wrong ❌</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-retry"  onclick="startQuiz()">🔄 Try Again</button>
+        <button class="btn-review" onclick="showReview()">📋 Review</button>
+      </div>
+    </div>
+  </div>
+  <div class="credit">✏️ Created by Bright EngMath</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     REVIEW SCREEN
+══════════════════════════════════════════════ -->
+<div id="reviewScreen" class="screen">
+  <div class="top-bar">
+    <div class="top-bar-title">📋 Review Answers</div>
+    <button class="btn-home" onclick="goHome()">🏠 Home</button>
+  </div>
+
+  <div class="review-body">
+    <div class="review-list-items" id="reviewList"></div>
+    <button class="btn-back-result" onclick="showScreen('resultScreen')">← Back to Results</button>
+  </div>
+  <div class="credit">✏️ Created by Bright EngMath</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  QUESTION BANK — 30 Questions
+// ═══════════════════════════════════════════════════════
+const ALL_Q = [
+
+  // ─── SECTION A: Focus (Q1–10) ───────────────────────
+  { id:1, sec:'A', tag:'⭐ Section A — Focus', col:'#2E86AB',
+    q:'Which list shows the first six multiples of 8?',
+    hint:'Multiply 8 by 1, 2, 3, 4, 5 and 6 in order.',
+    ch:['8, 16, 24, 32, 40, 48','8, 16, 24, 30, 40, 48','8, 14, 22, 30, 38, 46','4, 8, 12, 16, 20, 24'],
+    ans:0, exp:'8×1=8, 8×2=16, 8×3=24, 8×4=32, 8×5=40, 8×6=48.' },
+
+  { id:2, sec:'A', tag:'⭐ Section A — Focus', col:'#2E86AB',
+    q:'How many multiples of 7 are less than 50?',
+    hint:'List them: 7, 14, 21 … until you pass 50. Count how many.',
+    ch:['5','6','7','8'],
+    ans:2, exp:'Multiples of 7 less than 50: 7, 14, 21, 28, 35, 42, 49. That is 7 multiples.' },
+
+  { id:3, sec:'A', tag:'⭐ Section A — Focus', col:'#2E86AB',
+    q:'What is the Lowest Common Multiple (LCM) of 4 and 6?',
+    hint:'Write multiples of 4 and multiples of 6. Find the first number that appears in both lists.',
+    ch:['4','8','12','24'],
+    ans:2, exp:'Multiples of 4: 4, 8, 12 … Multiples of 6: 6, 12 … First common multiple = 12. So LCM = 12.' },
+
+  { id:4, sec:'A', tag:'⭐ Section A — Focus', col:'#2E86AB',
+    q:'Which number is a common multiple of both 3 and 5?',
+    hint:'A common multiple must appear in the times tables of BOTH numbers.',
+    ch:['9','12','15','20'],
+    ans:2, exp:'15 ÷ 3 = 5 ✓ and 15 ÷ 5 = 3 ✓. So 15 is a multiple of both 3 and 5.' },
+
+  { id:5, sec:'A', tag:'⭐ Section A — Focus', col:'#2E86AB',
+    q:'How many factors does 24 have?',
+    hint:'Find all factor pairs: 1×24, 2×12, 3×8, 4×6. Count each number.',
+    ch:['6','7','8','9'],
+    ans:2, exp:'Factors of 24: 1, 2, 3, 4, 6, 8, 12, 24. That is 8 factors.' },
+
+  { id:6, sec:'A', tag:'⭐ Section A — Focus', col:'#2E86AB',
+    q:'Which of the following is NOT a factor of 36?',
+    hint:'A factor divides exactly into 36 with no remainder. Test each option.',
+    ch:['6','8','9','12'],
+    ans:1, exp:'36 ÷ 8 = 4.5 — not a whole number. So 8 is NOT a factor of 36.' },
+
+  { id:7, sec:'A', tag:'⭐ Section A — Focus', col:'#2E86AB',
+    q:'What is the Highest Common Factor (HCF) of 20 and 28?',
+    hint:'List all factors of 20, then all factors of 28. Find the largest number in both lists.',
+    ch:['2','4','7','14'],
+    ans:1, exp:'Factors of 20: 1, 2, 4, 5, 10, 20. Factors of 28: 1, 2, 4, 7, 14, 28. Largest shared factor = 4.' },
+
+  { id:8, sec:'A', tag:'⭐ Section A — Focus', col:'#2E86AB',
+    q:'Which pair of numbers has an HCF of 6?',
+    hint:'Check which pair shares 6 as their LARGEST common factor.',
+    ch:['12 and 16','18 and 24','12 and 30','24 and 36'],
+    ans:2, exp:'HCF(12, 30): factors of 12 include 6; factors of 30 include 6. No larger common factor exists. HCF = 6.' },
+
+  { id:9, sec:'A', tag:'⭐ Section A — Focus', col:'#2E86AB',
+    q:'What is the LCM of 5, 6 and 10?',
+    hint:'Use prime factors: 5=5, 6=2×3, 10=2×5. Take the highest power of each prime.',
+    ch:['10','20','30','60'],
+    ans:2, exp:'5=5, 6=2×3, 10=2×5. LCM = 2×3×5 = 30.' },
+
+  { id:10, sec:'A', tag:'⭐ Section A — Focus', col:'#2E86AB',
+    q:'What is the HCF of 36 and 48?',
+    hint:'Use prime factors: 36=2²×3², 48=2⁴×3. Take the LOWEST power of each shared prime.',
+    ch:['6','9','12','18'],
+    ans:2, exp:'36=2²×3², 48=2⁴×3. Shared primes: 2² and 3. HCF = 2²×3 = 4×3 = 12.' },
+
+  // ─── SECTION B: Practice (Q11–22) ───────────────────
+  { id:11, sec:'B', tag:'⭐⭐ Section B — Practice', col:'#E07B00',
+    q:'What is the LCM of 12 and 15?',
+    hint:'12 = 2²×3 and 15 = 3×5. Take the highest power of each prime factor.',
+    ch:['30','45','60','90'],
+    ans:2, exp:'12=2²×3, 15=3×5. LCM = 2²×3×5 = 4×3×5 = 60.' },
+
+  { id:12, sec:'B', tag:'⭐⭐ Section B — Practice', col:'#E07B00',
+    q:'What is the LCM of 8 and 14?',
+    hint:'8 = 2³ and 14 = 2×7. They share a factor of 2.',
+    ch:['28','56','48','112'],
+    ans:1, exp:'8=2³, 14=2×7. LCM = 2³×7 = 8×7 = 56.' },
+
+  { id:13, sec:'B', tag:'⭐⭐ Section B — Practice', col:'#E07B00',
+    q:'What is the LCM of 4, 6 and 9?',
+    hint:'4=2², 6=2×3, 9=3². Take 2² and 3² — the highest powers.',
+    ch:['18','24','36','72'],
+    ans:2, exp:'4=2², 6=2×3, 9=3². LCM = 2²×3² = 4×9 = 36.' },
+
+  { id:14, sec:'B', tag:'⭐⭐ Section B — Practice', col:'#E07B00',
+    q:'What is the HCF of 24 and 36?',
+    hint:'24 = 2³×3 and 36 = 2²×3². Take the LOWEST power of each shared prime.',
+    ch:['4','6','8','12'],
+    ans:3, exp:'24=2³×3, 36=2²×3². HCF = 2²×3 = 4×3 = 12.' },
+
+  { id:15, sec:'B', tag:'⭐⭐ Section B — Practice', col:'#E07B00',
+    q:'What is the HCF of 12, 18 and 30?',
+    hint:'Find common prime factors across ALL THREE numbers.',
+    ch:['2','3','6','9'],
+    ans:2, exp:'12=2²×3, 18=2×3², 30=2×3×5. All three share 2 and 3. HCF = 2×3 = 6.' },
+
+  { id:16, sec:'B', tag:'⭐⭐ Section B — Practice', col:'#E07B00',
+    q:'Simplify the fraction 18/24 completely. Which answer is correct?',
+    hint:'Find the HCF of 18 and 24, then divide both the numerator and denominator by it.',
+    ch:['2/3','3/4','6/8','9/12'],
+    ans:1, exp:'HCF(18, 24) = 6. Divide both: 18÷6 = 3 and 24÷6 = 4. Simplified fraction = 3/4.' },
+
+  { id:17, sec:'B', tag:'⭐⭐ Section B — Practice', col:'#E07B00',
+    q:'Simplify 35/56 completely.',
+    hint:'Find the HCF of 35 and 56. Both are divisible by 7.',
+    ch:['4/7','5/7','5/8','7/8'],
+    ans:2, exp:'HCF(35, 56) = 7. Divide both: 35÷7 = 5 and 56÷7 = 8. Simplified fraction = 5/8.' },
+
+  { id:18, sec:'B', tag:'⭐⭐ Section B — Practice', col:'#E07B00',
+    q:'Mia practises violin every 4 days and piano every 6 days. She practises both today. After how many days will she next practise both on the same day?',
+    hint:'You need the smallest number of days that is a multiple of BOTH 4 and 6.',
+    ch:['8 days','10 days','12 days','24 days'],
+    ans:2, exp:'LCM(4, 6) = 12. She will next practise both instruments after 12 days.' },
+
+  { id:19, sec:'B', tag:'⭐⭐ Section B — Practice', col:'#E07B00',
+    q:'A market stall sells apples in bags of 6 and oranges in bags of 9. A baker wants an equal number of each fruit. What is the minimum number of each fruit?',
+    hint:'Find the LCM of 6 and 9 — that is the smallest equal amount.',
+    ch:['9','15','18','36'],
+    ans:2, exp:'LCM(6, 9) = 18. The baker needs 3 bags of apples (3×6=18) and 2 bags of oranges (2×9=18).' },
+
+  { id:20, sec:'B', tag:'⭐⭐ Section B — Practice', col:'#E07B00',
+    q:'A teacher has 32 red pencils and 48 blue pencils. She divides them into identical groups with no pencils left over. What is the greatest number of groups she can make?',
+    hint:'You need the LARGEST number that divides exactly into both 32 and 48 — use HCF!',
+    ch:['8','12','16','24'],
+    ans:2, exp:'Use HCF. HCF(32, 48) = 16. She can make 16 groups, each with 2 red and 3 blue pencils.' },
+
+  { id:21, sec:'B', tag:'⭐⭐ Section B — Practice', col:'#E07B00',
+    q:'Two lighthouses flash together at midnight. Lighthouse A flashes every 15 seconds, Lighthouse B every 20 seconds. After how many seconds will they next flash together?',
+    hint:'Find the LCM of 15 and 20 to get when both flash at the same moment.',
+    ch:['35 s','40 s','60 s','300 s'],
+    ans:2, exp:'LCM(15, 20): 15=3×5, 20=2²×5. LCM = 2²×3×5 = 60 seconds.' },
+
+  { id:22, sec:'B', tag:'⭐⭐ Section B — Practice', col:'#E07B00',
+    q:'The HCF of two numbers is 6 and their LCM is 60. One number is 12. What is the other number?',
+    hint:'Use the rule: Product of two numbers = LCM × HCF. Then divide by the known number.',
+    ch:['10','20','30','60'],
+    ans:2, exp:'Product = LCM × HCF = 60×6 = 360. Other number = 360 ÷ 12 = 30.' },
+
+  // ─── SECTION C: Challenge (Q23–30) ──────────────────
+  { id:23, sec:'C', tag:'⭐⭐⭐ Section C — Challenge', col:'#B03A2E',
+    q:'Which pair of numbers has a Lowest Common Multiple of 36?',
+    hint:'Try each pair: find their LCM by using prime factors or listing multiples.',
+    ch:['4 and 8','6 and 8','9 and 12','6 and 10'],
+    ans:2, exp:'LCM(9, 12): 9=3², 12=2²×3. LCM = 2²×3² = 36 ✓. Check others: LCM(4,8)=8, LCM(6,8)=24, LCM(6,10)=30.' },
+
+  { id:24, sec:'C', tag:'⭐⭐⭐ Section C — Challenge', col:'#B03A2E',
+    q:'Two numbers have an HCF of 8. Both numbers are between 10 and 50. Which is a valid pair?',
+    hint:'Both numbers must be multiples of 8. Check that their HCF is exactly 8, not 16 or 24.',
+    ch:['8 and 24','16 and 48','16 and 24','8 and 40'],
+    ans:2, exp:'HCF(16, 24) = 8 ✓ and both are between 10 and 50. (16, 48): HCF = 16 ≠ 8. Options A and D include 8, which is not between 10 and 50.' },
+
+  { id:25, sec:'C', tag:'⭐⭐⭐ Section C — Challenge', col:'#B03A2E',
+    q:'Two numbers have an LCM of 30 and a sum of 17. What are the two numbers?',
+    hint:'Pairs with LCM 30: try (2,15), (3,10), (5,6). Which pair adds up to 17?',
+    ch:['5 and 12','3 and 14','2 and 15','6 and 11'],
+    ans:2, exp:'2 + 15 = 17 ✓. LCM(2, 15): they share no common factors, so LCM = 2×15 = 30 ✓.' },
+
+  { id:26, sec:'C', tag:'⭐⭐⭐ Section C — Challenge', col:'#B03A2E',
+    q:'The HCF of two numbers is 5. One number is 15. The other number is less than 40. Which of the following CANNOT be the other number?',
+    hint:'The other number must be a multiple of 5. Check that HCF with 15 is exactly 5, not 15 or 30.',
+    ch:['10','25','30','35'],
+    ans:2, exp:'HCF(15, 30) = 15, not 5. So 30 cannot be the other number. HCF(15,10)=5 ✓, HCF(15,25)=5 ✓, HCF(15,35)=5 ✓.' },
+
+  { id:27, sec:'C', tag:'⭐⭐⭐ Section C — Challenge', col:'#B03A2E',
+    q:'What is the LCM of two consecutive integers n and (n+1), given that they share no common factors?',
+    hint:'Consecutive integers always have HCF = 1. Use the rule: LCM × HCF = product of the two numbers.',
+    ch:['n','n + 1','n(n + 1)','2n + 1'],
+    ans:2, exp:'Consecutive integers always have HCF = 1 (they share no common factors). Since LCM × HCF = n×(n+1), we get LCM = n(n+1).' },
+
+  { id:28, sec:'C', tag:'⭐⭐⭐ Section C — Challenge', col:'#B03A2E',
+    q:'Jamie says: "If you double both numbers, the HCF also doubles." Which example SUPPORTS Jamie\'s claim?',
+    hint:'Try doubling both numbers in each example and check whether the HCF doubles too.',
+    ch:['HCF(4, 6) = 2; doubling gives HCF(8, 12) = 8','HCF(4, 6) = 2; doubling gives HCF(8, 12) = 4','HCF(6, 9) = 3; doubling gives HCF(12, 18) = 9','HCF(8, 12) = 4; doubling gives HCF(16, 24) = 16'],
+    ans:1, exp:'HCF(4,6)=2. Double both: HCF(8,12)=4 = 2×2. ✓ The HCF doubled. Jamie is correct — doubling both numbers always doubles the HCF.' },
+
+  { id:29, sec:'C', tag:'⭐⭐⭐ Section C — Challenge', col:'#B03A2E',
+    q:'A library has 60 science books and 84 mathematics books. Each shelf holds one type of book, each shelf holds the same number of books, and as many books per shelf as possible. How many shelves are needed in total?',
+    hint:'First find the HCF of 60 and 84 — that tells you books per shelf. Then divide each total by it.',
+    ch:['6','9','12','24'],
+    ans:2, exp:'HCF(60, 84) = 12 books per shelf. Science: 60÷12 = 5 shelves. Maths: 84÷12 = 7 shelves. Total = 5+7 = 12 shelves.' },
+
+  { id:30, sec:'C', tag:'⭐⭐⭐ Section C — Challenge', col:'#B03A2E',
+    q:'Two numbers p and q are both multiples of 4 and their LCM is 48. Which statement is ALWAYS true for any valid pair (p, q)?',
+    hint:'Think about the general relationship between LCM, HCF and the product of two numbers.',
+    ch:['HCF(p, q) = 4 for every pair','p × q = 48 for every pair','LCM(p, q) × HCF(p, q) = p × q','p + q = 48 for every pair'],
+    ans:2, exp:'The rule LCM(p,q) × HCF(p,q) = p×q holds for ANY two positive integers. It is always true regardless of the specific values of p and q.' },
+];
+
+// ═══════════════════════════════════════════════════════
+//  EXAM PRACTICE — 25 Questions (Mixed Level)
+// ═══════════════════════════════════════════════════════
+const EXAM_Q = [
+
+  { id:'E1', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'What is the LCM of 6 and 10?',
+    hint:'Multiples of 6: 6, 12, 18, 24, 30 … Multiples of 10: 10, 20, 30 … Find the first number that appears in BOTH lists.',
+    ch:['20','30','40','60'],
+    ans:1, exp:'6=2×3, 10=2×5. LCM = 2×3×5 = 30. ✓' },
+
+  { id:'E2', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'What is the HCF of 18 and 45?',
+    hint:'18 = 2×3² and 45 = 3²×5. Which prime factor (with its highest shared power) appears in BOTH?',
+    ch:['3','6','9','18'],
+    ans:2, exp:'18=2×3², 45=3²×5. Shared factor: 3². HCF = 9. ✓' },
+
+  { id:'E3', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'How many factors does 28 have?',
+    hint:'Find all factor pairs of 28: start with 1×28, then 2×?, then 4×? Count each number individually.',
+    ch:['4','5','6','7'],
+    ans:2, exp:'Factor pairs: 1×28, 2×14, 4×7. Factors: 1, 2, 4, 7, 14, 28 — that is 6 factors in total.' },
+
+  { id:'E4', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'Which of the following is a common multiple of both 4 and 6?',
+    hint:'A common multiple must divide exactly by BOTH 4 and 6. Test each option.',
+    ch:['8','16','24','32'],
+    ans:2, exp:'Multiples of 4: 4, 8, 12, 16, 20, 24 … Multiples of 6: 6, 12, 18, 24 … 24 appears in both lists. ✓' },
+
+  { id:'E5', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'What is the HCF of 14 and 21?',
+    hint:'14 = 2×7 and 21 = 3×7. What prime factor do both share?',
+    ch:['2','3','7','14'],
+    ans:2, exp:'14=2×7, 21=3×7. They share the factor 7. HCF = 7. ✓' },
+
+  { id:'E6', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'What is the LCM of 3, 4 and 5?',
+    hint:'3, 4=2², and 5 share no common prime factors. Take the highest power of EACH prime.',
+    ch:['12','20','60','120'],
+    ans:2, exp:'3=3, 4=2², 5=5. No shared primes. LCM = 2²×3×5 = 4×3×5 = 60. ✓' },
+
+  { id:'E7', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'Simplify the fraction 16/24 completely.',
+    hint:'Find HCF(16, 24) first. Then divide BOTH the numerator and denominator by that HCF.',
+    ch:['4/8','2/3','3/4','8/12'],
+    ans:1, exp:'HCF(16, 24) = 8. Divide: 16÷8 = 2 and 24÷8 = 3. Simplified = 2/3. ✓' },
+
+  { id:'E8', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'The HCF of two numbers is 7 and their LCM is 84. One number is 21. What is the other number?',
+    hint:'Use the rule: first number × second number = HCF × LCM. Then divide by the known number.',
+    ch:['12','28','42','56'],
+    ans:1, exp:'Product = HCF × LCM = 7×84 = 588. Other = 588÷21 = 28. Check: HCF(21,28)=7 ✓ LCM(21,28)=84 ✓' },
+
+  { id:'E9', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'Bus A departs every 8 minutes. Bus B departs every 12 minutes. They both depart at 09:00. When is the next time they depart together?',
+    hint:'Find LCM(8, 12) — that gives the number of minutes until their next joint departure.',
+    ch:['09:20','09:24','09:32','09:48'],
+    ans:1, exp:'8=2³, 12=2²×3. LCM = 2³×3 = 24 minutes. Next joint departure: 09:00 + 24 min = 09:24. ✓' },
+
+  { id:'E10', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'What is the LCM of 15 and 25?',
+    hint:'15=3×5 and 25=5². Take the highest power of each prime: one 3 and two 5s.',
+    ch:['25','50','75','125'],
+    ans:2, exp:'15=3×5, 25=5². LCM = 3×5² = 3×25 = 75. ✓' },
+
+  { id:'E11', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'Simplify 42/70 completely.',
+    hint:'Both 42 and 70 are divisible by 2. After dividing, check if you can simplify further.',
+    ch:['3/5','6/10','21/35','5/7'],
+    ans:0, exp:'HCF(42, 70) = 14. Divide: 42÷14 = 3 and 70÷14 = 5. Simplified = 3/5. ✓' },
+
+  { id:'E12', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'What is the HCF of 48, 64 and 80?',
+    hint:'48=2⁴×3, 64=2⁶, 80=2⁴×5. Find the prime factor(s) shared by ALL THREE numbers.',
+    ch:['8','12','16','24'],
+    ans:2, exp:'48=2⁴×3, 64=2⁶, 80=2⁴×5. All three share 2⁴ = 16. HCF = 16. ✓' },
+
+  { id:'E13', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'Two numbers add up to 21 and their LCM is 36. What are the two numbers?',
+    hint:'Look for pairs with LCM = 36. Try: (4,9), (9,12), (12,18). Which pair adds up to 21?',
+    ch:['4 and 17','9 and 12','6 and 15','3 and 18'],
+    ans:1, exp:'9+12 = 21 ✓. LCM(9,12): 9=3², 12=2²×3. LCM = 2²×3² = 36 ✓. Answer: 9 and 12.' },
+
+  { id:'E14', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'A teacher has 72 red pens and 48 blue pens. She divides them into the largest possible identical groups with no pens left over. How many groups does she make?',
+    hint:'You need the HIGHEST Common Factor — the largest number that divides exactly into both 72 and 48.',
+    ch:['12','16','24','36'],
+    ans:2, exp:'72=2³×3², 48=2⁴×3. HCF = 2³×3 = 24. She makes 24 groups, each with 3 red and 2 blue pens. ✓' },
+
+  { id:'E15', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'What is the LCM of 7 and 9?',
+    hint:'Do 7 and 9 share any common prime factors? If their HCF = 1, then LCM = their product.',
+    ch:['7','9','54','63'],
+    ans:3, exp:'7 and 9 share no common prime factors (HCF = 1). So LCM = 7×9 = 63. ✓' },
+
+  { id:'E16', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'Which of the following gives an HCF of 12 when paired with 60?',
+    hint:'Test each option against 60. Remember: HCF must be EXACTLY 12 — not higher, not lower.',
+    ch:['18','12','30','60'],
+    ans:1, exp:'HCF(12, 60) = 12 ✓. Check others: HCF(18,60)=6 ✗, HCF(30,60)=30 ✗, HCF(60,60)=60 ✗.' },
+
+  { id:'E17', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'Three signal lights flash together at time zero. Light A flashes every 4 seconds, B every 6 seconds, C every 9 seconds. After how many seconds will all three flash together again?',
+    hint:'Find LCM(4, 6, 9). Use prime factors: 4=2², 6=2×3, 9=3². Take the highest power of each prime.',
+    ch:['18','24','36','72'],
+    ans:2, exp:'4=2², 6=2×3, 9=3². LCM = 2²×3² = 4×9 = 36 seconds. ✓' },
+
+  { id:'E18', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'Simplify 56/84 completely.',
+    hint:'Find HCF(56, 84). Both 56 and 84 are divisible by 4 and by 7.',
+    ch:['4/6','2/3','7/12','14/21'],
+    ans:1, exp:'HCF(56, 84) = 28. Divide: 56÷28 = 2 and 84÷28 = 3. Simplified = 2/3. ✓' },
+
+  { id:'E19', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'The HCF of two numbers is 8 and their LCM is 96. One number is 24. What is the other?',
+    hint:'Use: first × second = HCF × LCM. Calculate the product, then divide by 24.',
+    ch:['16','24','32','48'],
+    ans:2, exp:'Product = 8×96 = 768. Other = 768÷24 = 32. Check: HCF(24,32)=8 ✓ LCM(24,32)=96 ✓' },
+
+  { id:'E20', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'What is the smallest number that is a multiple of both 6 and 8?',
+    hint:'You need the Lowest Common Multiple. Try listing multiples of 8: 8, 16, 24 … Which is also a multiple of 6?',
+    ch:['12','16','24','48'],
+    ans:2, exp:'6=2×3, 8=2³. LCM = 2³×3 = 24. 24÷6=4 ✓ and 24÷8=3 ✓. Smallest common multiple = 24.' },
+
+  { id:'E21', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'For two numbers a and b, their LCM equals their product (a × b). What must be true?',
+    hint:'Think about the rule: LCM × HCF = a × b. If LCM = a × b, what does HCF equal?',
+    ch:['a = b','a + b is even','HCF(a, b) = 1','LCM(a, b) = 1'],
+    ans:2, exp:'Since LCM × HCF = a×b, and LCM = a×b, then HCF = 1. The two numbers share no common factors — they are coprime. ✓' },
+
+  { id:'E22', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'What is the LCM of 12, 15 and 20?',
+    hint:'Prime factorise each: 12=2²×3, 15=3×5, 20=2²×5. Take the highest power of every prime that appears.',
+    ch:['30','45','60','120'],
+    ans:2, exp:'12=2²×3, 15=3×5, 20=2²×5. LCM = 2²×3×5 = 4×3×5 = 60. ✓' },
+
+  { id:'E23', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'Fruit comes in bags of 6 mangoes or bags of 9 mangoes. A chef wants an equal number of each fruit with as few bags as possible. What is the minimum number of mangoes of each type he must buy?',
+    hint:'You need the LOWEST number that is a multiple of BOTH 6 and 9. That is the LCM.',
+    ch:['9','12','18','54'],
+    ans:2, exp:'LCM(6, 9): 6=2×3, 9=3². LCM = 2×3² = 18. He buys 3 bags of 6 (=18) and 2 bags of 9 (=18). ✓' },
+
+  { id:'E24', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'The HCF of two numbers is 5 and their LCM is 150. One number is 25. What is the other number?',
+    hint:'Use: first × second = HCF × LCM = 5 × 150. Then divide by 25.',
+    ch:['20','30','40','50'],
+    ans:1, exp:'Product = 5×150 = 750. Other = 750÷25 = 30. Check: HCF(25,30)=5 ✓ LCM(25,30)=150 ✓' },
+
+  { id:'E25', sec:'E', tag:'🎯 Exam Practice', col:'#6C3483',
+    q:'Which of the following statements is ALWAYS true for any two positive integers a and b?',
+    hint:'Recall the fundamental relationship between LCM, HCF and the two numbers themselves.',
+    ch:['LCM(a, b) = a × b always','HCF(a, b) = 1 always','LCM(a, b) × HCF(a, b) = a × b','LCM(a, b) is always greater than a + b'],
+    ans:2, exp:'The rule LCM(a,b) × HCF(a,b) = a × b holds for ANY two positive integers — it is a fundamental theorem of arithmetic. ✓ The other options are false: LCM equals a×b only when HCF=1; HCF is not always 1; LCM is not always greater than a+b.' },
+
+];
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+let mode      = 'ALL';   // 'A', 'ALL', 'C'
+let questions = [];
+let current   = 0;
+let score     = 0;
+let results   = [];
+let answered  = false;
+let clickReady = false;
+
+// ═══════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goHome(){
+  showScreen('homeScreen');
+}
+
+function confirmHome(){
+  if(!answered && current > 0){
+    if(confirm('Leave this quiz? Your progress will be lost.')){
+      goHome();
+    }
+  } else {
+    goHome();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  MODE SELECTION
+// ═══════════════════════════════════════════════════════
+function setMode(m, el){
+  mode = m;
+  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+
+// ═══════════════════════════════════════════════════════
+//  QUIZ SETUP
+// ═══════════════════════════════════════════════════════
+function shuffle(arr){
+  let a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function filterQ(){
+  if(mode==='A')   return ALL_Q.filter(q=>q.sec==='A');
+  if(mode==='C')   return ALL_Q.filter(q=>q.sec==='C');
+  return ALL_Q;
+}
+
+function startQuiz(){
+  if(mode==='EXAM'){
+    questions = shuffle(EXAM_Q);
+  } else {
+    // Shuffle within each section, maintain A→B→C order
+    const secA = shuffle(ALL_Q.filter(q=>q.sec==='A'));
+    const secB = shuffle(ALL_Q.filter(q=>q.sec==='B'));
+    const secC = shuffle(ALL_Q.filter(q=>q.sec==='C'));
+
+    if(mode==='A')        questions = secA;
+    else if(mode==='C')   questions = secC;
+    else                  questions = [...secA,...secB,...secC];
+  }
+
+  current=0; score=0; results=[]; answered=false;
+  showScreen('quizScreen');
+  loadQ();
+}
+
+// ═══════════════════════════════════════════════════════
+//  QUESTION LOADING
+// ═══════════════════════════════════════════════════════
+function loadQ(){
+  answered   = false;
+  clickReady = false;
+  setTimeout(()=>{ clickReady=true; }, 400);
+
+  const q     = questions[current];
+  const total = questions.length;
+
+  // Header
+  document.getElementById('qCounter').textContent  = `${current+1} / ${total}`;
+  document.getElementById('progFill').style.width   = `${(current/total)*100}%`;
+  document.getElementById('scoreLive').textContent  = `✅ ${score}`;
+
+  // Section tag
+  const tag = document.getElementById('sectionTag');
+  tag.textContent      = q.tag;
+  tag.style.background = q.col;
+
+  // Question
+  document.getElementById('qText').innerHTML = q.q.replace(/\n/g,'<br>');
+
+  // Hint
+  document.getElementById('hintBox').textContent = '💡 Hint: ' + q.hint;
+  document.getElementById('hintBox').classList.remove('show');
+  document.getElementById('btnHint').textContent = '💡 Show Hint';
+
+  // Choices
+  const cDiv = document.getElementById('choices');
+  cDiv.innerHTML = '';
+  q.ch.forEach((c,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="choice-lbl">${['A','B','C','D'][i]}</span>${c}`;
+    btn.onclick   = ()=>pickAnswer(i);
+    cDiv.appendChild(btn);
+  });
+
+  // Reset feedback
+  const fb = document.getElementById('feedbackBox');
+  fb.className  = 'feedback-box';
+  const nxt = document.getElementById('btnNext');
+  nxt.classList.remove('show');
+  nxt.textContent = current+1 < total ? 'Next Question →' : 'See Results →';
+}
+
+function toggleHint(){
+  const box = document.getElementById('hintBox');
+  const btn = document.getElementById('btnHint');
+  if(box.classList.contains('show')){
+    box.classList.remove('show');
+    btn.textContent = '💡 Show Hint';
+  } else {
+    box.classList.add('show');
+    btn.textContent = 'Hide Hint';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  ANSWER HANDLING
+// ═══════════════════════════════════════════════════════
+function pickAnswer(idx){
+  if(!clickReady || answered) return;
+  answered = true;
+
+  const q    = questions[current];
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(b=>b.disabled=true);
+
+  const correct = idx === q.ans;
+  if(correct) score++;
+
+  btns[idx].classList.add(correct ? 'correct' : 'wrong');
+  if(!correct) btns[q.ans].classList.add('correct');
+
+  // Section score tracking
+  results.push({ id:q.id, sec:q.sec, q:q.q, correct,
+                 userAns:q.ch[idx], correctAns:q.ch[q.ans], exp:q.exp });
+
+  // Feedback
+  const fb = document.getElementById('feedbackBox');
+  fb.className  = `feedback-box show ${correct ? 'fb-correct' : 'fb-wrong'}`;
+  document.getElementById('fbTitle').innerHTML = correct
+    ? '✅ Correct!'
+    : '❌ Incorrect — here is the right answer:';
+  document.getElementById('fbExp').textContent = q.exp;
+
+  document.getElementById('scoreLive').textContent = `✅ ${score}`;
+  document.getElementById('btnNext').classList.add('show');
+}
+
+function nextQuestion(){
+  current++;
+  if(current < questions.length) loadQ();
+  else showResults();
+}
+
+// ═══════════════════════════════════════════════════════
+//  RESULTS
+// ═══════════════════════════════════════════════════════
+function showResults(){
+  showScreen('resultScreen');
+  const total = questions.length;
+  const pct   = Math.round(score/total*100);
+
+  let emoji, title, badgeTxt, badgeBg, badgeCol;
+  if(pct>=90)      { emoji='🏆'; title='Outstanding!';     badgeTxt='A+ Excellent';     badgeBg='#D5F5E3'; badgeCol='#0a5931'; }
+  else if(pct>=73) { emoji='🎉'; title='Excellent!';       badgeTxt='A  Excellent';     badgeBg='#E8F5E9'; badgeCol='#1B5E20'; }
+  else if(pct>=60) { emoji='👍'; title='Well Done!';       badgeTxt='B  Good';          badgeBg='#FDEBD0'; badgeCol='#784212'; }
+  else if(pct>=40) { emoji='📚'; title='Keep Practising!'; badgeTxt='C  Keep Going';    badgeBg='#FADBD8'; badgeCol='#6E2C0B'; }
+  else             { emoji='💡'; title="Let's Review!";    badgeTxt='Review the Basics'; badgeBg='#E8DAEF'; badgeCol='#4A235A'; }
+
+  document.getElementById('resEmoji').textContent  = emoji;
+  document.getElementById('resTitle').textContent  = title;
+  document.getElementById('resSub').textContent    = `LCM & HCF Quiz — ${total} Questions`;
+  document.getElementById('resScore').textContent  = `${score}/${total}`;
+  document.getElementById('resPct').textContent    = `${pct}%`;
+  const badge = document.getElementById('resBadge');
+  badge.textContent       = badgeTxt;
+  badge.style.background  = badgeBg;
+  badge.style.color       = badgeCol;
+
+  // Section breakdown
+  const secScoresEl = document.querySelector('.sec-scores');
+  if(mode==='EXAM'){
+    secScoresEl.innerHTML=`
+      <div class="sec-score-box" style="background:#EDE7F6;grid-column:1/-1">
+        <div class="sv" style="color:#6C3483">${score}/${total}</div>
+        <div class="sl" style="color:#6C3483">🎯 Exam Practice</div>
+      </div>`;
+  } else {
+    secScoresEl.innerHTML=`
+      <div class="sec-score-box" style="background:#D6EAF8">
+        <div class="sv" id="secA" style="color:var(--blue)">-</div>
+        <div class="sl" style="color:var(--blue)">Section A<br>/10</div>
+      </div>
+      <div class="sec-score-box" style="background:#FDEBD0">
+        <div class="sv" id="secB" style="color:var(--orange)">-</div>
+        <div class="sl" style="color:var(--orange)">Section B<br>/12</div>
+      </div>
+      <div class="sec-score-box" style="background:#FADBD8">
+        <div class="sv" id="secC" style="color:var(--red)">-</div>
+        <div class="sl" style="color:var(--red)">Section C<br>/8</div>
+      </div>`;
+    const aQ = results.filter(r=>r.sec==='A');
+    const bQ = results.filter(r=>r.sec==='B');
+    const cQ = results.filter(r=>r.sec==='C');
+    const aC = aQ.filter(r=>r.correct).length;
+    const bC = bQ.filter(r=>r.correct).length;
+    const cC = cQ.filter(r=>r.correct).length;
+    document.getElementById('secA').textContent = aQ.length ? `${aC}/${aQ.length}` : '—';
+    document.getElementById('secB').textContent = bQ.length ? `${bC}/${bQ.length}` : '—';
+    document.getElementById('secC').textContent = cQ.length ? `${cC}/${cQ.length}` : '—';
+  }
+
+  document.getElementById('stCorrect').textContent = score;
+  document.getElementById('stWrong').textContent   = total - score;
+
+  if(pct>=80) confetti();
+}
+
+// ═══════════════════════════════════════════════════════
+//  REVIEW
+// ═══════════════════════════════════════════════════════
+function showReview(){
+  showScreen('reviewScreen');
+  const rl = document.getElementById('reviewList');
+  rl.innerHTML='';
+
+  const secColours = { A:'#2E86AB', B:'#E07B00', C:'#B03A2E', E:'#6C3483' };
+
+  results.forEach((r,i)=>{
+    const d = document.createElement('div');
+    d.className = `review-item ${r.correct?'ri-ok':'ri-ng'}`;
+    const qShort = r.q.replace(/<[^>]+>/g,'').replace(/\n/g,' ');
+    const display = qShort.length>70 ? qShort.substring(0,70)+'…' : qShort;
+    d.innerHTML=`
+      <div class="ri-ico">${r.correct?'✅':'❌'}</div>
+      <div class="ri-body">
+        <div class="ri-q">Q${i+1}: ${display}</div>
+        <div class="ri-a">${r.correct
+          ? '✓ Correct: ' + r.correctAns
+          : '✗ Your answer: ' + r.userAns + '  →  Correct: ' + r.correctAns
+        }</div>
+      </div>
+      <div class="ri-sec">
+        <span style="background:${secColours[r.sec]}">${r.sec}</span>
+      </div>`;
+    rl.appendChild(d);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  CONFETTI
+// ═══════════════════════════════════════════════════════
+function confetti(){
+  const colours=['#2E86AB','#1B7A4B','#E07B00','#9B59B6','#F39C12','#27AE60'];
+  for(let i=0;i<60;i++){
+    setTimeout(()=>{
+      const d=document.createElement('div');
+      d.className='confetti-p';
+      d.style.left=Math.random()*100+'vw';
+      d.style.background=colours[Math.floor(Math.random()*colours.length)];
+      d.style.width=(8+Math.random()*8)+'px';
+      d.style.height=(8+Math.random()*8)+'px';
+      d.style.borderRadius=Math.random()>.5?'50%':'3px';
+      d.style.animationDuration=(1.5+Math.random()*2)+'s';
+      d.style.animationDelay=(Math.random()*0.8)+'s';
+      document.body.appendChild(d);
+      setTimeout(()=>d.remove(), 4000);
+    },i*30);
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  SOUNDS (Web Audio API)
+// ═══════════════════════════════════════════════════════
+let AC;
+function getAC(){ if(!AC) AC=new(window.AudioContext||window.webkitAudioContext)(); return AC; }
+
+function beep(freq=523, type='sine', dur=0.15, vol=0.2){
+  try{
+    const ac=getAC();
+    const osc=ac.createOscillator();
+    const gain=ac.createGain();
+    osc.connect(gain); gain.connect(ac.destination);
+    osc.type=type; osc.frequency.value=freq;
+    gain.gain.setValueAtTime(vol, ac.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime+dur);
+    osc.start(); osc.stop(ac.currentTime+dur);
+  }catch(e){}
+}
+
+// Patch pickAnswer to play sounds
+const _origPick = pickAnswer;
+window.pickAnswer = function(idx){
+  _origPick(idx);
+  // sound is fired after answered=true is set in _origPick
+  const q = questions[current-1] || questions[current];
+  // use results last entry
+  const last = results[results.length-1];
+  if(last && last.correct) beep(660,'sine',0.18,0.18);
+  else beep(200,'sawtooth',0.25,0.15);
+};
+</script>
+</body>
+</html>

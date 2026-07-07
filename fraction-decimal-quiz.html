@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fraction &amp; Decimal Quiz</title>
+
+<!-- MathJax -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  :root{
+    --bg:#f7f9fc;--cream:#fffaf2;
+    --blue:#7ba7e8;--blue-d:#4f7cd1;
+    --purple:#b39ddb;--orange:#f6b26b;--green:#8bc9a3;
+    --ink:#3a4256;--muted:#7a8296;
+    --card:#ffffff;--shadow:0 6px 18px rgba(80,100,140,.12);
+    --ok:#4caf82;--ok-bg:#e6f6ee;--bad:#e57373;--bad-bg:#fdecea;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;
+    background:linear-gradient(160deg,var(--bg),#eef2fb);color:var(--ink);min-height:100vh;line-height:1.55;}
+  .wrap{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+  .hidden{display:none!important}
+  h1{font-size:2rem;margin:.2em 0}
+  h2{font-size:1.4rem;margin:.4em 0}
+  .sub{color:var(--muted);margin-top:0}
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:14px}
+  .btn{background:var(--blue);color:#fff;padding:12px 22px;font-size:1rem;
+    box-shadow:var(--shadow);transition:transform .12s,background .2s;}
+  .btn:hover{transform:translateY(-2px);background:var(--blue-d)}
+  .btn.ghost{background:#fff;color:var(--blue-d);border:2px solid var(--blue)}
+  .btn.ghost:hover{background:#eef3fd}
+  .btn.small{padding:8px 14px;font-size:.9rem}
+
+  .home-head{text-align:center;padding:24px 0 8px}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:14px}
+  .topic-card{background:var(--card);border-radius:22px;padding:26px 22px;box-shadow:var(--shadow);
+    text-align:center;transition:transform .15s;border-top:6px solid var(--blue);}
+  .topic-card.dec{border-top-color:var(--orange)}
+  .topic-card:hover{transform:translateY(-4px)}
+  .topic-card .emoji{font-size:2.4rem}
+  .topic-card p{color:var(--muted);min-height:48px}
+
+  .set-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}
+  .set-card{background:var(--card);border-radius:20px;padding:24px 18px;box-shadow:var(--shadow);
+    text-align:center;transition:transform .15s;border-top:6px solid var(--green);}
+  .set-card:hover{transform:translateY(-4px)}
+  .set-card:nth-child(2){border-top-color:var(--purple)}
+  .set-card:nth-child(3){border-top-color:var(--orange)}
+  .set-card .lvl{font-size:.8rem;color:var(--muted)}
+
+  .topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+  .crumbs{color:var(--muted);font-size:.9rem}
+
+  .quiz-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+  .score-pill{background:var(--cream);border:2px solid var(--orange);color:#c07a2a;
+    padding:6px 14px;border-radius:30px;font-weight:600}
+  .progress{background:#e3e9f5;border-radius:20px;height:14px;overflow:hidden;margin:12px 0}
+  .progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green));
+    border-radius:20px;transition:width .4s ease}
+  .navigator{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+  .nav-btn{width:40px;height:40px;border-radius:12px;background:#eef2fb;color:var(--ink);
+    font-weight:600;border:2px solid transparent}
+  .nav-btn.current{border-color:var(--blue-d);box-shadow:0 0 0 2px rgba(79,124,209,.25)}
+  .nav-btn.correct{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
+  .nav-btn.incorrect{background:var(--bad-bg);color:var(--bad);border-color:var(--bad)}
+  .qcard{background:var(--card);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+  .qnum{color:var(--muted);font-size:.9rem;margin-bottom:4px}
+  .qtext{font-size:1.3rem;font-weight:600;margin:6px 0 18px}
+  .choices{display:grid;gap:12px}
+  .choice{display:flex;align-items:center;gap:12px;text-align:left;background:#f4f7fd;
+    color:var(--ink);padding:14px 16px;font-size:1.05rem;border:2px solid #e1e8f5;
+    border-radius:14px;transition:background .15s,border .15s;width:100%;}
+  .choice:hover:not(:disabled){background:#e9f0fd;border-color:var(--blue)}
+  .choice .lab{font-weight:700;color:var(--blue-d);width:26px;flex:none}
+  .choice.correct{background:var(--ok-bg);border-color:var(--ok);color:#2f7d5a}
+  .choice.incorrect{background:var(--bad-bg);border-color:var(--bad);color:#c0392b}
+  .choice:disabled{cursor:default}
+  .feedback{margin-top:16px;padding:16px;border-radius:14px;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:var(--ok-bg);border:1px solid var(--ok)}
+  .feedback.bad{background:var(--bad-bg);border:1px solid var(--bad)}
+  .feedback .verdict{font-weight:700;font-size:1.1rem;margin-bottom:6px}
+  .feedback.ok .verdict{color:var(--ok)}
+  .feedback.bad .verdict{color:var(--bad)}
+  .feedback .steps{white-space:pre-line;color:#4a5266;font-size:.98rem}
+  .qnav{display:flex;justify-content:space-between;gap:10px;margin-top:18px}
+
+  .result{background:var(--card);border-radius:22px;padding:30px;box-shadow:var(--shadow);text-align:center}
+  .big-score{font-size:3rem;font-weight:800;color:var(--blue-d)}
+  .pct{font-size:1.2rem;color:var(--muted)}
+  .msg{font-size:1.15rem;margin:14px 0;font-weight:600}
+  .tally{display:flex;justify-content:center;gap:24px;margin:16px 0;flex-wrap:wrap}
+  .tally div{background:var(--cream);border-radius:14px;padding:12px 20px}
+  .tally .n{font-size:1.6rem;font-weight:700}
+  .result-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px}
+
+  .review-item{background:var(--card);border-radius:16px;padding:18px;box-shadow:var(--shadow);
+    margin-bottom:14px;border-left:6px solid var(--ok)}
+  .review-item.wrong{border-left-color:var(--bad)}
+  .review-item.skip{border-left-color:#c9cfdb}
+  .review-q{font-weight:600;margin-bottom:6px}
+  .review-line{font-size:.95rem;margin:2px 0}
+  .review-steps{white-space:pre-line;background:#f6f8fd;border-radius:10px;padding:10px;
+    margin-top:8px;color:#4a5266;font-size:.92rem}
+  .tag{font-size:.8rem;font-weight:700;padding:2px 8px;border-radius:20px}
+  .tag.ok{background:var(--ok-bg);color:var(--ok)}
+  .tag.bad{background:var(--bad-bg);color:var(--bad)}
+  .tag.skip{background:#eef2fb;color:var(--muted)}
+
+  footer{text-align:center;color:var(--muted);margin-top:34px;font-size:.9rem}
+
+  @media(max-width:640px){
+    .cards{grid-template-columns:1fr}
+    .set-grid{grid-template-columns:1fr}
+    h1{font-size:1.6rem}.qtext{font-size:1.15rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HOME -->
+  <section id="home">
+    <div class="home-head">
+      <h1>Fraction &amp; Decimal Quiz</h1>
+      <p class="sub">Practice mixed operations with fractions and decimals.</p>
+    </div>
+    <div class="cards">
+      <div class="topic-card">
+        <div class="emoji">➗</div>
+        <h2>Mixed Operations Involving Fractions</h2>
+        <p>Add, subtract, multiply and divide fractions, including mixed numbers and order of operations.</p>
+        <button class="btn" onclick="openTopic('fractions')">Start Topic</button>
+      </div>
+      <div class="topic-card dec">
+        <div class="emoji">🔢</div>
+        <h2>Decimal Operations</h2>
+        <p>Work with decimal place value, the four operations, and links between fractions and decimals.</p>
+        <button class="btn" onclick="openTopic('decimals')">Start Topic</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SET MENU -->
+  <section id="menu" class="hidden">
+    <div class="topbar">
+      <button class="btn ghost small" onclick="goHome()">🏠 Home</button>
+      <span class="crumbs" id="menuCrumb"></span>
+    </div>
+    <h2 id="menuTitle"></h2>
+    <div class="set-grid">
+      <div class="set-card">
+        <div class="lvl">Set 1</div><h2>Grade 6 Review</h2>
+        <p class="sub">Core skills, one– and two–step.</p>
+        <button class="btn" onclick="startQuiz(0)">Start Set</button>
+      </div>
+      <div class="set-card">
+        <div class="lvl">Set 2</div><h2>Grade 6 Standard</h2>
+        <p class="sub">Multi–step and word problems.</p>
+        <button class="btn" onclick="startQuiz(1)">Start Set</button>
+      </div>
+      <div class="set-card">
+        <div class="lvl">Set 3</div><h2>Grade 6 Challenge</h2>
+        <p class="sub">Reasoning and multi–step problems.</p>
+        <button class="btn" onclick="startQuiz(2)">Start Set</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="hidden">
+    <div class="topbar">
+      <button class="btn ghost small" onclick="goHome()">🏠 Home</button>
+      <button class="btn ghost small" onclick="backToMenu()">📚 Topic Menu</button>
+      <span class="crumbs" id="quizCrumb"></span>
+    </div>
+    <div class="quiz-head">
+      <div class="qnum" id="qCounter"></div>
+      <div class="score-pill">Score: <span id="liveScore">0</span></div>
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+    <div class="navigator" id="navigator"></div>
+    <div class="qcard">
+      <div class="qtext" id="qText"></div>
+      <div class="choices" id="choices"></div>
+      <div class="feedback" id="feedback">
+        <div class="verdict" id="verdict"></div>
+        <div class="steps" id="steps"></div>
+      </div>
+    </div>
+    <div class="qnav">
+      <button class="btn ghost" id="prevBtn" onclick="prevQ()">◀ Previous</button>
+      <button class="btn" id="nextBtn" onclick="nextQ()">Next ▶</button>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result" class="hidden">
+    <div class="topbar">
+      <button class="btn ghost small" onclick="goHome()">🏠 Home</button>
+      <span class="crumbs" id="resultCrumb"></span>
+    </div>
+    <div class="result">
+      <div class="big-score" id="finalScore"></div>
+      <div class="pct" id="finalPct"></div>
+      <div class="msg" id="finalMsg"></div>
+      <div class="tally">
+        <div><div class="n" style="color:var(--ok)" id="numCorrect"></div>Correct</div>
+        <div><div class="n" style="color:var(--bad)" id="numWrong"></div>Incorrect</div>
+      </div>
+      <div class="result-actions">
+        <button class="btn" onclick="showReview()">🔍 Review Answers</button>
+        <button class="btn" onclick="retrySet()">🔁 Retry Set</button>
+        <button class="btn ghost" onclick="backToMenu()">📚 Choose Another Set</button>
+        <button class="btn ghost" onclick="goHome()">🏠 Back to Home</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEW -->
+  <section id="review" class="hidden">
+    <div class="topbar">
+      <button class="btn ghost small" onclick="goHome()">🏠 Home</button>
+      <button class="btn ghost small" onclick="showEl('result')">◀ Back to Results</button>
+      <span class="crumbs" id="reviewCrumb"></span>
+    </div>
+    <h2>Review Answers</h2>
+    <div id="reviewList"></div>
+  </section>
+
+  <footer>© Bright EngMath 2026</footer>
+</div>
+
+<script>
+/* ==========================================================================
+   DATA — 6 sets x 10 Grade-6 questions. All math in LaTeX. a = correct index
+   ========================================================================== */
+const DATA = {
+  fractions: {
+    name: "Mixed Operations Involving Fractions",
+    sets: [
+      { name: "Grade 6 Review", questions: [
+        {q:"\\(\\frac{3}{4}+\\frac{5}{6}\\)",
+         c:["\\(1\\frac{7}{12}\\)","\\(\\frac{8}{10}\\)","\\(1\\frac{1}{12}\\)","\\(1\\frac{5}{12}\\)"], a:0,
+         e:"Use a common denominator of 12.\n\\[\\frac{3}{4}=\\frac{9}{12},\\quad \\frac{5}{6}=\\frac{10}{12}\\]\n\\[\\frac{9}{12}+\\frac{10}{12}=\\frac{19}{12}=1\\frac{7}{12}\\]\nThe correct answer is \\(1\\frac{7}{12}\\)."},
+        {q:"\\(2\\frac{1}{3}-\\frac{5}{8}\\)",
+         c:["\\(1\\frac{17}{24}\\)","\\(1\\frac{5}{24}\\)","\\(2\\frac{5}{24}\\)","\\(1\\frac{3}{8}\\)"], a:0,
+         e:"Write as improper fractions and use denominator 24.\n\\[2\\frac{1}{3}=\\frac{7}{3}=\\frac{56}{24},\\quad \\frac{5}{8}=\\frac{15}{24}\\]\n\\[\\frac{56}{24}-\\frac{15}{24}=\\frac{41}{24}=1\\frac{17}{24}\\]\nThe correct answer is \\(1\\frac{17}{24}\\)."},
+        {q:"\\(\\frac{7}{9}\\div\\frac{14}{15}\\)",
+         c:["\\(\\frac{5}{6}\\)","\\(\\frac{98}{135}\\)","\\(1\\frac{1}{5}\\)","\\(\\frac{2}{3}\\)"], a:0,
+         e:"Dividing means multiply by the reciprocal.\n\\[\\frac{7}{9}\\times\\frac{15}{14}=\\frac{105}{126}\\]\nSimplify by dividing top and bottom by 21.\n\\[\\frac{105}{126}=\\frac{5}{6}\\]\nThe correct answer is \\(\\frac{5}{6}\\)."},
+        {q:"\\(\\frac{5}{8}\\times\\frac{4}{15}\\)",
+         c:["\\(\\frac{1}{6}\\)","\\(\\frac{1}{3}\\)","\\(\\frac{2}{15}\\)","\\(\\frac{9}{23}\\)"], a:0,
+         e:"Multiply across, then simplify.\n\\[\\frac{5\\times4}{8\\times15}=\\frac{20}{120}=\\frac{1}{6}\\]\nThe correct answer is \\(\\frac{1}{6}\\)."},
+        {q:"\\(\\frac{5}{6}-\\frac{3}{8}\\)",
+         c:["\\(\\frac{11}{24}\\)","\\(\\frac{1}{24}\\)","\\(\\frac{13}{24}\\)","\\(\\frac{7}{24}\\)"], a:0,
+         e:"Use a common denominator of 24.\n\\[\\frac{5}{6}=\\frac{20}{24},\\quad \\frac{3}{8}=\\frac{9}{24}\\]\n\\[\\frac{20}{24}-\\frac{9}{24}=\\frac{11}{24}\\]\nThe correct answer is \\(\\frac{11}{24}\\)."},
+        {q:"\\(3\\frac{1}{2}\\times\\frac{2}{7}\\)",
+         c:["\\(1\\)","\\(\\frac{6}{7}\\)","\\(\\frac{7}{9}\\)","\\(1\\frac{1}{7}\\)"], a:0,
+         e:"Change the mixed number to an improper fraction first.\n\\[3\\frac{1}{2}=\\frac{7}{2}\\]\n\\[\\frac{7}{2}\\times\\frac{2}{7}=\\frac{14}{14}=1\\]\nThe correct answer is \\(1\\)."},
+        {q:"\\(\\frac{2}{3}+\\frac{1}{4}\\times2\\)",
+         c:["\\(1\\frac{1}{6}\\)","\\(1\\frac{5}{6}\\)","\\(\\frac{5}{6}\\)","\\(\\frac{7}{12}\\)"], a:0,
+         e:"Multiplication comes before addition.\n\\[\\frac{1}{4}\\times2=\\frac{1}{2}\\]\n\\[\\frac{2}{3}+\\frac{1}{2}=\\frac{4}{6}+\\frac{3}{6}=\\frac{7}{6}=1\\frac{1}{6}\\]\nThe correct answer is \\(1\\frac{1}{6}\\)."},
+        {q:"\\(\\frac{9}{10}\\div\\frac{3}{5}\\)",
+         c:["\\(1\\frac{1}{2}\\)","\\(\\frac{27}{50}\\)","\\(\\frac{2}{3}\\)","\\(1\\frac{1}{6}\\)"], a:0,
+         e:"Multiply by the reciprocal of \\(\\frac{3}{5}\\).\n\\[\\frac{9}{10}\\times\\frac{5}{3}=\\frac{45}{30}=\\frac{3}{2}=1\\frac{1}{2}\\]\nThe correct answer is \\(1\\frac{1}{2}\\)."},
+        {q:"\\(1\\frac{1}{4}+2\\frac{2}{3}\\)",
+         c:["\\(3\\frac{11}{12}\\)","\\(3\\frac{3}{7}\\)","\\(3\\frac{1}{4}\\)","\\(4\\frac{1}{12}\\)"], a:0,
+         e:"Add the whole numbers, then the fractions.\n\\[1+2=3\\]\n\\[\\frac{1}{4}+\\frac{2}{3}=\\frac{3}{12}+\\frac{8}{12}=\\frac{11}{12}\\]\nSo the total is \\(3\\frac{11}{12}\\)."},
+        {q:"\\(\\frac{7}{12}+\\frac{5}{12}-\\frac{1}{3}\\)",
+         c:["\\(\\frac{2}{3}\\)","\\(1\\frac{1}{3}\\)","\\(\\frac{11}{12}\\)","\\(\\frac{5}{12}\\)"], a:0,
+         e:"Work from left to right.\n\\[\\frac{7}{12}+\\frac{5}{12}=\\frac{12}{12}=1\\]\n\\[1-\\frac{1}{3}=\\frac{3}{3}-\\frac{1}{3}=\\frac{2}{3}\\]\nThe correct answer is \\(\\frac{2}{3}\\)."}
+      ]},
+      { name: "Grade 6 Standard", questions: [
+        {q:"\\(\\frac{2}{3}+\\frac{3}{4}\\times\\frac{5}{6}\\)",
+         c:["\\(1\\frac{7}{24}\\)","\\(1\\frac{13}{72}\\)","\\(1\\frac{1}{24}\\)","\\(\\frac{5}{8}\\)"], a:0,
+         e:"Do the multiplication first.\n\\[\\frac{3}{4}\\times\\frac{5}{6}=\\frac{15}{24}=\\frac{5}{8}\\]\n\\[\\frac{2}{3}+\\frac{5}{8}=\\frac{16}{24}+\\frac{15}{24}=\\frac{31}{24}=1\\frac{7}{24}\\]\nThe correct answer is \\(1\\frac{7}{24}\\)."},
+        {q:"\\(\\left(1\\frac{1}{2}+\\frac{3}{4}\\right)\\div\\frac{3}{5}\\)",
+         c:["\\(3\\frac{3}{4}\\)","\\(1\\frac{7}{20}\\)","\\(2\\frac{1}{4}\\)","\\(3\\frac{1}{4}\\)"], a:0,
+         e:"Work out the parentheses first.\n\\[1\\frac{1}{2}+\\frac{3}{4}=\\frac{6}{4}+\\frac{3}{4}=\\frac{9}{4}\\]\nThen divide by multiplying by the reciprocal.\n\\[\\frac{9}{4}\\times\\frac{5}{3}=\\frac{45}{12}=\\frac{15}{4}=3\\frac{3}{4}\\]\nThe correct answer is \\(3\\frac{3}{4}\\)."},
+        {q:"\\(3\\frac{1}{4}-1\\frac{2}{3}+\\frac{5}{6}\\)",
+         c:["\\(2\\frac{5}{12}\\)","\\(\\frac{3}{4}\\)","\\(2\\frac{1}{12}\\)","\\(2\\frac{7}{12}\\)"], a:0,
+         e:"Change to twelfths and work left to right.\n\\[3\\frac{1}{4}=\\frac{39}{12},\\ 1\\frac{2}{3}=\\frac{20}{12},\\ \\frac{5}{6}=\\frac{10}{12}\\]\n\\[\\frac{39}{12}-\\frac{20}{12}+\\frac{10}{12}=\\frac{29}{12}=2\\frac{5}{12}\\]\nThe correct answer is \\(2\\frac{5}{12}\\)."},
+        {q:"\\(\\frac{5}{6}\\times\\frac{2}{5}+\\frac{1}{4}\\)",
+         c:["\\(\\frac{7}{12}\\)","\\(\\frac{13}{24}\\)","\\(\\frac{1}{2}\\)","\\(\\frac{2}{3}\\)"], a:0,
+         e:"Multiply before you add.\n\\[\\frac{5}{6}\\times\\frac{2}{5}=\\frac{10}{30}=\\frac{1}{3}\\]\n\\[\\frac{1}{3}+\\frac{1}{4}=\\frac{4}{12}+\\frac{3}{12}=\\frac{7}{12}\\]\nThe correct answer is \\(\\frac{7}{12}\\)."},
+        {q:"Which fraction is greater, \\(\\frac{2}{3}\\) or \\(\\frac{5}{8}\\)?",
+         c:["\\(\\frac{2}{3}\\)","\\(\\frac{5}{8}\\)","They are equal","Cannot be compared"], a:0,
+         e:"Use a common denominator of 24.\n\\[\\frac{2}{3}=\\frac{16}{24},\\quad \\frac{5}{8}=\\frac{15}{24}\\]\nSince \\(\\frac{16}{24}>\\frac{15}{24}\\), \\(\\frac{2}{3}\\) is greater.\nThe correct answer is \\(\\frac{2}{3}\\)."},
+        {q:"What number completes the statement? \\[\\frac{3}{4}+\\;?\\;=1\\frac{1}{6}\\]",
+         c:["\\(\\frac{5}{12}\\)","\\(1\\frac{11}{12}\\)","\\(\\frac{11}{12}\\)","\\(\\frac{1}{2}\\)"], a:0,
+         e:"Subtract to find the missing part.\n\\[1\\frac{1}{6}-\\frac{3}{4}=\\frac{7}{6}-\\frac{3}{4}=\\frac{14}{12}-\\frac{9}{12}=\\frac{5}{12}\\]\nThe correct answer is \\(\\frac{5}{12}\\)."},
+        {q:"\\(2\\frac{1}{2}\\div1\\frac{1}{4}\\)",
+         c:["\\(2\\)","\\(3\\frac{1}{8}\\)","\\(\\frac{1}{2}\\)","\\(1\\frac{1}{4}\\)"], a:0,
+         e:"Change both to improper fractions, then multiply by the reciprocal.\n\\[\\frac{5}{2}\\div\\frac{5}{4}=\\frac{5}{2}\\times\\frac{4}{5}=\\frac{20}{10}=2\\]\nThe correct answer is \\(2\\)."},
+        {q:"A jug holds \\(3\\frac{3}{4}\\) L of juice. It is poured equally into 5 cups. How much juice is in each cup?",
+         c:["\\(\\frac{3}{4}\\) L","\\(18\\frac{3}{4}\\) L","\\(1\\frac{1}{4}\\) L","\\(\\frac{3}{20}\\) L"], a:0,
+         e:"Sharing equally means dividing by 5.\n\\[3\\frac{3}{4}\\div5=\\frac{15}{4}\\div5=\\frac{15}{20}=\\frac{3}{4}\\]\nEach cup holds \\(\\frac{3}{4}\\) L."},
+        {q:"Maya spent \\(\\frac{1}{3}\\) of her money on a book and \\(\\frac{2}{5}\\) on lunch. What fraction of her money is left?",
+         c:["\\(\\frac{4}{15}\\)","\\(\\frac{11}{15}\\)","\\(\\frac{3}{8}\\)","\\(\\frac{1}{15}\\)"], a:0,
+         e:"First find the total spent.\n\\[\\frac{1}{3}+\\frac{2}{5}=\\frac{5}{15}+\\frac{6}{15}=\\frac{11}{15}\\]\nThen subtract from the whole.\n\\[1-\\frac{11}{15}=\\frac{4}{15}\\]\nThe fraction left is \\(\\frac{4}{15}\\)."},
+        {q:"A ribbon is \\(4\\frac{1}{2}\\) m long. Each bow needs \\(\\frac{3}{4}\\) m. How many bows can be made?",
+         c:["\\(6\\)","\\(3\\frac{3}{8}\\)","\\(5\\)","\\(8\\)"], a:0,
+         e:"Divide the total length by the length of one bow.\n\\[4\\frac{1}{2}\\div\\frac{3}{4}=\\frac{9}{2}\\times\\frac{4}{3}=\\frac{36}{6}=6\\]\nSo 6 bows can be made."}
+      ]},
+      { name: "Grade 6 Challenge", questions: [
+        {q:"\\(\\left(2\\frac{1}{4}-\\frac{5}{6}\\right)\\times\\frac{3}{7}\\)",
+         c:["\\(\\frac{17}{28}\\)","\\(1\\frac{25}{28}\\)","\\(1\\frac{5}{28}\\)","\\(\\frac{3}{7}\\)"], a:0,
+         e:"Parentheses first.\n\\[2\\frac{1}{4}-\\frac{5}{6}=\\frac{27}{12}-\\frac{10}{12}=\\frac{17}{12}\\]\nThen multiply.\n\\[\\frac{17}{12}\\times\\frac{3}{7}=\\frac{51}{84}=\\frac{17}{28}\\]\nThe correct answer is \\(\\frac{17}{28}\\)."},
+        {q:"\\(3-\\left(\\frac{2}{5}+\\frac{3}{4}\\right)\\div\\frac{7}{10}\\)",
+         c:["\\(1\\frac{5}{14}\\)","\\(2\\frac{9}{14}\\)","\\(1\\frac{9}{14}\\)","\\(\\frac{2}{3}\\)"], a:0,
+         e:"Brackets, then divide, then subtract.\n\\[\\frac{2}{5}+\\frac{3}{4}=\\frac{8}{20}+\\frac{15}{20}=\\frac{23}{20}\\]\n\\[\\frac{23}{20}\\div\\frac{7}{10}=\\frac{23}{20}\\times\\frac{10}{7}=\\frac{23}{14}\\]\n\\[3-\\frac{23}{14}=\\frac{42}{14}-\\frac{23}{14}=\\frac{19}{14}=1\\frac{5}{14}\\]\nThe correct answer is \\(1\\frac{5}{14}\\)."},
+        {q:"\\(\\left(\\frac{5}{6}\\times1\\frac{1}{2}\\right)-\\frac{7}{12}\\)",
+         c:["\\(\\frac{2}{3}\\)","\\(1\\frac{1}{4}\\)","\\(\\frac{5}{6}\\)","\\(\\frac{1}{2}\\)"], a:0,
+         e:"Multiply inside the brackets first.\n\\[\\frac{5}{6}\\times1\\frac{1}{2}=\\frac{5}{6}\\times\\frac{3}{2}=\\frac{15}{12}=\\frac{5}{4}\\]\n\\[\\frac{5}{4}-\\frac{7}{12}=\\frac{15}{12}-\\frac{7}{12}=\\frac{8}{12}=\\frac{2}{3}\\]\nThe correct answer is \\(\\frac{2}{3}\\)."},
+        {q:"A class has 30 students. \\(\\frac{2}{5}\\) walk to school and \\(\\frac{1}{3}\\) cycle. How many students travel another way?",
+         c:["\\(8\\)","\\(22\\)","\\(12\\)","\\(10\\)"], a:0,
+         e:"Find each group, then subtract from 30.\n\\[\\frac{2}{5}\\times30=12,\\quad \\frac{1}{3}\\times30=10\\]\n\\[30-(12+10)=30-22=8\\]\nSo 8 students travel another way."},
+        {q:"A tank holds 24 L. \\(\\frac{3}{8}\\) is used in the morning and \\(\\frac{1}{4}\\) in the afternoon. How many litres remain?",
+         c:["\\(9\\) L","\\(15\\) L","\\(6\\) L","\\(5\\) L"], a:0,
+         e:"Work out the amount used, then subtract.\n\\[\\frac{3}{8}\\times24=9,\\quad \\frac{1}{4}\\times24=6\\]\n\\[24-(9+6)=24-15=9\\]\nSo 9 L remain."},
+        {q:"After giving away \\(\\frac{2}{3}\\) of his marbles, Sam has 12 marbles left. How many did he start with?",
+         c:["\\(36\\)","\\(18\\)","\\(8\\)","\\(24\\)"], a:0,
+         e:"If \\(\\frac{2}{3}\\) is given away, the 12 left are \\(\\frac{1}{3}\\) of the total.\n\\[\\frac{1}{3}\\ \\text{of total}=12\\]\n\\[\\text{total}=12\\times3=36\\]\nSo he started with 36 marbles."},
+        {q:"A book has 180 pages. Maya reads \\(\\frac{1}{3}\\) on Monday, then \\(\\frac{1}{4}\\) of the remaining pages on Tuesday. How many pages did she read on Tuesday?",
+         c:["\\(30\\)","\\(45\\)","\\(60\\)","\\(15\\)"], a:0,
+         e:"First find Monday's pages and what is left.\n\\[\\frac{1}{3}\\times180=60,\\quad 180-60=120\\]\nThen take \\(\\frac{1}{4}\\) of the remaining 120.\n\\[\\frac{1}{4}\\times120=30\\]\nSo she read 30 pages on Tuesday."},
+        {q:"Which expression means: subtract \\(\\frac{3}{8}\\) from the product of \\(\\frac{2}{3}\\) and \\(\\frac{3}{4}\\)?",
+         c:["\\(\\frac{2}{3}\\times\\frac{3}{4}-\\frac{3}{8}\\)","\\(\\frac{2}{3}\\times\\left(\\frac{3}{4}-\\frac{3}{8}\\right)\\)","\\(\\frac{3}{8}-\\frac{2}{3}\\times\\frac{3}{4}\\)","\\(\\left(\\frac{2}{3}+\\frac{3}{4}\\right)\\times\\frac{3}{8}\\)"], a:0,
+         e:"\"The product of \\(\\frac{2}{3}\\) and \\(\\frac{3}{4}\\)\" is \\(\\frac{2}{3}\\times\\frac{3}{4}\\).\nThen we subtract \\(\\frac{3}{8}\\) from it.\nSo the expression is \\(\\frac{2}{3}\\times\\frac{3}{4}-\\frac{3}{8}\\)."},
+        {q:"\\(\\left(\\frac{3}{4}+\\frac{1}{6}\\right)\\times\\left(\\frac{2}{3}-\\frac{1}{2}\\right)\\)",
+         c:["\\(\\frac{11}{72}\\)","\\(\\frac{11}{12}\\)","\\(\\frac{1}{6}\\)","\\(\\frac{13}{72}\\)"], a:0,
+         e:"Work out each bracket first.\n\\[\\frac{3}{4}+\\frac{1}{6}=\\frac{9}{12}+\\frac{2}{12}=\\frac{11}{12}\\]\n\\[\\frac{2}{3}-\\frac{1}{2}=\\frac{4}{6}-\\frac{3}{6}=\\frac{1}{6}\\]\nThen multiply.\n\\[\\frac{11}{12}\\times\\frac{1}{6}=\\frac{11}{72}\\]\nThe correct answer is \\(\\frac{11}{72}\\)."},
+        {q:"A recipe uses \\(\\frac{2}{3}\\) cup of flour for one batch. Maya makes \\(2\\frac{1}{2}\\) batches. How much flour does she need?",
+         c:["\\(1\\frac{2}{3}\\) cups","\\(\\frac{4}{15}\\) cup","\\(3\\frac{1}{3}\\) cups","\\(1\\frac{1}{3}\\) cups"], a:0,
+         e:"\"Of\" tells us to multiply.\n\\[\\frac{2}{3}\\times2\\frac{1}{2}=\\frac{2}{3}\\times\\frac{5}{2}=\\frac{10}{6}=\\frac{5}{3}=1\\frac{2}{3}\\]\nShe needs \\(1\\frac{2}{3}\\) cups of flour."}
+      ]}
+    ]
+  },
+  decimals: {
+    name: "Decimal Operations",
+    sets: [
+      { name: "Grade 6 Review", questions: [
+        {q:"\\(12.75+8.906\\)",
+         c:["\\(21.656\\)","\\(21.556\\)","\\(20.656\\)","\\(21.756\\)"], a:0,
+         e:"Line up the decimal points and add.\n\\[12.750+8.906=21.656\\]\nThe correct answer is \\(21.656\\)."},
+        {q:"\\(15.4-7.895\\)",
+         c:["\\(7.505\\)","\\(8.505\\)","\\(7.495\\)","\\(8.495\\)"], a:0,
+         e:"Write 15.4 as 15.400 and subtract.\n\\[15.400-7.895=7.505\\]\nThe correct answer is \\(7.505\\)."},
+        {q:"\\(3.75\\times8\\)",
+         c:["\\(30\\)","\\(24.4\\)","\\(30.75\\)","\\(300\\)"], a:0,
+         e:"Multiply as if there were no decimal, then place the point.\n\\[375\\times8=3000\\]\nThere are 2 decimal places, so \\(3.75\\times8=30.00=30\\).\nThe correct answer is \\(30\\)."},
+        {q:"\\(18.72\\div6\\)",
+         c:["\\(3.12\\)","\\(3.02\\)","\\(31.2\\)","\\(3.2\\)"], a:0,
+         e:"Divide keeping the decimal point in line.\n\\[18.72\\div6=3.12\\]\nCheck: \\(3.12\\times6=18.72\\).\nThe correct answer is \\(3.12\\)."},
+        {q:"Convert \\(\\frac{3}{8}\\) to a decimal.",
+         c:["\\(0.375\\)","\\(0.35\\)","\\(0.83\\)","\\(0.3\\)"], a:0,
+         e:"\\(\\frac{3}{8}\\) means \\(3\\div8\\).\n\\[3\\div8=0.375\\]\nThe correct answer is \\(0.375\\)."},
+        {q:"Which decimal is the largest?",
+         c:["\\(0.77\\)","\\(0.707\\)","\\(0.7\\)","\\(0.077\\)"], a:0,
+         e:"Compare place by place. Tenths first: 0.77 and 0.707 and 0.7 all have 7 tenths, but 0.077 has 0 tenths.\nHundredths: 0.77 has 7, while 0.707 has 0 and 0.7 has 0.\nSo \\(0.77\\) is the largest."},
+        {q:"\\(2.4+3.65\\)",
+         c:["\\(6.05\\)","\\(6.005\\)","\\(5.05\\)","\\(6.65\\)"], a:0,
+         e:"Write 2.4 as 2.40 so the places line up.\n\\[2.40+3.65=6.05\\]\nThe correct answer is \\(6.05\\)."},
+        {q:"\\(25.2\\div7\\)",
+         c:["\\(3.6\\)","\\(3.06\\)","\\(36\\)","\\(3.5\\)"], a:0,
+         e:"Divide, keeping the decimal point aligned.\n\\[25.2\\div7=3.6\\]\nCheck: \\(3.6\\times7=25.2\\).\nThe correct answer is \\(3.6\\)."},
+        {q:"Convert \\(\\frac{7}{20}\\) to a decimal.",
+         c:["\\(0.35\\)","\\(0.14\\)","\\(0.7\\)","\\(3.5\\)"], a:0,
+         e:"Make the denominator 100.\n\\[\\frac{7}{20}=\\frac{35}{100}=0.35\\]\nThe correct answer is \\(0.35\\)."},
+        {q:"\\(4.25\\times6\\)",
+         c:["\\(25.5\\)","\\(24.5\\)","\\(25.05\\)","\\(255\\)"], a:0,
+         e:"Multiply, then place the decimal point.\n\\[425\\times6=2550\\]\nThere are 2 decimal places, so \\(4.25\\times6=25.50=25.5\\).\nThe correct answer is \\(25.5\\)."}
+      ]},
+      { name: "Grade 6 Standard", questions: [
+        {q:"\\(4.8\\times2.35\\)",
+         c:["\\(11.28\\)","\\(112.8\\)","\\(11.08\\)","\\(10.28\\)"], a:0,
+         e:"Multiply, then count decimal places.\n\\[48\\times235=11280\\]\nThere are 3 decimal places in total, so \\(4.8\\times2.35=11.280=11.28\\).\nThe correct answer is \\(11.28\\)."},
+        {q:"\\(16.38\\div0.6\\)",
+         c:["\\(27.3\\)","\\(2.73\\)","\\(273\\)","\\(27.03\\)"], a:0,
+         e:"Multiply both numbers by 10 to remove the decimal in the divisor.\n\\[16.38\\div0.6=163.8\\div6=27.3\\]\nThe correct answer is \\(27.3\\)."},
+        {q:"\\(7.25+3.6\\times1.5\\)",
+         c:["\\(12.65\\)","\\(16.275\\)","\\(10.85\\)","\\(11.05\\)"], a:0,
+         e:"Multiplication comes before addition.\n\\[3.6\\times1.5=5.4\\]\n\\[7.25+5.4=12.65\\]\nThe correct answer is \\(12.65\\)."},
+        {q:"\\((12.5-4.75)\\div2.5\\)",
+         c:["\\(3.1\\)","\\(31\\)","\\(3.01\\)","\\(2.9\\)"], a:0,
+         e:"Brackets first, then divide.\n\\[12.5-4.75=7.75\\]\n\\[7.75\\div2.5=3.1\\]\nThe correct answer is \\(3.1\\)."},
+        {q:"\\(0.45\\times0.8\\)",
+         c:["\\(0.36\\)","\\(3.6\\)","\\(0.036\\)","\\(0.4\\)"], a:0,
+         e:"Multiply, then place the decimal point.\n\\[45\\times8=360\\]\nThere are 3 decimal places in total, so \\(0.45\\times0.8=0.360=0.36\\).\nThe correct answer is \\(0.36\\)."},
+        {q:"Which is greater, \\(\\frac{5}{8}\\) or \\(0.6\\)?",
+         c:["\\(\\frac{5}{8}\\)","\\(0.6\\)","They are equal","Cannot be compared"], a:0,
+         e:"Change the fraction to a decimal.\n\\[\\frac{5}{8}=0.625\\]\nSince \\(0.625>0.6\\), \\(\\frac{5}{8}\\) is greater."},
+        {q:"A notebook costs \\(\\$2.75\\). Maya buys 4 notebooks and pays with a \\(\\$20\\) note. How much change does she get?",
+         c:["\\(\\$9.00\\)","\\(\\$11.00\\)","\\(\\$8.00\\)","\\(\\$9.25\\)"], a:0,
+         e:"Find the total cost, then the change.\n\\[2.75\\times4=11.00\\]\n\\[20.00-11.00=9.00\\]\nHer change is \\(\\$9.00\\)."},
+        {q:"A car travels \\(3.6\\) km on 1 litre of fuel. How far can it travel on \\(4.5\\) litres?",
+         c:["\\(16.2\\) km","\\(8.1\\) km","\\(1.62\\) km","\\(16.02\\) km"], a:0,
+         e:"Multiply the distance per litre by the number of litres.\n\\[3.6\\times4.5=16.2\\]\nThe car travels \\(16.2\\) km."},
+        {q:"Six identical parcels weigh \\(15.9\\) kg in total. What is the mass of each parcel?",
+         c:["\\(2.65\\) kg","\\(26.5\\) kg","\\(2.56\\) kg","\\(9.9\\) kg"], a:0,
+         e:"Divide the total mass by the number of parcels.\n\\[15.9\\div6=2.65\\]\nEach parcel weighs \\(2.65\\) kg."},
+        {q:"Maya fills 3 bottles of \\(1.5\\) L each and 1 jug of \\(2.35\\) L. How much liquid is this in total?",
+         c:["\\(6.85\\) L","\\(3.85\\) L","\\(5.85\\) L","\\(6.35\\) L"], a:0,
+         e:"Multiply for the bottles, then add the jug.\n\\[3\\times1.5=4.5\\]\n\\[4.5+2.35=6.85\\]\nThe total is \\(6.85\\) L."}
+      ]},
+      { name: "Grade 6 Challenge", questions: [
+        {q:"\\(18.5-(2.75\\times4.2)\\)",
+         c:["\\(6.95\\)","\\(66.15\\)","\\(7.05\\)","\\(6.85\\)"], a:0,
+         e:"Do the multiplication in the brackets first.\n\\[2.75\\times4.2=11.55\\]\n\\[18.5-11.55=6.95\\]\nThe correct answer is \\(6.95\\)."},
+        {q:"\\((15.6+8.4)\\div1.5\\)",
+         c:["\\(16\\)","\\(21.2\\)","\\(1.6\\)","\\(160\\)"], a:0,
+         e:"Brackets first, then divide.\n\\[15.6+8.4=24\\]\n\\[24\\div1.5=16\\]\nThe correct answer is \\(16\\)."},
+        {q:"\\(3\\frac{1}{4}+2.75\\times1.2\\)",
+         c:["\\(6.55\\)","\\(7.2\\)","\\(6.05\\)","\\(6.6\\)"], a:0,
+         e:"Change the fraction to a decimal and multiply first.\n\\[3\\frac{1}{4}=3.25,\\quad 2.75\\times1.2=3.3\\]\n\\[3.25+3.3=6.55\\]\nThe correct answer is \\(6.55\\)."},
+        {q:"A \\(2.5\\) kg bag of rice costs \\(\\$7.50\\). What is the price per kilogram?",
+         c:["\\(\\$3.00\\)","\\(\\$5.00\\)","\\(\\$18.75\\)","\\(\\$0.30\\)"], a:0,
+         e:"Divide the total cost by the number of kilograms.\n\\[7.50\\div2.5=3.00\\]\nThe price is \\(\\$3.00\\) per kg."},
+        {q:"A shirt costs \\(\\$24.50\\). It is reduced by \\(\\$8.75\\). You pay with a \\(\\$20\\) note. How much change do you get?",
+         c:["\\(\\$4.25\\)","\\(\\$15.75\\)","\\(\\$5.25\\)","\\(\\$3.25\\)"], a:0,
+         e:"Find the sale price, then the change.\n\\[24.50-8.75=15.75\\]\n\\[20.00-15.75=4.25\\]\nThe change is \\(\\$4.25\\)."},
+        {q:"A cyclist rides \\(12.5\\) km, \\(9.75\\) km and \\(14.35\\) km over three days. What is the average distance per day?",
+         c:["\\(12.2\\) km","\\(36.6\\) km","\\(12.02\\) km","\\(11.2\\) km"], a:0,
+         e:"Add the distances, then divide by 3.\n\\[12.5+9.75+14.35=36.6\\]\n\\[36.6\\div3=12.2\\]\nThe average is \\(12.2\\) km per day."},
+        {q:"A plank is \\(3.6\\) m long. It is cut into pieces each \\(0.45\\) m long. How many pieces are there?",
+         c:["\\(8\\)","\\(9\\)","\\(1.62\\)","\\(4\\)"], a:0,
+         e:"Divide the total length by the length of each piece.\n\\[3.6\\div0.45=360\\div45=8\\]\nThere are 8 pieces."},
+        {q:"A shop sells pens at \\(\\$1.25\\) each and pencils at \\(\\$0.75\\) each. To find the total cost of 4 pens, which piece of information is NOT needed?",
+         c:["The price of a pencil","The price of a pen","The number of pens bought","That she is buying pens"], a:0,
+         e:"To find the cost of 4 pens you multiply the price of a pen by 4.\n\\[1.25\\times4=5.00\\]\nThe price of a pencil is not used at all, so it is not needed."},
+        {q:"A taxi charges \\(\\$3.50\\) to start, plus \\(\\$1.20\\) for each kilometre. Which expression gives the cost of a 6 km trip?",
+         c:["\\(3.50+1.20\\times6\\)","\\((3.50+1.20)\\times6\\)","\\(3.50\\times6+1.20\\)","\\(3.50+1.20+6\\)"], a:0,
+         e:"The \\(\\$3.50\\) is charged once, and \\(\\$1.20\\) is charged for each of the 6 km.\nSo the cost is \\(3.50+1.20\\times6\\).\nBy order of operations this equals \\(3.50+7.20=10.70\\)."},
+        {q:"Estimate: \\(4.9\\times6.1\\) is closest to which value?",
+         c:["\\(30\\)","\\(24\\)","\\(300\\)","\\(3\\)"], a:0,
+         e:"Round each number to the nearest whole number.\n\\[4.9\\approx5,\\quad 6.1\\approx6\\]\n\\[5\\times6=30\\]\nSo the answer is closest to \\(30\\)."}
+      ]}
+    ]
+  }
+};
+
+/* ==========================================================================
+   STATE + NAVIGATION
+   ========================================================================== */
+let curTopic=null, curSetIdx=0, curQ=0, answers=[];
+
+function typeset(){ if(window.MathJax && MathJax.typesetPromise){ MathJax.typesetPromise(); } }
+
+function showEl(id){
+  ["home","menu","quiz","result","review"].forEach(s=>document.getElementById(s).classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function goHome(){ showEl("home"); }
+
+function openTopic(t){
+  curTopic=t;
+  const d=DATA[t];
+  document.getElementById("menuTitle").textContent=d.name;
+  document.getElementById("menuCrumb").textContent=d.name;
+  showEl("menu");
+}
+function backToMenu(){ curTopic?openTopic(curTopic):goHome(); }
+
+function startQuiz(setIdx){
+  curSetIdx=setIdx; curQ=0; answers=new Array(10).fill(null);
+  showEl("quiz"); renderQuestion();
+}
+function retrySet(){ startQuiz(curSetIdx); }
+function curSet(){ return DATA[curTopic].sets[curSetIdx]; }
+function crumbText(){ return DATA[curTopic].name+" • "+curSet().name; }
+
+/* ==========================================================================
+   RENDER QUESTION
+   ========================================================================== */
+function renderQuestion(){
+  const set=curSet(), q=set.questions[curQ];
+  document.getElementById("quizCrumb").textContent=crumbText();
+  document.getElementById("qCounter").textContent="Question "+(curQ+1)+" of 10";
+  document.getElementById("qText").innerHTML=q.q;
+
+  const answered=answers.filter(a=>a!==null).length;
+  document.getElementById("progressBar").style.width=(answered/10*100)+"%";
+  document.getElementById("liveScore").textContent=scoreCount();
+
+  const box=document.getElementById("choices"); box.innerHTML="";
+  const labels=["A","B","C","D"], state=answers[curQ];
+  q.c.forEach((choice,i)=>{
+    const b=document.createElement("button");
+    b.className="choice";
+    b.innerHTML='<span class="lab">'+labels[i]+'</span><span>'+choice+'</span>';
+    if(state){
+      b.disabled=true;
+      if(i===q.a) b.classList.add("correct");
+      if(i===state.picked && !state.correct) b.classList.add("incorrect");
+    }else{
+      b.onclick=()=>selectAnswer(i);
+    }
+    box.appendChild(b);
+  });
+
+  const fb=document.getElementById("feedback");
+  if(state){
+    fb.className="feedback show "+(state.correct?"ok":"bad");
+    document.getElementById("verdict").textContent=state.correct?"✅ Correct!":"❌ Not quite.";
+    let stepText=q.e;
+    if(!state.correct){
+      stepText="You chose <b>"+labels[state.picked]+"</b>. The correct answer is <b>"+labels[q.a]+"</b>.\n\n"+q.e;
+    }
+    document.getElementById("steps").innerHTML=stepText;
+  }else{
+    fb.className="feedback";
+    document.getElementById("verdict").textContent="";
+    document.getElementById("steps").innerHTML="";
+  }
+
+  document.getElementById("prevBtn").disabled=(curQ===0);
+  document.getElementById("nextBtn").textContent=(curQ===9)?"Finish ✓":"Next ▶";
+  renderNavigator();
+  typeset();
+}
+
+function renderNavigator(){
+  const nav=document.getElementById("navigator"); nav.innerHTML="";
+  for(let i=0;i<10;i++){
+    const b=document.createElement("button");
+    b.className="nav-btn"; b.textContent=i+1;
+    const st=answers[i];
+    if(st) b.classList.add(st.correct?"correct":"incorrect");
+    if(i===curQ) b.classList.add("current");
+    b.onclick=()=>{ curQ=i; renderQuestion(); };
+    nav.appendChild(b);
+  }
+}
+
+function selectAnswer(i){
+  if(answers[curQ]) return;
+  const q=curSet().questions[curQ];
+  answers[curQ]={picked:i, correct:(i===q.a)};
+  renderQuestion();
+}
+function scoreCount(){ return answers.filter(a=>a&&a.correct).length; }
+function prevQ(){ if(curQ>0){ curQ--; renderQuestion(); } }
+function nextQ(){
+  if(curQ<9){ curQ++; renderQuestion(); }
+  else{
+    const firstUn=answers.findIndex(a=>a===null);
+    if(firstUn!==-1){
+      alert("Please answer all 10 questions first. Question "+(firstUn+1)+" is still unanswered.");
+      curQ=firstUn; renderQuestion(); return;
+    }
+    finishQuiz();
+  }
+}
+
+/* ==========================================================================
+   RESULT
+   ========================================================================== */
+function finishQuiz(){
+  const correct=scoreCount(), wrong=10-correct, pct=Math.round(correct/10*100);
+  document.getElementById("resultCrumb").textContent=crumbText();
+  document.getElementById("finalScore").textContent=correct+" / 10";
+  document.getElementById("finalPct").textContent=pct+"%";
+  document.getElementById("numCorrect").textContent=correct;
+  document.getElementById("numWrong").textContent=wrong;
+  let msg;
+  if(correct>=9) msg="Excellent work! You have mastered this skill.";
+  else if(correct>=7) msg="Great job! You understand most of the topic.";
+  else if(correct>=5) msg="Good effort! Review the explanations and try again.";
+  else msg="Keep practising. You will improve step by step.";
+  document.getElementById("finalMsg").textContent=msg;
+  showEl("result");
+}
+
+/* ==========================================================================
+   REVIEW
+   ========================================================================== */
+function showReview(){
+  document.getElementById("reviewCrumb").textContent=crumbText();
+  const list=document.getElementById("reviewList"); list.innerHTML="";
+  const labels=["A","B","C","D"], set=curSet();
+  set.questions.forEach((q,i)=>{
+    const st=answers[i], div=document.createElement("div");
+    let cls="review-item", tag="", pickedTxt="";
+    if(!st){ cls+=" skip"; tag='<span class="tag skip">Not answered</span>'; pickedTxt="— (no answer)"; }
+    else if(st.correct){ tag='<span class="tag ok">Correct</span>'; pickedTxt=labels[st.picked]+". "+q.c[st.picked]; }
+    else{ cls+=" wrong"; tag='<span class="tag bad">Incorrect</span>'; pickedTxt=labels[st.picked]+". "+q.c[st.picked]; }
+    div.className=cls;
+    div.innerHTML=
+      '<div class="review-q">Q'+(i+1)+'. '+q.q+' '+tag+'</div>'+
+      '<div class="review-line"><strong>Your answer:</strong> '+pickedTxt+'</div>'+
+      '<div class="review-line"><strong>Correct answer:</strong> '+labels[q.a]+'. '+q.c[q.a]+'</div>'+
+      '<div class="review-steps">'+q.e+'</div>';
+    list.appendChild(div);
+  });
+  showEl("review");
+  typeset();
+}
+</script>
+</body>
+</html>

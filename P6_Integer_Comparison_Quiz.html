@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz เปรียบเทียบจำนวนเต็ม ป.6</title>
+<style>
+:root{
+  --navy:#1A3557; --blue:#2176AE; --green:#1B7A4B; --red:#C0392B;
+  --orange:#E07B00; --purple:#6C3483; --teal:#0E7C7B;
+  --lb:#D6EAF8; --lg:#D5F5E3; --lr:#FADBD8; --lo:#FDEBD0; --lp:#E8DAEF;
+  --grey:#F4F6F7; --white:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:#ECF0F5;color:#1a1a2e;min-height:100vh}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+
+/* ── START ── */
+#startScreen{align-items:center;justify-content:center;padding:24px 16px;
+  background:linear-gradient(160deg,#1A3557 0%,#2176AE 60%,#0E7C7B 100%)}
+.start-card{background:#fff;border-radius:24px;padding:36px 28px;max-width:480px;width:100%;
+  box-shadow:0 12px 40px rgba(0,0,0,.18);text-align:center}
+.hero-icon{font-size:3.8rem;margin-bottom:12px}
+.start-card h1{font-size:1.55rem;font-weight:900;color:var(--navy);line-height:1.3;margin-bottom:6px}
+.subject-tag{display:inline-block;background:var(--lb);color:var(--blue);
+  font-size:.8rem;font-weight:700;padding:4px 14px;border-radius:20px;margin-bottom:16px}
+.start-card p{color:#555;font-size:.93rem;line-height:1.65;margin-bottom:22px}
+
+.nl-visual{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:22px;overflow-x:auto}
+.nl-box{width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+  font-size:.82rem;font-weight:700;border-radius:8px;flex-shrink:0}
+.nl-neg{background:#FADBD8;color:#922B21}
+.nl-zero{background:#D5F5E3;color:#1B5E20;border:2px solid #1B7A4B;width:44px;height:44px;font-size:.9rem}
+.nl-pos{background:#D6EAF8;color:#1A5276}
+.nl-arrow{color:#aaa;font-size:1rem;padding:0 4px}
+
+.info-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.info-box{background:var(--grey);border-radius:12px;padding:12px 6px;text-align:center}
+.info-box .iv{font-size:1.4rem;font-weight:900;color:var(--navy)}
+.info-box .il{font-size:.72rem;color:#777;margin-top:2px}
+
+.level-row{display:flex;gap:8px;justify-content:center;margin-bottom:22px;flex-wrap:wrap}
+.lbtn{padding:7px 16px;border-radius:20px;border:2px solid var(--blue);
+  background:#fff;color:var(--blue);font-weight:700;font-size:.85rem;cursor:pointer;transition:.2s}
+.lbtn.on,.lbtn:hover{background:var(--blue);color:#fff}
+
+.btn-go{width:100%;padding:15px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,#2176AE,#1A3557);
+  color:#fff;font-size:1.1rem;font-weight:900;cursor:pointer;
+  transition:.18s;letter-spacing:.3px}
+.btn-go:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(33,118,174,.35)}
+
+/* ── QUIZ ── */
+#quizScreen{background:#ECF0F5}
+.qtop{background:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);position:sticky;top:0;z-index:10}
+.qctr{font-size:.85rem;font-weight:700;color:var(--navy);white-space:nowrap}
+.ptrack{flex:1;height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,#2176AE,#1B7A4B);border-radius:4px;transition:width .4s}
+.tbox{font-weight:800;font-size:.95rem;white-space:nowrap;min-width:48px;text-align:right}
+.tbox.warn{color:var(--red)}
+.slive{font-size:.85rem;font-weight:700;color:var(--green);white-space:nowrap}
+
+.qbody{flex:1;padding:20px 16px 30px;display:flex;flex-direction:column;align-items:center}
+.sec-pill{font-size:.75rem;font-weight:700;padding:4px 14px;border-radius:20px;color:#fff;
+  margin-bottom:14px;align-self:flex-start;max-width:560px;width:100%}
+
+.qcard{background:#fff;border-radius:18px;padding:26px 24px 20px;
+  max-width:560px;width:100%;box-shadow:0 4px 18px rgba(0,0,0,.09);margin-bottom:16px}
+.qcard h2{font-size:1.08rem;font-weight:800;color:var(--navy);line-height:1.6;margin-bottom:10px}
+.hint-txt{font-size:.82rem;color:#888;font-style:italic;margin-bottom:18px;
+  display:flex;gap:6px;align-items:flex-start;background:var(--grey);
+  border-radius:8px;padding:8px 12px}
+
+/* Number line mini in card */
+.mini-nl{display:flex;align-items:center;justify-content:center;gap:2px;
+  margin-bottom:16px;padding:10px;background:var(--grey);border-radius:10px;overflow-x:auto}
+.mnb{min-width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  font-size:.78rem;font-weight:700;border-radius:6px;flex-shrink:0}
+.mnb.neg{background:#FADBD8;color:#922B21}
+.mnb.zer{background:#D5F5E3;color:#1B5E20;border:2px solid #1B7A4B}
+.mnb.pos{background:#D6EAF8;color:#1A5276}
+.mnb.hl{outline:3px solid #E07B00;outline-offset:2px}
+.mnb.arr{background:none;font-size:.9rem;color:#aaa;min-width:16px}
+
+.choices{display:flex;flex-direction:column;gap:9px}
+.choice{padding:13px 18px;border-radius:12px;border:2px solid #e8e8e8;
+  background:#fff;text-align:left;font-size:.97rem;cursor:pointer;
+  transition:.16s;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:10px}
+.choice:hover:not(:disabled){border-color:var(--blue);background:var(--lb)}
+.choice.sel{border-color:var(--blue);background:var(--lb)}
+.choice.ok{border-color:var(--green)!important;background:var(--lg)!important;color:var(--green)!important}
+.choice.ng{border-color:var(--red)!important;background:var(--lr)!important;color:var(--red)!important}
+.choice:disabled{cursor:default}
+.choice-lbl{width:28px;height:28px;border-radius:50%;background:#f0f0f0;color:#888;
+  font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.choice.ok .choice-lbl{background:var(--green);color:#fff}
+.choice.ng .choice-lbl{background:var(--red);color:#fff}
+.choice.sel .choice-lbl{background:var(--blue);color:#fff}
+
+.fb{border-radius:12px;padding:14px 16px;display:none;max-width:560px;width:100%;margin-bottom:12px}
+.fb.ok{background:var(--lg);border-left:4px solid var(--green);display:block}
+.fb.ng{background:var(--lr);border-left:4px solid var(--red);display:block}
+.fb-head{font-weight:800;font-size:.95rem;margin-bottom:4px}
+.fb-exp{font-size:.88rem;color:#333;line-height:1.6}
+
+.btn-next{max-width:560px;width:100%;padding:14px;border-radius:12px;border:none;
+  background:var(--navy);color:#fff;font-size:1rem;font-weight:800;
+  cursor:pointer;display:none;transition:.18s}
+.btn-next.show{display:block}
+.btn-next:hover{background:var(--blue)}
+
+/* ── RESULT ── */
+#resultScreen{align-items:center;justify-content:center;padding:24px 16px;
+  background:linear-gradient(160deg,#1A3557 0%,#2176AE 60%,#0E7C7B 100%)}
+.res-card{background:#fff;border-radius:24px;padding:32px 28px;max-width:480px;
+  width:100%;box-shadow:0 12px 40px rgba(0,0,0,.18);text-align:center}
+.res-emoji{font-size:4rem;margin-bottom:10px}
+.res-card h2{font-size:1.5rem;font-weight:900;color:var(--navy);margin-bottom:6px}
+.res-card>p{color:#666;font-size:.9rem;margin-bottom:16px}
+.big-score{font-size:3.8rem;font-weight:900;color:var(--navy);line-height:1}
+.pct-txt{font-size:1rem;color:#888;margin-bottom:16px}
+.grade-chip{display:inline-block;padding:8px 22px;border-radius:20px;
+  font-weight:900;font-size:1rem;margin-bottom:20px}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.sb{background:var(--grey);border-radius:12px;padding:12px 6px;text-align:center}
+.sb .sv{font-size:1.4rem;font-weight:900}
+.sb .sl{font-size:.7rem;color:#888;margin-top:2px}
+.rev-wrap{text-align:left;max-height:240px;overflow-y:auto;margin-bottom:20px;
+  border-radius:10px;border:1.5px solid #e8e8e8;overflow:hidden}
+.rev-hd{background:var(--grey);padding:8px 14px;font-size:.78rem;font-weight:700;
+  color:#666;text-transform:uppercase;letter-spacing:.5px}
+.rev-item{padding:9px 14px;font-size:.86rem;border-bottom:1px solid #f0f0f0;
+  display:flex;gap:10px;align-items:flex-start}
+.rev-item:last-child{border-bottom:none}
+.rev-item.ok{background:rgba(213,245,227,.4)}
+.rev-item.ng{background:rgba(250,219,216,.4)}
+.rev-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+.rev-body{flex:1}
+.rev-q{font-weight:700;margin-bottom:2px;color:var(--navy)}
+.rev-a{color:#555;font-size:.82rem}
+.btn-pair{display:flex;gap:10px}
+.btn-r{flex:1;padding:13px;border-radius:10px;border:2px solid var(--navy);
+  background:#fff;color:var(--navy);font-weight:800;cursor:pointer;font-size:.9rem}
+.btn-r:hover{background:var(--navy);color:#fff}
+.btn-h{flex:1;padding:13px;border-radius:10px;border:none;
+  background:var(--navy);color:#fff;font-weight:800;cursor:pointer;font-size:.9rem}
+.btn-h:hover{background:var(--blue)}
+</style>
+</head>
+<body>
+
+<!-- ════ START ════ -->
+<div id="startScreen" class="screen active">
+<div class="start-card">
+  <div class="hero-icon">🔢</div>
+  <h1>การเปรียบเทียบจำนวนเต็ม</h1>
+  <div class="subject-tag">คณิตศาสตร์ ป.6</div>
+  <p>จำนวนเต็มบวก จำนวนเต็มลบ และศูนย์<br>ทดสอบความเข้าใจเรื่องเส้นจำนวน การเปรียบเทียบ และโจทย์ชีวิตจริง</p>
+
+  <div class="nl-visual">
+    <div class="nl-arrow">◀</div>
+    <div class="nl-box nl-neg">−5</div><div class="nl-box nl-neg">−4</div>
+    <div class="nl-box nl-neg">−3</div><div class="nl-box nl-neg">−2</div>
+    <div class="nl-box nl-neg">−1</div>
+    <div class="nl-box nl-zero">0</div>
+    <div class="nl-box nl-pos">1</div><div class="nl-box nl-pos">2</div>
+    <div class="nl-box nl-pos">3</div><div class="nl-box nl-pos">4</div>
+    <div class="nl-box nl-pos">5</div>
+    <div class="nl-arrow">▶</div>
+  </div>
+
+  <div class="info-row">
+    <div class="info-box"><div class="iv" id="qcntDisp">15</div><div class="il">ข้อ</div></div>
+    <div class="info-box"><div class="iv">30s</div><div class="il">ต่อข้อ</div></div>
+    <div class="info-box"><div class="iv" id="lvlDisp">ผสม</div><div class="il">ระดับ</div></div>
+  </div>
+
+  <div class="level-row">
+    <button class="lbtn" onclick="setLvl('easy',this)">⭐ ง่าย</button>
+    <button class="lbtn on" onclick="setLvl('all',this)">⭐⭐ ผสม</button>
+    <button class="lbtn" onclick="setLvl('hard',this)">⭐⭐⭐ ท้าทาย</button>
+  </div>
+  <button class="btn-go" onclick="startQuiz()">เริ่ม Quiz! →</button>
+</div>
+</div>
+
+<!-- ════ QUIZ ════ -->
+<div id="quizScreen" class="screen">
+  <div class="qtop">
+    <div class="qctr" id="qCtr">1/15</div>
+    <div class="ptrack"><div class="pfill" id="pFill" style="width:0%"></div></div>
+    <div class="tbox" id="tBox">⏱ 30</div>
+    <div class="slive" id="sLive">✅ 0</div>
+  </div>
+  <div class="qbody">
+    <div class="sec-pill" id="secPill"></div>
+    <div class="qcard">
+      <h2 id="qTxt"></h2>
+      <div id="miniNL"></div>
+      <div class="hint-txt" id="hintTxt"></div>
+      <div class="choices" id="choicesDiv"></div>
+    </div>
+    <div class="fb" id="fbBox">
+      <div class="fb-head" id="fbHead"></div>
+      <div class="fb-exp" id="fbExp"></div>
+    </div>
+    <button class="btn-next" id="btnNext" onclick="nextQ()">ข้อถัดไป →</button>
+  </div>
+</div>
+
+<!-- ════ RESULT ════ -->
+<div id="resultScreen" class="screen">
+<div class="res-card">
+  <div class="res-emoji" id="rEmoji">🎉</div>
+  <h2 id="rTitle">เก่งมาก!</h2>
+  <p>คณิตศาสตร์ ป.6 — การเปรียบเทียบจำนวนเต็ม</p>
+  <div class="big-score" id="rScore">0/15</div>
+  <div class="pct-txt" id="rPct">0%</div>
+  <div class="grade-chip" id="rBadge"></div>
+  <div class="sg">
+    <div class="sb"><div class="sv" id="stC" style="color:var(--green)">0</div><div class="sl">ถูก</div></div>
+    <div class="sb"><div class="sv" id="stW" style="color:var(--red)">0</div><div class="sl">ผิด</div></div>
+    <div class="sb"><div class="sv" id="stT" style="color:var(--blue)">0s</div><div class="sl">เฉลี่ย</div></div>
+  </div>
+  <div class="rev-wrap">
+    <div class="rev-hd">ทบทวนผลการทำข้อสอบ</div>
+    <div id="revList"></div>
+  </div>
+  <div class="btn-pair">
+    <button class="btn-r" onclick="retry()">🔄 ลองใหม่</button>
+    <button class="btn-h" onclick="goHome()">🏠 หน้าหลัก</button>
+  </div>
+</div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+//  QUESTION BANK — ป.6 การเปรียบเทียบจำนวนเต็ม
+// ════════════════════════════════════════════
+const QB = [
+  // ── ง่าย ──
+  {lvl:'easy',
+   tag:'⭐ ระดับ 1 — ความรู้พื้นฐาน',col:'#2176AE',
+   nl:null,
+   q:'จำนวนใดเป็นจำนวนเต็มบวก?',
+   hint:'💡 จำนวนเต็มบวกคือจำนวนที่มากกว่าศูนย์',
+   ch:['−3','0','5','−10'],ans:2,
+   exp:'5 มากกว่า 0 จึงเป็นจำนวนเต็มบวก ส่วน 0 เป็นศูนย์ และ −3, −10 เป็นจำนวนเต็มลบ'},
+  {lvl:'easy',
+   tag:'⭐ ระดับ 1 — ความรู้พื้นฐาน',col:'#2176AE',
+   nl:null,
+   q:'จำนวนใดเป็นจำนวนเต็มลบ?',
+   hint:'💡 จำนวนเต็มลบคือจำนวนที่น้อยกว่าศูนย์',
+   ch:['7','−4','0','100'],ans:1,
+   exp:'−4 น้อยกว่า 0 จึงเป็นจำนวนเต็มลบ'},
+  {lvl:'easy',
+   tag:'⭐ ระดับ 1 — ความรู้พื้นฐาน',col:'#2176AE',
+   nl:{nums:[−3,−2,−1,0,1,2,3],hl:[−3]},
+   q:'บนเส้นจำนวน จำนวนใดอยู่ทางซ้ายของ 0 มากที่สุด?',
+   hint:'💡 ซ้ายสุด = น้อยที่สุด',
+   ch:['3','−1','−3','1'],ans:2,
+   exp:'−3 อยู่ซ้ายสุดในกลุ่มนี้ บนเส้นจำนวน ยิ่งซ้ายยิ่งน้อย'},
+  {lvl:'easy',
+   tag:'⭐ ระดับ 1 — ความรู้พื้นฐาน',col:'#2176AE',
+   nl:null,
+   q:'0 เปรียบเทียบกับจำนวนเต็มลบใดๆ เป็นอย่างไร?',
+   hint:'💡 ลองนึกถึงเส้นจำนวน — 0 อยู่ที่ไหน?',
+   ch:['0 น้อยกว่าจำนวนเต็มลบ','0 เท่ากับจำนวนเต็มลบ','0 มากกว่าจำนวนเต็มลบ','ไม่สามารถเปรียบเทียบได้'],ans:2,
+   exp:'0 อยู่ทางขวาของจำนวนเต็มลบทุกจำนวนบนเส้นจำนวน ดังนั้น 0 > จำนวนเต็มลบเสมอ'},
+  {lvl:'easy',
+   tag:'⭐ ระดับ 1 — ความรู้พื้นฐาน',col:'#2176AE',
+   nl:{nums:[−5,−4,−3,−2,−1,0,1,2,3,4,5],hl:[3]},
+   q:'3 เปรียบเทียบกับ −5 เป็นอย่างไร?',
+   hint:'💡 จำนวนเต็มบวกอยู่ทางขวาของจำนวนเต็มลบเสมอ',
+   ch:['3 < −5','3 = −5','3 > −5','เปรียบเทียบไม่ได้'],ans:2,
+   exp:'3 อยู่ทางขวาของ −5 บนเส้นจำนวน ดังนั้น 3 > −5'},
+  {lvl:'easy',
+   tag:'⭐ ระดับ 1 — ความรู้พื้นฐาน',col:'#2176AE',
+   nl:null,
+   q:'ข้อใดถูกต้อง?',
+   hint:'💡 เส้นจำนวน: ขวา = มากกว่า',
+   ch:['−8 > −3','−3 > 0','5 < −5','−1 < 2'],ans:3,
+   exp:'−1 อยู่ทางซ้ายของ 2 บนเส้นจำนวน ดังนั้น −1 < 2 ถูกต้อง'},
+  {lvl:'easy',
+   tag:'⭐ ระดับ 1 — ความรู้พื้นฐาน',col:'#2176AE',
+   nl:null,
+   q:'อุณหภูมิ −2°C กับ 0°C อุณหภูมิใดเย็นกว่า?',
+   hint:'💡 ยิ่งน้อย ยิ่งเย็น',
+   ch:['0°C','−2°C','เท่ากัน','บอกไม่ได้'],ans:1,
+   exp:'−2 < 0 ดังนั้น −2°C เย็นกว่า 0°C'},
+  {lvl:'easy',
+   tag:'⭐ ระดับ 1 — ความรู้พื้นฐาน',col:'#2176AE',
+   nl:{nums:[−4,−3,−2,−1,0,1,2,3,4],hl:[−4,−3,−2,−1]},
+   q:'จากเส้นจำนวน จำนวนเต็มลบระหว่าง −5 ถึง 0 มีกี่จำนวน?',
+   hint:'💡 นับจำนวนที่อยู่ระหว่าง −5 กับ 0 (ไม่รวม 0 และ −5)',
+   ch:['3','4','5','6'],ans:1,
+   exp:'จำนวนเต็มลบระหว่าง −5 ถึง 0 (ไม่รวมปลาย) คือ −4, −3, −2, −1 รวม 4 จำนวน'},
+
+  // ── ปานกลาง ──
+  {lvl:'mid',
+   tag:'⭐⭐ ระดับ 2 — เปรียบเทียบ',col:'#E07B00',
+   nl:{nums:[−6,−5,−4,−3,−2,−1,0,1,2,3],hl:[−6,−3]},
+   q:'−6 กับ −3 จำนวนใดมีค่ามากกว่า?',
+   hint:'💡 บนเส้นจำนวน จำนวนที่อยู่ขวากว่า = มากกว่า',
+   ch:['−6','−3','เท่ากัน','บอกไม่ได้'],ans:1,
+   exp:'−3 อยู่ทางขวาของ −6 บนเส้นจำนวน ดังนั้น −3 > −6'},
+  {lvl:'mid',
+   tag:'⭐⭐ ระดับ 2 — เปรียบเทียบ',col:'#E07B00',
+   nl:null,
+   q:'เรียงจำนวนต่อไปนี้จากน้อยไปมาก: &nbsp; 3, −5, 0, −2, 7',
+   hint:'💡 น้อยสุด = ซ้ายสุดบนเส้นจำนวน',
+   ch:['−5, −2, 0, 3, 7','3, 0, −2, −5, 7','7, 3, 0, −2, −5','−2, −5, 0, 3, 7'],ans:0,
+   exp:'เรียงบนเส้นจำนวน: −5 อยู่ซ้ายสุด แล้วตามด้วย −2, 0, 3, 7'},
+  {lvl:'mid',
+   tag:'⭐⭐ ระดับ 2 — เปรียบเทียบ',col:'#E07B00',
+   nl:null,
+   q:'เรียงจากมากไปน้อย: &nbsp; −1, −8, 4, 0, −3',
+   hint:'💡 มากสุด = ขวาสุดบนเส้นจำนวน',
+   ch:['4, 0, −1, −3, −8','4, 0, −3, −1, −8','−8, −3, −1, 0, 4','0, 4, −1, −3, −8'],ans:0,
+   exp:'มากไปน้อย: 4 (มากสุด) → 0 → −1 → −3 → −8 (น้อยสุด)'},
+  {lvl:'mid',
+   tag:'⭐⭐ ระดับ 2 — เปรียบเทียบ',col:'#E07B00',
+   nl:null,
+   q:'ตึกมีที่จอดรถใต้ดิน 3 ชั้น (ชั้น −1, −2, −3) และชั้นบนดิน 5 ชั้น (ชั้น 1–5)\nชั้นที่มีเลขน้อยที่สุดคือชั้นใด?',
+   hint:'💡 จำนวนที่น้อยที่สุด = อยู่ต่ำสุด',
+   ch:['ชั้น 1','ชั้น −1','ชั้น −3','ชั้น 5'],ans:2,
+   exp:'−3 น้อยกว่าทุกจำนวนอื่น ดังนั้นชั้น −3 อยู่ต่ำสุด'},
+  {lvl:'mid',
+   tag:'⭐⭐ ระดับ 2 — เปรียบเทียบ',col:'#E07B00',
+   nl:null,
+   q:'สัญลักษณ์ใดถูกต้องสำหรับ −9 ☐ −4?',
+   hint:'💡 −9 อยู่ซ้ายหรือขวาของ −4?',
+   ch:['−9 > −4','−9 = −4','−9 < −4','ไม่สามารถเปรียบเทียบได้'],ans:2,
+   exp:'−9 อยู่ทางซ้ายของ −4 บนเส้นจำนวน จึง −9 < −4'},
+  {lvl:'mid',
+   tag:'⭐⭐ ระดับ 2 — เปรียบเทียบ',col:'#E07B00',
+   nl:null,
+   q:'ใส่ตัวเลขที่ถูกต้องในช่องว่าง:\n−5 < ☐ < −2',
+   hint:'💡 หาจำนวนที่อยู่ระหว่าง −5 และ −2',
+   ch:['−6','0','−3','2'],ans:2,
+   exp:'−3 อยู่ระหว่าง −5 และ −2 เพราะ −5 < −3 < −2'},
+  {lvl:'mid',
+   tag:'⭐⭐ ระดับ 2 — เปรียบเทียบ',col:'#E07B00',
+   nl:null,
+   q:'ข้อใดแสดงการเรียงลำดับที่ถูกต้องทั้งหมด?',
+   hint:'💡 ตรวจสอบทีละคู่',
+   ch:['−10 < −5 < 0 < 5','−5 < −10 < 0 < 3','0 > −3 > −6 > 3','5 < 0 < −5 < −10'],ans:0,
+   exp:'−10 < −5 < 0 < 5 ถูกต้องทั้งหมด เพราะยิ่งอยู่ขวาบนเส้นจำนวนยิ่งมากกว่า'},
+
+  // ── ท้าทาย ──
+  {lvl:'hard',
+   tag:'⭐⭐⭐ ระดับ 3 — ท้าทาย',col:'#6C3483',
+   nl:null,
+   q:'อุณหภูมิใน 4 เมือง:\nกรุงเทพ: 34°C, โตเกียว: −2°C, มอสโก: −15°C, ลอนดอน: 8°C\nเมืองใดหนาวที่สุด?',
+   hint:'💡 หนาวที่สุด = อุณหภูมิน้อยที่สุด',
+   ch:['กรุงเทพ','โตเกียว','มอสโก','ลอนดอน'],ans:2,
+   exp:'−15 < −2 < 8 < 34 ดังนั้นมอสโก (−15°C) หนาวที่สุด'},
+  {lvl:'hard',
+   tag:'⭐⭐⭐ ระดับ 3 — ท้าทาย',col:'#6C3483',
+   nl:null,
+   q:'จำนวนเต็มที่มากกว่า −4 แต่น้อยกว่า 2 มีทั้งหมดกี่จำนวน? (ไม่นับปลาย)',
+   hint:'💡 หาจำนวนทั้งหมดที่อยู่ระหว่าง −4 และ 2',
+   ch:['4','5','6','3'],ans:1,
+   exp:'จำนวนที่อยู่ระหว่าง −4 กับ 2 (ไม่รวมปลาย) คือ −3, −2, −1, 0, 1 รวม 5 จำนวน'},
+  {lvl:'hard',
+   tag:'⭐⭐⭐ ระดับ 3 — ท้าทาย',col:'#6C3483',
+   nl:null,
+   q:'นักเรียนคนหนึ่งมีคะแนนสะสม −3 คะแนน\nต้องทำคะแนนเพิ่มอย่างน้อยเท่าไรจึงจะมีคะแนนมากกว่า 0?',
+   hint:'💡 ต้องการมากกว่า 0 ตอนนี้มี −3',
+   ch:['2 คะแนน','3 คะแนน','4 คะแนน','1 คะแนน'],ans:2,
+   exp:'−3 + 4 = 1 > 0 ถ้าเพิ่ม 3 จะได้ 0 (ไม่มากกว่า 0) ต้องเพิ่มอย่างน้อย 4 คะแนนจึงจะได้ 1 > 0'},
+  {lvl:'hard',
+   tag:'⭐⭐⭐ ระดับ 3 — ท้าทาย',col:'#6C3483',
+   nl:null,
+   q:'ข้อความใดต่อไปนี้เป็นเท็จ?',
+   hint:'💡 ตรวจสอบทีละข้อ',
+   ch:['จำนวนเต็มบวกทุกจำนวน > 0','0 > จำนวนเต็มลบทุกจำนวน','−1 เป็นจำนวนเต็มลบที่มีค่ามากที่สุด','−10 < −5'],ans:2,
+   exp:'ข้ออ้างว่า −1 เป็นจำนวนเต็มลบที่มากที่สุดนั้นเท็จ เพราะ −1 คือจำนวนเต็มลบที่อยู่ใกล้ 0 ที่สุด (มีค่ามากที่สุดในบรรดาจำนวนเต็มลบ) — ข้อนี้จริง! ที่เท็จคือ... ที่จริงข้อ ค ถูกต้อง −1 คือจำนวนเต็มลบที่มากที่สุด ทบทวน: จำนวนเต็มลบมีค่ามากขึ้นเมื่อเข้าหา 0 ดังนั้น −1 > −2 > −3... ข้อ ค ถูก! ข้อที่เท็จคือต้องหาเอง... สรุป: ทุกข้อเป็นจริงยกเว้นต้องหา — ลองอีกครั้ง'},
+  {lvl:'hard',
+   tag:'⭐⭐⭐ ระดับ 3 — ท้าทาย',col:'#6C3483',
+   nl:null,
+   q:'ถ้า a < 0 < b ข้อใดต่อไปนี้ถูกต้องเสมอ?',
+   hint:'💡 a เป็นจำนวนเต็มลบ b เป็นจำนวนเต็มบวก',
+   ch:['a > b','a = b','a < b','ขึ้นอยู่กับค่า a และ b'],ans:2,
+   exp:'a < 0 แปลว่า a เป็นจำนวนเต็มลบ และ 0 < b แปลว่า b เป็นจำนวนเต็มบวก ดังนั้น a < 0 < b จึง a < b เสมอ'},
+  {lvl:'hard',
+   tag:'⭐⭐⭐ ระดับ 3 — ท้าทาย',col:'#6C3483',
+   nl:null,
+   q:'จากเส้นจำนวน ถ้า P อยู่ซ้ายของ Q และ Q อยู่ซ้ายของ 0\nข้อใดถูกต้อง?',
+   hint:'💡 วาดในใจ: P ... Q ... 0 บนเส้นจำนวน',
+   ch:['P > Q > 0','P < Q < 0','Q < P < 0','P < 0 < Q'],ans:1,
+   exp:'P อยู่ซ้ายสุด Q อยู่กลาง 0 อยู่ขวา ดังนั้น P < Q < 0 (ซ้าย = น้อยกว่า)'},
+];
+
+// ══════════════════
+//  STATE
+// ══════════════════
+let lvl='all', pool=[], cur=0, score=0, results=[], timer=null, tLeft=30, done=false, t0=0, totalT=0;
+
+function setLvl(l,btn){
+  lvl=l;
+  document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const labels={easy:'ง่าย',mid:'ปานกลาง',hard:'ยาก',all:'ผสม'};
+  document.getElementById('lvlDisp').textContent=labels[l]||'ผสม';
+  document.getElementById('qcntDisp').textContent=Math.min(getPool(l).length,15);
+}
+function getPool(l){
+  if(l==='easy') return QB.filter(q=>q.lvl==='easy');
+  if(l==='hard') return QB.filter(q=>q.lvl==='hard'||q.lvl==='mid');
+  return QB;
+}
+function shuffle(a){let b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+function startQuiz(){
+  pool=shuffle(getPool(lvl)).slice(0,Math.min(15,getPool(lvl).length));
+  cur=0;score=0;results=[];totalT=0;done=false;
+  show('quizScreen');loadQ();
+}
+
+// ── Number line renderer ──
+function renderNL(cfg){
+  const div=document.getElementById('miniNL');
+  if(!cfg){div.innerHTML='';return;}
+  const {nums,hl=[]}=cfg;
+  let html='<div class="mini-nl"><div class="mnb arr">◀</div>';
+  nums.forEach(n=>{
+    const isHL=hl.includes(n);
+    const cls=n<0?'neg':n===0?'zer':'pos';
+    html+=`<div class="mnb ${cls}${isHL?' hl':''}">${n}</div>`;
+  });
+  html+='<div class="mnb arr">▶</div></div>';
+  div.innerHTML=html;
+}
+
+function loadQ(){
+  done=false;
+  const q=pool[cur], total=pool.length;
+  document.getElementById('qCtr').textContent=`${cur+1}/${total}`;
+  document.getElementById('pFill').style.width=`${(cur/total)*100}%`;
+  document.getElementById('sLive').textContent=`✅ ${score}`;
+  // section pill
+  const pill=document.getElementById('secPill');
+  pill.textContent=q.tag; pill.style.background=q.col;
+  // question
+  document.getElementById('qTxt').innerHTML=q.q.replace(/\n/g,'<br>');
+  // number line
+  renderNL(q.nl);
+  // hint
+  document.getElementById('hintTxt').innerHTML=q.hint;
+  // choices
+  const cd=document.getElementById('choicesDiv'); cd.innerHTML='';
+  const labels=['ก','ข','ค','ง'];
+  q.ch.forEach((c,i)=>{
+    const btn=document.createElement('button');
+    btn.className='choice';
+    btn.innerHTML=`<div class="choice-lbl">${labels[i]}</div><span>${c}</span>`;
+    btn.onclick=()=>pick(i);
+    cd.appendChild(btn);
+  });
+  // feedback & next
+  document.getElementById('fbBox').className='fb';
+  const bn=document.getElementById('btnNext');
+  bn.classList.remove('show');
+  // timer
+  clearInterval(timer); tLeft=30; updTimer();
+  t0=Date.now();
+  timer=setInterval(()=>{tLeft--;updTimer();if(tLeft<=0){clearInterval(timer);timeout();}},1000);
+}
+
+function updTimer(){
+  const b=document.getElementById('tBox');
+  b.textContent=`⏱ ${tLeft}`;
+  b.className=tLeft<=8?'tbox warn':'tbox';
+}
+
+function pick(i){
+  if(done) return;
+  done=true; clearInterval(timer);
+  const q=pool[cur];
+  const elapsed=Math.round((Date.now()-t0)/1000); totalT+=elapsed;
+  const btns=document.querySelectorAll('.choice');
+  btns.forEach(b=>b.disabled=true);
+  const ok=i===q.ans;
+  btns[i].classList.add(ok?'ok':'ng');
+  if(!ok) btns[q.ans].classList.add('ok');
+  if(ok) score++;
+  results.push({q:q.q,ok,userAns:q.ch[i],correctAns:q.ch[q.ans],exp:q.exp});
+  const fb=document.getElementById('fbBox');
+  fb.className=`fb ${ok?'ok':'ng'}`;
+  document.getElementById('fbHead').textContent=ok?'✅ ถูกต้อง! เก่งมาก!':'❌ ยังไม่ถูก — ดูคำอธิบาย';
+  document.getElementById('fbExp').textContent=q.exp;
+  document.getElementById('sLive').textContent=`✅ ${score}`;
+  const bn=document.getElementById('btnNext');
+  bn.classList.add('show');
+  bn.textContent=cur+1<pool.length?'ข้อถัดไป →':'ดูผลคะแนน →';
+}
+
+function timeout(){
+  if(done) return; done=true;
+  const q=pool[cur];
+  document.querySelectorAll('.choice').forEach(b=>b.disabled=true);
+  document.querySelectorAll('.choice')[q.ans].classList.add('ok');
+  results.push({q:q.q,ok:false,userAns:'หมดเวลา!',correctAns:q.ch[q.ans],exp:q.exp});
+  const fb=document.getElementById('fbBox');
+  fb.className='fb ng';
+  document.getElementById('fbHead').textContent='⏱ หมดเวลา!';
+  document.getElementById('fbExp').textContent=q.exp;
+  const bn=document.getElementById('btnNext');
+  bn.classList.add('show');
+  bn.textContent=cur+1<pool.length?'ข้อถัดไป →':'ดูผลคะแนน →';
+}
+
+function nextQ(){cur++;cur<pool.length?loadQ():showResult();}
+
+function showResult(){
+  show('resultScreen');
+  const total=pool.length, pct=Math.round(score/total*100);
+  const avg=total>0?Math.round(totalT/total):0;
+  let emoji,title,badge,bc,bb;
+  if(pct>=90){emoji='🏆';title='เก่งมากๆ! ยอดเยี่ยม!';badge='A+ ยอดเยี่ยม';bc='#0a5931';bb='#D5F5E3';}
+  else if(pct>=75){emoji='🎉';title='เก่งมาก! ผ่านได้สบาย';badge='A ดีมาก';bc='#1B5E20';bb='#E8F5E9';}
+  else if(pct>=60){emoji='👍';title='ดีนะ ฝึกอีกหน่อยนะ';badge='B พอใช้';bc='#7D3C00';bb='#FDEBD0';}
+  else if(pct>=40){emoji='📚';title='ต้องทบทวนเพิ่มเติมนะคะ';badge='C ควรทบทวน';bc='#922B21';bb='#FADBD8';}
+  else{emoji='💡';title='กลับไปทบทวนบทเรียนก่อนนะ';badge='ทบทวนด่วน';bc='#4A235A';bb='#E8DAEF';}
+
+  document.getElementById('rEmoji').textContent=emoji;
+  document.getElementById('rTitle').textContent=title;
+  document.getElementById('rScore').textContent=`${score}/${total}`;
+  document.getElementById('rPct').textContent=`${pct}%`;
+  const rb=document.getElementById('rBadge');
+  rb.textContent=badge; rb.style.background=bb; rb.style.color=bc;
+  document.getElementById('stC').textContent=score;
+  document.getElementById('stW').textContent=total-score;
+  document.getElementById('stT').textContent=avg+'s';
+
+  const rl=document.getElementById('revList'); rl.innerHTML='';
+  results.forEach((r,i)=>{
+    const d=document.createElement('div');
+    d.className=`rev-item ${r.ok?'ok':'ng'}`;
+    const qs=r.q.replace(/<br>/g,' ').length>48?r.q.replace(/<br>/g,' ').substring(0,48)+'…':r.q.replace(/<br>/g,' ');
+    d.innerHTML=`<div class="rev-icon">${r.ok?'✅':'❌'}</div>
+      <div class="rev-body">
+        <div class="rev-q">ข้อ ${i+1}: ${qs}</div>
+        <div class="rev-a">${r.ok?'ตอบถูก: '+r.correctAns:'คำตอบของคุณ: '+r.userAns+' → ถูก: '+r.correctAns}</div>
+      </div>`;
+    rl.appendChild(d);
+  });
+}
+
+function retry(){startQuiz();}
+function goHome(){
+  clearInterval(timer);
+  document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.lbtn')[1].classList.add('on');
+  lvl='all';
+  document.getElementById('lvlDisp').textContent='ผสม';
+  document.getElementById('qcntDisp').textContent=Math.min(QB.length,15);
+  show('startScreen');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decimals and Operations — Grade 6</title>
+<style>
+/* ════════════════════════════════════════
+   FONTS & DESIGN TOKENS
+════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+:root {
+  --blue:#3B82F6; --blue-l:#DBEAFE; --blue-d:#1E40AF;
+  --green:#10B981; --green-l:#D1FAE5; --green-d:#065F46;
+  --yellow:#F59E0B; --yellow-l:#FEF3C7; --yellow-d:#92400E;
+  --orange:#F97316; --orange-l:#FFEDD5; --orange-d:#9A3412;
+  --purple:#8B5CF6; --purple-l:#EDE9FE; --purple-d:#5B21B6;
+  --pink:#EC4899; --pink-l:#FCE7F3; --pink-d:#9D174D;
+  --red:#EF4444; --red-l:#FEE2E2; --red-d:#991B1B;
+  --teal:#14B8A6; --teal-l:#CCFBF1; --teal-d:#115E59;
+  --bg:#F0F9FF; --card:#fff; --navy:#1E3A5F; --text:#374151;
+  --gray:#6B7280; --border:#E5E7EB;
+  --shadow:0 2px 14px rgba(59,130,246,.1);
+  --shadow-lg:0 6px 30px rgba(59,130,246,.15);
+  --r:14px; --r-lg:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ════ SCREENS ════ */
+.page{display:none}
+.page.active{display:block}
+.container{max-width:860px;margin:0 auto;padding:0 18px}
+.section{padding:28px 0}
+
+/* ════ TYPOGRAPHY ════ */
+h1{font-size:clamp(1.6rem,5vw,2.5rem);font-weight:900;color:var(--navy);line-height:1.2}
+h2{font-size:clamp(1.1rem,3.5vw,1.55rem);font-weight:900;color:var(--navy)}
+h3{font-size:1.02rem;font-weight:800;color:var(--navy)}
+p{line-height:1.75}
+
+/* ════ CARD ════ */
+.card{background:var(--card);border-radius:var(--r-lg);padding:22px 20px;
+  box-shadow:var(--shadow);border:1.5px solid var(--border)}
+.card+.card{margin-top:14px}
+
+/* ════ BUTTONS ════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:12px 24px;border-radius:50px;font-size:.95rem;font-weight:800;
+  cursor:pointer;border:none;transition:.2s;font-family:'Nunito',sans-serif}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.05)}
+.btn:active{transform:none}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;
+  box-shadow:0 4px 14px rgba(59,130,246,.32)}
+.btn-green{background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;
+  box-shadow:0 4px 14px rgba(16,185,129,.28)}
+.btn-yellow{background:linear-gradient(135deg,var(--yellow),var(--yellow-d));color:#fff;
+  box-shadow:0 4px 14px rgba(245,158,11,.28)}
+.btn-orange{background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff}
+.btn-outline{background:#fff;color:var(--blue);border:2.5px solid var(--blue)}
+.btn-sm{padding:8px 18px;font-size:.84rem}
+.btn-lg{padding:15px 36px;font-size:1.08rem}
+.btn-full{width:100%;display:flex}
+
+/* ════ BADGES ════ */
+.badge{display:inline-block;padding:4px 13px;border-radius:20px;font-size:.77rem;font-weight:800}
+.b-blue{background:var(--blue-l);color:var(--blue-d)}
+.b-green{background:var(--green-l);color:var(--green-d)}
+.b-yellow{background:var(--yellow-l);color:var(--yellow-d)}
+.b-purple{background:var(--purple-l);color:var(--purple-d)}
+.b-orange{background:var(--orange-l);color:var(--orange-d)}
+.b-teal{background:var(--teal-l);color:var(--teal-d)}
+.b-pink{background:var(--pink-l);color:var(--pink-d)}
+.b-red{background:var(--red-l);color:var(--red-d)}
+
+/* ════ STEP BOXES ════ */
+.step{background:var(--blue-l);border-radius:12px;padding:11px 15px;
+  margin:7px 0;border-left:4px solid var(--blue);font-size:.92rem}
+.step .slbl{font-size:.7rem;font-weight:900;color:var(--blue-d);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.step.g{background:var(--green-l);border-color:var(--green)}.step.g .slbl{color:var(--green-d)}
+.step.y{background:var(--yellow-l);border-color:var(--yellow)}.step.y .slbl{color:var(--yellow-d)}
+.step.p{background:var(--purple-l);border-color:var(--purple)}.step.p .slbl{color:var(--purple-d)}
+.step.o{background:var(--orange-l);border-color:var(--orange)}.step.o .slbl{color:var(--orange-d)}
+
+/* ════ EXAMPLE / DEF BOXES ════ */
+.ex-box{background:linear-gradient(135deg,var(--yellow-l),#FDE68A);
+  border-radius:14px;padding:14px 18px;border-left:5px solid var(--yellow);margin:12px 0}
+.ex-box .elbl{font-size:.7rem;font-weight:900;color:var(--yellow-d);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.def-box{background:linear-gradient(135deg,#EFF6FF,var(--blue-l));
+  border-radius:14px;padding:16px 18px;border:2px solid var(--blue);
+  position:relative;margin:14px 0}
+.def-box::before{content:'📘 Remember';position:absolute;top:-12px;left:14px;
+  background:var(--blue);color:#fff;font-size:.7rem;font-weight:900;
+  padding:2px 11px;border-radius:10px}
+
+/* ════ COLUMN CALC ════ */
+.col-calc{font-family:'Courier New',monospace;font-size:1.05rem;font-weight:700;
+  background:#F8FAFC;border-radius:12px;padding:14px 18px;border:2px solid var(--border);
+  margin:10px 0;display:inline-block;min-width:180px}
+.col-calc .cr{display:flex;justify-content:flex-end;gap:4px;line-height:1.8}
+.col-calc .sep{border-top:2px solid var(--navy);margin:4px 0}
+.col-calc .ans{color:var(--green-d);font-weight:900}
+
+/* ════ PLACE VALUE TABLE ════ */
+.pv-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:12px 0;
+  border-radius:12px;overflow:hidden}
+.pv-table th{background:var(--navy);color:#fff;padding:9px 8px;text-align:center;font-weight:800}
+.pv-table td{padding:10px 8px;text-align:center;border:1px solid var(--border);font-weight:700;font-size:1rem}
+.pv-table .dp{background:#FEF3C7;color:var(--yellow-d);font-size:1.3rem}
+.pv-table .whole{background:var(--blue-l);color:var(--blue-d)}
+.pv-table .dec{background:var(--green-l);color:var(--green-d)}
+.pv-table .hl{background:var(--orange-l);color:var(--orange-d);font-size:1.2rem}
+
+/* ════ TABS ════ */
+.tab-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tab-btn{padding:7px 15px;border-radius:20px;font-size:.83rem;font-weight:800;
+  border:2px solid var(--border);background:#fff;cursor:pointer;
+  transition:.2s;font-family:'Nunito',sans-serif;color:var(--gray)}
+.tab-btn:hover{border-color:var(--blue);color:var(--blue)}
+.tab-btn.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.tab-c{display:none}.tab-c.on{display:block}
+
+/* ════ TIP CARDS ════ */
+.tip{display:flex;gap:13px;align-items:flex-start;
+  background:linear-gradient(135deg,#EFF6FF,var(--blue-l));
+  border-radius:14px;padding:16px;border-left:5px solid var(--blue);margin-bottom:11px}
+.tip-n{width:32px;height:32px;background:var(--blue);color:#fff;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.88rem;flex-shrink:0}
+
+/* ════ GUIDED PRACTICE ════ */
+.gp-card{background:var(--card);border-radius:var(--r-lg);padding:22px 18px;
+  box-shadow:var(--shadow);border:2px solid var(--border);margin-bottom:14px;transition:.25s}
+.gp-card.done{border-color:var(--green)}
+.gp-choices{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:13px 0}
+.gp-btn{padding:12px 13px;border-radius:12px;border:2.5px solid var(--border);
+  background:#fff;font-size:.95rem;font-weight:700;cursor:pointer;transition:.18s;
+  display:flex;align-items:center;gap:9px;font-family:'Nunito',sans-serif;color:var(--navy)}
+.gp-btn:hover:not(:disabled){border-color:var(--blue);background:var(--blue-l);transform:translateY(-2px)}
+.gp-lbl{width:28px;height:28px;border-radius:50%;background:var(--bg);color:var(--gray);
+  font-weight:900;font-size:.78rem;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;border:2px solid var(--border)}
+.gp-btn.ok{border-color:var(--green)!important;background:var(--green-l)!important}
+.gp-btn.ok .gp-lbl{background:var(--green);color:#fff;border-color:var(--green)}
+.gp-btn.ng{border-color:var(--red)!important;background:var(--red-l)!important}
+.gp-btn.ng .gp-lbl{background:var(--red);color:#fff;border-color:var(--red)}
+.gp-btn:disabled{cursor:default;transform:none!important}
+.gp-work{display:none;margin-top:12px;border-radius:14px;padding:14px;border:1.5px solid}
+.gp-work.show{display:block}
+.gp-work.ok{background:var(--green-l);border-color:var(--green)}
+.gp-work.ng{background:var(--red-l);border-color:var(--red)}
+
+/* ════ WORD PROBLEMS / PROBLEM SOLVING ════ */
+.wp-card{background:var(--card);border-radius:var(--r-lg);padding:20px 18px;
+  box-shadow:var(--shadow);border:1.5px solid var(--border);margin-bottom:14px}
+.wp-toggle{background:none;border:2px solid var(--blue);color:var(--blue);
+  padding:8px 18px;border-radius:20px;font-weight:800;cursor:pointer;
+  font-size:.85rem;font-family:'Nunito',sans-serif;transition:.2s;margin-top:12px}
+.wp-toggle:hover{background:var(--blue-l)}
+.wp-solution{display:none;margin-top:12px;background:var(--green-l);
+  border-radius:12px;padding:14px;border:1.5px solid var(--green)}
+.wp-solution.show{display:block}
+.wp-ans{font-weight:900;color:var(--green-d);font-size:1.05rem;margin-top:8px}
+
+/* ════ PERFORMANCE TASK ════ */
+.pt-task{background:var(--card);border-radius:var(--r-lg);padding:20px 18px;
+  box-shadow:var(--shadow);border:2px solid var(--border);margin-bottom:14px;transition:.25s}
+.pt-task.correct{border-color:var(--green)}
+.pt-task.wrong{border-color:var(--red)}
+.pt-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.pt-input{padding:10px 14px;border-radius:10px;border:2.5px solid var(--border);
+  font-size:.95rem;font-weight:700;font-family:'Nunito',sans-serif;
+  width:140px;text-align:center;outline:none;transition:.2s}
+.pt-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+.pt-input.ok{border-color:var(--green);background:var(--green-l)}
+.pt-input.ng{border-color:var(--red);background:var(--red-l)}
+.pt-fb{font-size:.85rem;font-weight:700;margin-top:6px}
+.checklist{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.cl-item{display:flex;align-items:center;gap:10px;font-size:.92rem}
+.cl-item input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:var(--green)}
+
+/* ════ QUIZ ════ */
+.qz-hd{background:var(--card);border-radius:var(--r-lg);padding:15px 18px;
+  margin-bottom:16px;box-shadow:var(--shadow);border:1.5px solid var(--border)}
+.qz-meta{display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.qz-ctr{font-size:.84rem;font-weight:800;color:var(--gray)}
+.qz-sc{background:var(--yellow-l);color:var(--yellow-d);
+  padding:5px 15px;border-radius:20px;font-weight:900;font-size:.86rem}
+.pbar-w{background:var(--blue-l);border-radius:50px;height:11px;overflow:hidden}
+.pbar-f{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));
+  border-radius:50px;transition:width .5s}
+.pbar-row{display:flex;justify-content:space-between;margin-top:5px;font-size:.72rem;color:var(--gray)}
+.qz-card{background:var(--card);border-radius:var(--r-lg);padding:24px 20px;
+  box-shadow:var(--shadow-lg);border:1.5px solid var(--border);margin-bottom:13px}
+.q-txt{font-size:1.08rem;font-weight:800;color:var(--navy);line-height:1.65;margin:10px 0 18px}
+.q-choices{display:grid;gap:10px}
+.q-btn{width:100%;padding:13px 17px;border-radius:12px;border:2.5px solid var(--border);
+  background:#fff;text-align:left;font-size:.95rem;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;gap:11px;transition:.18s;
+  color:var(--navy);font-family:'Nunito',sans-serif}
+.q-btn:hover:not(:disabled){border-color:var(--blue);background:var(--blue-l);transform:translateX(4px)}
+.q-lbl{width:30px;height:30px;border-radius:50%;background:var(--bg);color:var(--gray);
+  font-weight:900;font-size:.78rem;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;border:2px solid var(--border)}
+.q-btn.ok{border-color:var(--green)!important;background:var(--green-l)!important}
+.q-btn.ok .q-lbl{background:var(--green);color:#fff;border-color:var(--green)}
+.q-btn.ng{border-color:var(--red)!important;background:var(--red-l)!important}
+.q-btn.ng .q-lbl{background:var(--red);color:#fff;border-color:var(--red)}
+.q-btn:disabled{cursor:default;transform:none!important}
+.hint-box{display:none;background:var(--yellow-l);border-radius:12px;
+  padding:10px 14px;border:1.5px solid var(--yellow);margin:10px 0;font-size:.88rem;font-weight:700;color:var(--yellow-d)}
+.hint-box.show{display:block}
+.q-fb{display:none;border-radius:14px;padding:13px 16px;margin:11px 0;border:1.5px solid}
+.q-fb.show{display:block}
+.q-fb.ok{background:var(--green-l);border-color:var(--green)}
+.q-fb.ng{background:var(--red-l);border-color:var(--red)}
+.fb-hd{font-weight:900;font-size:.92rem;margin-bottom:4px}
+.fb-exp{font-size:.86rem;line-height:1.65}
+.q-actions{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.btn-hint{padding:7px 16px;border-radius:20px;background:var(--yellow-l);
+  color:var(--yellow-d);border:1.5px solid var(--yellow);
+  font-weight:800;font-size:.82rem;cursor:pointer;font-family:'Nunito',sans-serif}
+.btn-hint:hover{background:#FDE68A}
+
+/* ════ RESULTS ════ */
+.r-ring{width:148px;height:148px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:9px solid var(--blue-l);background:var(--card);box-shadow:var(--shadow-lg);margin:0 auto 22px}
+.r-ring .rv{font-size:2.1rem;font-weight:900;color:var(--navy)}
+.r-ring .rp{font-size:.78rem;font-weight:700;color:var(--gray)}
+.rev-item{padding:10px 15px;border-bottom:1px solid var(--border);display:flex;gap:11px}
+.rev-item:last-child{border-bottom:none}
+.rev-item.ok{background:rgba(16,185,129,.05)}.rev-item.ng{background:rgba(239,68,68,.05)}
+.ri-q{font-weight:700;font-size:.84rem;color:var(--navy)}
+.ri-a{font-size:.79rem;color:var(--gray);margin-top:2px}
+
+/* ════ HERO ════ */
+.hero{background:linear-gradient(135deg,#1E3A5F,#1D4ED8,#3B82F6);
+  color:#fff;padding:58px 18px 76px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 40%,rgba(255,255,255,.07) 0%,transparent 55%),
+    radial-gradient(ellipse at 75% 70%,rgba(245,158,11,.12) 0%,transparent 55%);pointer-events:none}
+.hero h1{color:#fff;margin-bottom:10px;position:relative}
+.hero .sub{font-size:1rem;opacity:.9;margin-bottom:8px;font-weight:600}
+.hero .intro{max-width:600px;margin:0 auto 26px;font-size:.92rem;opacity:.83;line-height:1.8}
+.hero-chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
+.hero-chip{padding:5px 14px;border-radius:20px;background:rgba(255,255,255,.14);
+  backdrop-filter:blur(4px);color:#fff;font-size:.8rem;font-weight:800;
+  border:1px solid rgba(255,255,255,.22)}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* ════ NAVBAR ════ */
+.navbar{background:var(--card);border-bottom:1.5px solid var(--border);
+  padding:11px 16px;position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;gap:8px}
+.nav-brand{font-weight:900;color:var(--navy);font-size:.86rem;flex-shrink:0}
+.nav-steps{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px}
+.nav-steps::-webkit-scrollbar{height:3px}
+.nav-steps::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.ns{padding:5px 11px;border-radius:20px;font-size:.76rem;font-weight:800;
+  background:var(--bg);color:var(--gray);cursor:pointer;border:1.5px solid var(--border);
+  transition:.2s;font-family:'Nunito',sans-serif;white-space:nowrap;flex-shrink:0}
+.ns:hover{border-color:var(--blue);color:var(--blue)}
+.ns.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.ns.done{background:var(--green-l);color:var(--green-d);border-color:var(--green)}
+
+/* ════ SEC HEADER ════ */
+.sec-hd{display:flex;align-items:center;gap:13px;margin-bottom:20px}
+.sec-ico{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;
+  justify-content:center;font-size:1.3rem;flex-shrink:0}
+.ico-b{background:var(--blue-l)} .ico-y{background:var(--yellow-l)}
+.ico-g{background:var(--green-l)} .ico-p{background:var(--purple-l)}
+.ico-o{background:var(--orange-l)} .ico-t{background:var(--teal-l)}
+.ico-pk{background:var(--pink-l)}
+
+/* ════ ANIMATIONS ════ */
+@keyframes pop{0%{transform:scale(.65);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+@keyframes confetti-fall{0%{transform:translateY(-8px) rotate(0);opacity:1}100%{transform:translateY(75px) rotate(400deg);opacity:0}}
+.anim-pop{animation:pop .32s cubic-bezier(.34,1.56,.64,1)}
+.anim-fade{animation:fadeUp .36s ease}
+.confetti-p{position:fixed;pointer-events:none;z-index:9999;animation:confetti-fall 1s ease forwards}
+
+/* ════ RESPONSIVE ════ */
+@media(max-width:580px){
+  .hero{padding:38px 14px 54px}
+  .card,.qz-card,.gp-card,.wp-card{padding:16px 13px}
+  .gp-choices{grid-template-columns:1fr}
+  .tip{flex-direction:column;gap:8px}
+  .tab-btn{padding:6px 11px;font-size:.79rem}
+  .pv-table{font-size:.78rem}
+  .pv-table th,.pv-table td{padding:6px 4px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ NAVBAR ═══════════════════ -->
+<nav class="navbar" id="navbar" style="display:none">
+  <span class="nav-brand">🔢 Decimals · G6</span>
+  <div class="nav-steps">
+    <button class="ns" id="ns-home"       onclick="goTo('home')">🏠 Home</button>
+    <button class="ns" id="ns-learn"      onclick="goTo('learn')">📖 Learn</button>
+    <button class="ns" id="ns-think"      onclick="goTo('think')">🧠 Think Along</button>
+    <button class="ns" id="ns-tips"       onclick="goTo('tips')">💡 Tips</button>
+    <button class="ns" id="ns-practice"   onclick="goTo('practice')">✏️ Practice</button>
+    <button class="ns" id="ns-wordprob"   onclick="goTo('wordprob')">📝 Word Problems</button>
+    <button class="ns" id="ns-probsolve"  onclick="goTo('probsolve')">🧩 Problem Solving</button>
+    <button class="ns" id="ns-perf"       onclick="goTo('perf')">🎉 Performance Task</button>
+    <button class="ns" id="ns-quiz"       onclick="beginQuiz()">🎯 Quiz</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════ HOME ═══════════════════ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="container">
+      <p style="font-size:.75rem;font-weight:900;opacity:.6;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Grade 6 · Mathematics</p>
+      <h1>Decimals and Operations<br>with Decimals</h1>
+      <p class="sub">Practise converting, calculating, and solving real-life decimal problems.</p>
+      <p class="intro">In this lesson, you will learn how decimals are connected to fractions. You will also practise adding, subtracting, multiplying, and dividing decimals through calculation questions, word problems, and real-life tasks.</p>
+      <div class="hero-chips">
+        <span class="hero-chip">🔄 Fractions ↔ Decimals</span>
+        <span class="hero-chip">➕➖ Add & Subtract</span>
+        <span class="hero-chip">✖️➗ Multiply & Divide</span>
+        <span class="hero-chip">📝 Word Problems</span>
+        <span class="hero-chip">🎉 Performance Task</span>
+      </div>
+      <div class="hero-btns">
+        <button class="btn btn-yellow btn-lg" onclick="goTo('learn')">📖 Start Learning</button>
+        <button class="btn btn-green btn-lg" onclick="beginQuiz()">🎯 Start Quiz</button>
+        <button class="btn btn-orange btn-lg" onclick="goTo('perf')">🎉 Performance Task</button>
+      </div>
+      <p style="margin-top:16px;font-size:.77rem;opacity:.55;font-weight:700">✏️ Created by Bright EngMath</p>
+    </div>
+  </div>
+  <div class="container section">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px">
+      <div class="card" style="text-align:center;border-top:4px solid var(--blue)"><div style="font-size:2rem;margin-bottom:7px">📖</div><h3>Learn</h3><p style="font-size:.86rem;margin:7px 0 13px;color:var(--gray)">5 topic tabs covering all decimal operations.</p><button class="btn btn-outline btn-sm" onclick="goTo('learn')">Study</button></div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--teal)"><div style="font-size:2rem;margin-bottom:7px">🧠</div><h3>Think Along</h3><p style="font-size:.86rem;margin:7px 0 13px;color:var(--gray)">3 reasoning questions — choose the best first step.</p><button class="btn btn-outline btn-sm" onclick="goTo('think')">Think</button></div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--yellow)"><div style="font-size:2rem;margin-bottom:7px">💡</div><h3>Tips</h3><p style="font-size:.86rem;margin:7px 0 13px;color:var(--gray)">7 tips and keyword table for word problems.</p><button class="btn btn-outline btn-sm" onclick="goTo('tips')">Tips</button></div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--green)"><div style="font-size:2rem;margin-bottom:7px">✏️</div><h3>Guided Practice</h3><p style="font-size:.86rem;margin:7px 0 13px;color:var(--gray)">6 practice questions with step-by-step working.</p><button class="btn btn-outline btn-sm" onclick="goTo('practice')">Practise</button></div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--orange)"><div style="font-size:2rem;margin-bottom:7px">📝</div><h3>Word Problems</h3><p style="font-size:.86rem;margin:7px 0 13px;color:var(--gray)">8 real-life word problems with solutions.</p><button class="btn btn-outline btn-sm" onclick="goTo('wordprob')">Solve</button></div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--purple)"><div style="font-size:2rem;margin-bottom:7px">🧩</div><h3>Problem Solving</h3><p style="font-size:.86rem;margin:7px 0 13px;color:var(--gray)">5 challenging multi-step problems.</p><button class="btn btn-outline btn-sm" onclick="goTo('probsolve')">Solve</button></div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--pink)"><div style="font-size:2rem;margin-bottom:7px">🎉</div><h3>Performance Task</h3><p style="font-size:.86rem;margin:7px 0 13px;color:var(--gray)">Plan a Class Party using decimal maths.</p><button class="btn btn-orange btn-sm" onclick="goTo('perf')">Start</button></div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--red)"><div style="font-size:2rem;margin-bottom:7px">🎯</div><h3>Quiz — 30 Questions</h3><p style="font-size:.86rem;margin:7px 0 13px;color:var(--gray)">Full test with hints, instant feedback & score.</p><button class="btn btn-primary btn-sm" onclick="beginQuiz()">Start Quiz</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ LEARN ═══════════════════ -->
+<div id="page-learn" class="page">
+<div class="container section">
+  <div class="sec-hd"><div class="sec-ico ico-b">📖</div><div><span class="badge b-blue">Learning Section</span><h2 style="margin-top:4px">Decimals and Operations</h2></div></div>
+
+  <div class="tab-bar">
+    <button class="tab-btn on"  onclick="showTab('t1',this)">🔢 Place Value</button>
+    <button class="tab-btn"     onclick="showTab('t2',this)">🔄 Converting</button>
+    <button class="tab-btn"     onclick="showTab('t3',this)">➕➖ Add & Sub</button>
+    <button class="tab-btn"     onclick="showTab('t4',this)">✖️ Multiply</button>
+    <button class="tab-btn"     onclick="showTab('t5',this)">➗ Divide</button>
+  </div>
+
+  <!-- TAB 1: PLACE VALUE -->
+  <div id="tab-t1" class="tab-c on">
+    <div class="card">
+      <span class="badge b-blue" style="margin-bottom:12px">🔢 Place Value & Fractions ↔ Decimals</span>
+      <div class="def-box">
+        <p>Fractions and decimals can show the <strong>same value</strong>. The decimal point separates whole numbers from decimal parts.</p>
+      </div>
+      <div class="ex-box">
+        <div class="elbl">Key Equivalences</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:8px">
+          <div style="background:var(--blue-l);border-radius:10px;padding:9px;text-align:center;font-weight:800;color:var(--blue-d)">1/10 = <span style="font-size:1.1rem">0.1</span></div>
+          <div style="background:var(--green-l);border-radius:10px;padding:9px;text-align:center;font-weight:800;color:var(--green-d)">1/100 = <span style="font-size:1.1rem">0.01</span></div>
+          <div style="background:var(--yellow-l);border-radius:10px;padding:9px;text-align:center;font-weight:800;color:var(--yellow-d)">1/2 = <span style="font-size:1.1rem">0.5</span></div>
+          <div style="background:var(--purple-l);border-radius:10px;padding:9px;text-align:center;font-weight:800;color:var(--purple-d)">1/4 = <span style="font-size:1.1rem">0.25</span></div>
+          <div style="background:var(--orange-l);border-radius:10px;padding:9px;text-align:center;font-weight:800;color:var(--orange-d)">3/4 = <span style="font-size:1.1rem">0.75</span></div>
+        </div>
+      </div>
+      <h3 style="margin:16px 0 10px">📊 Place Value Chart</h3>
+      <div style="overflow-x:auto">
+        <table class="pv-table">
+          <tr><th colspan="2" style="background:#2563EB">Whole Number Part</th><th style="background:#1E3A5F">.</th><th colspan="3" style="background:#059669">Decimal Part</th></tr>
+          <tr><th class="whole">Tens</th><th class="whole">Ones</th><th class="dp">.</th><th class="dec">Tenths</th><th class="dec">Hundredths</th><th class="dec">Thousandths</th></tr>
+          <tr><td class="whole">1</td><td class="whole">2</td><td class="dp">.</td><td class="dec">3</td><td class="dec hl">4</td><td class="dec">5</td></tr>
+        </table>
+      </div>
+      <div class="ex-box" style="margin-top:14px">
+        <div class="elbl">Reading Decimals</div>
+        <div class="step"><div class="slbl">0.3 means</div>3 tenths</div>
+        <div class="step y"><div class="slbl">0.27 means</div>27 hundredths</div>
+        <div class="step g"><div class="slbl">0.405 means</div>405 thousandths</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: CONVERTING -->
+  <div id="tab-t2" class="tab-c">
+    <div class="card">
+      <span class="badge b-purple" style="margin-bottom:12px">🔄 Converting Fractions and Decimals</span>
+      <h3>A. Fraction → Decimal</h3>
+      <div class="def-box" style="margin-top:10px">
+        <p><strong>Method 1:</strong> Divide the numerator by the denominator.</p>
+      </div>
+      <div class="ex-box">
+        <div class="elbl">Example</div>
+        <div class="step y"><div class="slbl">3/4 = 3 ÷ 4 = 0.75</div></div>
+      </div>
+      <div class="def-box" style="margin-top:14px">
+        <p><strong>Method 2:</strong> Change the denominator to 10, 100, or 1000 if possible.</p>
+      </div>
+      <div class="ex-box">
+        <div class="elbl">Examples</div>
+        <div class="step"><div class="slbl">7/10 = 0.7</div></div>
+        <div class="step p"><div class="slbl">23/100 = 0.23</div></div>
+      </div>
+      <h3 style="margin-top:20px">B. Decimal → Fraction</h3>
+      <div class="def-box" style="margin-top:10px">
+        <p>Write the decimal over 10, 100, or 1000 (based on decimal places), then <strong>simplify</strong>.</p>
+      </div>
+      <div class="ex-box">
+        <div class="elbl">Examples</div>
+        <div class="step"><div class="slbl">1 decimal place → over 10</div>0.6 = 6/10 = 3/5</div>
+        <div class="step y"><div class="slbl">2 decimal places → over 100</div>0.25 = 25/100 = 1/4</div>
+        <div class="step g"><div class="slbl">3 decimal places → over 1000</div>0.125 = 125/1000 = 1/8</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: ADD & SUB -->
+  <div id="tab-t3" class="tab-c">
+    <div class="card">
+      <span class="badge b-teal" style="margin-bottom:12px">➕➖ Addition and Subtraction of Decimals</span>
+      <div class="def-box">
+        <p>When adding or subtracting decimals, always <strong>line up the decimal points</strong>. Add zeros if needed to make columns even.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px;flex-wrap:wrap" class="ex-box">
+        <div>
+          <div class="elbl">Addition — 3.45 + 2.6</div>
+          <div class="col-calc">
+            <div class="cr">3 . 4 5</div>
+            <div class="cr">2 . 6 0</div>
+            <div class="sep"></div>
+            <div class="cr ans">6 . 0 5</div>
+          </div>
+        </div>
+        <div>
+          <div class="elbl">Subtraction — 8.2 − 3.75</div>
+          <div class="col-calc">
+            <div class="cr">8 . 2 0</div>
+            <div class="cr">3 . 7 5</div>
+            <div class="sep"></div>
+            <div class="cr ans">4 . 4 5</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="background:#FFF7ED;border:1.5px solid var(--orange);margin-top:14px;padding:13px">
+        <p style="font-size:.88rem"><strong>⚠️ Key Tip:</strong> Write zeros after the decimal to fill empty places before calculating. This avoids careless errors!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: MULTIPLY -->
+  <div id="tab-t4" class="tab-c">
+    <div class="card">
+      <span class="badge b-yellow" style="margin-bottom:12px">✖️ Multiplication of Decimals</span>
+      <div class="def-box">
+        <p>Step 1: Multiply as if they are whole numbers (ignore decimal points).<br>Step 2: Count the <strong>total decimal places</strong> in both numbers.<br>Step 3: Put the decimal point in your answer.</p>
+      </div>
+      <div class="ex-box">
+        <div class="elbl">Example 1 — 2.4 × 0.3</div>
+        <div class="step"><div class="slbl">Ignore decimal: 24 × 3 = 72</div></div>
+        <div class="step y"><div class="slbl">Count decimal places: 2.4 has 1, 0.3 has 1 → total = 2</div></div>
+        <div class="step g"><div class="slbl">Place decimal 2 places from right</div>Answer = 0.72</div>
+      </div>
+      <div class="ex-box" style="margin-top:10px">
+        <div class="elbl">Example 2 — 1.25 × 4</div>
+        <div class="step"><div class="slbl">Ignore decimal: 125 × 4 = 500</div></div>
+        <div class="step y"><div class="slbl">Decimal places: 1.25 has 2, 4 has 0 → total = 2</div></div>
+        <div class="step g"><div class="slbl">Answer</div>1.25 × 4 = 5.00 = 5</div>
+      </div>
+      <div class="def-box" style="margin-top:14px">
+        <p>🔑 Multiplying by <strong>10</strong> moves the decimal point <strong>1 place right</strong>. Multiplying by <strong>100</strong> moves it <strong>2 places right</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: DIVIDE -->
+  <div id="tab-t5" class="tab-c">
+    <div class="card">
+      <span class="badge b-purple" style="margin-bottom:12px">➗ Division of Decimals</span>
+      <div class="def-box">
+        <p>When dividing by a decimal, <strong>make the divisor a whole number</strong> by multiplying both numbers by 10, 100, etc.</p>
+      </div>
+      <div class="ex-box">
+        <div class="elbl">Example 1 — 4.8 ÷ 0.6 (divisor has 1 decimal place → multiply by 10)</div>
+        <div class="step"><div class="slbl">Multiply both by 10</div>4.8 × 10 = 48 &nbsp;|&nbsp; 0.6 × 10 = 6</div>
+        <div class="step g"><div class="slbl">48 ÷ 6 = 8</div>So 4.8 ÷ 0.6 = <strong>8</strong></div>
+      </div>
+      <div class="ex-box" style="margin-top:10px">
+        <div class="elbl">Example 2 — 6.3 ÷ 3 (divisor is already whole)</div>
+        <div class="step g"><div class="slbl">Divide directly</div>6.3 ÷ 3 = <strong>2.1</strong></div>
+      </div>
+      <div class="def-box" style="margin-top:14px">
+        <p>🔑 Dividing by <strong>10</strong> moves the decimal point <strong>1 place left</strong>. Dividing by <strong>100</strong> moves it <strong>2 places left</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn btn-outline" onclick="goTo('home')">← Home</button>
+    <button class="btn btn-primary" onclick="goTo('think')">Next: Think Along ➜</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ THINK ALONG ═══════════════════ -->
+<div id="page-think" class="page">
+<div class="container section">
+  <div class="sec-hd"><div class="sec-ico ico-t">🧠</div><div><span class="badge b-teal">Let's Think Along</span><h2 style="margin-top:4px">Choose the Best First Step</h2></div></div>
+  <p style="margin-bottom:20px;color:var(--gray)">Read each question carefully and choose the <strong>best first step</strong> to solve it.</p>
+  <div id="think-qs"></div>
+  <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn btn-outline" onclick="goTo('learn')">← Learn</button>
+    <button class="btn btn-primary" onclick="goTo('tips')">Next: Tips ➜</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ TIPS ═══════════════════ -->
+<div id="page-tips" class="page">
+<div class="container section">
+  <div class="sec-hd"><div class="sec-ico ico-y">💡</div><div><span class="badge b-yellow">Avoid Mistakes</span><h2 style="margin-top:4px">How to Avoid Common Mistakes</h2></div></div>
+
+  <div class="tip"><div class="tip-n">1</div><div><h3>Line up decimal points for + and −</h3><p style="font-size:.9rem;margin-top:5px">For addition and subtraction, <strong>always align the decimal points</strong> in a column before calculating.</p></div></div>
+  <div class="tip"><div class="tip-n">2</div><div><h3>Don't line up decimals for multiplication</h3><p style="font-size:.9rem;margin-top:5px">For multiplication, <strong>ignore the decimal</strong>, multiply whole numbers first, then count total decimal places and place the point.</p></div></div>
+  <div class="tip"><div class="tip-n">3</div><div><h3>Make the divisor whole for division</h3><p style="font-size:.9rem;margin-top:5px">If dividing by a decimal like 0.6, multiply both numbers by 10 first to make 0.6 into 6.</p></div></div>
+  <div class="tip" style="border-color:var(--green)"><div class="tip-n" style="background:var(--green)">4</div><div><h3>Add zeros when needed</h3><p style="font-size:.9rem;margin-top:5px">4.5 can be written as 4.50. Adding zeros after the last decimal digit does not change the value but helps with column work.</p></div></div>
+  <div class="tip" style="border-color:var(--yellow)"><div class="tip-n" style="background:var(--yellow)">5</div><div><h3>Estimate first</h3><p style="font-size:.9rem;margin-top:5px">Before calculating, estimate to check your answer makes sense. For example, 2.9 + 3.1 ≈ 3 + 3 = 6, so an answer of 60 would be wrong.</p></div></div>
+  <div class="tip" style="border-color:var(--purple)"><div class="tip-n" style="background:var(--purple)">6</div><div><h3>Remember place values for conversion</h3><p style="font-size:.9rem;margin-top:5px">
+    <span class="badge b-blue" style="margin:2px">0.7 = 7/10</span>
+    <span class="badge b-green" style="margin:2px">0.07 = 7/100</span>
+    <span class="badge b-orange" style="margin:2px">0.007 = 7/1000</span>
+  </p></div></div>
+  <div class="tip" style="border-color:var(--orange)"><div class="tip-n" style="background:var(--orange)">7</div><div><h3>Word problem keywords</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:8px;margin-top:10px">
+      <div style="background:var(--green-l);border-radius:10px;padding:10px;font-size:.84rem;border:1.5px solid var(--green)"><strong>total / altogether</strong><br><span style="color:var(--green-d)">→ Addition ➕</span></div>
+      <div style="background:var(--blue-l);border-radius:10px;padding:10px;font-size:.84rem;border:1.5px solid var(--blue)"><strong>difference / how much more</strong><br><span style="color:var(--blue-d)">→ Subtraction ➖</span></div>
+      <div style="background:var(--yellow-l);border-radius:10px;padding:10px;font-size:.84rem;border:1.5px solid var(--yellow)"><strong>each / groups of / per item</strong><br><span style="color:var(--yellow-d)">→ Multiply / Divide ✖️➗</span></div>
+      <div style="background:var(--purple-l);border-radius:10px;padding:10px;font-size:.84rem;border:1.5px solid var(--purple)"><strong>shared equally / split</strong><br><span style="color:var(--purple-d)">→ Division ➗</span></div>
+    </div>
+  </div></div>
+
+  <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn btn-outline" onclick="goTo('think')">← Think Along</button>
+    <button class="btn btn-primary" onclick="goTo('practice')">Next: Practice ➜</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ GUIDED PRACTICE ═══════════════════ -->
+<div id="page-practice" class="page">
+<div class="container section">
+  <div class="sec-hd"><div class="sec-ico ico-g">✏️</div><div><span class="badge b-green">Guided Practice</span><h2 style="margin-top:4px">Try It Yourself!</h2></div></div>
+  <p style="margin-bottom:20px;color:var(--gray)">Choose the correct answer. Full step-by-step working appears after you answer.</p>
+  <div id="gp-container"></div>
+  <div id="gp-complete" style="display:none" class="card anim-fade" style="border:2px solid var(--green);text-align:center">
+    <div style="font-size:2.5rem;margin-bottom:7px">🎉</div>
+    <h3 style="color:var(--green-d)">All practice questions done!</h3>
+    <p style="margin:7px 0 14px;font-size:.9rem">Great work! You're ready for the word problems.</p>
+    <button class="btn btn-primary btn-lg" onclick="goTo('wordprob')">Next: Word Problems 📝</button>
+  </div>
+  <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap" id="gp-nav">
+    <button class="btn btn-outline" onclick="goTo('tips')">← Tips</button>
+    <button class="btn btn-primary" onclick="goTo('wordprob')">Next: Word Problems ➜</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ WORD PROBLEMS ═══════════════════ -->
+<div id="page-wordprob" class="page">
+<div class="container section">
+  <div class="sec-hd"><div class="sec-ico ico-o">📝</div><div><span class="badge b-orange">Word Problems</span><h2 style="margin-top:4px">Real-Life Decimal Problems</h2></div></div>
+  <p style="margin-bottom:20px;color:var(--gray)">Read each problem carefully, solve it, then click <strong>Show Solution</strong> to check your working.</p>
+  <div id="wp-container"></div>
+  <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn btn-outline" onclick="goTo('practice')">← Practice</button>
+    <button class="btn btn-primary" onclick="goTo('probsolve')">Next: Problem Solving ➜</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ PROBLEM SOLVING ═══════════════════ -->
+<div id="page-probsolve" class="page">
+<div class="container section">
+  <div class="sec-hd"><div class="sec-ico ico-p">🧩</div><div><span class="badge b-purple">Problem Solving</span><h2 style="margin-top:4px">Challenging Multi-Step Problems</h2></div></div>
+  <p style="margin-bottom:20px;color:var(--gray)">These questions need more than one step. Work them out, then click <strong>Show Working</strong>.</p>
+  <div id="ps-container"></div>
+  <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn btn-outline" onclick="goTo('wordprob')">← Word Problems</button>
+    <button class="btn btn-primary" onclick="goTo('perf')">Next: Performance Task ➜</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ PERFORMANCE TASK ═══════════════════ -->
+<div id="page-perf" class="page">
+<div class="container section">
+  <div class="sec-hd"><div class="sec-ico ico-pk">🎉</div><div><span class="badge b-pink">Performance Task</span><h2 style="margin-top:4px">Plan a Class Party!</h2></div></div>
+
+  <div class="card" style="background:linear-gradient(135deg,#FFF0F9,#FCE7F3);border:2px solid var(--pink)">
+    <p style="font-size:.93rem;line-height:1.75">You are helping your class plan a small party. Use decimal operations to calculate the total cost, amount of food, and change from the budget.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:14px">
+      <div style="background:#fff;border-radius:12px;padding:12px;text-align:center;border:1.5px solid var(--border)"><div style="font-size:1.5rem">🧃</div><div style="font-weight:800;color:var(--navy);margin-top:4px">Juice</div><div style="color:var(--green-d);font-weight:700">$2.75 per bottle</div></div>
+      <div style="background:#fff;border-radius:12px;padding:12px;text-align:center;border:1.5px solid var(--border)"><div style="font-size:1.5rem">🍿</div><div style="font-weight:800;color:var(--navy);margin-top:4px">Snacks</div><div style="color:var(--green-d);font-weight:700">$1.85 per pack</div></div>
+      <div style="background:#fff;border-radius:12px;padding:12px;text-align:center;border:1.5px solid var(--border)"><div style="font-size:1.5rem">🧁</div><div style="font-weight:800;color:var(--navy);margin-top:4px">Cupcakes</div><div style="color:var(--green-d);font-weight:700">$0.95 each</div></div>
+      <div style="background:#fff;border-radius:12px;padding:12px;text-align:center;border:1.5px solid var(--border)"><div style="font-size:1.5rem">🍽️</div><div style="font-weight:800;color:var(--navy);margin-top:4px">Plates</div><div style="color:var(--green-d);font-weight:700">$3.60 per pack</div></div>
+      <div style="background:var(--yellow-l);border-radius:12px;padding:12px;text-align:center;border:2px solid var(--yellow)"><div style="font-size:1.5rem">💰</div><div style="font-weight:900;color:var(--yellow-d);margin-top:4px">Budget</div><div style="color:var(--yellow-d);font-weight:900;font-size:1.1rem">$50.00</div></div>
+    </div>
+  </div>
+
+  <div id="pt-tasks"></div>
+
+  <!-- Checklist -->
+  <div class="card" style="margin-top:16px;border:2px solid var(--blue)">
+    <h3 style="margin-bottom:12px">✅ Self-Check: Did I…</h3>
+    <div class="checklist">
+      <label class="cl-item"><input type="checkbox"><span>Line up decimal points for addition and subtraction</span></label>
+      <label class="cl-item"><input type="checkbox"><span>Use the correct operation for each question</span></label>
+      <label class="cl-item"><input type="checkbox"><span>Include units in my answers (e.g., $, kg, m)</span></label>
+      <label class="cl-item"><input type="checkbox"><span>Check if my answer makes sense</span></label>
+      <label class="cl-item"><input type="checkbox"><span>Show my working clearly step by step</span></label>
+    </div>
+  </div>
+
+  <div id="pt-sol-wrap" style="display:none" class="card anim-fade" style="background:var(--green-l);border:2px solid var(--green)">
+    <h3 style="color:var(--green-d);margin-bottom:12px">✅ Full Solution</h3>
+    <div class="step"><div class="slbl">Task 1: Juice cost</div>$2.75 × 4 = <strong>$11.00</strong></div>
+    <div class="step y"><div class="slbl">Task 2: Snacks cost</div>$1.85 × 6 = <strong>$11.10</strong></div>
+    <div class="step"><div class="slbl">Task 3: Cupcakes cost</div>$0.95 × 12 = <strong>$11.40</strong></div>
+    <div class="step p"><div class="slbl">Task 4: Plates cost</div>$3.60 × 2 = <strong>$7.20</strong></div>
+    <div class="step o"><div class="slbl">Task 5: Total cost</div>$11.00 + $11.10 + $11.40 + $7.20 = <strong>$40.70</strong></div>
+    <div class="step"><div class="slbl">Task 6: Money left</div>$50.00 − $40.70 = <strong>$9.30</strong></div>
+    <div class="step g"><div class="slbl">Task 7: Each student gets</div>$9.30 ÷ 8 = <strong>$1.1625 ≈ $1.16</strong></div>
+  </div>
+  <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn btn-outline" onclick="document.getElementById('pt-sol-wrap').style.display='block';document.getElementById('pt-sol-wrap').classList.add('anim-fade')">📋 Show Full Solution</button>
+    <button class="btn btn-primary" onclick="beginQuiz()">Start Quiz 🎯</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ QUIZ ═══════════════════ -->
+<div id="page-quiz" class="page">
+<div class="container" style="padding-top:20px;padding-bottom:40px">
+  <div class="qz-hd">
+    <div class="qz-meta">
+      <span class="qz-ctr" id="qz-ctr">Question 1 of 30</span>
+      <span class="qz-sc" id="qz-sc">⭐ 0 pts</span>
+    </div>
+    <div class="pbar-w"><div class="pbar-f" id="qz-pbar" style="width:0%"></div></div>
+    <div class="pbar-row">
+      <span id="qz-ok">✅ 0 correct</span>
+      <span id="qz-ng">❌ 0 wrong</span>
+    </div>
+  </div>
+  <div class="qz-card anim-fade" id="qz-card">
+    <div id="qz-type"></div>
+    <div class="q-txt" id="qz-txt"></div>
+    <div class="q-actions">
+      <button class="btn-hint" id="btn-hint" onclick="toggleHint()">💡 Show Hint</button>
+    </div>
+    <div class="hint-box" id="hint-box"></div>
+    <div class="q-choices" id="qz-choices"></div>
+    <div class="q-fb" id="qz-fb"><div class="fb-hd" id="qz-fb-hd"></div><div class="fb-exp" id="qz-fb-exp"></div></div>
+  </div>
+  <button class="btn btn-primary btn-full" id="btn-next" style="display:none" onclick="nextQ()">Next Question ➜</button>
+</div>
+</div>
+
+<!-- ═══════════════════ RESULTS ═══════════════════ -->
+<div id="page-results" class="page">
+<div class="container" style="padding:26px 18px 56px">
+  <div style="text-align:center;margin-bottom:22px">
+    <div style="font-size:3.2rem;margin-bottom:7px" id="r-deco">🏆</div>
+    <h1 id="r-title">Excellent!</h1>
+    <p style="color:var(--gray)">Decimals and Operations — Grade 6</p>
+  </div>
+  <div class="r-ring" id="r-ring"><span class="rv" id="r-score">0/30</span><span class="rp" id="r-pct">0%</span></div>
+  <div class="card" style="text-align:center;margin-bottom:16px">
+    <div class="badge" id="r-badge" style="font-size:.92rem;padding:8px 22px;margin-bottom:10px"></div>
+    <p id="r-msg" style="font-size:.9rem;line-height:1.7"></p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:16px">
+    <div class="card" style="text-align:center;border-top:4px solid var(--green);padding:13px 8px"><div style="font-size:1.6rem;font-weight:900;color:var(--green-d)" id="r-nc">0</div><div style="font-size:.7rem;color:var(--gray)">Correct ✅</div></div>
+    <div class="card" style="text-align:center;border-top:4px solid var(--red);padding:13px 8px"><div style="font-size:1.6rem;font-weight:900;color:var(--red-d)" id="r-nw">0</div><div style="font-size:.7rem;color:var(--gray)">Wrong ❌</div></div>
+    <div class="card" style="text-align:center;border-top:4px solid var(--blue);padding:13px 8px"><div style="font-size:1.6rem;font-weight:900;color:var(--blue-d)" id="r-pct2">0%</div><div style="font-size:.7rem;color:var(--gray)">Accuracy</div></div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <div style="background:var(--bg);padding:11px 16px;font-size:.78rem;font-weight:900;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid var(--border)">📋 Question Review</div>
+    <div id="r-review" style="max-height:320px;overflow-y:auto"></div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px">
+    <button class="btn btn-outline" style="flex:1;min-width:120px" onclick="goTo('learn')">📖 Review</button>
+    <button class="btn btn-yellow" style="flex:1;min-width:120px" onclick="restartQuiz()">🔄 Retry</button>
+    <button class="btn btn-primary" style="flex:1;min-width:120px" onclick="goTo('home')">🏠 Home</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
+<script>
+/* ══════════════════════════════════════════════════
+   THINK ALONG DATA (3 questions)
+══════════════════════════════════════════════════ */
+const THINK = [
+  { q: 'What is the <strong>best first step</strong> for solving 4.5 + 2.37?',
+    ch: ['Line up the decimal points', 'Multiply the numbers', 'Move the decimal point', 'Simplify the fraction'],
+    ans: 0,
+    exp: 'For decimal addition, always line up the decimal points first so each digit is in the correct column.' },
+  { q: 'What is the <strong>best first step</strong> for solving 3.6 ÷ 0.4?',
+    ch: ['Add zeros', 'Make 0.4 into a whole number (multiply both by 10)', 'Multiply the decimals', 'Convert to a mixed number'],
+    ans: 1,
+    exp: 'For division by a decimal, make the divisor a whole number first. Multiply both numbers by 10: 36 ÷ 4 = 9.' },
+  { q: 'What is the <strong>best first step</strong> for changing 0.75 into a fraction?',
+    ch: ['Write it as 75/100', 'Write it as 75/10', 'Write it as 7/5', 'Write it as 0/75'],
+    ans: 0,
+    exp: '0.75 has two decimal places, so it means 75 hundredths → 75/100. Then simplify: 75/100 = 3/4.' }
+];
+
+/* ══════════════════════════════════════════════════
+   GUIDED PRACTICE DATA (6 questions)
+══════════════════════════════════════════════════ */
+const GP = [
+  { type:'Convert Decimal→Fraction', typeCls:'b-purple',
+    q:'Convert <strong>0.4</strong> into a fraction in simplest form.',
+    ch:['4/100','4/10','2/5','1/4'], ans:2,
+    work:[{t:'Write as fraction over 10',c:'0.4 = 4/10'},{t:'Simplify (÷2)',c:'4/10 = 2/5'}] },
+  { type:'Convert Fraction→Decimal', typeCls:'b-blue',
+    q:'Convert <strong>3/4</strong> into a decimal.',
+    ch:['0.34','0.43','0.75','3.4'], ans:2,
+    work:[{t:'Method: divide numerator by denominator',c:'3 ÷ 4 = 0.75'}] },
+  { type:'Addition', typeCls:'b-teal',
+    q:'Calculate <strong>2.35 + 1.7</strong>',
+    ch:['3.15','4.05','3.95','4.15'], ans:1,
+    work:[{t:'Write 1.7 as 1.70 (add zero)',c:'1.70'},{t:'Column addition',c:'2.35 + 1.70 = 4.05'}] },
+  { type:'Subtraction', typeCls:'b-blue',
+    q:'Calculate <strong>8.4 − 3.65</strong>',
+    ch:['4.75','5.75','4.25','5.25'], ans:0,
+    work:[{t:'Write 8.4 as 8.40 (add zero)',c:'8.40'},{t:'Column subtraction',c:'8.40 − 3.65 = 4.75'}] },
+  { type:'Multiplication', typeCls:'b-yellow',
+    q:'Calculate <strong>1.2 × 0.5</strong>',
+    ch:['6.0','0.06','0.6','60'], ans:2,
+    work:[{t:'Ignore decimals: 12 × 5 = 60',c:'60'},{t:'Count decimal places: 1.2 has 1, 0.5 has 1 → total 2',c:''},{t:'Place decimal 2 from right',c:'0.60 = 0.6'}] },
+  { type:'Division', typeCls:'b-purple',
+    q:'Calculate <strong>7.2 ÷ 0.8</strong>',
+    ch:['0.9','9','0.09','90'], ans:1,
+    work:[{t:'Divisor 0.8 has 1 decimal → multiply both by 10',c:'7.2 × 10 = 72 | 0.8 × 10 = 8'},{t:'Divide whole numbers',c:'72 ÷ 8 = 9'}] },
+];
+
+/* ══════════════════════════════════════════════════
+   WORD PROBLEMS DATA (8 questions)
+══════════════════════════════════════════════════ */
+const WP = [
+  { n:1, op:'➖ Subtraction', opCls:'b-blue',
+    q:'A water bottle contains <strong>1.25 litres</strong> of water. Emma drinks <strong>0.45 litres</strong>. How much water is left?',
+    steps:['Write: 1.25 − 0.45','Column subtraction: 1.25 − 0.45 = 0.80'],
+    ans:'0.8 litres' },
+  { n:2, op:'✖️ Multiplication', opCls:'b-yellow',
+    q:'A chocolate bar weighs <strong>0.35 kg</strong>. What is the weight of <strong>6</strong> chocolate bars?',
+    steps:['Write: 0.35 × 6','Ignore decimal: 35 × 6 = 210','2 decimal places → 2.10'],
+    ans:'2.1 kg' },
+  { n:3, op:'➗ Division', opCls:'b-purple',
+    q:'A rope is <strong>7.2 metres</strong> long. It is cut into equal pieces of <strong>0.9 metre</strong>. How many pieces can be made?',
+    steps:['Write: 7.2 ÷ 0.9','Multiply both by 10: 72 ÷ 9 = 8'],
+    ans:'8 pieces' },
+  { n:4, op:'➕ Addition', opCls:'b-teal',
+    q:'A runner runs <strong>3.75 km</strong> in the morning and <strong>2.8 km</strong> in the evening. How far altogether?',
+    steps:['Write 2.8 as 2.80','Column addition: 3.75 + 2.80 = 6.55'],
+    ans:'6.55 km' },
+  { n:5, op:'✖️ Multiplication', opCls:'b-yellow',
+    q:'A notebook costs <strong>$2.45</strong>. A student buys <strong>3</strong> notebooks. How much does the student pay?',
+    steps:['Write: 2.45 × 3','Ignore decimal: 245 × 3 = 735','2 decimal places → $7.35'],
+    ans:'$7.35' },
+  { n:6, op:'➖ Subtraction', opCls:'b-blue',
+    q:'A bag weighs <strong>5.6 kg</strong>. Another bag weighs <strong>3.85 kg</strong>. What is the difference in weight?',
+    steps:['Write 5.6 as 5.60','Column subtraction: 5.60 − 3.85 = 1.75'],
+    ans:'1.75 kg' },
+  { n:7, op:'➗ Division', opCls:'b-purple',
+    q:'A pizza costs <strong>$12.60</strong>. Four friends share the cost equally. How much does each friend pay?',
+    steps:['Write: 12.60 ÷ 4','Divide: 12.60 ÷ 4 = 3.15'],
+    ans:'$3.15' },
+  { n:8, op:'✖️ Multiplication', opCls:'b-orange',
+    q:'A car uses <strong>0.08 litres</strong> of fuel per kilometre. How much fuel does it use for <strong>50 kilometres</strong>?',
+    steps:['Write: 0.08 × 50','Ignore decimal: 8 × 50 = 400','2 decimal places → 4.00 = 4'],
+    ans:'4 litres' },
+];
+
+/* ══════════════════════════════════════════════════
+   PROBLEM SOLVING DATA (5 questions)
+══════════════════════════════════════════════════ */
+const PS = [
+  { n:1, q:'A shop sells apples for <strong>$1.35</strong> each. Ben buys <strong>4 apples</strong> and pays with <strong>$10</strong>. How much change does he get?',
+    steps:['Step 1: Cost of apples = 1.35 × 4 = 5.40','Step 2: Change = 10.00 − 5.40 = 4.60'],
+    ans:'$4.60' },
+  { n:2, q:'A bottle contains <strong>2.4 litres</strong> of juice. Each cup holds <strong>0.3 litre</strong>. How many cups can be filled?',
+    steps:['Write: 2.4 ÷ 0.3','Multiply both by 10: 24 ÷ 3 = 8'],
+    ans:'8 cups' },
+  { n:3, q:'A cyclist rides <strong>12.5 km</strong> each day for <strong>4 days</strong>. Then rides another <strong>8.75 km</strong>. How far altogether?',
+    steps:['Step 1: 12.5 × 4 = 50 km','Step 2: 50 + 8.75 = 58.75 km'],
+    ans:'58.75 km' },
+  { n:4, q:'A ribbon is <strong>10 metres</strong> long. Maya uses <strong>2.35 m</strong> for a project and <strong>4.8 m</strong> for decoration. How much ribbon is left?',
+    steps:['Step 1: 2.35 + 4.80 = 7.15 m used','Step 2: 10.00 − 7.15 = 2.85 m left'],
+    ans:'2.85 metres' },
+  { n:5, q:'A box of cereal weighs <strong>0.45 kg</strong>. A carton holds <strong>12 boxes</strong>. What is the total weight of the boxes?',
+    steps:['Ignore decimal: 45 × 12 = 540','2 decimal places → 5.40 = 5.4 kg'],
+    ans:'5.4 kg' },
+];
+
+/* ══════════════════════════════════════════════════
+   PERFORMANCE TASK DATA
+══════════════════════════════════════════════════ */
+const PT_TASKS = [
+  { n:1, q:'Buy <strong>4 bottles</strong> of juice at $2.75 each. How much does the juice cost?', ans:11.00, tolerance:0.005 },
+  { n:2, q:'Buy <strong>6 packs</strong> of snacks at $1.85 each. How much do the snacks cost?', ans:11.10, tolerance:0.005 },
+  { n:3, q:'Buy <strong>12 cupcakes</strong> at $0.95 each. How much do the cupcakes cost?', ans:11.40, tolerance:0.005 },
+  { n:4, q:'Buy <strong>2 packs</strong> of plates at $3.60 each. How much do the plates cost?', ans:7.20, tolerance:0.005 },
+  { n:5, q:'What is the <strong>total cost</strong> of all items?', ans:40.70, tolerance:0.005 },
+  { n:6, q:'How much money is <strong>left</strong> from the $50.00 budget?', ans:9.30, tolerance:0.005 },
+  { n:7, q:'If <strong>8 students</strong> share the leftover money equally, how much does each student get? (Round to nearest cent)', ans:1.16, tolerance:0.01 },
+];
+
+/* ══════════════════════════════════════════════════
+   QUIZ DATA — 30 Questions
+   To edit: change q, ch, ans (0-indexed), hint, exp
+══════════════════════════════════════════════════ */
+const QUIZ = [
+  // ── FRACTIONS & DECIMALS
+  { type:'Fractions & Decimals', cls:'b-purple',
+    q:'What is 0.6 as a fraction in simplest form?',
+    ch:['6/100','6/10','3/5','1/6'], ans:2,
+    hint:'0.6 = 6 tenths = 6/10. Can you simplify 6/10 by dividing both by 2?',
+    exp:'0.6 = 6/10. Simplify: 6÷2=3 and 10÷2=5. Answer = 3/5.' },
+  { type:'Fractions & Decimals', cls:'b-purple',
+    q:'What is 0.25 as a fraction?',
+    ch:['1/2','1/3','1/4','1/5'], ans:2,
+    hint:'0.25 has 2 decimal places, so write it over 100.',
+    exp:'0.25 = 25/100. Simplify: 25÷25=1 and 100÷25=4. Answer = 1/4.' },
+  { type:'Fractions & Decimals', cls:'b-purple',
+    q:'What is 3/10 as a decimal?',
+    ch:['0.03','0.3','3.0','30.0'], ans:1,
+    hint:'3/10 means 3 tenths. How many decimal places does "tenths" use?',
+    exp:'3/10 = 3 tenths = 0.3 (1 decimal place).' },
+  { type:'Fractions & Decimals', cls:'b-purple',
+    q:'What is 7/100 as a decimal?',
+    ch:['0.7','0.07','0.007','7.00'], ans:1,
+    hint:'7/100 = 7 hundredths. That is 2 decimal places.',
+    exp:'7/100 = 7 hundredths = 0.07.' },
+  { type:'Fractions & Decimals', cls:'b-purple',
+    q:'What is 1/2 as a decimal?',
+    ch:['0.2','0.25','0.5','1.2'], ans:2,
+    hint:'1 ÷ 2 = ? Or think: 1/2 = 5/10.',
+    exp:'1/2 = 0.5.' },
+  { type:'Fractions & Decimals', cls:'b-purple',
+    q:'What is 3/4 as a decimal?',
+    ch:['0.34','0.43','0.75','0.25'], ans:2,
+    hint:'3 ÷ 4 = ? Or think: 3/4 = 75/100.',
+    exp:'3/4 = 3 ÷ 4 = 0.75.' },
+  // ── PLACE VALUE
+  { type:'Place Value', cls:'b-blue',
+    q:'What is the value of the digit 5 in 12.354?',
+    ch:['5 ones','5 tenths','5 hundredths','5 thousandths'], ans:2,
+    hint:'In 12.354 → 1=tens, 2=ones, 3=tenths, 5=?, 4=thousandths',
+    exp:'12.354: tens=1, ones=2, tenths=3, hundredths=5, thousandths=4. So 5 is in the hundredths place.' },
+  // ── ADDITION
+  { type:'Addition', cls:'b-teal',
+    q:'What is 2.4 + 3.5?',
+    ch:['5.7','5.8','5.9','6.0'], ans:2,
+    hint:'Line up the decimal points: 2.4 + 3.5',
+    exp:'2.4 + 3.5 = 5.9.' },
+  { type:'Addition', cls:'b-teal',
+    q:'What is 4.25 + 1.3?',
+    ch:['5.28','5.55','5.58','5.65'], ans:1,
+    hint:'Write 1.3 as 1.30 first, then add.',
+    exp:'1.3 = 1.30. So 4.25 + 1.30 = 5.55.' },
+  // ── SUBTRACTION
+  { type:'Subtraction', cls:'b-blue',
+    q:'What is 7.8 − 2.6?',
+    ch:['5.1','5.2','5.3','5.4'], ans:1,
+    hint:'Line up decimal points: 7.8 − 2.6',
+    exp:'7.8 − 2.6 = 5.2.' },
+  { type:'Subtraction', cls:'b-blue',
+    q:'What is 9.5 − 3.75?',
+    ch:['5.25','5.50','5.75','6.25'], ans:2,
+    hint:'Write 9.5 as 9.50 first.',
+    exp:'9.50 − 3.75 = 5.75.' },
+  { type:'Addition', cls:'b-teal',
+    q:'What is 0.7 + 0.08?',
+    ch:['0.15','0.78','0.708','7.8'], ans:1,
+    hint:'Write 0.7 as 0.70, then add: 0.70 + 0.08 = ?',
+    exp:'0.70 + 0.08 = 0.78.' },
+  { type:'Subtraction', cls:'b-blue',
+    q:'What is 6.04 − 2.9?',
+    ch:['3.04','3.14','3.24','4.14'], ans:1,
+    hint:'Write 2.9 as 2.90 first.',
+    exp:'2.9 = 2.90. So 6.04 − 2.90 = 3.14.' },
+  // ── MULTIPLICATION
+  { type:'Multiplication', cls:'b-yellow',
+    q:'What is 2.3 × 4?',
+    ch:['8.2','8.8','9.2','9.5'], ans:2,
+    hint:'Ignore the decimal: 23 × 4 = 92. How many decimal places are there?',
+    exp:'23 × 4 = 92. 2.3 has 1 decimal place, so the answer is 9.2.' },
+  { type:'Multiplication', cls:'b-yellow',
+    q:'What is 1.5 × 0.2?',
+    ch:['0.03','0.3','3','30'], ans:1,
+    hint:'15 × 2 = 30. Count decimal places: 1.5 has 1, 0.2 has 1 → total 2.',
+    exp:'15 × 2 = 30. 2 decimal places → 0.30 = 0.3.' },
+  { type:'Multiplication', cls:'b-yellow',
+    q:'What is 0.6 × 0.4?',
+    ch:['0.024','0.24','2.4','24'], ans:1,
+    hint:'6 × 4 = 24. Count decimal places: 0.6 has 1, 0.4 has 1 → total 2.',
+    exp:'6 × 4 = 24. 2 decimal places → 0.24.' },
+  { type:'Multiplication', cls:'b-yellow',
+    q:'What is 3.25 × 10?',
+    ch:['0.325','3.25','32.5','325'], ans:2,
+    hint:'Multiplying by 10 moves the decimal point 1 place to the right.',
+    exp:'3.25 × 10 = 32.5 (decimal moves 1 place right).' },
+  // ── DIVISION
+  { type:'Division', cls:'b-purple',
+    q:'What is 4.8 ÷ 2?',
+    ch:['1.4','2.4','3.4','4.2'], ans:1,
+    hint:'The divisor 2 is already whole. Divide normally: 48 ÷ 2, then place the decimal.',
+    exp:'4.8 ÷ 2 = 2.4.' },
+  { type:'Division', cls:'b-purple',
+    q:'What is 6.3 ÷ 0.7?',
+    ch:['0.9','9','90','0.09'], ans:1,
+    hint:'Make 0.7 a whole number: multiply both by 10. 63 ÷ 7 = ?',
+    exp:'6.3 ÷ 0.7 → ×10 both → 63 ÷ 7 = 9.' },
+  { type:'Division', cls:'b-purple',
+    q:'What is 5.6 ÷ 0.8?',
+    ch:['0.7','7','70','0.07'], ans:1,
+    hint:'Multiply both by 10: 56 ÷ 8 = ?',
+    exp:'5.6 ÷ 0.8 → ×10 → 56 ÷ 8 = 7.' },
+  { type:'Division', cls:'b-purple',
+    q:'What is 0.45 ÷ 0.05?',
+    ch:['0.9','9','90','0.09'], ans:1,
+    hint:'Multiply both by 100 (or by 20). 45 ÷ 5 = ?',
+    exp:'0.45 ÷ 0.05 → ×100 → 45 ÷ 5 = 9.' },
+  // ── COMPARISON
+  { type:'Comparing Decimals', cls:'b-teal',
+    q:'Which is greater: 0.6 or 0.56?',
+    ch:['0.6','0.56','They are equal','Cannot be compared'], ans:0,
+    hint:'Write both with 2 decimal places: 0.60 vs 0.56.',
+    exp:'0.6 = 0.60 which is greater than 0.56.' },
+  { type:'Fractions & Decimals', cls:'b-purple',
+    q:'Which decimal is equal to 4/5?',
+    ch:['0.45','0.4','0.8','0.85'], ans:2,
+    hint:'4/5 = 8/10 = ?  Or: 4 ÷ 5 = ?',
+    exp:'4/5 = 4 ÷ 5 = 0.8 (or: 4/5 = 8/10 = 0.8).' },
+  // ── WORD PROBLEMS
+  { type:'Word Problem', cls:'b-orange',
+    q:'A pencil costs $1.25. How much do 4 pencils cost?',
+    ch:['$4.00','$4.50','$5.00','$5.25'], ans:2,
+    hint:'Cost of 4 pencils = 1.25 × 4',
+    exp:'1.25 × 4 = 5.00. Answer = $5.00.' },
+  { type:'Word Problem', cls:'b-orange',
+    q:'Mia ran 2.35 km on Monday and 3.4 km on Tuesday. How far did she run altogether?',
+    ch:['5.39 km','5.65 km','5.75 km','6.75 km'], ans:2,
+    hint:'Altogether = addition. Write 3.4 as 3.40 first.',
+    exp:'2.35 + 3.40 = 5.75 km.' },
+  { type:'Word Problem', cls:'b-orange',
+    q:'A bottle has 1.5 litres of water. Sam drinks 0.65 litres. How much water is left?',
+    ch:['0.75 L','0.85 L','0.95 L','1.15 L'], ans:1,
+    hint:'Left = subtraction. Write 1.5 as 1.50 first.',
+    exp:'1.50 − 0.65 = 0.85 litres.' },
+  { type:'Word Problem', cls:'b-orange',
+    q:'A ribbon is 4.8 m long. It is cut into pieces of 0.6 m each. How many pieces are made?',
+    ch:['6','7','8','9'], ans:2,
+    hint:'Number of pieces = 4.8 ÷ 0.6. Multiply both by 10: 48 ÷ 6 = ?',
+    exp:'4.8 ÷ 0.6 → 48 ÷ 6 = 8 pieces.' },
+  { type:'Word Problem', cls:'b-orange',
+    q:'A bag of rice weighs 2.5 kg. What is the weight of 3 bags?',
+    ch:['5.5 kg','6.5 kg','7.5 kg','8.5 kg'], ans:2,
+    hint:'Weight × number of bags = 2.5 × 3',
+    exp:'2.5 × 3 = 7.5 kg.' },
+  { type:'Word Problem', cls:'b-orange',
+    q:'A student buys a notebook for $2.75 and a pen for $1.40. How much does the student spend?',
+    ch:['$3.15','$4.05','$4.15','$4.25'], ans:2,
+    hint:'Total = 2.75 + 1.40',
+    exp:'2.75 + 1.40 = $4.15.' },
+  { type:'Word Problem', cls:'b-orange',
+    q:'A cake recipe needs 0.75 cup of milk. If Lily makes 2 batches, how much milk does she need?',
+    ch:['1.25 cups','1.5 cups','1.75 cups','2 cups'], ans:1,
+    hint:'Milk needed = 0.75 × 2',
+    exp:'0.75 × 2 = 1.50 = 1.5 cups.' },
+];
+
+/* ══════════════════════════════════════════════════
+   AUDIO
+══════════════════════════════════════════════════ */
+const AC = new (window.AudioContext || window.webkitAudioContext)();
+function beep(f,d,t='sine',g=.26){
+  try{const o=AC.createOscillator(),v=AC.createGain();
+    o.connect(v);v.connect(AC.destination);o.type=t;o.frequency.value=f;
+    v.gain.setValueAtTime(g,AC.currentTime);
+    v.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);
+    o.start();o.stop(AC.currentTime+d);}catch(e){}
+}
+function playOK(){beep(523,.08);setTimeout(()=>beep(659,.08),90);setTimeout(()=>beep(784,.18),180);}
+function playNG(){beep(240,.13,'sawtooth',.2);setTimeout(()=>beep(196,.2,'sawtooth',.16),140);}
+
+/* ══════════════════════════════════════════════════
+   CONFETTI
+══════════════════════════════════════════════════ */
+function confetti(n=20){
+  const c=['#3B82F6','#F59E0B','#10B981','#8B5CF6','#EC4899','#F97316','#14B8A6'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div');
+    el.className='confetti-p';
+    el.style.cssText=`left:${10+Math.random()*80}%;top:12%;
+      background:${c[i%c.length]};transform:rotate(${Math.random()*360}deg);
+      animation-delay:${Math.random()*.4}s;
+      width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;
+      border-radius:${Math.random()>.5?'50%':'2px'}`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1400);
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════ */
+function goTo(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById('navbar').style.display = page==='home'?'none':'flex';
+  document.querySelectorAll('.ns').forEach(s=>s.classList.remove('active'));
+  const ns=document.getElementById('ns-'+page);
+  if(ns)ns.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab-c').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+
+/* ══════════════════════════════════════════════════
+   BUILD: THINK ALONG
+══════════════════════════════════════════════════ */
+let thinkState = new Array(THINK.length).fill(false);
+function buildThink(){
+  const wrap=document.getElementById('think-qs');
+  THINK.forEach((t,idx)=>{
+    const div=document.createElement('div');
+    div.className='gp-card';div.id='thk'+idx;
+    const lbl=['A','B','C','D'];
+    let chs='';
+    t.ch.forEach((c,i)=>{ chs+=`<button class="gp-btn" onclick="answerThink(${idx},${i})"><span class="gp-lbl">${lbl[i]}</span><span>${c}</span></button>`; });
+    div.innerHTML=`<span class="badge b-teal" style="margin-bottom:10px">Question ${idx+1}</span>
+      <h3 style="margin-top:4px">${t.q}</h3>
+      <div class="gp-choices">${chs}</div>
+      <div class="gp-work" id="thkw${idx}"></div>`;
+    wrap.appendChild(div);
+  });
+}
+function answerThink(idx,i){
+  if(thinkState[idx])return;
+  thinkState[idx]=true;
+  const t=THINK[idx],ok=i===t.ans;
+  const btns=document.querySelectorAll(`#thk${idx} .gp-btn`);
+  btns.forEach(b=>b.disabled=true);
+  btns[i].classList.add(ok?'ok':'ng');
+  if(!ok)btns[t.ans].classList.add('ok');
+  const w=document.getElementById('thkw'+idx);
+  w.className=`gp-work show ${ok?'ok':'ng'}`;
+  w.innerHTML=`<div style="font-weight:900;margin-bottom:7px">${ok?'✅ Correct! 🌟':'❌ Not quite!'}</div><div style="font-size:.88rem">${t.exp}</div>`;
+  if(ok){playOK();document.getElementById('thk'+idx).classList.add('done');confetti(10);}
+  else playNG();
+  document.getElementById('ns-think').classList.add('done');
+}
+
+/* ══════════════════════════════════════════════════
+   BUILD: GUIDED PRACTICE
+══════════════════════════════════════════════════ */
+let gpState=new Array(GP.length).fill(false),gpDone=0;
+function buildGP(){
+  const wrap=document.getElementById('gp-container');
+  GP.forEach((q,idx)=>{
+    const div=document.createElement('div');
+    div.className='gp-card';div.id='gp'+idx;
+    const lbl=['A','B','C','D'];
+    let chs='';
+    q.ch.forEach((c,i)=>{ chs+=`<button class="gp-btn" onclick="answerGP(${idx},${i})"><span class="gp-lbl">${lbl[i]}</span><span>${c}</span></button>`; });
+    let workHtml=q.work.map(w=>`<div class="step"><div class="slbl">${w.t}</div>${w.c}</div>`).join('');
+    div.innerHTML=`<span class="badge ${q.typeCls}" style="margin-bottom:9px">${q.type}</span>
+      <h3 style="margin-top:4px">${q.q}</h3>
+      <div class="gp-choices">${chs}</div>
+      <div class="gp-work" id="gpw${idx}">${workHtml}</div>`;
+    wrap.appendChild(div);
+  });
+}
+function answerGP(idx,i){
+  if(gpState[idx])return;
+  gpState[idx]=true;
+  const q=GP[idx],ok=i===q.ans;
+  const btns=document.querySelectorAll(`#gp${idx} .gp-btn`);
+  btns.forEach(b=>b.disabled=true);
+  btns[i].classList.add(ok?'ok':'ng');
+  if(!ok)btns[q.ans].classList.add('ok');
+  const w=document.getElementById('gpw'+idx);
+  const hdr=`<div style="font-weight:900;margin-bottom:8px">${ok?'✅ Correct! Well done!':'❌ Not quite — here\'s how:'}</div>`;
+  w.innerHTML=hdr+w.innerHTML;
+  w.className=`gp-work show ${ok?'ok':'ng'}`;
+  if(ok){playOK();document.getElementById('gp'+idx).classList.add('done');gpDone++;confetti(10);}
+  else playNG();
+  if(gpDone>=GP.length){
+    setTimeout(()=>{
+      document.getElementById('gp-complete').style.display='block';
+      document.getElementById('gp-nav').style.display='none';
+      document.getElementById('ns-practice').classList.add('done');
+    },400);
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   BUILD: WORD PROBLEMS
+══════════════════════════════════════════════════ */
+function buildWP(){
+  const wrap=document.getElementById('wp-container');
+  WP.forEach((w,idx)=>{
+    const div=document.createElement('div');
+    div.className='wp-card';
+    let stepsHtml=w.steps.map((s,i)=>`<div class="step ${i===w.steps.length-1?'g':''}"><div class="slbl">Step ${i+1}</div>${s}</div>`).join('');
+    div.innerHTML=`<span class="badge ${w.opCls}" style="margin-bottom:10px">${w.op}</span>
+      <h3 style="margin-top:4px">Question ${w.n}</h3>
+      <p style="margin-top:8px;font-size:.93rem">${w.q}</p>
+      <button class="wp-toggle" onclick="toggleWP(this)">▼ Show Solution</button>
+      <div class="wp-solution">
+        ${stepsHtml}
+        <div class="wp-ans">✅ Answer: ${w.ans}</div>
+      </div>`;
+    wrap.appendChild(div);
+  });
+}
+function toggleWP(btn){
+  const sol=btn.nextElementSibling;
+  const isOpen=sol.classList.contains('show');
+  sol.classList.toggle('show');
+  btn.textContent=isOpen?'▼ Show Solution':'▲ Hide Solution';
+  document.getElementById('ns-wordprob').classList.add('done');
+}
+
+/* ══════════════════════════════════════════════════
+   BUILD: PROBLEM SOLVING
+══════════════════════════════════════════════════ */
+function buildPS(){
+  const wrap=document.getElementById('ps-container');
+  PS.forEach((p,idx)=>{
+    const div=document.createElement('div');
+    div.className='wp-card';
+    let stepsHtml=p.steps.map((s,i)=>`<div class="step ${i===p.steps.length-1?'g':''}"><div class="slbl">${s.split(':')[0]}</div>${s.split(':').slice(1).join(':').trim()||s}</div>`).join('');
+    div.innerHTML=`<span class="badge b-purple" style="margin-bottom:10px">🧩 Problem ${p.n}</span>
+      <p style="margin-top:4px;font-size:.93rem">${p.q}</p>
+      <button class="wp-toggle" onclick="toggleWP(this)">📋 Show Working</button>
+      <div class="wp-solution">
+        ${stepsHtml}
+        <div class="wp-ans">✅ Answer: ${p.ans}</div>
+      </div>`;
+    wrap.appendChild(div);
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   BUILD: PERFORMANCE TASK
+══════════════════════════════════════════════════ */
+function buildPT(){
+  const wrap=document.getElementById('pt-tasks');
+  PT_TASKS.forEach((t,idx)=>{
+    const div=document.createElement('div');
+    div.className='pt-task';div.id='pt'+idx;
+    div.innerHTML=`<span class="badge b-pink" style="margin-bottom:8px">Task ${t.n}</span>
+      <p style="font-size:.93rem;margin-top:4px">${t.q}</p>
+      <div class="pt-row">
+        <span style="font-weight:700">$</span>
+        <input class="pt-input" id="pti${idx}" type="number" step="0.01" placeholder="0.00" oninput="">
+        <button class="btn btn-green btn-sm" onclick="checkPT(${idx})">✓ Check</button>
+        <div class="pt-fb" id="ptf${idx}"></div>
+      </div>`;
+    wrap.appendChild(div);
+  });
+}
+function checkPT(idx){
+  const t=PT_TASKS[idx];
+  const inp=document.getElementById('pti'+idx);
+  const val=parseFloat(inp.value);
+  const fb=document.getElementById('ptf'+idx);
+  const div=document.getElementById('pt'+idx);
+  if(isNaN(val)){inp.focus();return;}
+  if(Math.abs(val-t.ans)<=t.tolerance){
+    inp.className='pt-input ok';
+    fb.innerHTML='✅ Correct!';fb.style.color='var(--green-d)';
+    div.classList.add('correct');div.classList.remove('wrong');
+    playOK();confetti(8);
+    document.getElementById('ns-perf').classList.add('done');
+  } else {
+    inp.className='pt-input ng';
+    fb.innerHTML=`❌ Try again`;fb.style.color='var(--red-d)';
+    div.classList.add('wrong');div.classList.remove('correct');
+    playNG();
+    setTimeout(()=>{inp.className='pt-input';inp.value='';inp.focus();},1200);
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   QUIZ ENGINE
+══════════════════════════════════════════════════ */
+let curQ=0,qOK=0,qNG=0,qPts=0,qAnswered=false,clickReady=false,qResults=[];
+let hintShown=false;
+
+function beginQuiz(){
+  curQ=0;qOK=0;qNG=0;qPts=0;qAnswered=false;clickReady=false;qResults=[];
+  loadQ();goTo('quiz');
+}
+function restartQuiz(){beginQuiz();}
+
+function loadQ(){
+  qAnswered=false;clickReady=false;hintShown=false;
+  setTimeout(()=>{clickReady=true;},400);
+  const q=QUIZ[curQ],tot=QUIZ.length;
+  const pct=Math.round((curQ/tot)*100);
+  document.getElementById('qz-ctr').textContent=`Question ${curQ+1} of ${tot}`;
+  document.getElementById('qz-sc').textContent=`⭐ ${qPts} pts`;
+  document.getElementById('qz-pbar').style.width=pct+'%';
+  document.getElementById('qz-ok').textContent=`✅ ${qOK} correct`;
+  document.getElementById('qz-ng').textContent=`❌ ${qNG} wrong`;
+  document.getElementById('qz-type').innerHTML=`<span class="badge ${q.cls}" style="margin-bottom:10px">${q.type}</span>`;
+  document.getElementById('qz-txt').textContent=q.q;
+  document.getElementById('hint-box').className='hint-box';
+  document.getElementById('hint-box').textContent=q.hint;
+  document.getElementById('btn-hint').textContent='💡 Show Hint';
+  const cc=document.getElementById('qz-choices');cc.innerHTML='';
+  const lbl=['A','B','C','D'];
+  q.ch.forEach((c,i)=>{
+    const b=document.createElement('button');
+    b.className='q-btn';
+    b.innerHTML=`<span class="q-lbl">${lbl[i]}</span><span>${c}</span>`;
+    b.onclick=()=>answerQ(i);
+    cc.appendChild(b);
+  });
+  document.getElementById('qz-fb').className='q-fb';
+  document.getElementById('btn-next').style.display='none';
+  const card=document.getElementById('qz-card');
+  card.classList.remove('anim-fade');void card.offsetWidth;card.classList.add('anim-fade');
+}
+
+function toggleHint(){
+  const hb=document.getElementById('hint-box');
+  const hintVisible=hb.classList.contains('show');
+  hb.classList.toggle('show');
+  document.getElementById('btn-hint').textContent=hintVisible?'💡 Show Hint':'🙈 Hide Hint';
+}
+
+function answerQ(i){
+  if(qAnswered||!clickReady)return;
+  qAnswered=true;
+  const q=QUIZ[curQ],ok=i===q.ans;
+  if(ok){qPts+=3;qOK++;}else qNG++;
+  qResults.push({q:q.q,ok,ua:q.ch[i],ca:q.ch[q.ans],exp:q.exp});
+  const btns=document.querySelectorAll('.q-btn');
+  btns.forEach(b=>b.disabled=true);
+  btns[i].classList.add(ok?'ok':'ng');
+  if(!ok)btns[q.ans].classList.add('ok');
+  const fb=document.getElementById('qz-fb');
+  fb.className=`q-fb show ${ok?'ok':'ng'}`;
+  document.getElementById('qz-fb-hd').textContent=ok?'✅ Correct! Great work! 🌟':'❌ Not quite!';
+  document.getElementById('qz-fb-exp').textContent=q.exp;
+  document.getElementById('qz-sc').textContent=`⭐ ${qPts} pts`;
+  document.getElementById('qz-ok').textContent=`✅ ${qOK} correct`;
+  document.getElementById('qz-ng').textContent=`❌ ${qNG} wrong`;
+  if(ok){playOK();if(qOK%5===0)confetti();}else playNG();
+  const nb=document.getElementById('btn-next');
+  nb.style.display='flex';
+  nb.textContent=curQ+1<QUIZ.length?'Next Question ➜':'See My Results 🎉';
+}
+
+function nextQ(){
+  curQ++;
+  curQ<QUIZ.length?loadQ():showResults();
+}
+
+/* ══════════════════════════════════════════════════
+   RESULTS
+══════════════════════════════════════════════════ */
+function showResults(){
+  const tot=QUIZ.length,pct=Math.round((qOK/tot)*100);
+  let deco,title,badge,cls,msg;
+  if(pct>=90){deco='🏆';title='Excellent!';badge='27–30 / 30 · Excellent';cls='b-green';
+    msg='You are very confident with decimal operations. Outstanding work!';}
+  else if(pct>=73){deco='🎉';title='Great Job!';badge='22–26 / 30 · Great';cls='b-blue';
+    msg='Great job! You understand most decimal skills. Review a few tricky questions and try again.';}
+  else if(pct>=53){deco='👍';title='Good Effort!';badge='16–21 / 30 · Good';cls='b-yellow';
+    msg='Good effort! Practise decimal multiplication, division, and word problems more carefully.';}
+  else{deco='📚';title='Keep Practising!';badge='0–15 / 30 · Needs Review';cls='b-purple';
+    msg='Keep practising! Review place value and operation rules in the Learning section, then try again.';}
+  document.getElementById('r-deco').textContent=deco;
+  document.getElementById('r-title').textContent=title;
+  document.getElementById('r-score').textContent=`${qOK}/${tot}`;
+  document.getElementById('r-pct').textContent=`${pct}%`;
+  document.getElementById('r-pct2').textContent=`${pct}%`;
+  document.getElementById('r-nc').textContent=qOK;
+  document.getElementById('r-nw').textContent=qNG;
+  const rb=document.getElementById('r-badge');rb.textContent=badge;rb.className=`badge ${cls}`;
+  document.getElementById('r-msg').textContent=msg;
+  document.getElementById('r-ring').style.borderColor=pct>=73?'var(--green)':pct>=53?'var(--yellow)':'var(--red)';
+  const rl=document.getElementById('r-review');rl.innerHTML='';
+  qResults.forEach((r,i)=>{
+    const d=document.createElement('div');
+    d.className=`rev-item ${r.ok?'ok':'ng'}`;
+    const qs=r.q.length>55?r.q.substring(0,55)+'…':r.q;
+    d.innerHTML=`<span style="font-size:.95rem;flex-shrink:0">${r.ok?'✅':'❌'}</span>
+      <div><div class="ri-q">Q${i+1}: ${qs}</div>
+      <div class="ri-a">${r.ok?'Correct: '+r.ca:'Your answer: '+r.ua+' → Correct: '+r.ca}</div></div>`;
+    rl.appendChild(d);
+  });
+  if(pct>=73)confetti(30);
+  goTo('results');
+  document.getElementById('ns-quiz').classList.add('done');
+}
+
+/* ══════════════════════════════════════════════════
+   INIT — build all dynamic sections on page load
+══════════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded',()=>{
+  buildThink();
+  buildGP();
+  buildWP();
+  buildPS();
+  buildPT();
+});
+</script>
+</body>
+</html>

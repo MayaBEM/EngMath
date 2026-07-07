@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mixed Operations Involving Fractions — Grade 6</title>
+<style>
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+:root {
+  --blue:#3B82F6; --blue-l:#DBEAFE; --blue-d:#1E40AF;
+  --green:#10B981; --green-l:#D1FAE5; --green-d:#065F46;
+  --yellow:#F59E0B; --yellow-l:#FEF3C7; --yellow-d:#92400E;
+  --orange:#F97316; --orange-l:#FFEDD5;
+  --purple:#8B5CF6; --purple-l:#EDE9FE; --purple-d:#5B21B6;
+  --pink:#EC4899; --pink-l:#FCE7F3;
+  --red:#EF4444; --red-l:#FEE2E2; --red-d:#991B1B;
+  --bg:#F0F9FF; --card:#FFFFFF; --navy:#1E3A5F; --text:#374151;
+  --gray:#6B7280; --border:#E5E7EB;
+  --r:14px; --r-lg:22px; --r-xl:30px;
+  --shadow:0 2px 16px rgba(59,130,246,.1);
+  --shadow-lg:0 6px 32px rgba(59,130,246,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ═══════════════════════════════════════════════
+   FRACTION DISPLAY
+═══════════════════════════════════════════════ */
+.fr{display:inline-flex;flex-direction:column;align-items:center;
+  vertical-align:middle;margin:0 2px;line-height:1.1}
+.fr .n{padding:0 4px 2px;border-bottom:2px solid currentColor;
+  font-weight:800;text-align:center;min-width:18px;font-size:inherit}
+.fr .d{padding:2px 4px 0;font-weight:800;text-align:center;min-width:18px;font-size:inherit}
+.mix{display:inline-flex;align-items:center;gap:3px;vertical-align:middle}
+.op{font-weight:900;margin:0 5px;font-size:1.05em}
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════ */
+.page{display:none}
+.page.active{display:block}
+.container{max-width:840px;margin:0 auto;padding:0 18px}
+.section{padding:28px 0}
+
+/* ═══════════════════════════════════════════════
+   TYPOGRAPHY
+═══════════════════════════════════════════════ */
+h1{font-size:clamp(1.6rem,5vw,2.6rem);font-weight:900;color:var(--navy);line-height:1.2}
+h2{font-size:clamp(1.15rem,3.5vw,1.6rem);font-weight:900;color:var(--navy)}
+h3{font-size:1.05rem;font-weight:800;color:var(--navy)}
+p{line-height:1.75}
+
+/* ═══════════════════════════════════════════════
+   CARDS
+═══════════════════════════════════════════════ */
+.card{background:var(--card);border-radius:var(--r-lg);padding:24px 22px;
+  box-shadow:var(--shadow);border:1.5px solid var(--border)}
+.card+.card{margin-top:16px}
+
+/* ═══════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 26px;border-radius:50px;font-size:1rem;font-weight:800;
+  cursor:pointer;border:none;transition:.2s;font-family:'Nunito',sans-serif}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.btn:active{transform:none}
+.btn-primary{background:linear-gradient(135deg,#3B82F6,#1D4ED8);color:#fff;
+  box-shadow:0 4px 16px rgba(59,130,246,.35)}
+.btn-green{background:linear-gradient(135deg,#10B981,#059669);color:#fff;
+  box-shadow:0 4px 16px rgba(16,185,129,.3)}
+.btn-yellow{background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff;
+  box-shadow:0 4px 16px rgba(245,158,11,.3)}
+.btn-outline{background:#fff;color:var(--blue);border:2.5px solid var(--blue)}
+.btn-sm{padding:9px 20px;font-size:.88rem}
+.btn-lg{padding:16px 38px;font-size:1.1rem}
+.btn-full{width:100%;display:flex}
+
+/* ═══════════════════════════════════════════════
+   BADGES & CHIPS
+═══════════════════════════════════════════════ */
+.badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.78rem;font-weight:800}
+.b-blue{background:var(--blue-l);color:var(--blue-d)}
+.b-green{background:var(--green-l);color:var(--green-d)}
+.b-yellow{background:var(--yellow-l);color:var(--yellow-d)}
+.b-purple{background:var(--purple-l);color:var(--purple-d)}
+.b-pink{background:var(--pink-l);color:#9D174D}
+.b-orange{background:var(--orange-l);color:#9A3412}
+
+/* ═══════════════════════════════════════════════
+   OP CHIPS
+═══════════════════════════════════════════════ */
+.op-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 14px;
+  border-radius:20px;font-size:.82rem;font-weight:800}
+.op-add{background:var(--green-l);color:var(--green-d)}
+.op-sub{background:var(--blue-l);color:var(--blue-d)}
+.op-mul{background:var(--yellow-l);color:var(--yellow-d)}
+.op-div{background:var(--purple-l);color:var(--purple-d)}
+.op-mix{background:var(--pink-l);color:#9D174D}
+.op-word{background:var(--orange-l);color:#9A3412}
+
+/* ═══════════════════════════════════════════════
+   STEP BOXES
+═══════════════════════════════════════════════ */
+.step{background:var(--blue-l);border-radius:12px;padding:12px 16px;
+  margin:8px 0;border-left:4px solid var(--blue)}
+.step .slbl{font-size:.72rem;font-weight:800;color:var(--blue-d);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.step.g{background:var(--green-l);border-color:var(--green)}
+.step.g .slbl{color:var(--green-d)}
+.step.y{background:var(--yellow-l);border-color:var(--yellow)}
+.step.y .slbl{color:var(--yellow-d)}
+
+/* ═══════════════════════════════════════════════
+   EXAMPLE BOX
+═══════════════════════════════════════════════ */
+.ex-box{background:linear-gradient(135deg,var(--yellow-l),#FDE68A);
+  border-radius:14px;padding:16px 20px;border-left:5px solid var(--yellow);margin:14px 0}
+.ex-box .elbl{font-size:.72rem;font-weight:800;color:var(--yellow-d);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+
+/* ═══════════════════════════════════════════════
+   DEF BOX
+═══════════════════════════════════════════════ */
+.def-box{background:linear-gradient(135deg,#EFF6FF,var(--blue-l));
+  border-radius:14px;padding:18px 20px;border:2px solid var(--blue);
+  position:relative;margin:16px 0}
+.def-box::before{content:'📘 Remember';position:absolute;top:-12px;left:16px;
+  background:var(--blue);color:#fff;font-size:.72rem;font-weight:800;
+  padding:3px 12px;border-radius:10px;letter-spacing:.3px}
+
+/* ═══════════════════════════════════════════════
+   RECALL TABS
+═══════════════════════════════════════════════ */
+.tab-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.tab-btn{padding:8px 16px;border-radius:20px;font-size:.85rem;font-weight:800;
+  border:2px solid var(--border);background:#fff;cursor:pointer;transition:.2s;
+  font-family:'Nunito',sans-serif}
+.tab-btn:hover{border-color:var(--blue);color:var(--blue)}
+.tab-btn.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.tab-content{display:none}
+.tab-content.on{display:block}
+
+/* ═══════════════════════════════════════════════
+   TIP CARDS
+═══════════════════════════════════════════════ */
+.tip-card{display:flex;gap:14px;align-items:flex-start;
+  background:linear-gradient(135deg,#EFF6FF,#DBEAFE);
+  border-radius:14px;padding:18px;border-left:5px solid var(--blue);margin-bottom:12px}
+.tip-num{width:34px;height:34px;background:var(--blue);color:#fff;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:.9rem;flex-shrink:0}
+
+/* ═══════════════════════════════════════════════
+   GUIDED PRACTICE
+═══════════════════════════════════════════════ */
+.gp-card{background:var(--card);border-radius:var(--r-lg);padding:24px 20px;
+  box-shadow:var(--shadow);border:2px solid var(--border);margin-bottom:16px;transition:.3s}
+.gp-card.done{border-color:var(--green)}
+.gp-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.gp-btn{padding:13px 14px;border-radius:12px;border:2.5px solid var(--border);
+  background:#fff;font-size:1rem;font-weight:700;cursor:pointer;transition:.18s;
+  display:flex;align-items:center;gap:10px;font-family:'Nunito',sans-serif;color:var(--navy)}
+.gp-btn:hover:not(:disabled){border-color:var(--blue);background:var(--blue-l);transform:translateY(-2px)}
+.gp-lbl{width:30px;height:30px;border-radius:50%;background:var(--bg);
+  color:var(--gray);font-weight:900;font-size:.8rem;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid var(--border)}
+.gp-btn.ok{border-color:var(--green)!important;background:var(--green-l)!important}
+.gp-btn.ok .gp-lbl{background:var(--green);color:#fff;border-color:var(--green)}
+.gp-btn.ng{border-color:var(--red)!important;background:var(--red-l)!important}
+.gp-btn.ng .gp-lbl{background:var(--red);color:#fff;border-color:var(--red)}
+.gp-btn:disabled{cursor:default;transform:none!important}
+.gp-working{display:none;margin-top:14px;border-radius:14px;padding:16px;
+  border:1.5px solid transparent}
+.gp-working.show{display:block}
+.gp-working.ok{background:var(--green-l);border-color:var(--green)}
+.gp-working.ng{background:var(--red-l);border-color:var(--red)}
+
+/* ═══════════════════════════════════════════════
+   QUIZ
+═══════════════════════════════════════════════ */
+.qz-header{background:var(--card);border-radius:var(--r-lg);padding:16px 20px;
+  margin-bottom:18px;box-shadow:var(--shadow);border:1.5px solid var(--border)}
+.qz-meta{display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.qz-counter{font-size:.85rem;font-weight:800;color:var(--gray)}
+.qz-score{background:var(--yellow-l);color:var(--yellow-d);
+  padding:5px 16px;border-radius:20px;font-weight:900;font-size:.88rem}
+.pbar-w{background:var(--blue-l);border-radius:50px;height:11px;overflow:hidden}
+.pbar-f{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));
+  border-radius:50px;transition:width .5s}
+.pbar-row{display:flex;justify-content:space-between;margin-top:5px;font-size:.72rem;color:var(--gray)}
+
+.qz-card{background:var(--card);border-radius:var(--r-lg);padding:26px 22px;
+  box-shadow:var(--shadow-lg);border:1.5px solid var(--border);margin-bottom:14px}
+.q-text{font-size:1.1rem;font-weight:800;color:var(--navy);line-height:1.7;margin:10px 0 20px}
+.q-choices{display:grid;gap:10px}
+.q-btn{width:100%;padding:14px 18px;border-radius:12px;border:2.5px solid var(--border);
+  background:#fff;text-align:left;font-size:1rem;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;gap:12px;transition:.18s;
+  color:var(--navy);font-family:'Nunito',sans-serif}
+.q-btn:hover:not(:disabled){border-color:var(--blue);background:var(--blue-l);transform:translateX(4px)}
+.q-lbl{width:32px;height:32px;border-radius:50%;background:var(--bg);
+  color:var(--gray);font-weight:900;font-size:.8rem;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid var(--border)}
+.q-btn.ok{border-color:var(--green)!important;background:var(--green-l)!important}
+.q-btn.ok .q-lbl{background:var(--green);color:#fff;border-color:var(--green)}
+.q-btn.ng{border-color:var(--red)!important;background:var(--red-l)!important}
+.q-btn.ng .q-lbl{background:var(--red);color:#fff;border-color:var(--red)}
+.q-btn:disabled{cursor:default;transform:none!important}
+.q-fb{display:none;border-radius:14px;padding:14px 18px;margin:12px 0}
+.q-fb.show{display:block}
+.q-fb.ok{background:var(--green-l);border:1.5px solid var(--green)}
+.q-fb.ng{background:var(--red-l);border:1.5px solid var(--red)}
+.fb-hd{font-weight:900;font-size:.95rem;margin-bottom:4px}
+.fb-exp{font-size:.88rem;line-height:1.65}
+
+/* ═══════════════════════════════════════════════
+   RESULTS
+═══════════════════════════════════════════════ */
+.score-arc{width:150px;height:150px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:9px solid var(--blue-l);background:var(--card);box-shadow:var(--shadow-lg)}
+.score-arc .sv{font-size:2.2rem;font-weight:900;color:var(--navy)}
+.score-arc .sp{font-size:.8rem;font-weight:700;color:var(--gray)}
+.rev-item{padding:11px 16px;border-bottom:1px solid var(--border);
+  display:flex;gap:12px;align-items:flex-start}
+.rev-item:last-child{border-bottom:none}
+.rev-item.ok{background:rgba(16,185,129,.05)}
+.rev-item.ng{background:rgba(239,68,68,.05)}
+.ri-q{font-weight:700;font-size:.85rem;color:var(--navy)}
+.ri-a{font-size:.8rem;color:var(--gray);margin-top:2px}
+
+/* ═══════════════════════════════════════════════
+   REAL LIFE CARDS
+═══════════════════════════════════════════════ */
+.rl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.rl-card{background:var(--card);border-radius:var(--r-lg);padding:20px 18px;
+  box-shadow:var(--shadow);border-top:4px solid var(--blue)}
+.rl-icon{font-size:2.2rem;margin-bottom:10px}
+.rl-card h3{margin-bottom:8px}
+.rl-card .ex{background:var(--blue-l);border-radius:10px;padding:10px 13px;
+  margin-top:10px;font-size:.88rem;font-weight:700;color:var(--blue-d)}
+
+/* ═══════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════ */
+.hero{background:linear-gradient(135deg,#1E3A5F,#1D4ED8,#3B82F6);
+  color:#fff;padding:60px 20px 80px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 25% 40%,rgba(255,255,255,.07) 0%,transparent 55%),
+    radial-gradient(ellipse at 75% 70%,rgba(245,158,11,.13) 0%,transparent 55%);
+  pointer-events:none}
+.hero h1{color:#fff;margin-bottom:12px;position:relative}
+.hero .sub{font-size:1.1rem;opacity:.9;margin-bottom:10px;font-weight:600}
+.hero .intro{max-width:600px;margin:0 auto 28px;font-size:.95rem;opacity:.85;line-height:1.8}
+.hero-chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.hero-chip{padding:6px 16px;border-radius:20px;background:rgba(255,255,255,.15);
+  backdrop-filter:blur(4px);color:#fff;font-size:.82rem;font-weight:800;
+  border:1px solid rgba(255,255,255,.25)}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ═══════════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════════ */
+.navbar{background:var(--card);border-bottom:1.5px solid var(--border);
+  padding:12px 18px;position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.nav-brand{font-weight:900;color:var(--navy);font-size:.9rem}
+.nav-steps{display:flex;gap:5px;flex-wrap:wrap}
+.ns{padding:5px 12px;border-radius:20px;font-size:.78rem;font-weight:800;
+  background:var(--bg);color:var(--gray);cursor:pointer;border:1.5px solid var(--border);
+  transition:.2s;font-family:'Nunito',sans-serif}
+.ns:hover{border-color:var(--blue);color:var(--blue)}
+.ns.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.ns.done{background:var(--green-l);color:var(--green-d);border-color:var(--green)}
+
+/* ═══════════════════════════════════════════════
+   SEC HEADER
+═══════════════════════════════════════════════ */
+.sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.sec-ico{width:46px;height:46px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0}
+.ico-b{background:var(--blue-l)} .ico-y{background:var(--yellow-l)}
+.ico-g{background:var(--green-l)} .ico-p{background:var(--purple-l)}
+.ico-o{background:var(--orange-l)}
+
+/* ═══════════════════════════════════════════════
+   KEYWORD TABLE
+═══════════════════════════════════════════════ */
+.kw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:14px}
+.kw-card{border-radius:12px;padding:12px 14px;border:1.5px solid transparent}
+.kw-add{background:var(--green-l);border-color:var(--green);color:var(--green-d)}
+.kw-sub{background:var(--blue-l);border-color:var(--blue);color:var(--blue-d)}
+.kw-mul{background:var(--yellow-l);border-color:var(--yellow);color:var(--yellow-d)}
+.kw-div{background:var(--purple-l);border-color:var(--purple);color:var(--purple-d)}
+.kw-kw{font-weight:900;font-size:.95rem;margin-bottom:2px}
+.kw-op{font-size:.78rem;font-weight:700;opacity:.75}
+
+/* ═══════════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════════ */
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}30%{transform:translateX(-6px)}70%{transform:translateX(6px)}}
+@keyframes confetti-fall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(70px) rotate(360deg);opacity:0}}
+.anim-pop{animation:pop .35s cubic-bezier(.34,1.56,.64,1)}
+.anim-fade{animation:fadeUp .38s ease}
+.anim-shake{animation:shake .35s ease}
+.confetti-p{position:fixed;width:9px;height:9px;border-radius:2px;
+  pointer-events:none;z-index:9999;animation:confetti-fall .9s ease forwards}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media(max-width:580px){
+  .hero{padding:40px 16px 56px}
+  .card,.qz-card,.gp-card{padding:18px 14px}
+  .tip-card{flex-direction:column;gap:8px}
+  .gp-choices{grid-template-columns:1fr}
+  .tab-bar{gap:4px}
+  .tab-btn{padding:6px 12px;font-size:.8rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ════ NAVBAR (hidden on Home) ════ -->
+<nav class="navbar" id="navbar" style="display:none">
+  <span class="nav-brand">📐 Mixed Fractions · Grade 6</span>
+  <div class="nav-steps">
+    <button class="ns" id="ns-home"     onclick="goTo('home')">🏠 Home</button>
+    <button class="ns" id="ns-recall"   onclick="goTo('recall')">📖 Recall</button>
+    <button class="ns" id="ns-tips"     onclick="goTo('tips')">💡 Tips</button>
+    <button class="ns" id="ns-practice" onclick="goTo('practice')">✏️ Practice</button>
+    <button class="ns" id="ns-reallife" onclick="goTo('reallife')">🌍 Real Life</button>
+    <button class="ns" id="ns-quiz"     onclick="beginQuiz()">🎯 Quiz</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════
+     PAGE — HOME
+══════════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="container">
+      <p style="font-size:.78rem;font-weight:800;opacity:.65;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Grade 6 · Mathematics</p>
+      <h1>Mixed Operations<br>Involving Fractions</h1>
+      <p class="sub">Practise adding, subtracting, multiplying, and dividing fractions.</p>
+      <p class="intro">In this lesson, you will review fraction operations and practise solving mixed fraction problems. You will also learn how fractions are used in real-life situations.</p>
+      <div class="hero-chips">
+        <span class="hero-chip">➕ Addition</span>
+        <span class="hero-chip">➖ Subtraction</span>
+        <span class="hero-chip">✖️ Multiplication</span>
+        <span class="hero-chip">➗ Division</span>
+        <span class="hero-chip">🔢 Mixed Numbers</span>
+        <span class="hero-chip">📝 Word Problems</span>
+      </div>
+      <div class="hero-btns">
+        <button class="btn btn-yellow btn-lg" onclick="goTo('recall')">📖 Start Learning</button>
+        <button class="btn btn-green btn-lg" onclick="beginQuiz()">🎯 Start Quiz</button>
+      </div>
+      <p style="margin-top:18px;font-size:.78rem;opacity:.6;font-weight:700">✏️ Created by Bright EngMath</p>
+    </div>
+  </div>
+
+  <div class="container section">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+      <div class="card" style="text-align:center;border-top:4px solid var(--blue)">
+        <div style="font-size:2.2rem;margin-bottom:8px">📖</div>
+        <h3>Let's Recall</h3>
+        <p style="font-size:.88rem;margin:8px 0 14px;color:var(--gray)">Review all 4 fraction operations plus mixed numbers and BIDMAS.</p>
+        <button class="btn btn-outline btn-sm" onclick="goTo('recall')">Review Now</button>
+      </div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--yellow)">
+        <div style="font-size:2.2rem;margin-bottom:8px">💡</div>
+        <h3>Tips &amp; Advice</h3>
+        <p style="font-size:.88rem;margin:8px 0 14px;color:var(--gray)">8 useful tips for tackling fraction problems and word problems.</p>
+        <button class="btn btn-outline btn-sm" onclick="goTo('tips')">See Tips</button>
+      </div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--green)">
+        <div style="font-size:2.2rem;margin-bottom:8px">✏️</div>
+        <h3>Guided Practice</h3>
+        <p style="font-size:.88rem;margin:8px 0 14px;color:var(--gray)">5 practice questions with full step-by-step solutions.</p>
+        <button class="btn btn-outline btn-sm" onclick="goTo('practice')">Practise</button>
+      </div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--orange)">
+        <div style="font-size:2.2rem;margin-bottom:8px">🌍</div>
+        <h3>Math in Real Life</h3>
+        <p style="font-size:.88rem;margin:8px 0 14px;color:var(--gray)">See how fractions are used in cooking, shopping, and more.</p>
+        <button class="btn btn-outline btn-sm" onclick="goTo('reallife')">Explore</button>
+      </div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--purple)">
+        <div style="font-size:2.2rem;margin-bottom:8px">🎯</div>
+        <h3>Quiz — 25 Questions</h3>
+        <p style="font-size:.88rem;margin:8px 0 14px;color:var(--gray)">Test yourself with 25 questions and get your score and grade.</p>
+        <button class="btn btn-primary btn-sm" onclick="beginQuiz()">Start Quiz</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PAGE — RECALL
+══════════════════════════════════════════════════ -->
+<div id="page-recall" class="page">
+  <div class="container section">
+    <div class="sec-hd">
+      <div class="sec-ico ico-b">📘</div>
+      <div><span class="badge b-blue">Let's Recall</span><h2 style="margin-top:4px">Fraction Operations</h2></div>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn on" onclick="showTab('ta')">➕ Adding</button>
+      <button class="tab-btn" onclick="showTab('tb')">➖ Subtracting</button>
+      <button class="tab-btn" onclick="showTab('tc')">✖️ Multiplying</button>
+      <button class="tab-btn" onclick="showTab('td')">➗ Dividing</button>
+      <button class="tab-btn" onclick="showTab('te')">🔢 Mixed Numbers</button>
+      <button class="tab-btn" onclick="showTab('tf')">📋 BIDMAS</button>
+    </div>
+
+    <!-- A: ADDING -->
+    <div id="tab-ta" class="tab-content on">
+      <div class="card">
+        <span class="op-chip op-add" style="margin-bottom:12px">➕ Adding Fractions</span>
+        <div class="def-box">
+          <p>To add fractions with the <strong>same denominator</strong>, add the numerators and keep the denominator.</p>
+        </div>
+        <div class="ex-box">
+          <div class="elbl">Same Denominator</div>
+          <p style="font-size:1.05rem;font-weight:700">
+            <span class="fr"><span class="n">2</span><span class="d">7</span></span>
+            <span class="op">+</span>
+            <span class="fr"><span class="n">3</span><span class="d">7</span></span>
+            <span class="op">=</span>
+            <span class="fr"><span class="n">2+3</span><span class="d">7</span></span>
+            <span class="op">=</span>
+            <span class="fr"><span class="n">5</span><span class="d">7</span></span>
+          </p>
+        </div>
+        <div class="def-box" style="margin-top:18px">
+          <p>For <strong>different denominators</strong>, find the Lowest Common Denominator (LCD) first, then convert and add.</p>
+        </div>
+        <div class="ex-box">
+          <div class="elbl">Different Denominators — Find LCM(3,4) = 12</div>
+          <div class="step"><div class="slbl">Step 1 — Convert to same denominator</div>
+            <span class="fr"><span class="n">1</span><span class="d">3</span></span>
+            <span class="op">=</span>
+            <span class="fr"><span class="n">4</span><span class="d">12</span></span>
+            &nbsp;&nbsp;&nbsp;
+            <span class="fr"><span class="n">1</span><span class="d">4</span></span>
+            <span class="op">=</span>
+            <span class="fr"><span class="n">3</span><span class="d">12</span></span>
+          </div>
+          <div class="step g"><div class="slbl">Step 2 — Add</div>
+            <span class="fr"><span class="n">4</span><span class="d">12</span></span>
+            <span class="op">+</span>
+            <span class="fr"><span class="n">3</span><span class="d">12</span></span>
+            <span class="op">=</span>
+            <span style="font-size:1.1rem;font-weight:900;color:var(--green-d)">
+              <span class="fr"><span class="n">7</span><span class="d">12</span></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B: SUBTRACTING -->
+    <div id="tab-tb" class="tab-content">
+      <div class="card">
+        <span class="op-chip op-sub" style="margin-bottom:12px">➖ Subtracting Fractions</span>
+        <div class="def-box">
+          <p>To subtract fractions with <strong>different denominators</strong>, find the common denominator first, convert, then subtract the numerators.</p>
+        </div>
+        <div class="ex-box">
+          <div class="elbl">Example — LCM(4,6) = 12</div>
+          <div class="step"><div class="slbl">Step 1 — Convert</div>
+            <span class="fr"><span class="n">3</span><span class="d">4</span></span>
+            <span class="op">=</span>
+            <span class="fr"><span class="n">9</span><span class="d">12</span></span>
+            &nbsp;&nbsp;&nbsp;
+            <span class="fr"><span class="n">1</span><span class="d">6</span></span>
+            <span class="op">=</span>
+            <span class="fr"><span class="n">2</span><span class="d">12</span></span>
+          </div>
+          <div class="step g"><div class="slbl">Step 2 — Subtract</div>
+            <span class="fr"><span class="n">9</span><span class="d">12</span></span>
+            <span class="op">−</span>
+            <span class="fr"><span class="n">2</span><span class="d">12</span></span>
+            <span class="op">=</span>
+            <span style="font-size:1.1rem;font-weight:900;color:var(--green-d)">
+              <span class="fr"><span class="n">7</span><span class="d">12</span></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C: MULTIPLYING -->
+    <div id="tab-tc" class="tab-content">
+      <div class="card">
+        <span class="op-chip op-mul" style="margin-bottom:12px">✖️ Multiplying Fractions</span>
+        <div class="def-box">
+          <p>Multiply the <strong>numerators</strong> together, then multiply the <strong>denominators</strong> together. Simplify if possible.</p>
+        </div>
+        <div class="ex-box">
+          <div class="elbl">Example</div>
+          <div class="step"><div class="slbl">Multiply numerators: 2 × 4 = 8 &nbsp;|&nbsp; Multiply denominators: 3 × 5 = 15</div>
+            <span class="fr"><span class="n">2</span><span class="d">3</span></span>
+            <span class="op">×</span>
+            <span class="fr"><span class="n">4</span><span class="d">5</span></span>
+            <span class="op">=</span>
+            <span class="fr"><span class="n">2 × 4</span><span class="d">3 × 5</span></span>
+            <span class="op">=</span>
+            <span style="font-size:1.1rem;font-weight:900;color:var(--green-d)">
+              <span class="fr"><span class="n">8</span><span class="d">15</span></span>
+            </span>
+          </div>
+        </div>
+        <div class="def-box" style="margin-top:16px">
+          <p>💡 <strong>"of" means multiply!</strong> &nbsp; e.g. "half of <span class="fr"><span class="n">3</span><span class="d">4</span></span>" means <span class="fr"><span class="n">1</span><span class="d">2</span></span> × <span class="fr"><span class="n">3</span><span class="d">4</span></span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- D: DIVIDING -->
+    <div id="tab-td" class="tab-content">
+      <div class="card">
+        <span class="op-chip op-div" style="margin-bottom:12px">➗ Dividing Fractions</span>
+        <div class="def-box">
+          <p>Use the <strong>Keep–Change–Flip</strong> method:</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;text-align:center">
+          <div class="card" style="background:var(--green-l);border:2px solid var(--green);padding:16px 10px">
+            <div style="font-size:1.6rem">🔒</div>
+            <div style="font-weight:900;color:var(--green-d);margin-top:4px">KEEP</div>
+            <div style="font-size:.82rem;color:var(--green-d);margin-top:4px">Keep the first fraction</div>
+          </div>
+          <div class="card" style="background:var(--yellow-l);border:2px solid var(--yellow);padding:16px 10px">
+            <div style="font-size:1.6rem">🔄</div>
+            <div style="font-weight:900;color:var(--yellow-d);margin-top:4px">CHANGE</div>
+            <div style="font-size:.82rem;color:var(--yellow-d);margin-top:4px">÷ becomes ×</div>
+          </div>
+          <div class="card" style="background:var(--blue-l);border:2px solid var(--blue);padding:16px 10px">
+            <div style="font-size:1.6rem">🔃</div>
+            <div style="font-weight:900;color:var(--blue-d);margin-top:4px">FLIP</div>
+            <div style="font-size:.82rem;color:var(--blue-d);margin-top:4px">Flip the second fraction</div>
+          </div>
+        </div>
+        <div class="ex-box">
+          <div class="elbl">Example</div>
+          <div class="step"><div class="slbl">Apply Keep–Change–Flip</div>
+            <span class="fr"><span class="n">2</span><span class="d">3</span></span>
+            <span class="op">÷</span>
+            <span class="fr"><span class="n">4</span><span class="d">5</span></span>
+            <span class="op">=</span>
+            <span class="fr"><span class="n">2</span><span class="d">3</span></span>
+            <span class="op">×</span>
+            <span class="fr"><span class="n">5</span><span class="d">4</span></span>
+            <span class="op">=</span>
+            <span class="fr"><span class="n">10</span><span class="d">12</span></span>
+          </div>
+          <div class="step g"><div class="slbl">Simplify ÷ 2</div>
+            <span class="fr"><span class="n">10</span><span class="d">12</span></span>
+            <span class="op">=</span>
+            <span style="font-size:1.1rem;font-weight:900;color:var(--green-d)">
+              <span class="fr"><span class="n">5</span><span class="d">6</span></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E: MIXED NUMBERS -->
+    <div id="tab-te" class="tab-content">
+      <div class="card">
+        <span class="badge b-purple" style="margin-bottom:12px">🔢 Mixed Numbers</span>
+        <div class="def-box">
+          <p>A <strong>mixed number</strong> has a whole part and a fraction part. Example: <span class="mix"><span>2</span><span class="fr"><span class="n">1</span><span class="d">3</span></span></span></p>
+        </div>
+        <div class="def-box" style="margin-top:16px;--blue:#8B5CF6;border-color:var(--purple)">
+          <p>To calculate with mixed numbers, first convert to an <strong>improper fraction</strong>:</p>
+        </div>
+        <div class="ex-box">
+          <div class="elbl">Converting Mixed Number → Improper Fraction</div>
+          <div class="step"><div class="slbl">Formula: (whole × denominator) + numerator, over the same denominator</div>
+            <span class="mix"><span>2</span><span class="fr"><span class="n">1</span><span class="d">3</span></span></span>
+            <span class="op">=</span>
+            <span class="fr"><span class="n">(2 × 3) + 1</span><span class="d">3</span></span>
+            <span class="op">=</span>
+            <span style="font-size:1.1rem;font-weight:900;color:var(--green-d)">
+              <span class="fr"><span class="n">7</span><span class="d">3</span></span>
+            </span>
+          </div>
+        </div>
+        <div class="ex-box" style="margin-top:12px">
+          <div class="elbl">More Examples</div>
+          <p style="font-size:.95rem;font-weight:700">
+            <span class="mix"><span>1</span><span class="fr"><span class="n">1</span><span class="d">2</span></span></span> =
+            <span class="fr"><span class="n">3</span><span class="d">2</span></span>
+            &nbsp;&nbsp;&nbsp;
+            <span class="mix"><span>3</span><span class="fr"><span class="n">2</span><span class="d">5</span></span></span> =
+            <span class="fr"><span class="n">17</span><span class="d">5</span></span>
+            &nbsp;&nbsp;&nbsp;
+            <span class="mix"><span>2</span><span class="fr"><span class="n">3</span><span class="d">4</span></span></span> =
+            <span class="fr"><span class="n">11</span><span class="d">4</span></span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- F: BIDMAS -->
+    <div id="tab-tf" class="tab-content">
+      <div class="card">
+        <span class="badge b-pink" style="margin-bottom:12px">📋 Order of Operations — BIDMAS</span>
+        <div class="def-box">
+          <p>When an expression has more than one operation, always follow this order:</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin:16px 0;text-align:center">
+          <div style="background:#FEE2E2;border-radius:12px;padding:14px 8px"><div style="font-size:1.5rem">( )</div><div style="font-weight:900;color:var(--red-d);margin-top:4px">Brackets</div></div>
+          <div style="background:var(--purple-l);border-radius:12px;padding:14px 8px"><div style="font-size:1.5rem">x²</div><div style="font-weight:900;color:var(--purple-d);margin-top:4px">Indices</div></div>
+          <div style="background:var(--yellow-l);border-radius:12px;padding:14px 8px"><div style="font-size:1.5rem">✖️➗</div><div style="font-weight:900;color:var(--yellow-d);margin-top:4px">× and ÷</div></div>
+          <div style="background:var(--green-l);border-radius:12px;padding:14px 8px"><div style="font-size:1.5rem">➕➖</div><div style="font-weight:900;color:var(--green-d);margin-top:4px">+ and −</div></div>
+        </div>
+        <div class="card" style="background:#FFF7ED;border:1.5px solid var(--orange);padding:14px 16px;margin-bottom:14px">
+          <p style="font-size:.88rem"><strong>⚠️ Important:</strong> Multiplication and division are done <strong>left to right</strong>. Addition and subtraction are also done <strong>left to right</strong>.</p>
+        </div>
+        <div class="ex-box">
+          <div class="elbl">Example — 1/2 + 2/3 × 3/4</div>
+          <div class="step y"><div class="slbl">Step 1 — Multiply first (BIDMAS)</div>
+            <span class="fr"><span class="n">2</span><span class="d">3</span></span>
+            <span class="op">×</span>
+            <span class="fr"><span class="n">3</span><span class="d">4</span></span>
+            <span class="op">=</span>
+            <span class="fr"><span class="n">6</span><span class="d">12</span></span>
+            <span class="op">=</span>
+            <span class="fr"><span class="n">1</span><span class="d">2</span></span>
+          </div>
+          <div class="step g"><div class="slbl">Step 2 — Then add</div>
+            <span class="fr"><span class="n">1</span><span class="d">2</span></span>
+            <span class="op">+</span>
+            <span class="fr"><span class="n">1</span><span class="d">2</span></span>
+            <span class="op">=</span>
+            <span style="font-size:1.2rem;font-weight:900;color:var(--green-d)">1</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-outline" onclick="goTo('home')">← Home</button>
+      <button class="btn btn-primary" onclick="goTo('tips')">Next: Tips ➜</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PAGE — TIPS
+══════════════════════════════════════════════════ -->
+<div id="page-tips" class="page">
+  <div class="container section">
+    <div class="sec-hd">
+      <div class="sec-ico ico-y">💡</div>
+      <div><span class="badge b-yellow">Study Tips</span><h2 style="margin-top:4px">How to Solve Mixed Fraction Operations</h2></div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-num">1</div>
+      <div><h3>Check the operation first</h3><p style="margin-top:6px;font-size:.92rem">Look carefully at whether the question uses <strong>+</strong>, <strong>−</strong>, <strong>×</strong>, or <strong>÷</strong>. Don't rush — each operation has a different method.</p></div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">2</div>
+      <div><h3>Convert mixed numbers first</h3><p style="margin-top:6px;font-size:.92rem">If the question has mixed numbers like <span class="mix"><span>2</span><span class="fr"><span class="n">1</span><span class="d">3</span></span></span>, always convert them to improper fractions before calculating.</p></div>
+    </div>
+    <div class="tip-card" style="border-color:var(--green)">
+      <div class="tip-num" style="background:var(--green)">3</div>
+      <div><h3>Same denominator for + and −</h3><p style="margin-top:6px;font-size:.92rem">For addition and subtraction, the denominators must be the same. Find the LCM of the denominators to create an equivalent fraction.</p></div>
+    </div>
+    <div class="tip-card" style="border-color:var(--yellow)">
+      <div class="tip-num" style="background:var(--yellow)">4</div>
+      <div><h3>Multiply across for ×</h3><p style="margin-top:6px;font-size:.92rem">For multiplication, just multiply numerators together and denominators together. Simplify if possible — you can even cross-cancel before multiplying!</p></div>
+    </div>
+    <div class="tip-card" style="border-color:var(--purple)">
+      <div class="tip-num" style="background:var(--purple)">5</div>
+      <div><h3>Keep–Change–Flip for ÷</h3><p style="margin-top:6px;font-size:.92rem">For division: <strong>Keep</strong> the first fraction → <strong>Change</strong> ÷ to × → <strong>Flip</strong> the second fraction. Then multiply normally.</p></div>
+    </div>
+    <div class="tip-card" style="border-color:var(--red)">
+      <div class="tip-num" style="background:var(--red)">6</div>
+      <div><h3>Follow BIDMAS always</h3><p style="margin-top:6px;font-size:.92rem">When a problem has more than one operation, always do <strong>× and ÷ before + and −</strong>. Brackets are done first of all.</p></div>
+    </div>
+    <div class="tip-card" style="border-color:var(--green)">
+      <div class="tip-num" style="background:var(--green)">7</div>
+      <div><h3>Simplify your answer</h3><p style="margin-top:6px;font-size:.92rem">Always check if your fraction can be simplified. Divide the numerator and denominator by their HCF. Convert improper fractions to mixed numbers if asked.</p></div>
+    </div>
+    <div class="tip-card" style="border-color:var(--orange)">
+      <div class="tip-num" style="background:var(--orange)">8</div>
+      <div><h3>Read word problems carefully</h3><p style="margin-top:6px;font-size:.92rem">Underline important numbers and keywords. The keyword tells you which operation to use.</p>
+        <div class="kw-grid" style="margin-top:12px">
+          <div class="kw-card kw-add"><div class="kw-kw">altogether · total · combined</div><div class="kw-op">→ Addition ➕</div></div>
+          <div class="kw-card kw-sub"><div class="kw-kw">left · remaining · how much more</div><div class="kw-op">→ Subtraction ➖</div></div>
+          <div class="kw-card kw-mul"><div class="kw-kw">of · times · product</div><div class="kw-op">→ Multiplication ✖️</div></div>
+          <div class="kw-card kw-div"><div class="kw-kw">shared equally · per · each · split</div><div class="kw-op">→ Division ➗</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-outline" onclick="goTo('recall')">← Recall</button>
+      <button class="btn btn-primary" onclick="goTo('practice')">Next: Practice ➜</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PAGE — GUIDED PRACTICE
+══════════════════════════════════════════════════ -->
+<div id="page-practice" class="page">
+  <div class="container section">
+    <div class="sec-hd">
+      <div class="sec-ico ico-g">✏️</div>
+      <div><span class="badge b-green">Guided Practice</span><h2 style="margin-top:4px">Try It Yourself!</h2></div>
+    </div>
+    <p style="margin-bottom:20px;color:var(--gray)">Choose the correct answer. Full step-by-step working appears after you answer.</p>
+
+    <!-- GP1 -->
+    <div class="gp-card" id="gpc1">
+      <span class="op-chip op-add" style="margin-bottom:10px">➕ Addition</span>
+      <h3 style="margin-top:4px">What is <span class="fr"><span class="n">1</span><span class="d">4</span></span> + <span class="fr"><span class="n">2</span><span class="d">4</span></span> ?</h3>
+      <div class="gp-choices" id="gpc1-ch">
+        <button class="gp-btn" onclick="checkGP(1,0)"><span class="gp-lbl">A</span><span><span class="fr"><span class="n">1</span><span class="d">4</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(1,1)"><span class="gp-lbl">B</span><span><span class="fr"><span class="n">2</span><span class="d">4</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(1,2)"><span class="gp-lbl">C</span><span><span class="fr"><span class="n">3</span><span class="d">4</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(1,3)"><span class="gp-lbl">D</span><span><span class="fr"><span class="n">4</span><span class="d">4</span></span></span></button>
+      </div>
+      <div class="gp-working" id="gpc1-w">
+        <div class="step"><div class="slbl">The denominators are the same → add the numerators</div>1 + 2 = 3</div>
+        <div class="step g"><div class="slbl">Answer</div>
+          <span class="fr"><span class="n">1</span><span class="d">4</span></span> +
+          <span class="fr"><span class="n">2</span><span class="d">4</span></span> =
+          <strong><span class="fr"><span class="n">3</span><span class="d">4</span></span></strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- GP2 -->
+    <div class="gp-card" id="gpc2">
+      <span class="op-chip op-sub" style="margin-bottom:10px">➖ Subtraction</span>
+      <h3 style="margin-top:4px">What is <span class="fr"><span class="n">3</span><span class="d">5</span></span> − <span class="fr"><span class="n">1</span><span class="d">10</span></span> ?</h3>
+      <div class="gp-choices" id="gpc2-ch">
+        <button class="gp-btn" onclick="checkGP(2,0)"><span class="gp-lbl">A</span><span><span class="fr"><span class="n">2</span><span class="d">15</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(2,1)"><span class="gp-lbl">B</span><span><span class="fr"><span class="n">4</span><span class="d">10</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(2,2)"><span class="gp-lbl">C</span><span><span class="fr"><span class="n">1</span><span class="d">2</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(2,3)"><span class="gp-lbl">D</span><span><span class="fr"><span class="n">1</span><span class="d">5</span></span></span></button>
+      </div>
+      <div class="gp-working" id="gpc2-w">
+        <div class="step"><div class="slbl">Common denominator = 10 (LCM of 5 and 10)</div>
+          <span class="fr"><span class="n">3</span><span class="d">5</span></span> =
+          <span class="fr"><span class="n">6</span><span class="d">10</span></span>
+        </div>
+        <div class="step y"><div class="slbl">Subtract</div>
+          <span class="fr"><span class="n">6</span><span class="d">10</span></span> −
+          <span class="fr"><span class="n">1</span><span class="d">10</span></span> =
+          <span class="fr"><span class="n">5</span><span class="d">10</span></span>
+        </div>
+        <div class="step g"><div class="slbl">Simplify ÷ 5</div>
+          <span class="fr"><span class="n">5</span><span class="d">10</span></span> =
+          <strong><span class="fr"><span class="n">1</span><span class="d">2</span></span></strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- GP3 -->
+    <div class="gp-card" id="gpc3">
+      <span class="op-chip op-mul" style="margin-bottom:10px">✖️ Multiplication</span>
+      <h3 style="margin-top:4px">What is <span class="fr"><span class="n">2</span><span class="d">3</span></span> × <span class="fr"><span class="n">3</span><span class="d">4</span></span> ?</h3>
+      <div class="gp-choices" id="gpc3-ch">
+        <button class="gp-btn" onclick="checkGP(3,0)"><span class="gp-lbl">A</span><span><span class="fr"><span class="n">5</span><span class="d">7</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(3,1)"><span class="gp-lbl">B</span><span><span class="fr"><span class="n">6</span><span class="d">7</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(3,2)"><span class="gp-lbl">C</span><span><span class="fr"><span class="n">1</span><span class="d">2</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(3,3)"><span class="gp-lbl">D</span><span><span class="fr"><span class="n">2</span><span class="d">4</span></span></span></button>
+      </div>
+      <div class="gp-working" id="gpc3-w">
+        <div class="step"><div class="slbl">Multiply numerators: 2 × 3 = 6 &nbsp;|&nbsp; Multiply denominators: 3 × 4 = 12</div>
+          <span class="fr"><span class="n">2</span><span class="d">3</span></span> ×
+          <span class="fr"><span class="n">3</span><span class="d">4</span></span> =
+          <span class="fr"><span class="n">6</span><span class="d">12</span></span>
+        </div>
+        <div class="step g"><div class="slbl">Simplify ÷ 6</div>
+          <span class="fr"><span class="n">6</span><span class="d">12</span></span> =
+          <strong><span class="fr"><span class="n">1</span><span class="d">2</span></span></strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- GP4 -->
+    <div class="gp-card" id="gpc4">
+      <span class="op-chip op-div" style="margin-bottom:10px">➗ Division</span>
+      <h3 style="margin-top:4px">What is <span class="fr"><span class="n">4</span><span class="d">5</span></span> ÷ <span class="fr"><span class="n">2</span><span class="d">3</span></span> ?</h3>
+      <div class="gp-choices" id="gpc4-ch">
+        <button class="gp-btn" onclick="checkGP(4,0)"><span class="gp-lbl">A</span><span><span class="fr"><span class="n">8</span><span class="d">15</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(4,1)"><span class="gp-lbl">B</span><span><span class="fr"><span class="n">4</span><span class="d">10</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(4,2)"><span class="gp-lbl">C</span><span><span class="fr"><span class="n">6</span><span class="d">5</span></span> = <span class="mix"><span>1</span><span class="fr"><span class="n">1</span><span class="d">5</span></span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(4,3)"><span class="gp-lbl">D</span><span><span class="fr"><span class="n">5</span><span class="d">6</span></span></span></button>
+      </div>
+      <div class="gp-working" id="gpc4-w">
+        <div class="step"><div class="slbl">Keep–Change–Flip</div>
+          <span class="fr"><span class="n">4</span><span class="d">5</span></span> ÷
+          <span class="fr"><span class="n">2</span><span class="d">3</span></span> =
+          <span class="fr"><span class="n">4</span><span class="d">5</span></span> ×
+          <span class="fr"><span class="n">3</span><span class="d">2</span></span>
+        </div>
+        <div class="step y"><div class="slbl">Multiply</div>
+          <span class="fr"><span class="n">4 × 3</span><span class="d">5 × 2</span></span> =
+          <span class="fr"><span class="n">12</span><span class="d">10</span></span>
+        </div>
+        <div class="step g"><div class="slbl">Simplify ÷ 2, then convert to mixed number</div>
+          <span class="fr"><span class="n">12</span><span class="d">10</span></span> =
+          <span class="fr"><span class="n">6</span><span class="d">5</span></span> =
+          <strong><span class="mix"><span>1</span><span class="fr"><span class="n">1</span><span class="d">5</span></span></span></strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- GP5 -->
+    <div class="gp-card" id="gpc5">
+      <span class="op-chip op-mix" style="margin-bottom:10px">📋 BIDMAS</span>
+      <h3 style="margin-top:4px">What is <span class="fr"><span class="n">1</span><span class="d">2</span></span> + <span class="fr"><span class="n">2</span><span class="d">3</span></span> × <span class="fr"><span class="n">3</span><span class="d">4</span></span> ?</h3>
+      <div class="gp-choices" id="gpc5-ch">
+        <button class="gp-btn" onclick="checkGP(5,0)"><span class="gp-lbl">A</span><span><span class="fr"><span class="n">3</span><span class="d">4</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(5,1)"><span class="gp-lbl">B</span><span><span class="fr"><span class="n">5</span><span class="d">6</span></span></span></button>
+        <button class="gp-btn" onclick="checkGP(5,2)"><span class="gp-lbl">C</span><span>1</span></button>
+        <button class="gp-btn" onclick="checkGP(5,3)"><span class="gp-lbl">D</span><span><span class="mix"><span>1</span><span class="fr"><span class="n">1</span><span class="d">4</span></span></span></span></button>
+      </div>
+      <div class="gp-working" id="gpc5-w">
+        <div class="step y"><div class="slbl">BIDMAS — Multiply first</div>
+          <span class="fr"><span class="n">2</span><span class="d">3</span></span> ×
+          <span class="fr"><span class="n">3</span><span class="d">4</span></span> =
+          <span class="fr"><span class="n">6</span><span class="d">12</span></span> =
+          <span class="fr"><span class="n">1</span><span class="d">2</span></span>
+        </div>
+        <div class="step"><div class="slbl">Now add</div>
+          <span class="fr"><span class="n">1</span><span class="d">2</span></span> +
+          <span class="fr"><span class="n">1</span><span class="d">2</span></span> =
+          <span class="fr"><span class="n">2</span><span class="d">2</span></span>
+        </div>
+        <div class="step g"><div class="slbl">Answer</div>
+          <strong>1</strong>
+        </div>
+      </div>
+    </div>
+
+    <div id="gp-complete" style="display:none" class="card anim-fade" style="border:2px solid var(--green);text-align:center">
+      <div style="font-size:2.5rem;margin-bottom:8px">🎉</div>
+      <h3 style="color:var(--green-d)">All practice questions done!</h3>
+      <p style="margin:8px 0 16px;font-size:.92rem">Excellent work! You're ready for the quiz.</p>
+      <button class="btn btn-primary btn-lg" onclick="beginQuiz()">Start the Quiz 🎯</button>
+    </div>
+
+    <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap" id="gp-nav">
+      <button class="btn btn-outline" onclick="goTo('tips')">← Tips</button>
+      <button class="btn btn-primary" onclick="goTo('reallife')">Next: Real Life ➜</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PAGE — REAL LIFE
+══════════════════════════════════════════════════ -->
+<div id="page-reallife" class="page">
+  <div class="container section">
+    <div class="sec-hd">
+      <div class="sec-ico ico-o">🌍</div>
+      <div><span class="badge b-orange">Real-World Maths</span><h2 style="margin-top:4px">Math in Real Life</h2></div>
+    </div>
+    <p style="margin-bottom:22px;color:var(--gray)">Fractions appear everywhere in daily life — here are some examples you might encounter.</p>
+    <div class="rl-grid">
+      <div class="rl-card" style="border-color:var(--yellow)">
+        <div class="rl-icon">🍳</div>
+        <h3>Cooking &amp; Recipes</h3>
+        <p style="font-size:.88rem;color:var(--gray)">Recipes often use fractions for measurements like cups, teaspoons, and tablespoons.</p>
+        <div class="rl-card ex" style="background:var(--yellow-l);color:var(--yellow-d)">
+          A recipe needs <span class="fr"><span class="n">3</span><span class="d">4</span></span> cup of milk. Making half the recipe:<br>
+          <span class="fr"><span class="n">1</span><span class="d">2</span></span> × <span class="fr"><span class="n">3</span><span class="d">4</span></span> = <strong><span class="fr"><span class="n">3</span><span class="d">8</span></span> cup</strong>
+        </div>
+      </div>
+      <div class="rl-card" style="border-color:var(--green)">
+        <div class="rl-icon">🍕</div>
+        <h3>Sharing Food</h3>
+        <p style="font-size:.88rem;color:var(--gray)">When sharing pizza, cake, or other food, we use fractions to describe each person's share.</p>
+        <div class="rl-card ex" style="background:var(--green-l);color:var(--green-d)">
+          A pizza is shared equally among 6 people. Each person gets <strong><span class="fr"><span class="n">1</span><span class="d">6</span></span></strong> of the pizza.
+        </div>
+      </div>
+      <div class="rl-card" style="border-color:var(--blue)">
+        <div class="rl-icon">🧴</div>
+        <h3>Measuring Liquid</h3>
+        <p style="font-size:.88rem;color:var(--gray)">Liquid amounts in bottles, glasses, and containers are often described using fractions.</p>
+        <div class="rl-card ex" style="background:var(--blue-l);color:var(--blue-d)">
+          A bottle has <span class="fr"><span class="n">3</span><span class="d">4</span></span> L of juice. After drinking <span class="fr"><span class="n">1</span><span class="d">2</span></span> L:<br>
+          <span class="fr"><span class="n">3</span><span class="d">4</span></span> − <span class="fr"><span class="n">1</span><span class="d">2</span></span> = <strong><span class="fr"><span class="n">1</span><span class="d">4</span></span> L left</strong>
+        </div>
+      </div>
+      <div class="rl-card" style="border-color:var(--pink)">
+        <div class="rl-icon">🎀</div>
+        <h3>Cutting Rope or Ribbon</h3>
+        <p style="font-size:.88rem;color:var(--gray)">When crafting or wrapping, we often cut ribbon into fractional lengths.</p>
+        <div class="rl-card ex" style="background:var(--pink-l);color:#9D174D">
+          You have <span class="mix"><span>2</span><span class="fr"><span class="n">1</span><span class="d">2</span></span></span> m of ribbon. You use <span class="mix"><span>1</span><span class="fr"><span class="n">1</span><span class="d">4</span></span></span> m:<br>
+          <span class="mix"><span>2</span><span class="fr"><span class="n">1</span><span class="d">2</span></span></span> − <span class="mix"><span>1</span><span class="fr"><span class="n">1</span><span class="d">4</span></span></span> = <strong><span class="mix"><span>1</span><span class="fr"><span class="n">1</span><span class="d">4</span></span></span> m left</strong>
+        </div>
+      </div>
+      <div class="rl-card" style="border-color:var(--orange)">
+        <div class="rl-icon">🛍️</div>
+        <h3>Shopping Discounts</h3>
+        <p style="font-size:.88rem;color:var(--gray)">Discounts are often fractions of the original price (e.g., <span class="fr"><span class="n">1</span><span class="d">4</span></span> off).</p>
+        <div class="rl-card ex" style="background:var(--orange-l);color:#9A3412">
+          A shirt costs ฿240. Sale is <span class="fr"><span class="n">1</span><span class="d">4</span></span> off:<br>
+          Discount = <span class="fr"><span class="n">1</span><span class="d">4</span></span> × 240 = <strong>฿60 off</strong>
+        </div>
+      </div>
+      <div class="rl-card" style="border-color:var(--purple)">
+        <div class="rl-icon">⏱️</div>
+        <h3>Time &amp; Distance</h3>
+        <p style="font-size:.88rem;color:var(--gray)">Journey times and distances are often expressed as fractions of an hour or kilometre.</p>
+        <div class="rl-card ex" style="background:var(--purple-l);color:var(--purple-d)">
+          A journey takes <span class="fr"><span class="n">3</span><span class="d">4</span></span> hour. After <span class="fr"><span class="n">1</span><span class="d">4</span></span> hour: <br>
+          <span class="fr"><span class="n">3</span><span class="d">4</span></span> − <span class="fr"><span class="n">1</span><span class="d">4</span></span> = <strong><span class="fr"><span class="n">2</span><span class="d">4</span></span> = <span class="fr"><span class="n">1</span><span class="d">2</span></span> hour left</strong>
+        </div>
+      </div>
+      <div class="rl-card" style="border-color:var(--green)">
+        <div class="rl-icon">⚽</div>
+        <h3>Sports &amp; Practice</h3>
+        <p style="font-size:.88rem;color:var(--gray)">Practice schedules and game statistics often use fractions to describe time and performance.</p>
+        <div class="rl-card ex" style="background:var(--green-l);color:var(--green-d)">
+          A player trains for <span class="mix"><span>1</span><span class="fr"><span class="n">1</span><span class="d">2</span></span></span> hours, 4 days a week:<br>
+          Total = <span class="mix"><span>1</span><span class="fr"><span class="n">1</span><span class="d">2</span></span></span> × 4 = <strong>6 hours</strong>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-outline" onclick="goTo('practice')">← Practice</button>
+      <button class="btn btn-primary" onclick="beginQuiz()">Start Quiz 🎯</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PAGE — QUIZ
+══════════════════════════════════════════════════ -->
+<div id="page-quiz" class="page">
+  <div class="container" style="padding-top:22px;padding-bottom:40px">
+    <div class="qz-header">
+      <div class="qz-meta">
+        <span class="qz-counter" id="qz-counter">Question 1 of 25</span>
+        <span class="qz-score" id="qz-score">⭐ 0 pts</span>
+      </div>
+      <div class="pbar-w"><div class="pbar-f" id="qz-pbar" style="width:0%"></div></div>
+      <div class="pbar-row">
+        <span id="qz-correct">✅ 0 correct</span>
+        <span id="qz-wrong">❌ 0 wrong</span>
+      </div>
+    </div>
+
+    <div class="qz-card anim-fade" id="qz-card">
+      <div id="qz-type"></div>
+      <div class="q-text" id="qz-text"></div>
+      <div class="q-choices" id="qz-choices"></div>
+      <div class="q-fb" id="qz-fb">
+        <div class="fb-hd" id="qz-fb-hd"></div>
+        <div class="fb-exp" id="qz-fb-exp"></div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-full" id="btn-next" style="display:none" onclick="nextQ()">
+      Next Question ➜
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PAGE — RESULTS
+══════════════════════════════════════════════════ -->
+<div id="page-results" class="page">
+  <div class="container" style="padding:28px 18px 56px">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:3.5rem;margin-bottom:8px" id="r-deco">🏆</div>
+      <h1 id="r-title">Excellent!</h1>
+      <p style="color:var(--gray)">Mixed Operations Involving Fractions · Grade 6</p>
+    </div>
+
+    <div style="display:flex;justify-content:center;margin-bottom:22px">
+      <div class="score-arc" id="r-ring">
+        <span class="sv" id="r-score">0/25</span>
+        <span class="sp" id="r-pct">0%</span>
+      </div>
+    </div>
+
+    <div class="card" style="text-align:center;margin-bottom:18px">
+      <div class="badge" id="r-badge" style="font-size:.95rem;padding:9px 24px;margin-bottom:10px"></div>
+      <p id="r-msg" style="font-size:.92rem;line-height:1.7"></p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px">
+      <div class="card" style="text-align:center;border-top:4px solid var(--green);padding:14px 8px">
+        <div style="font-size:1.7rem;font-weight:900;color:var(--green-d)" id="r-nc">0</div>
+        <div style="font-size:.72rem;color:var(--gray)">Correct ✅</div>
+      </div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--red);padding:14px 8px">
+        <div style="font-size:1.7rem;font-weight:900;color:var(--red-d)" id="r-nw">0</div>
+        <div style="font-size:.72rem;color:var(--gray)">Wrong ❌</div>
+      </div>
+      <div class="card" style="text-align:center;border-top:4px solid var(--blue);padding:14px 8px">
+        <div style="font-size:1.7rem;font-weight:900;color:var(--blue-d)" id="r-pct2">0%</div>
+        <div style="font-size:.72rem;color:var(--gray)">Accuracy</div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="background:var(--bg);padding:12px 18px;font-size:.8rem;font-weight:900;
+        color:var(--gray);text-transform:uppercase;letter-spacing:.5px;
+        border-bottom:1.5px solid var(--border)">📋 Question Review</div>
+      <div id="r-review" style="max-height:320px;overflow-y:auto"></div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:22px">
+      <button class="btn btn-outline" style="flex:1;min-width:130px" onclick="goTo('recall')">📖 Review Notes</button>
+      <button class="btn btn-yellow" style="flex:1;min-width:130px" onclick="restartQuiz()">🔄 Try Again</button>
+      <button class="btn btn-primary" style="flex:1;min-width:130px" onclick="goTo('home')">🏠 Home</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════ -->
+<script>
+/* ─────────────────────────────────────────
+   FRACTION HELPERS
+   Use these functions to render fractions as HTML
+───────────────────────────────────────── */
+const F = (n, d) => `<span class="fr"><span class="n">${n}</span><span class="d">${d}</span></span>`;
+const M = (w, n, d) => `<span class="mix"><span>${w}</span>${F(n,d)}</span>`;
+
+/* ─────────────────────────────────────────
+   QUIZ DATA — 25 Questions
+   To edit: change q (question), ch (choices), ans (0-indexed), exp (explanation)
+───────────────────────────────────────── */
+const QUIZ = [
+  // ── Q1: Addition (same denominator)
+  { type:'Addition', typeCls:'op-add',
+    q: `What is ${F(1,6)} + ${F(2,6)} ?`,
+    ch: [F(1,6), F(2,6), F(3,6), F(4,6)],
+    ans: 2,
+    exp: `The denominators are the same, so add the numerators: 1 + 2 = 3. Answer = ${F(3,6)}.` },
+
+  // ── Q2: Subtraction (same denominator)
+  { type:'Subtraction', typeCls:'op-sub',
+    q: `What is ${F(3,4)} − ${F(1,4)} ?`,
+    ch: [F(1,4), F(2,4), F(3,4), F(4,4)],
+    ans: 1,
+    exp: `3 − 1 = 2. Answer = ${F(2,4)} = ${F(1,2)}.` },
+
+  // ── Q3: Addition (different denominators)
+  { type:'Addition', typeCls:'op-add',
+    q: `What is ${F(1,3)} + ${F(1,6)} ?`,
+    ch: [F(1,9), F(2,9), F(1,2), F(2,6)],
+    ans: 2,
+    exp: `Convert: ${F(1,3)} = ${F(2,6)}. Then ${F(2,6)} + ${F(1,6)} = ${F(3,6)} = ${F(1,2)}.` },
+
+  // ── Q4: Subtraction (different denominators)
+  { type:'Subtraction', typeCls:'op-sub',
+    q: `What is ${F(5,6)} − ${F(1,3)} ?`,
+    ch: [F(1,6), F(2,6), F(3,6), F(4,6)],
+    ans: 2,
+    exp: `Convert: ${F(1,3)} = ${F(2,6)}. Then ${F(5,6)} − ${F(2,6)} = ${F(3,6)} = ${F(1,2)}.` },
+
+  // ── Q5: Multiplication
+  { type:'Multiplication', typeCls:'op-mul',
+    q: `What is ${F(2,5)} × ${F(3,4)} ?`,
+    ch: [F(5,9), F(6,20), F(8,15), F(3,10)],
+    ans: 1,
+    exp: `Multiply numerators: 2 × 3 = 6. Multiply denominators: 5 × 4 = 20. Answer = ${F(6,20)} = ${F(3,10)}.` },
+
+  // ── Q6: Multiplication
+  { type:'Multiplication', typeCls:'op-mul',
+    q: `What is ${F(3,7)} × ${F(2,5)} ?`,
+    ch: [F(5,12), F(6,35), F(6,12), F(3,35)],
+    ans: 1,
+    exp: `3 × 2 = 6 and 7 × 5 = 35. Answer = ${F(6,35)}.` },
+
+  // ── Q7: Division
+  { type:'Division', typeCls:'op-div',
+    q: `What is ${F(2,3)} ÷ ${F(1,4)} ?`,
+    ch: [F(2,12), F(2,7), F(8,3), F(3,8)],
+    ans: 2,
+    exp: `Keep–Change–Flip: ${F(2,3)} × ${F(4,1)} = ${F(8,3)}.` },
+
+  // ── Q8: Division
+  { type:'Division', typeCls:'op-div',
+    q: `What is ${F(5,6)} ÷ ${F(2,3)} ?`,
+    ch: [F(5,9), F(10,18), F(15,12), F(12,15)],
+    ans: 2,
+    exp: `Keep–Change–Flip: ${F(5,6)} × ${F(3,2)} = ${F(15,12)} = ${F(5,4)}.` },
+
+  // ── Q9: Mixed Operations (BIDMAS)
+  { type:'Mixed Operations', typeCls:'op-mix',
+    q: `What is ${F(1,2)} + ${F(1,4)} × 2 ?`,
+    ch: ['1', F(3,4), F(2,4), F(1,8)],
+    ans: 0,
+    exp: `Multiply first (BIDMAS): ${F(1,4)} × 2 = ${F(2,4)} = ${F(1,2)}. Then: ${F(1,2)} + ${F(1,2)} = 1.` },
+
+  // ── Q10: Mixed Operations (BIDMAS)
+  { type:'Mixed Operations', typeCls:'op-mix',
+    q: `What is ${F(3,4)} − ${F(1,2)} × ${F(1,3)} ?`,
+    ch: [F(7,12), F(1,12), F(5,12), F(2,3)],
+    ans: 0,
+    exp: `Multiply first: ${F(1,2)} × ${F(1,3)} = ${F(1,6)}. Then: ${F(3,4)} − ${F(1,6)} = ${F(9,12)} − ${F(2,12)} = ${F(7,12)}.` },
+
+  // ── Q11: Mixed Operations (BIDMAS)
+  { type:'Mixed Operations', typeCls:'op-mix',
+    q: `What is ${F(2,3)} + ${F(1,6)} ÷ ${F(1,2)} ?`,
+    ch: ['1', F(2,3), F(1,3), F(5,6)],
+    ans: 0,
+    exp: `Divide first: ${F(1,6)} ÷ ${F(1,2)} = ${F(1,6)} × ${F(2,1)} = ${F(2,6)} = ${F(1,3)}. Then: ${F(2,3)} + ${F(1,3)} = 1.` },
+
+  // ── Q12: Improper Fraction
+  { type:'Mixed Numbers', typeCls:'b-purple',
+    q: `What is ${M(1,1,2)} as an improper fraction?`,
+    ch: [F(2,3), F(3,2), F(4,2), F(5,2)],
+    ans: 1,
+    exp: `(1 × 2) + 1 = 3. Answer = ${F(3,2)}.` },
+
+  // ── Q13: Improper Fraction
+  { type:'Mixed Numbers', typeCls:'b-purple',
+    q: `What is ${M(2,1,3)} as an improper fraction?`,
+    ch: [F(5,3), F(6,3), F(7,3), F(8,3)],
+    ans: 2,
+    exp: `(2 × 3) + 1 = 7. Answer = ${F(7,3)}.` },
+
+  // ── Q14: Mixed Number Addition
+  { type:'Mixed Numbers', typeCls:'b-purple',
+    q: `What is ${M(1,1,2)} + ${F(1,2)} ?`,
+    ch: ['1', M(1,1,2), '2', M(2,1,2)],
+    ans: 2,
+    exp: `Convert: ${M(1,1,2)} = ${F(3,2)}. Then ${F(3,2)} + ${F(1,2)} = ${F(4,2)} = 2.` },
+
+  // ── Q15: Mixed Number Subtraction
+  { type:'Mixed Numbers', typeCls:'b-purple',
+    q: `What is ${M(2,1,4)} − ${F(1,4)} ?`,
+    ch: ['1', '2', M(2,1,4), M(2,1,2)],
+    ans: 1,
+    exp: `Convert: ${M(2,1,4)} = ${F(9,4)}. Then ${F(9,4)} − ${F(1,4)} = ${F(8,4)} = 2.` },
+
+  // ── Q16: "of" = multiply
+  { type:'Multiplication', typeCls:'op-mul',
+    q: `What is ${F(1,2)} of ${F(3,4)} ?`,
+    ch: [F(3,8), F(1,8), F(4,6), F(2,4)],
+    ans: 0,
+    exp: `"Of" means multiply: ${F(1,2)} × ${F(3,4)} = ${F(3,8)}.` },
+
+  // ── Q17: "of" a whole number
+  { type:'Multiplication', typeCls:'op-mul',
+    q: `What is ${F(3,5)} of 10?`,
+    ch: ['2', '4', '6', '8'],
+    ans: 2,
+    exp: `${F(3,5)} × 10 = ${F(30,5)} = 6.` },
+
+  // ── Q18: Word Problem — Addition
+  { type:'Word Problem', typeCls:'op-word',
+    q: `Mia ate ${F(1,4)} of a pizza. Her brother ate ${F(2,4)}. How much pizza did they eat altogether?`,
+    ch: [F(1,4), F(2,4), F(3,4), F(4,4)],
+    ans: 2,
+    exp: `"Altogether" = addition. ${F(1,4)} + ${F(2,4)} = ${F(3,4)}.` },
+
+  // ── Q19: Word Problem — Subtraction
+  { type:'Word Problem', typeCls:'op-word',
+    q: `A bottle has ${F(3,4)} litre of juice. Sam drinks ${F(1,2)} litre. How much juice is left?`,
+    ch: [`${F(1,4)} litre`, `${F(1,2)} litre`, `${F(3,4)} litre`, '1 litre'],
+    ans: 0,
+    exp: `"Left" = subtraction. ${F(3,4)} − ${F(1,2)} = ${F(3,4)} − ${F(2,4)} = ${F(1,4)}.` },
+
+  // ── Q20: Word Problem — Multiplication
+  { type:'Word Problem', typeCls:'op-word',
+    q: `A recipe needs ${F(2,3)} cup of sugar. Amy makes half the recipe. How much sugar does she need?`,
+    ch: [`${F(1,3)} cup`, `${F(2,6)} cup`, `${F(3,4)} cup`, `${F(4,3)} cup`],
+    ans: 0,
+    exp: `Half of ${F(2,3)} means ${F(1,2)} × ${F(2,3)} = ${F(2,6)} = ${F(1,3)}.` },
+
+  // ── Q21: Word Problem — Division
+  { type:'Word Problem', typeCls:'op-word',
+    q: `A rope is ${F(4,5)} m long. It is cut into pieces of ${F(1,5)} m each. How many pieces are made?`,
+    ch: ['2', '3', '4', '5'],
+    ans: 2,
+    exp: `${F(4,5)} ÷ ${F(1,5)} = ${F(4,5)} × ${F(5,1)} = ${F(20,5)} = 4.` },
+
+  // ── Q22: Word Problem — Mixed Numbers
+  { type:'Word Problem', typeCls:'op-word',
+    q: `Lily has ${M(2,1,2)} cups of flour. She uses ${M(1,1,2)} cups. How much flour is left?`,
+    ch: ['1 cup', '1½ cups', '2 cups', '3 cups'],
+    ans: 0,
+    exp: `${M(2,1,2)} − ${M(1,1,2)} = ${F(5,2)} − ${F(3,2)} = ${F(2,2)} = 1 cup.` },
+
+  // ── Q23: Word Problem — Addition
+  { type:'Problem Solving', typeCls:'b-orange',
+    q: `A water tank is ${F(3,5)} full. Then ${F(1,10)} more water is added. How full is the tank now?`,
+    ch: [F(4,15), F(5,10), F(7,10), F(6,15)],
+    ans: 2,
+    exp: `Convert: ${F(3,5)} = ${F(6,10)}. Then ${F(6,10)} + ${F(1,10)} = ${F(7,10)}.` },
+
+  // ── Q24: Problem Solving
+  { type:'Problem Solving', typeCls:'b-orange',
+    q: `A cake is divided equally among 4 people. There is ${F(3,4)} of a cake left. How much does each person get?`,
+    ch: [F(3,16), F(3,8), F(1,4), F(4,3)],
+    ans: 0,
+    exp: `${F(3,4)} ÷ 4 = ${F(3,4)} × ${F(1,4)} = ${F(3,16)}.` },
+
+  // ── Q25: Order of Operations (concept)
+  { type:'BIDMAS', typeCls:'op-mix',
+    q: `Which operation should you do FIRST in: ${F(1,3)} + ${F(2,5)} × ${F(1,2)} ?`,
+    ch: ['Addition', 'Subtraction', 'Multiplication', 'Division'],
+    ans: 2,
+    exp: 'According to BIDMAS, multiplication is always done before addition.' },
+];
+
+/* ─────────────────────────────────────────
+   GUIDED PRACTICE ANSWERS (0-indexed)
+───────────────────────────────────────── */
+const GP_ANS = { 1:2, 2:2, 3:2, 4:2, 5:2 };
+let gpCompleted = 0;
+
+/* ─────────────────────────────────────────
+   QUIZ STATE
+───────────────────────────────────────── */
+let curQ = 0, qCorrect = 0, qWrong = 0, qScore = 0;
+let qAnswered = false, clickReady = false;
+let qResults = [];
+
+/* ─────────────────────────────────────────
+   AUDIO (Web Audio API)
+───────────────────────────────────────── */
+const AC = new (window.AudioContext || window.webkitAudioContext)();
+function beep(freq, dur, type='sine', gain=.28) {
+  try {
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.connect(g); g.connect(AC.destination);
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(gain, AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(.0001, AC.currentTime + dur);
+    o.start(); o.stop(AC.currentTime + dur);
+  } catch(e) {}
+}
+function playOK()   { beep(523,.08); setTimeout(()=>beep(659,.08),90); setTimeout(()=>beep(784,.18),180); }
+function playNG()   { beep(240,.14,'sawtooth',.22); setTimeout(()=>beep(196,.22,'sawtooth',.18),140); }
+
+/* ─────────────────────────────────────────
+   CONFETTI
+───────────────────────────────────────── */
+function confetti(n=20) {
+  const cols = ['#3B82F6','#F59E0B','#10B981','#8B5CF6','#EC4899','#F97316','#EF4444'];
+  for (let i = 0; i < n; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-p';
+    el.style.cssText = `left:${10+Math.random()*80}%;top:15%;
+      background:${cols[i%cols.length]};
+      transform:rotate(${Math.random()*360}deg);
+      animation-delay:${Math.random()*.4}s;
+      width:${7+Math.random()*8}px;height:${7+Math.random()*8}px`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1400);
+  }
+}
+
+/* ─────────────────────────────────────────
+   NAVIGATION
+───────────────────────────────────────── */
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('navbar').style.display = page === 'home' ? 'none' : 'flex';
+  document.querySelectorAll('.ns').forEach(s => s.classList.remove('active'));
+  const ns = document.getElementById('ns-' + page);
+  if (ns) ns.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ─────────────────────────────────────────
+   RECALL TABS
+───────────────────────────────────────── */
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('tab-' + id).classList.add('on');
+  event.currentTarget.classList.add('on');
+}
+
+/* ─────────────────────────────────────────
+   GUIDED PRACTICE
+───────────────────────────────────────── */
+function checkGP(n, picked) {
+  const correct = GP_ANS[n];
+  const ok = picked === correct;
+  const btns = document.querySelectorAll(`#gpc${n}-ch .gp-btn`);
+  btns.forEach(b => b.disabled = true);
+  btns[picked].classList.add(ok ? 'ok' : 'ng');
+  if (!ok) btns[correct].classList.add('ok');
+
+  const working = document.getElementById(`gpc${n}-w`);
+  working.className = `gp-working show ${ok ? 'ok' : 'ng'}`;
+  if (!ok) {
+    const hdr = document.createElement('div');
+    hdr.style.cssText = 'font-weight:800;margin-bottom:8px;color:var(--red-d)';
+    hdr.textContent = '❌ Not quite! Here\'s the correct working:';
+    working.prepend(hdr);
+  } else {
+    const hdr = document.createElement('div');
+    hdr.style.cssText = 'font-weight:800;margin-bottom:8px;color:var(--green-d)';
+    hdr.textContent = '✅ Correct! Well done!';
+    working.prepend(hdr);
+  }
+
+  if (ok) { playOK(); document.getElementById(`gpc${n}`).classList.add('done'); gpCompleted++; }
+  else playNG();
+
+  if (gpCompleted >= 5) {
+    setTimeout(() => {
+      document.getElementById('gp-complete').style.display = 'block';
+      document.getElementById('gp-nav').style.display = 'none';
+      document.getElementById('ns-practice').classList.add('done');
+    }, 500);
+  }
+}
+
+/* ─────────────────────────────────────────
+   QUIZ ENGINE
+───────────────────────────────────────── */
+function beginQuiz() {
+  curQ = 0; qCorrect = 0; qWrong = 0; qScore = 0; qResults = [];
+  qAnswered = false; clickReady = false;
+  loadQuestion();
+  goTo('quiz');
+}
+
+function restartQuiz() { beginQuiz(); }
+
+function loadQuestion() {
+  qAnswered = false; clickReady = false;
+  setTimeout(() => { clickReady = true; }, 420);
+
+  const q = QUIZ[curQ], tot = QUIZ.length;
+  const pct = Math.round((curQ / tot) * 100);
+
+  document.getElementById('qz-counter').textContent = `Question ${curQ + 1} of ${tot}`;
+  document.getElementById('qz-score').textContent = `⭐ ${qScore} pts`;
+  document.getElementById('qz-pbar').style.width = pct + '%';
+  document.getElementById('qz-correct').textContent = `✅ ${qCorrect} correct`;
+  document.getElementById('qz-wrong').textContent = `❌ ${qWrong} wrong`;
+
+  // Type badge
+  const tb = document.getElementById('qz-type');
+  const cls = q.typeCls.startsWith('op-') ? `op-chip ${q.typeCls}` : `badge ${q.typeCls}`;
+  tb.innerHTML = `<span class="${cls}" style="margin-bottom:10px">${q.type}</span>`;
+
+  document.getElementById('qz-text').innerHTML = q.q;
+
+  // Choices
+  const cc = document.getElementById('qz-choices');
+  cc.innerHTML = '';
+  const lbl = ['A', 'B', 'C', 'D'];
+  q.ch.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'q-btn';
+    btn.innerHTML = `<span class="q-lbl">${lbl[i]}</span><span>${c}</span>`;
+    btn.onclick = () => selectAnswer(i);
+    cc.appendChild(btn);
+  });
+
+  document.getElementById('qz-fb').className = 'q-fb';
+  document.getElementById('btn-next').style.display = 'none';
+
+  // Animate card
+  const card = document.getElementById('qz-card');
+  card.classList.remove('anim-fade');
+  void card.offsetWidth;
+  card.classList.add('anim-fade');
+}
+
+function selectAnswer(i) {
+  if (qAnswered || !clickReady) return;
+  qAnswered = true;
+
+  const q = QUIZ[curQ];
+  const ok = i === q.ans;
+  if (ok) { qScore += 4; qCorrect++; } else { qWrong++; }
+  qResults.push({ q: q.q, ok, ua: q.ch[i], ca: q.ch[q.ans], exp: q.exp });
+
+  const btns = document.querySelectorAll('.q-btn');
+  btns.forEach(b => b.disabled = true);
+  btns[i].classList.add(ok ? 'ok' : 'ng');
+  if (!ok) btns[q.ans].classList.add('ok');
+
+  const fb = document.getElementById('qz-fb');
+  fb.className = `q-fb show ${ok ? 'ok' : 'ng'}`;
+  document.getElementById('qz-fb-hd').textContent = ok ? '✅ Correct! Excellent! 🌟' : '❌ Not quite!';
+  document.getElementById('qz-fb-exp').innerHTML = q.exp;
+
+  document.getElementById('qz-score').textContent = `⭐ ${qScore} pts`;
+  document.getElementById('qz-correct').textContent = `✅ ${qCorrect} correct`;
+  document.getElementById('qz-wrong').textContent = `❌ ${qWrong} wrong`;
+
+  if (ok) { playOK(); if (qCorrect % 5 === 0) confetti(); }
+  else playNG();
+
+  const nb = document.getElementById('btn-next');
+  nb.style.display = 'flex';
+  nb.textContent = curQ + 1 < QUIZ.length ? 'Next Question ➜' : 'See My Results 🎉';
+}
+
+function nextQ() {
+  curQ++;
+  curQ < QUIZ.length ? loadQuestion() : showResults();
+}
+
+/* ─────────────────────────────────────────
+   RESULTS
+───────────────────────────────────────── */
+function showResults() {
+  const tot = QUIZ.length;
+  const pct = Math.round((qCorrect / tot) * 100);
+
+  let deco, title, badge, badgeCls, msg;
+  if (pct >= 92) {
+    deco = '🏆'; title = 'Excellent!';
+    badge = '23–25 / 25 · Excellent ⭐'; badgeCls = 'b-green';
+    msg = 'You are very confident with mixed fraction operations. Outstanding work!';
+  } else if (pct >= 72) {
+    deco = '🎉'; title = 'Great Job!';
+    badge = '18–22 / 25 · Great'; badgeCls = 'b-blue';
+    msg = 'Great job! You understand most of the skills. Review the tricky questions and try again.';
+  } else if (pct >= 52) {
+    deco = '👍'; title = 'Good Effort!';
+    badge = '13–17 / 25 · Good'; badgeCls = 'b-yellow';
+    msg = 'Good effort! Practise order of operations and word problems more carefully.';
+  } else {
+    deco = '📚'; title = 'Keep Practising!';
+    badge = '0–12 / 25 · Needs Review'; badgeCls = 'b-purple';
+    msg = 'Keep practising! Review the Let\'s Recall and Tips sections, then try the quiz again.';
+  }
+
+  document.getElementById('r-deco').textContent = deco;
+  document.getElementById('r-title').textContent = title;
+  document.getElementById('r-score').textContent = `${qCorrect}/${tot}`;
+  document.getElementById('r-pct').textContent = `${pct}%`;
+  document.getElementById('r-pct2').textContent = `${pct}%`;
+  document.getElementById('r-nc').textContent = qCorrect;
+  document.getElementById('r-nw').textContent = qWrong;
+
+  const rb = document.getElementById('r-badge');
+  rb.textContent = badge; rb.className = `badge ${badgeCls}`;
+  document.getElementById('r-msg').textContent = msg;
+
+  const ring = document.getElementById('r-ring');
+  ring.style.borderColor = pct >= 72 ? 'var(--green)' : pct >= 52 ? 'var(--yellow)' : 'var(--red)';
+
+  // Review list
+  const rl = document.getElementById('r-review');
+  rl.innerHTML = '';
+  qResults.forEach((r, idx) => {
+    const d = document.createElement('div');
+    d.className = `rev-item ${r.ok ? 'ok' : 'ng'}`;
+    const qTxt = r.q.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    const qShort = qTxt.length > 55 ? qTxt.substring(0, 55) + '…' : qTxt;
+    d.innerHTML = `<span style="font-size:1rem;flex-shrink:0">${r.ok ? '✅' : '❌'}</span>
+      <div>
+        <div class="ri-q">Q${idx + 1}: ${qShort}</div>
+        <div class="ri-a">${r.ok ? 'Correct: ' + r.ca.replace(/<[^>]+>/g,' ').trim() : 'Your answer: ' + r.ua.replace(/<[^>]+>/g,' ').trim() + ' → Correct: ' + r.ca.replace(/<[^>]+>/g,' ').trim()}</div>
+      </div>`;
+    rl.appendChild(d);
+  });
+
+  if (pct >= 72) confetti(28);
+  goTo('results');
+  document.getElementById('ns-quiz').classList.add('done');
+}
+</script>
+</body>
+</html>

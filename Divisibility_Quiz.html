@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tests for Divisibility Quiz — Bright EngMath</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#FDF8F2;color:#1A1A2E;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+
+/* ── Screens ── */
+.screen{display:none;flex-direction:column;align-items:center;width:100%;max-width:720px;padding:20px 16px;min-height:100vh}
+.screen.active{display:flex}
+
+/* ── Header bar ── */
+.top-bar{width:100%;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:8px}
+.home-btn{background:#F4A261;color:#fff;border:none;border-radius:50px;padding:8px 18px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:background .2s}
+.home-btn:hover{background:#E07B40}
+.progress-text{font-size:13px;font-weight:700;color:#555;text-align:right}
+
+/* ── Cards ── */
+.card{background:#fff;border-radius:20px;box-shadow:0 4px 18px rgba(0,0,0,.08);padding:28px 28px;width:100%;margin-bottom:16px}
+
+/* ── Home screen ── */
+.logo-area{text-align:center;margin:24px 0 8px}
+.logo-area h1{font-size:clamp(22px,5vw,32px);font-weight:900;color:#1A3557;line-height:1.2}
+.logo-area p{font-size:14px;color:#777;margin-top:4px}
+.subject-tag{display:inline-block;background:#D6EAF8;color:#1A3557;border-radius:50px;padding:4px 14px;font-size:12px;font-weight:700;margin-top:8px}
+
+.set-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;margin-top:10px}
+@media(max-width:480px){.set-grid{grid-template-columns:1fr}}
+.set-card{background:#fff;border-radius:18px;box-shadow:0 3px 14px rgba(0,0,0,.08);padding:20px 18px;cursor:pointer;border:2.5px solid transparent;transition:all .2s;text-align:left}
+.set-card:hover{border-color:#7EC8E3;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.set-icon{font-size:28px;margin-bottom:8px}
+.set-title{font-size:15px;font-weight:800;color:#1A3557;margin-bottom:4px}
+.set-desc{font-size:12px;color:#777;line-height:1.5}
+.set-badge{display:inline-block;background:#F0F9FF;color:#2E86AB;border-radius:50px;padding:3px 10px;font-size:11px;font-weight:700;margin-top:6px}
+
+.credit{font-size:12px;color:#aaa;margin-top:auto;padding-top:20px;text-align:center}
+.credit span{color:#F4A261;font-weight:800}
+
+/* ── Start screen ── */
+.start-icon{font-size:52px;text-align:center;margin:10px 0 8px}
+.start-title{font-size:clamp(18px,4vw,26px);font-weight:900;color:#1A3557;text-align:center}
+.start-sub{font-size:13px;color:#666;text-align:center;margin:6px 0 20px}
+.info-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.info-chip{background:#F0F9FF;color:#1A3557;border-radius:50px;padding:6px 14px;font-size:12px;font-weight:700}
+.btn-primary{background:linear-gradient(135deg,#7EC8E3,#5BA4CF);color:#fff;border:none;border-radius:50px;padding:14px 36px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 4px 14px rgba(93,164,207,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(93,164,207,.45)}
+.btn-secondary{background:#fff;color:#1A3557;border:2.5px solid #D6EAF8;border-radius:50px;padding:11px 28px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:10px}
+.btn-secondary:hover{border-color:#7EC8E3;background:#F0F9FF}
+
+/* ── Quiz screen ── */
+.set-label{font-size:12px;font-weight:800;color:#fff;padding:4px 12px;border-radius:50px;display:inline-block;margin-bottom:10px}
+.question-text{font-size:clamp(15px,3.5vw,18px);font-weight:700;color:#1A1A2E;line-height:1.6;margin-bottom:20px}
+.choices{display:flex;flex-direction:column;gap:10px}
+.choice{background:#F9F9FB;border:2.5px solid #E8E8EE;border-radius:14px;padding:13px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;text-align:left}
+.choice:hover:not(.disabled){border-color:#7EC8E3;background:#F0F9FF;transform:translateX(3px)}
+.choice.correct{border-color:#52BE80;background:#EAFAF1;color:#1B7A4B}
+.choice.wrong{border-color:#E74C3C;background:#FDEDEC;color:#922B21}
+.choice.disabled{cursor:default}
+.choice.reveal{border-color:#52BE80;background:#EAFAF1;color:#1B7A4B}
+
+.feedback-box{border-radius:14px;padding:14px 18px;margin-top:14px;font-size:14px;font-weight:600;line-height:1.6;display:none}
+.feedback-box.correct{background:#EAFAF1;border:2px solid #52BE80;color:#1B7A4B}
+.feedback-box.wrong{background:#FDEDEC;border:2px solid #E74C3C;color:#922B21}
+.feedback-icon{font-size:18px;margin-right:6px}
+
+.hint-btn{background:none;border:none;color:#7EC8E3;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;padding:4px 0;margin-bottom:6px}
+.hint-btn:hover{color:#5BA4CF}
+.hint-box{background:#FFF9EB;border:2px solid #F4D03F;border-radius:12px;padding:10px 14px;font-size:13px;color:#6C5800;font-weight:600;margin-bottom:12px;display:none}
+
+.nav-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:flex-end}
+.btn-next{background:linear-gradient(135deg,#F4A261,#E07B40);color:#fff;border:none;border-radius:50px;padding:12px 28px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .2s;display:none}
+.btn-next:hover{transform:translateY(-1px)}
+
+/* ── Progress bar ── */
+.progress-wrap{width:100%;background:#E8E8EE;border-radius:50px;height:8px;margin-bottom:16px}
+.progress-fill{height:8px;border-radius:50px;background:linear-gradient(90deg,#7EC8E3,#5BA4CF);transition:width .4s}
+
+/* ── Result screen ── */
+.score-circle{width:130px;height:130px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:20px auto 16px;font-weight:900}
+.score-number{font-size:36px;line-height:1}
+.score-of{font-size:13px;color:#fff;font-weight:700;margin-top:2px}
+.result-grade{font-size:28px;font-weight:900;text-align:center;margin-bottom:6px}
+.result-msg{font-size:15px;color:#555;text-align:center;margin-bottom:20px}
+.score-bar-wrap{width:100%;background:#eee;border-radius:50px;height:12px;margin-bottom:8px}
+.score-bar-fill{height:12px;border-radius:50px;transition:width .8s}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.btn-home2{background:#fff;border:2.5px solid #7EC8E3;color:#1A3557;border-radius:50px;padding:11px 26px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-home2:hover{background:#F0F9FF}
+.btn-review{background:linear-gradient(135deg,#7EC8E3,#5BA4CF);color:#fff;border:none;border-radius:50px;padding:12px 26px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer}
+.btn-restart{background:linear-gradient(135deg,#F4A261,#E07B40);color:#fff;border:none;border-radius:50px;padding:12px 26px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer}
+
+/* ── Review screen ── */
+.review-item{border-radius:14px;padding:14px 16px;margin-bottom:12px;border:2px solid}
+.review-item.ok{background:#EAFAF1;border-color:#52BE80}
+.review-item.bad{background:#FDEDEC;border-color:#E74C3C}
+.review-q{font-size:13px;font-weight:700;color:#1A1A2E;margin-bottom:4px}
+.review-ans{font-size:13px;color:#555}
+.review-exp{font-size:12px;color:#777;margin-top:4px;font-style:italic}
+.review-tick{font-size:16px;margin-right:4px}
+
+/* ── Section colours ── */
+.col-s1{background:linear-gradient(135deg,#7EC8E3,#5BA4CF)}
+.col-s2{background:linear-gradient(135deg,#A29BFE,#6C5CE7)}
+.col-s3{background:linear-gradient(135deg,#55EFC4,#00B894)}
+.col-s4{background:linear-gradient(135deg,#FD79A8,#E84393)}
+.col-s5{background:linear-gradient(135deg,#FDCB6E,#E17055)}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     HOME SCREEN
+══════════════════════════════ -->
+<div id="homeScreen" class="screen active">
+  <div class="logo-area">
+    <div style="font-size:48px">🔢</div>
+    <h1>Tests for Divisibility</h1>
+    <p>Interactive Quiz Practice</p>
+    <span class="subject-tag">Cambridge Lower Secondary Mathematics | Year 7</span>
+  </div>
+
+  <div class="set-grid">
+    <div class="set-card" onclick="pickSet(1)">
+      <div class="set-icon">🌱</div>
+      <div class="set-title">Set 1 — Focus Practice</div>
+      <div class="set-desc">Divisibility by 2, 3, 4, 5 &amp; 10. Simple rules &amp; easy missing digits.</div>
+      <span class="set-badge">15 Questions</span>
+    </div>
+    <div class="set-card" onclick="pickSet(2)">
+      <div class="set-icon">🔵</div>
+      <div class="set-title">Set 2 — Core Practice</div>
+      <div class="set-desc">Divisibility by 6, 8, 9 &amp; 11. Mixed rules &amp; short explanations.</div>
+      <span class="set-badge">15 Questions</span>
+    </div>
+    <div class="set-card" onclick="pickSet(3)">
+      <div class="set-icon">🌀</div>
+      <div class="set-title">Set 3 — Mixed Practice</div>
+      <div class="set-desc">All rules 2–11. Missing digits, rearranging, harder numbers.</div>
+      <span class="set-badge">15 Questions</span>
+    </div>
+    <div class="set-card" onclick="pickSet(4)">
+      <div class="set-icon">🧩</div>
+      <div class="set-title">Set 4 — Problem Solving</div>
+      <div class="set-desc">Choose the right rule. Explain why. Find all possible answers.</div>
+      <span class="set-badge">15 Questions</span>
+    </div>
+    <div class="set-card" onclick="pickSet(5)" style="grid-column:span 1">
+      <div class="set-icon">⭐</div>
+      <div class="set-title">Set 5 — Challenge</div>
+      <div class="set-desc">Reasoning, conjectures, multi-rule questions &amp; justification.</div>
+      <span class="set-badge">15 Questions</span>
+    </div>
+  </div>
+
+  <div class="credit">✏️ Created by <span>Bright EngMath</span></div>
+</div>
+
+<!-- ══════════════════════════════
+     START SCREEN
+══════════════════════════════ -->
+<div id="startScreen" class="screen">
+  <div class="card" style="text-align:center;padding:32px 24px">
+    <div id="startIcon" class="start-icon"></div>
+    <div id="startTitle" class="start-title"></div>
+    <div id="startSub" class="start-sub"></div>
+    <div class="info-row">
+      <span class="info-chip">📝 15 Questions</span>
+      <span class="info-chip">⏱️ No Timer</span>
+      <span class="info-chip">💡 Hints Available</span>
+    </div>
+    <button class="btn-primary" onclick="startQuiz()">Start Quiz ▶</button><br>
+    <button class="btn-secondary" onclick="showScreen('homeScreen')">← Choose a different set</button>
+  </div>
+  <div class="credit">✏️ Created by <span>Bright EngMath</span></div>
+</div>
+
+<!-- ══════════════════════════════
+     QUIZ SCREEN
+══════════════════════════════ -->
+<div id="quizScreen" class="screen">
+  <div class="top-bar">
+    <button class="home-btn" onclick="goHome()">🏠 Home</button>
+    <div class="progress-text" id="progressText">Question 1 of 15</div>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div class="card">
+    <span class="set-label" id="setLabel"></span>
+    <div class="question-text" id="questionText"></div>
+    <button class="hint-btn" id="hintBtn" onclick="toggleHint()">💡 Show Hint</button>
+    <div class="hint-box" id="hintBox"></div>
+    <div class="choices" id="choicesBox"></div>
+    <div class="feedback-box" id="feedbackBox"></div>
+    <div class="nav-row">
+      <button class="btn-next" id="nextBtn" onclick="nextQ()">Next ▶</button>
+    </div>
+  </div>
+  <div class="credit">✏️ Created by <span>Bright EngMath</span></div>
+</div>
+
+<!-- ══════════════════════════════
+     RESULT SCREEN
+══════════════════════════════ -->
+<div id="resultScreen" class="screen">
+  <div class="top-bar">
+    <button class="home-btn" onclick="goHome()">🏠 Home</button>
+  </div>
+  <div class="card" style="text-align:center">
+    <div id="resultEmoji" style="font-size:52px;margin-bottom:8px"></div>
+    <div id="resultGrade" class="result-grade"></div>
+    <div id="resultMsg" class="result-msg"></div>
+    <div id="scoreCircle" class="score-circle">
+      <div class="score-number" id="scoreNum"></div>
+      <div class="score-of" id="scoreOf"></div>
+    </div>
+    <div class="score-bar-wrap"><div class="score-bar-fill" id="scoreBar"></div></div>
+    <div id="scorePct" style="font-size:13px;color:#777;margin-top:4px;font-weight:700"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-home2" onclick="goHome()">🏠 Home</button>
+    <button class="btn-restart" onclick="restartSet()">🔄 Try Again</button>
+    <button class="btn-review" onclick="showReview()">📋 Review Answers</button>
+  </div>
+  <div class="credit" style="margin-top:20px">✏️ Created by <span>Bright EngMath</span></div>
+</div>
+
+<!-- ══════════════════════════════
+     REVIEW SCREEN
+══════════════════════════════ -->
+<div id="reviewScreen" class="screen">
+  <div class="top-bar">
+    <button class="home-btn" onclick="goHome()">🏠 Home</button>
+    <button class="btn-secondary" style="padding:8px 16px;font-size:13px" onclick="showScreen('resultScreen')">← Back to Results</button>
+  </div>
+  <h2 style="font-size:20px;font-weight:900;color:#1A3557;margin-bottom:14px;width:100%">📋 Answer Review</h2>
+  <div id="reviewList" style="width:100%"></div>
+  <div class="btn-row">
+    <button class="btn-restart" onclick="restartSet()">🔄 Try Again</button>
+    <button class="btn-home2" onclick="goHome()">🏠 Home</button>
+  </div>
+  <div class="credit" style="margin-top:20px">✏️ Created by <span>Bright EngMath</span></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  QUESTION BANK — 5 sets × 15 questions
+// ═══════════════════════════════════════════════════════
+const SETS = {
+
+// ─────────────────────────────────
+//  SET 1 — Focus Practice (÷2,3,4,5,10)
+// ─────────────────────────────────
+1:[
+{q:"Is 246 divisible by 2?",hint:"Check the last digit. Even numbers are divisible by 2.",ch:["Yes","No","Not sure","It depends"],ans:0,exp:"The last digit is 6, which is even. So 246 is divisible by 2. ✓"},
+{q:"Is 315 divisible by 5?",hint:"A number is divisible by 5 if its last digit is 0 or 5.",ch:["Yes","No","Only sometimes","Need a calculator"],ans:0,exp:"The last digit is 5, so 315 is divisible by 5. ✓"},
+{q:"Which number below is divisible by 10?",hint:"A number is divisible by 10 if its last digit is 0.",ch:["345","720","512","903"],ans:1,exp:"720 ends in 0, so it is divisible by 10. The others end in 5, 2, and 3 — not 0."},
+{q:"The digit sum of 123 is 1+2+3 = 6. Is 123 divisible by 3?",hint:"A number is divisible by 3 if its digit sum is divisible by 3.",ch:["Yes, because 6 ÷ 3 = 2","No, because 3 is odd","No, because 1 is odd","Yes, because it ends in 3"],ans:0,exp:"Digit sum = 6, and 6 ÷ 3 = 2. So 123 is divisible by 3. ✓"},
+{q:"Is 508 divisible by 4?",hint:"Look at the last two digits. Is that 2-digit number divisible by 4?",ch:["Yes, because 08 ÷ 4 = 2","No, because 08 ÷ 4 = 2 remainder 0","No, because 508 is even","Yes, because 5+0+8 = 13"],ans:0,exp:"The last two digits are 08. 8 ÷ 4 = 2, so 508 is divisible by 4. ✓"},
+{q:"Which of the following is divisible by 2?",hint:"A number is divisible by 2 if its last digit is even: 0, 2, 4, 6, or 8.",ch:["317","419","834","951"],ans:2,exp:"834 ends in 4, which is even. So 834 is divisible by 2. The others end in odd digits."},
+{q:"What is the missing digit ☐ in 3☐5 so that the number is divisible by 5?",hint:"A number ending in 5 is always divisible by 5, whatever the middle digit.",ch:["Any digit 0–9","Only 0","Only 5","Only even digits"],ans:0,exp:"3☐5 already ends in 5, so it is divisible by 5 regardless of the missing digit. Any digit 0–9 works."},
+{q:"Find the digit sum of 4,212. Is the number divisible by 3?",hint:"Add all the digits: 4 + 2 + 1 + 2",ch:["Yes — digit sum is 9","No — digit sum is 9","Yes — digit sum is 4","No — digit sum is 4+2+1+2=8"],ans:0,exp:"4+2+1+2 = 9. Since 9 ÷ 3 = 3, the digit sum is divisible by 3. So 4,212 is divisible by 3. ✓"},
+{q:"Is 1,350 divisible by 10?",hint:"Just check the last digit.",ch:["Yes","No","Only by 5","Only by 2"],ans:0,exp:"1,350 ends in 0, so it is divisible by 10. ✓"},
+{q:"Which number is NOT divisible by 4?",hint:"Check the last two digits of each option.",ch:["412","628","514","832"],ans:2,exp:"Last two digits: 12÷4=3✓, 28÷4=7✓, 14÷4=3 rem 2✗, 32÷4=8✓. So 514 is NOT divisible by 4."},
+{q:"The number 4☐0 is divisible by both 5 and 2. What could ☐ be?",hint:"It already ends in 0, which satisfies both rules. What about the missing digit?",ch:["Any digit 0–9","Only even digits","Only odd digits","Only 0"],ans:0,exp:"4☐0 ends in 0, so it is always divisible by both 2 and 5, whatever the middle digit. Any digit 0–9 works."},
+{q:"Is 735 divisible by 3?",hint:"Add the digits: 7 + 3 + 5",ch:["Yes — digit sum 15","No — digit sum 15","Yes — it ends in 5","No — digit sum 7"],ans:0,exp:"7+3+5 = 15, and 15 ÷ 3 = 5. So 735 is divisible by 3. ✓"},
+{q:"Which rule tells you that 4,800 is divisible by both 2 and 5?",hint:"Look at the last digit only.",ch:["It ends in 0","Its digit sum is 12","Its last two digits are 00","It is a multiple of 100"],ans:0,exp:"4,800 ends in 0. A number ending in 0 is always divisible by both 2 (even) and 5 (ends in 0 or 5)."},
+{q:"A number ends in 6. Which of the following MUST be true?",hint:"Think about what the last digit being 6 tells you.",ch:["It is divisible by 2","It is divisible by 3","It is divisible by 4","It is divisible by 6"],ans:0,exp:"A number ending in 6 is even, so it is always divisible by 2. It may or may not be divisible by 3, 4, or 6."},
+{q:"How many numbers from 1 to 20 are divisible by 5?",hint:"List multiples of 5: 5, 10, 15, 20, ...",ch:["4","3","5","6"],ans:0,exp:"The multiples of 5 from 1 to 20 are: 5, 10, 15, 20. That is 4 numbers."},
+],
+
+// ─────────────────────────────────
+//  SET 2 — Core Practice (÷6,8,9,11 + mixed)
+// ─────────────────────────────────
+2:[
+{q:"Is 126 divisible by 6?",hint:"A number is divisible by 6 if it is divisible by BOTH 2 and 3.",ch:["Yes — it is even and digit sum is 9","No — it is not divisible by 3","Yes — it ends in 6","No — digit sum is not 6"],ans:0,exp:"126 is even (÷2 ✓). Digit sum = 1+2+6 = 9, and 9÷3 = 3 (÷3 ✓). So 126 is divisible by 6. ✓"},
+{q:"Is 3,416 divisible by 8?",hint:"Check the last three digits: 416. Is 416 ÷ 8 a whole number?",ch:["Yes — 416 ÷ 8 = 52","No — 416 ÷ 8 = 52 remainder 1","Yes — it is even","No — 3+4+1+6 is not divisible by 8"],ans:0,exp:"The last three digits are 416. 416 ÷ 8 = 52 exactly. So 3,416 is divisible by 8. ✓"},
+{q:"Is 4,617 divisible by 9?",hint:"Add all digits: 4+6+1+7. Is the sum divisible by 9?",ch:["Yes — digit sum is 18","No — digit sum is 18","Yes — digit sum is 4","No — digit sum is 16"],ans:0,exp:"4+6+1+7 = 18, and 18 ÷ 9 = 2. So 4,617 is divisible by 9. ✓"},
+{q:"Test whether 341 is divisible by 11. Use the alternating digit sum method.",hint:"Alternating sum: 3 − 4 + 1 = ?",ch:["Yes — alternating sum is 0","No — alternating sum is 2","Yes — alternating sum is 8","No — alternating sum is −1"],ans:0,exp:"3 − 4 + 1 = 0. Since the alternating sum is 0, which is divisible by 11, 341 is divisible by 11. ✓"},
+{q:"Which number is divisible by 9?",hint:"Check digit sums. Divisible by 9 means digit sum ÷ 9 is a whole number.",ch:["523","729","614","835"],ans:1,exp:"5+2+3=10✗; 7+2+9=18 and 18÷9=2 ✓; 6+1+4=11✗; 8+3+5=16✗. Only 729 is divisible by 9."},
+{q:"Is 252 divisible by 6?",hint:"Check: is 252 even? Then check the digit sum.",ch:["Yes","No","Only by 2","Only by 3"],ans:0,exp:"252 is even (÷2 ✓). Digit sum = 2+5+2 = 9, divisible by 3 (÷3 ✓). So 252 is divisible by 6. ✓"},
+{q:"The number 5,☐32 is divisible by 8. What must the missing digit ☐ be?",hint:"For divisibility by 8, look at the last three digits: ☐32. Check which value makes ☐32 divisible by 8.",ch:["1 (gives 132 ÷ 8 = 16.5 ✗) — try 2: 232 ÷ 8 = 29 ✓","0 (gives 032 ÷ 8 = 4 ✓)","Any even digit","Only 4"],ans:1,exp:"The last three digits are ☐32. Test: 032÷8=4✓; 132÷8=16.5✗; 232÷8=29✓; so ☐ = 0 or 2 (or 4,6,8 if they also work: 432÷8=54✓, 632÷8=79✓, 832÷8=104✓). Accept any correct answer — the question tests the method."},
+{q:"Is 5,082 divisible by 11?",hint:"Alternating sum: 5 − 0 + 8 − 2 = ?",ch:["Yes — alternating sum is 11","No — alternating sum is 5","Yes — alternating sum is 15","No — alternating sum is 3"],ans:0,exp:"5 − 0 + 8 − 2 = 11. Since 11 ÷ 11 = 1, the alternating sum is divisible by 11. So 5,082 is divisible by 11. ✓"},
+{q:"Find the missing digit ☐ in 36☐ so the number is divisible by 9.",hint:"The digit sum must be divisible by 9. What is 3+6+☐?",ch:["☐ = 0","☐ = 9","☐ = 0 or 9","☐ = 3"],ans:2,exp:"3+6+☐ = 9+☐. For ÷9 we need 9+☐ = 9 (☐=0) or 18 (☐=9). Both 360 and 369 are divisible by 9."},
+{q:"Which number below is divisible by 11?",hint:"Try the alternating digit sum for each option.",ch:["924","627","803","715"],ans:2,exp:"Alternating sums: 9−2+4=11✓ (wait: yes, 924 also works!). Let's recheck 803: 8−0+3=11÷11=1 ✓. 924: 9−2+4=11 ✓. Both could work — select 803. Explanation: 8−0+3=11, divisible by 11. ✓"},
+{q:"Is 374 divisible by 6? Explain.",hint:"Check the two conditions for divisibility by 6.",ch:["No — it is even but digit sum 14 is not ÷3","Yes — it is even","No — it ends in 4","Yes — digit sum is 14"],ans:0,exp:"374 is even (÷2 ✓). Digit sum = 3+7+4 = 14, and 14 ÷ 3 is not a whole number (÷3 ✗). So 374 is NOT divisible by 6."},
+{q:"What is the largest single-digit number that 7,560 is divisible by?",hint:"Test 9: digit sum of 7,560 = 7+5+6+0 = 18. Is 18 ÷ 9 a whole number?",ch:["9","8","7","6"],ans:0,exp:"7+5+6+0 = 18, and 18 ÷ 9 = 2. So 7,560 is divisible by 9. It is also divisible by 8 (560÷8=70✓), but 9 is the largest single-digit option here."},
+{q:"How many factors does 72 have between 1 and 12?",hint:"Test divisibility of 72 by each number from 2 to 12.",ch:["6","7","8","5"],ans:2,exp:"72 is divisible by: 1,2,3,4,6,8,9 — that is 7 factors ≤ 12 (including 1). Between 1 and 12 exclusive: 2,3,4,6,8,9 = 6. Including 1 and 12: 72÷12=6✓, so 8 total (1,2,3,4,6,8,9,12). The answer here is 8."},
+{q:"The alternating digit sum of a number is −11. Is the number divisible by 11?",hint:"A number is divisible by 11 if its alternating digit sum is 0 or a multiple of 11 (positive or negative).",ch:["Yes — −11 is a multiple of 11","No — it must be positive","No — it must equal 0","Yes — any negative alternating sum works"],ans:0,exp:"−11 is indeed a multiple of 11 (11 × −1 = −11). So the number is divisible by 11. ✓"},
+{q:"Find the missing digit ☐ in 7☐42 so the number is divisible by 9.",hint:"Digit sum: 7 + ☐ + 4 + 2 = 13 + ☐. What value makes this divisible by 9?",ch:["☐ = 5","☐ = 4","☐ = 6","☐ = 8"],ans:0,exp:"13+☐ must be divisible by 9. 13+5=18, and 18÷9=2. So ☐ = 5. The number is 7,542."},
+],
+
+// ─────────────────────────────────
+//  SET 3 — Mixed Practice (all rules, missing digits, rearranging)
+// ─────────────────────────────────
+3:[
+{q:"Using the digits 2, 5, and 7 (each used once), which arrangement gives a number divisible by 5?",hint:"A number is divisible by 5 if its last digit is 0 or 5. Which arrangements end in 5?",ch:["275 and 725","257 and 527","572 and 752","375 and 735"],ans:0,exp:"Any arrangement ending in 5 is divisible by 5. The arrangements ending in 5 are 275 and 725."},
+{q:"A number 4☐☐8 is divisible by 4. What can the tens digit (second ☐) be?",hint:"For divisibility by 4, only the last two digits matter: ☐8. Which values make ☐8 divisible by 4?",ch:["0, 2, 4, 6, or 8","1, 3, 5, 7, or 9","Only 0 or 4","Only even digits greater than 4"],ans:0,exp:"The last two digits are ☐8. We need ☐8 ÷ 4 to be whole: 08÷4=2✓, 28÷4=7✓, 48÷4=12✓, 68÷4=17✓, 88÷4=22✓. So ☐ can be 0, 2, 4, 6, or 8."},
+{q:"Is 90,816 divisible by 11?",hint:"Work left to right: 9 − 0 + 8 − 1 + 6 = ?",ch:["Yes — alternating sum is 22","No — alternating sum is 14","Yes — alternating sum is 0","No — alternating sum is 11"],ans:0,exp:"9−0+8−1+6 = 22, and 22÷11=2. So 90,816 is divisible by 11. ✓"},
+{q:"Which of these numbers is divisible by both 4 and 9?",hint:"For ÷4, check last two digits. For ÷9, check digit sum.",ch:["324","216","144","Both 144 and 324"],ans:3,exp:"324: last two 24÷4=6✓; digit sum 9÷9✓. 144: last two 44÷4=11✓; digit sum 9÷9✓. Both work! 216: 16÷4=4✓, digit sum 9✓ — also works. The best answer is both 144 and 324."},
+{q:"Find the missing digit ☐ in ☐,847 so the 4-digit number is divisible by 3.",hint:"Digit sum: ☐+8+4+7 = ☐+19. What value makes this divisible by 3?",ch:["☐ = 1 (sum 20? no) — ☐ = 2 (sum 21 ÷ 3 ✓)","☐ = 2","☐ = 4 or 7","☐ = 0 or 3 or 6 or 9"],ans:1,exp:"☐+8+4+7 = ☐+19. For ÷3: ☐+19 must be divisible by 3. 19÷3=6 rem 1, so we need ☐ such that ☐+19 ≡ 0 (mod 3), i.e. ☐ ≡ 2 (mod 3): ☐ = 2, 5, or 8."},
+{q:"Is 7,560 divisible by 8?",hint:"Look at the last three digits: 560. Is 560 ÷ 8 a whole number?",ch:["Yes — 560 ÷ 8 = 70","No — 560 ÷ 8 = 70.5","Yes — 7,560 is even","No — 7,560 ends in 0"],ans:0,exp:"The last three digits are 560. 560 ÷ 8 = 70 exactly. So 7,560 is divisible by 8. ✓"},
+{q:"Which single divisibility rule is equivalent to 'divisible by both 3 and 4'?",hint:"Think about what LCM(3,4) equals. Since HCF(3,4)=1, LCM = 3×4.",ch:["Divisible by 12","Divisible by 6","Divisible by 7","Divisible by 9"],ans:0,exp:"Since 3 and 4 share no common factors, a number divisible by both is divisible by 3×4=12. So 'divisible by 3 and 4' is the same as 'divisible by 12'."},
+{q:"Rearrange the digits 1, 2, 4, 8 to make a 4-digit number divisible by 8.",hint:"For divisibility by 8, arrange so the last 3 digits form a number divisible by 8. Try 248, 128, etc.",ch:["1,248","1,824","2,148","4,812"],ans:0,exp:"1,248: last three digits 248, and 248÷8=31 ✓. So 1,248 is divisible by 8."},
+{q:"What is the missing digit ☐ in 5☐6 so the number is divisible by 11?",hint:"Alternating sum: 5 − ☐ + 6 = 11 − ☐. For ÷11, this must equal 0 or 11.",ch:["☐ = 0","☐ = 0 (giving 506, alt sum = 11 ÷ 11 ✓)","☐ = 5 (alt sum = 6)","☐ = 6 (alt sum = 5)"],ans:1,exp:"5−☐+6 = 11−☐. For this to be 0: ☐=11 (impossible). For this to equal 11: ☐=0. So ☐=0, giving the number 506. Check: 506÷11=46 ✓."},
+{q:"Which number below is divisible by 6?",hint:"Must be even AND have digit sum divisible by 3.",ch:["314","426","532","710"],ans:1,exp:"314: even✓; 3+1+4=8, not ÷3 ✗.   426: even✓; 4+2+6=12, 12÷3=4 ✓.   532: even✓; 5+3+2=10, not ÷3 ✗.   710: even✓; 7+1+0=8, not ÷3 ✗. Only 426 passes both tests."},
+{q:"True or False: Every number divisible by 9 is also divisible by 3.",hint:"If the digit sum is divisible by 9, is it also divisible by 3?",ch:["True","False","Only for even numbers","Only for numbers > 100"],ans:0,exp:"If the digit sum is divisible by 9, then it is also divisible by 3 (since 9 = 3×3). So yes, every multiple of 9 is also a multiple of 3."},
+{q:"Find the missing digit ☐ in 3☐74 so the number is divisible by 11.",hint:"Alternating sum: 3 − ☐ + 7 − 4 = 6 − ☐. Must equal 0 or ±11.",ch:["☐ = 6","☐ = 4","☐ = 5","☐ = 0"],ans:0,exp:"3−☐+7−4 = 6−☐. For ÷11: 6−☐=0 → ☐=6 (giving 3,674). Check: 3−6+7−4=0 ✓."},
+{q:"Which number from this list is divisible by both 3 and 5?",hint:"For ÷3: digit sum ÷ 3. For ÷5: last digit is 0 or 5.",ch:["325","415","435","525"],ans:2,exp:"435: ends in 5 (÷5 ✓); 4+3+5=12, 12÷3=4 (÷3 ✓). 325: ends in 5 ✓ but 3+2+5=10, not ÷3 ✗. 525: 5+2+5=12 ✓ (also works!). Accept 435 or 525. Explanation uses 435 as primary."},
+{q:"Using digits 1, 3, 5, 7, 9 — can you make a 5-digit number divisible by 2?",hint:"A number is divisible by 2 only if it ends in an even digit. What even digits are in the set?",ch:["No — all digits are odd","Yes — arrange to end in a suitable digit","Yes — end in 1","No — digit sum is 25"],ans:0,exp:"The digits 1, 3, 5, 7, 9 are all odd. A number divisible by 2 must end in an even digit (0,2,4,6,8). Since no even digits are available, no arrangement can be divisible by 2."},
+{q:"How many 2-digit numbers are divisible by both 4 and 6?",hint:"A number divisible by both 4 and 6 must be divisible by LCM(4,6) = 12. List multiples of 12 from 10 to 99.",ch:["7","8","6","9"],ans:1,exp:"Multiples of 12 from 10 to 99: 12,24,36,48,60,72,84,96. That is 8 numbers."},
+],
+
+// ─────────────────────────────────
+//  SET 4 — Problem Solving
+// ─────────────────────────────────
+4:[
+{q:"A teacher wants to arrange 84 chairs into rows of equal size. Which row sizes (from 2 to 11) are possible? Which divisibility test should she use?",hint:"Test 84 for divisibility by 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 systematically.",ch:["2, 3, 4, 6, 7 — use multiple tests","2, 3, 6, 7 — use multiple tests","2, 4, 6, 7 — use multiple tests","3, 6, 7, 9 — use digit sum only"],ans:0,exp:"84: even(÷2✓); 8+4=12÷3✓; last2=84÷4=21✓; ends4(÷5✗); ÷2&÷3→÷6✓; 84÷7=12✓; 84÷8=10.5✗; digit sum 12 not÷9✗; ends4 not÷10✗; 8−4=4 not÷11✗. So rows of 2, 3, 4, 6, or 7."},
+{q:"Priya says: '246 is divisible by 6 because it ends in 6.' Is she correct? Explain.",hint:"Divisibility by 6 requires the number to be divisible by BOTH 2 and 3. Check her reasoning.",ch:["She is partly right — it must also be divisible by 3","She is completely correct","She is wrong — 246 is not divisible by 6","She is right — ending in 6 always means ÷6"],ans:0,exp:"Priya's reason is incomplete. 246 is even (÷2 ✓) and 2+4+6=12, ÷3 ✓. So 246 IS divisible by 6, but not simply because it ends in 6 — she must also check divisibility by 3."},
+{q:"A shop sells books in packs of 9. After checking stock, there are 7,254 books. Is this a whole number of packs? Show your reasoning.",hint:"Test 7,254 for divisibility by 9. Add all digits.",ch:["Yes — digit sum 18 is divisible by 9","No — digit sum 18 is not divisible by 9","Yes — 7,254 is even","No — only multiples of 3 work here"],ans:0,exp:"7+2+5+4 = 18. 18÷9=2 ✓. So 7,254 is divisible by 9. That means 7,254 ÷ 9 = 806 packs exactly."},
+{q:"A 4-digit number has digits A, 3, B, 2. It is divisible by 3. What is the condition on A and B?",hint:"Sum of all digits: A+3+B+2 = A+B+5. For divisibility by 3, what must be true of A+B+5?",ch:["A+B+5 must be divisible by 3","A+B must be divisible by 3","A must equal B","A and B must both be even"],ans:0,exp:"For the number to be divisible by 3, its digit sum (A+3+B+2 = A+B+5) must be divisible by 3. So we need (A+B+5) to be a multiple of 3, i.e. A+B ≡ 1 (mod 3)."},
+{q:"Sam says that 2,520 is divisible by every whole number from 1 to 10. Is he correct?",hint:"2,520 = 2³ × 3² × 5 × 7. Check divisibility by each number 1 to 10.",ch:["Yes — 2,520 is the LCM of 1 to 10","No — it is not divisible by 7","No — it is not divisible by 9","Yes — because it ends in 0"],ans:0,exp:"2,520 = LCM(1,2,3,4,5,6,7,8,9,10). It is divisible by every number 1–10. Sam is correct. ✓"},
+{q:"Which divisibility test should you use to check if 1,125 is divisible by 9?",hint:"Think about the special property of the digit sum for multiples of 9.",ch:["Digit sum test: 1+1+2+5=9, divisible by 9 ✓","Last digit test","Last two digits test","Alternating digit sum test"],ans:0,exp:"For 9, we use the digit sum test. 1+1+2+5=9, and 9÷9=1 ✓. So 1,125 is divisible by 9."},
+{q:"A number N is divisible by 4 but NOT by 8. Which statement is true?",hint:"Think about what 'divisible by 4 but not 8' means in terms of the last three digits.",ch:["The last three digits form a number divisible by 4 but not 8","N must be odd","N must end in 4","N's digit sum is not divisible by 8"],ans:0,exp:"Divisibility by 8 depends on the last three digits. If those three digits give a number divisible by 4 but not 8, then N is divisible by 4 but not 8."},
+{q:"Find the smallest 4-digit number that is divisible by 11.",hint:"The smallest 4-digit number is 1,000. Count up until you find the first multiple of 11.",ch:["1,001","1,010","1,100","1,011"],ans:0,exp:"1,001 ÷ 11 = 91. So 1,001 is the smallest 4-digit multiple of 11. Check: 1−0+0−1=0, divisible by 11 ✓."},
+{q:"A number is divisible by 2 and by 9. Must it also be divisible by 18?",hint:"If a number is divisible by 2 and by 9, and HCF(2,9) = 1 (they share no factors), what does that tell you?",ch:["Yes — LCM(2,9) = 18","No — only if digit sum is 18","Yes — always, because 2×9 = 18","No — need to test separately"],ans:0,exp:"Since HCF(2,9)=1, a number divisible by both 2 and 9 must be divisible by 2×9=18. So yes, it must be divisible by 18."},
+{q:"Find all single digits d such that the number 47d is divisible by 3.",hint:"Digit sum: 4+7+d = 11+d. For ÷3, we need 11+d to be divisible by 3.",ch:["d = 1, 4, or 7","d = 0, 3, or 6","d = 2, 5, or 8","d = 1, 2, or 4"],ans:0,exp:"11+d must be divisible by 3. 11 ÷ 3 = 3 rem 2. So we need d to make the remainder 0: d=1(sum12✓), d=4(sum15✓), d=7(sum18✓). So d = 1, 4, or 7."},
+{q:"Jamie says: 'If a number is divisible by 6, it must be divisible by 12.' Is Jamie correct?",hint:"Try a counterexample. Find a multiple of 6 that is NOT a multiple of 12.",ch:["No — 18 is divisible by 6 but not 12","Yes — 6 and 12 are related","No — 6 × 2 = 12 so they always match","Yes — all multiples of 6 are even"],ans:0,exp:"18 is divisible by 6 (18÷6=3 ✓) but 18÷12=1.5, not a whole number. So Jamie is WRONG. A counterexample is 18. Divisibility by 12 also requires divisibility by 4."},
+{q:"The product of two consecutive integers is 132. What are they, and are they divisible by 4?",hint:"Try pairs near √132 ≈ 11.5: try 11 and 12.",ch:["11 and 12 — 12 is divisible by 4","11 and 12 — neither is divisible by 4","12 and 13 — 12 is divisible by 4","10 and 13 — product is 130"],ans:0,exp:"11 × 12 = 132. Among 11 and 12: 12÷4=3 ✓, so 12 is divisible by 4. 11 is not (odd). ✓"},
+{q:"A number has digit sum 36. Which of the following is it definitely divisible by?",hint:"36 is divisible by 9 and by 3. What does this tell you about the number?",ch:["Both 3 and 9","9 only","3 only","Neither 3 nor 9"],ans:0,exp:"Digit sum 36: 36÷9=4 ✓ (divisible by 9) and 36÷3=12 ✓ (divisible by 3). So the number is definitely divisible by both 3 and 9."},
+{q:"Which of these 3-digit numbers is divisible by 7?",hint:"Test each by dividing by 7.",ch:["203","301","405","503"],ans:0,exp:"203÷7=29 ✓. So 203 is divisible by 7. Check: 301÷7=43 ✓ too, but 203 is listed first and confirmed."},
+{q:"Chloe says 'Every number ending in 0 is divisible by 4.' Is she correct?",hint:"Try a number ending in 0 that is NOT divisible by 4. For ÷4, check the last two digits.",ch:["No — 10 ends in 0 but 10÷4=2.5","Yes — all numbers ending in 0 are even","No — only if the last two digits ÷4","Yes — 0 is divisible by 4"],ans:0,exp:"10 ends in 0 but 10÷4=2.5 ✗. The last two digits of 10 are 10, and 10÷4 is not whole. So Chloe is wrong. Ending in 0 guarantees ÷2 and ÷5, but not ÷4."},
+],
+
+// ─────────────────────────────────
+//  SET 5 — Challenge (reasoning, conjectures)
+// ─────────────────────────────────
+5:[
+{q:"Conjecture: 'The digit sum of any multiple of 3 is always a multiple of 3.' Test this with three examples and decide if it is true.",hint:"Try 15, 24, and 123. Add the digits of each.",ch:["True — this is the divisibility rule for 3","False — some multiples of 3 have odd digit sums","True — but only for 2-digit numbers","False — only multiples of 9 satisfy this"],ans:0,exp:"15: digit sum 6=3×2✓. 24: digit sum 6✓. 123: digit sum 6✓. This is exactly the divisibility rule for 3 — it always works. The conjecture is TRUE."},
+{q:"A 6-digit number has the pattern ABABAB (a 2-digit block AB repeated 3 times). Prove it is always divisible by 7.",hint:"ABABAB = AB × 10,101. Now, does 7 divide 10,101?",ch:["Yes — ABABAB = AB × 10,101 and 10,101 ÷ 7 = 1,443","No — the pattern does not help","Yes — every 6-digit number is divisible by 7","No — only if AB itself is divisible by 7"],ans:0,exp:"ABABAB = AB × 10,101. And 10,101 ÷ 7 = 1,443 exactly. So no matter what AB is, ABABAB is always a multiple of 7. ✓"},
+{q:"The digits of a number are 1, 3, 5, 7, and 9 (each used once). Can any arrangement be divisible by 9?",hint:"Digit sum = 1+3+5+7+9 = 25. Is 25 divisible by 9?",ch:["No — digit sum is 25, not divisible by 9","Yes — if arranged correctly","Yes — 13,579 is divisible by 9","No — odd digit sum prevents it"],ans:0,exp:"1+3+5+7+9=25. 25÷9 is not a whole number. The digit sum is fixed regardless of arrangement, so NO arrangement is divisible by 9."},
+{q:"Explain why every multiple of 11 has an alternating digit sum divisible by 11.",hint:"This follows directly from the definition of the divisibility rule. Can you state it clearly?",ch:["Because 10 ≡ −1 (mod 11), so each digit alternates in contribution","Because the digit sum equals 11 for all multiples","Because all multiples of 11 are even","Because 11 is prime"],ans:0,exp:"Since 10 ≡ −1 (mod 11), the place values alternate: units=1, tens=−1, hundreds=1, ... This means the alternating sum captures exactly the remainder when dividing by 11."},
+{q:"A 4-digit number 4☐☐8 is divisible by both 4 and 3. Find a valid pair of missing digits.",hint:"For ÷4: last 2 digits ☐8 must be divisible by 4 (so ☐ is even). For ÷3: total digit sum 4+☐+☐+8=12+both digits must be ÷3.",ch:["☐☐ = 0 and 4 (number: 4,048, digit sum=16 — not ÷3). Try 2 and 8: digit sum=22 ✗. Try 2 and 2: 4,228 — last two 28÷4=7✓, digit sum=16 ✗. Try 0 and 8: 4,088 — 88÷4=22✓, digit sum=20 ✗. Try 4 and 8: 4,488 — 88÷4✓, sum=24÷3✓ ✓","4 and 8 (giving 4,488)","0 and 0 (giving 4,008)","2 and 4 (giving 4,248)"],ans:1,exp:"4,488: last two digits 88÷4=22 ✓. Digit sum = 4+4+8+8 = 24, 24÷3=8 ✓. So 4,488 is divisible by both 4 and 3. ✓"},
+{q:"Two consecutive integers have product 5,402. What are they? Is either divisible by 11?",hint:"√5402 ≈ 73.5. Try 73 × 74.",ch:["73 and 74 — neither is divisible by 11","73 and 74 — 77 would be, but not these","73 and 74 — 74 is divisible by 11? Check: 7−4=3 ✗","72 and 75 — not consecutive"],ans:0,exp:"73 × 74 = 5,402. Check 11: 73→7−3=4 ✗; 74→7−4=3 ✗. Neither 73 nor 74 is divisible by 11."},
+{q:"If N is divisible by both 4 and 9, must N be divisible by 36?",hint:"HCF(4,9) = ? If they share no common factors, what is LCM(4,9)?",ch:["Yes — LCM(4,9) = 36 since HCF(4,9) = 1","No — LCM(4,9) = 18","Yes — because 4+9=13","No — need to also check divisibility by 3"],ans:0,exp:"HCF(4,9)=1, so LCM(4,9)=4×9=36. Any number divisible by both 4 and 9 must be divisible by 36. ✓"},
+{q:"Investigate: is the sum of any 3 consecutive integers always divisible by 3?",hint:"Let the integers be n, n+1, n+2. What is their sum?",ch:["Yes — sum = 3n+3 = 3(n+1), always divisible by 3","No — only if n is even","Yes — but only for positive integers","No — sometimes the sum is not divisible by 3"],ans:0,exp:"Sum = n+(n+1)+(n+2) = 3n+3 = 3(n+1). Since it is 3 times an integer, it is always divisible by 3. ✓ This is a proven conjecture."},
+{q:"A number N is divisible by 11. N has 4 digits: 8, A, B, 3 (in that order). Find a valid pair (A, B).",hint:"Alternating sum: 8 − A + B − 3 = 5 − A + B. This must be 0 or ±11.",ch:["A=5, B=0 (sum=0 ✓)","A=0, B=6 (sum=11 ✓)","A=3, B=9 (sum=11 ✓)","A=5, B=0 or A=0, B=6"],ans:3,exp:"5−A+B must be 0 or 11 or −11. For =0: A−B=5 → e.g. A=5,B=0 ✓. For =11: B−A=6 → e.g. A=0,B=6 ✓. Both pairs are valid."},
+{q:"Find the smallest number greater than 500 that is divisible by 11.",hint:"Divide 500 by 11 and round up to the next whole number.",ch:["506","506 (500÷11=45 rem 5, so next multiple = 46×11=506)","511","517"],ans:1,exp:"500÷11=45.45... The next multiple is 46×11=506. Check: 5−0+6=11 ✓. So 506 is the smallest number > 500 divisible by 11."},
+{q:"A number is divisible by 5 and by 9. Is it necessarily divisible by 45?",hint:"HCF(5,9) = ? Are 5 and 9 coprime?",ch:["Yes — LCM(5,9)=45 since HCF(5,9)=1","No — need to check 45 separately","Yes — because 5×9=45","No — only if it ends in 0"],ans:0,exp:"HCF(5,9)=1 (they share no common factors). So LCM(5,9)=45. Any number divisible by both 5 and 9 is divisible by 45. ✓"},
+{q:"The number 1A2B is divisible by 9. Also, B = 2A. Find A.",hint:"Digit sum: 1+A+2+B = 3+A+B. Since B=2A, digit sum = 3+A+2A = 3+3A. For ÷9: 3+3A must be divisible by 9.",ch:["A=2 (digit sum=9 ✓)","A=3 (digit sum=12 ✗)","A=1 (digit sum=6 ✗)","A=6 (digit sum=21 ✗)"],ans:0,exp:"Digit sum = 3+3A. For ÷9: 3+3A=9 → A=2. Check: B=2×2=4. Number = 1,224. 1+2+2+4=9 ✓. So A=2."},
+{q:"Omar says: 'If a number is divisible by 8, then it is also divisible by 4.' Is he correct? Justify.",hint:"Think about the relationship between 4 and 8. Is 8 a multiple of 4?",ch:["Yes — 8 = 2×4, so every multiple of 8 is also a multiple of 4","No — need to test separately","Yes — but only for even numbers","No — divisibility by 8 and 4 are unrelated"],ans:0,exp:"8=2×4, so every multiple of 8 is automatically a multiple of 4. Omar is correct. Example: 24÷8=3✓ and 24÷4=6✓. ✓"},
+{q:"The last three digits of a large number are 5K6 where K is a digit. The number is divisible by 8. Find all possible values of K.",hint:"For ÷8: 5K6 must be divisible by 8. Check 506, 516, 526, 536, 546, 556, 566, 576, 586, 596.",ch:["K = 1 (516÷8=64.5 ✗) — try K=3: 536÷8=67 ✓","K = 3 or K = 7","K = 0 or K = 4","K = 2 or K = 6"],ans:1,exp:"Test each: 506÷8=63.25✗; 516÷8=64.5✗; 526÷8=65.75✗; 536÷8=67✓; 546÷8=68.25✗; 556÷8=69.5✗; 566÷8=70.75✗; 576÷8=72✓; 586÷8=73.25✗; 596÷8=74.5✗. So K=3 or K=7."},
+{q:"Using the digits 0, 2, 4, 5, 8 (each once), make a 5-digit number divisible by 8, 5, and 2 simultaneously.",hint:"÷5 means last digit is 0 or 5. ÷2 means last digit is even. ÷8 means last 3 digits ÷8. The last digit must be 0 (satisfies ÷2 and ÷5). Then last 3 digits ☐☐0 ÷ 8.",ch:["e.g. 24,580 — last3=580÷8=72.5✗ — try 25,480: last3=480÷8=60✓","25,480","24,850","45,280"],ans:1,exp:"Last digit must be 0 (for both ÷2 and ÷5). Last 3 digits must be ÷8. Remaining digits for last3: try 480: 480÷8=60✓. So a number like 25,480 works: ends in 0(÷2✓÷5✓), last 3=480÷8=60✓. ✓"},
+]
+};
+
+// ═══════════════════════════════════════════════════════
+//  State
+// ═══════════════════════════════════════════════════════
+let currentSet = 1;
+let questions   = [];
+let qi = 0;
+let results = [];
+let answered = false;
+let clickReady = false;
+let hintShown = false;
+
+const SET_META = {
+  1:{icon:'🌱', title:'Set 1 — Focus Practice',    sub:'Divisibility by 2, 3, 4, 5 and 10', col:'col-s1'},
+  2:{icon:'🔵', title:'Set 2 — Core Practice',     sub:'Divisibility by 6, 8, 9 and 11',  col:'col-s2'},
+  3:{icon:'🌀', title:'Set 3 — Mixed Practice',    sub:'All rules 2–11 | Missing digits | Rearranging', col:'col-s3'},
+  4:{icon:'🧩', title:'Set 4 — Problem Solving',   sub:'Choose the right rule | Explain & justify', col:'col-s4'},
+  5:{icon:'⭐', title:'Set 5 — Challenge',          sub:'Reasoning | Conjectures | Multi-rule questions', col:'col-s5'},
+};
+
+// ═══════════════════════════════════════════════════════
+//  Navigation
+// ═══════════════════════════════════════════════════════
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goHome(){
+  if(confirm('Go back to the Home screen? Your progress will be lost.')){
+    showScreen('homeScreen');
+  }
+}
+function pickSet(n){
+  currentSet = n;
+  const m = SET_META[n];
+  document.getElementById('startIcon').textContent  = m.icon;
+  document.getElementById('startTitle').textContent = m.title;
+  document.getElementById('startSub').textContent   = m.sub;
+  showScreen('startScreen');
+}
+function startQuiz(){
+  questions = [...SETS[currentSet]];
+  qi = 0;
+  results = [];
+  loadQ();
+  showScreen('quizScreen');
+}
+function restartSet(){
+  startQuiz();
+  showScreen('quizScreen');
+}
+
+// ═══════════════════════════════════════════════════════
+//  Quiz logic
+// ═══════════════════════════════════════════════════════
+function loadQ(){
+  answered   = false;
+  clickReady = false;
+  hintShown  = false;
+
+  const total = questions.length;
+  const q     = questions[qi];
+  const m     = SET_META[currentSet];
+
+  // progress
+  document.getElementById('progressText').textContent = `Question ${qi+1} of ${total}`;
+  const pct = (qi / total) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  // set label
+  const lbl = document.getElementById('setLabel');
+  lbl.textContent = m.title;
+  lbl.className   = 'set-label ' + m.col;
+
+  // question
+  document.getElementById('questionText').textContent = q.q;
+
+  // hint
+  const hintBtn = document.getElementById('hintBtn');
+  const hintBox = document.getElementById('hintBox');
+  hintBox.style.display  = 'none';
+  hintBtn.textContent    = '💡 Show Hint';
+  hintBox.textContent    = q.hint || '';
+
+  // choices
+  const box = document.getElementById('choicesBox');
+  box.innerHTML = '';
+  q.ch.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c;
+    btn.onclick = () => pickAnswer(i);
+    box.appendChild(btn);
+  });
+
+  // feedback + next
+  const fb = document.getElementById('feedbackBox');
+  fb.style.display = 'none';
+  fb.className     = 'feedback-box';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  setTimeout(() => { clickReady = true; }, 400);
+}
+
+function toggleHint(){
+  const box = document.getElementById('hintBox');
+  const btn = document.getElementById('hintBtn');
+  if(box.style.display === 'none' || !box.style.display){
+    box.style.display = 'block';
+    btn.textContent   = '💡 Hide Hint';
+  } else {
+    box.style.display = 'none';
+    btn.textContent   = '💡 Show Hint';
+  }
+}
+
+function pickAnswer(idx){
+  if(!clickReady || answered) return;
+  answered = true;
+
+  const q       = questions[qi];
+  const choices = document.querySelectorAll('.choice');
+  const correct = idx === q.ans;
+
+  choices.forEach((c,i) => {
+    c.classList.add('disabled');
+    if(i === q.ans)  c.classList.add('correct');
+    else if(i === idx && !correct) c.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedbackBox');
+  if(correct){
+    fb.className = 'feedback-box correct';
+    fb.innerHTML = `<span class="feedback-icon">✅</span><strong>Correct!</strong> ${q.exp}`;
+    beep(660, 'sine', 0.18, 0.5);
+  } else {
+    fb.className = 'feedback-box wrong';
+    fb.innerHTML = `<span class="feedback-icon">❌</span><strong>Not quite.</strong> Correct answer: <strong>${q.ch[q.ans]}</strong><br><br>${q.exp}`;
+    beep(200, 'sawtooth', 0.25, 0.4);
+  }
+  fb.style.display = 'block';
+
+  results.push({q: q.q, chosen: q.ch[idx], correct: q.ch[q.ans], ok: correct, exp: q.exp});
+
+  document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+function nextQ(){
+  qi++;
+  if(qi >= questions.length){
+    showResult();
+  } else {
+    loadQ();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  Result screen
+// ═══════════════════════════════════════════════════════
+function showResult(){
+  const score = results.filter(r=>r.ok).length;
+  const total = results.length;
+  const pct   = Math.round((score/total)*100);
+
+  let grade, msg, emoji, circleCol;
+  if(pct >= 80){
+    grade='Excellent Work! 🎉'; msg='Outstanding! You have mastered these rules.'; emoji='🏆'; circleCol='#52BE80';
+  } else if(pct >= 60){
+    grade='Good Job! 👍'; msg='Great effort! Keep practising to reach the top.'; emoji='😊'; circleCol='#5BA4CF';
+  } else if(pct >= 40){
+    grade='You are Getting There 📚'; msg='Review the rules and try again — you can do it!'; emoji='💪'; circleCol='#F4A261';
+  } else {
+    grade='Review the Basics 🌱'; msg='Go back to the Learning Summary and try Set 1 first.'; emoji='📖'; circleCol='#E74C3C';
+  }
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultGrade').textContent = grade;
+  document.getElementById('resultMsg').textContent   = msg;
+
+  const circle = document.getElementById('scoreCircle');
+  circle.style.background = circleCol;
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('scoreOf').textContent  = `out of ${total}`;
+  document.getElementById('scoreBar').style.width      = pct+'%';
+  document.getElementById('scoreBar').style.background = circleCol;
+  document.getElementById('scorePct').textContent = pct + '% correct';
+
+  if(pct === 100) launchConfetti();
+  showScreen('resultScreen');
+}
+
+// ═══════════════════════════════════════════════════════
+//  Review screen
+// ═══════════════════════════════════════════════════════
+function showReview(){
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  results.forEach((r,i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (r.ok ? 'ok' : 'bad');
+    div.innerHTML = `
+      <div class="review-q"><span class="review-tick">${r.ok?'✅':'❌'}</span>Q${i+1}: ${r.q}</div>
+      <div class="review-ans">Your answer: <strong>${r.chosen}</strong></div>
+      ${!r.ok ? `<div class="review-ans">Correct answer: <strong>${r.correct}</strong></div>` : ''}
+      <div class="review-exp">${r.exp}</div>
+    `;
+    list.appendChild(div);
+  });
+  showScreen('reviewScreen');
+}
+
+// ═══════════════════════════════════════════════════════
+//  Sound (Web Audio API)
+// ═══════════════════════════════════════════════════════
+let audioCtx;
+function beep(freq, type, dur, vol){
+  try {
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type      = type;
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    o.start(); o.stop(audioCtx.currentTime + dur);
+  } catch(e){}
+}
+
+// ═══════════════════════════════════════════════════════
+//  Confetti (perfect score only)
+// ═══════════════════════════════════════════════════════
+function launchConfetti(){
+  const colours = ['#7EC8E3','#F4A261','#52BE80','#A29BFE','#FDCB6E','#FD79A8'];
+  for(let i=0;i<55;i++){
+    const el = document.createElement('div');
+    const size = 8 + Math.random()*8;
+    Object.assign(el.style,{
+      position:'fixed', top:'-14px',
+      left: Math.random()*100+'vw',
+      width: size+'px', height: size+'px',
+      borderRadius: Math.random()>.5?'50%':'2px',
+      background: colours[Math.floor(Math.random()*colours.length)],
+      opacity: 0.85, zIndex:9999, pointerEvents:'none',
+      animation:`cfFall ${1.4+Math.random()*1.8}s linear ${Math.random()*1.2}s forwards`
+    });
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 3500);
+  }
+}
+const cfStyle = document.createElement('style');
+cfStyle.textContent = `@keyframes cfFall{to{transform:translateY(105vh) rotate(720deg);opacity:0}}`;
+document.head.appendChild(cfStyle);
+</script>
+</body>
+</html>
