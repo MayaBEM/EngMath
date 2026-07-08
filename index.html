@@ -1,59 +1,1894 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maths 7 – Unit 1: Integers · Review &amp; Test | Bright EngMath</title>
-<meta name="description" content="A complete interactive review and test-preparation course for Cambridge-style Maths Stage 7, Unit 1: Integers. Created by Bright EngMath.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Bright EngMath — Unit 2: Expressions, Formulae & Equations. A fun, interactive Year 7 maths learning and quiz adventure." />
+<title>Bright EngMath · Unit 2 — Expressions, Formulae & Equations</title>
+<style>
+/* ============================================================
+   BRIGHT ENGMATH · UNIT 2 — single-file interactive site
+   Sections:
+   1. Design tokens & base
+   2. Layout & top bar
+   3. Buttons & chips
+   4. Welcome page
+   5. Unit map / cards
+   6. Lesson & content cards
+   7. Quiz engine UI
+   8. Vocabulary / flashcards
+   9. Results dashboard
+   10. Gamification & animation
+   11. Teacher mode & responsive
+   ============================================================ */
+
+/* ---------- 1. Design tokens ---------- */
+:root{
+  --sky:#7ec8ff; --sky-soft:#d9f0ff;
+  --aqua:#6fe0d6; --aqua-soft:#d6f7f3;
+  --mint:#8fe3a8; --mint-soft:#dcf7e3;
+  --yellow:#ffd76b; --yellow-soft:#fff3d1;
+  --peach:#ffc7a3; --peach-soft:#ffe8db;
+  --coral:#ff9a8b; --coral-soft:#ffe0da;
+  --lav:#c3b1ff; --lav-soft:#ece6ff;
+  --pink:#ffb3d1; --pink-soft:#ffe1ee;
+  --cream:#fffdf7;
+  --ink:#3a3a55; --ink-soft:#6a6a86;
+  --good:#37b26a; --good-soft:#e2f7ea;
+  --bad:#f2617a; --bad-soft:#ffe4ea;
+  --shadow:0 10px 26px rgba(120,120,170,.18);
+  --shadow-sm:0 4px 12px rgba(120,120,170,.14);
+  --radius:26px; --radius-sm:16px;
+  --font:'Nunito','Noto Sans Thai','Trebuchet MS',system-ui,sans-serif;
+  --fs:17px;
+}
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Noto+Sans+Thai:wght@500;600;700;800&display=swap');
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; font-family:var(--font); color:var(--ink); font-size:var(--fs);
+  background:
+    radial-gradient(circle at 12% 8%, var(--sky-soft), transparent 42%),
+    radial-gradient(circle at 88% 12%, var(--pink-soft), transparent 40%),
+    radial-gradient(circle at 78% 88%, var(--mint-soft), transparent 42%),
+    radial-gradient(circle at 18% 92%, var(--yellow-soft), transparent 40%),
+    var(--cream);
+  min-height:100vh; line-height:1.5;
+}
+h1,h2,h3{font-weight:800; line-height:1.2; margin:.2em 0 .4em;}
+p{margin:.4em 0;}
+img{max-width:100%;}
+:focus-visible{outline:3px solid var(--lav); outline-offset:2px; border-radius:8px;}
+.hidden{display:none !important;}
+
+/* ---------- 2. Layout ---------- */
+.app{max-width:1080px; margin:0 auto; padding:0 16px 90px;}
+.topbar{
+  position:sticky; top:0; z-index:50;
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  padding:10px 16px; margin-bottom:14px;
+  background:rgba(255,253,247,.86); backdrop-filter:blur(8px);
+  border-bottom:2px solid rgba(195,177,255,.3);
+}
+.brand{display:flex; align-items:center; gap:9px; font-weight:800; font-size:1.15rem; cursor:pointer;}
+.brand .logo{
+  width:38px;height:38px;border-radius:12px; display:grid; place-items:center; font-size:1.2rem;
+  background:linear-gradient(135deg,var(--sky),var(--lav)); box-shadow:var(--shadow-sm);
+}
+.brand small{display:block; font-size:.62rem; font-weight:600; color:var(--ink-soft); letter-spacing:.5px;}
+.topbar .spacer{flex:1;}
+.topnav{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+.progress-mini{display:flex; align-items:center; gap:8px; font-weight:700; font-size:.85rem;}
+.progress-mini .bar{width:110px;height:12px;border-radius:99px;background:var(--lav-soft);overflow:hidden;}
+.progress-mini .bar > i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--mint),var(--aqua));transition:width .5s;}
+.star-count{display:flex;align-items:center;gap:4px;font-weight:800;color:#c9931f;background:var(--yellow-soft);padding:5px 11px;border-radius:99px;}
+
+/* ---------- 3. Buttons ---------- */
+.btn{
+  font-family:inherit; font-weight:700; font-size:.95rem; cursor:pointer;
+  border:none; border-radius:99px; padding:11px 20px; color:var(--ink);
+  background:#fff; box-shadow:var(--shadow-sm); transition:transform .12s, box-shadow .2s, background .2s;
+  display:inline-flex; align-items:center; gap:7px;
+}
+.btn:hover{transform:translateY(-2px);}
+.btn:active{transform:translateY(1px) scale(.98);}
+.btn.primary{background:linear-gradient(135deg,var(--sky),var(--aqua)); color:#fff;}
+.btn.pink{background:linear-gradient(135deg,var(--pink),var(--coral)); color:#fff;}
+.btn.lav{background:linear-gradient(135deg,var(--lav),var(--sky)); color:#fff;}
+.btn.mint{background:linear-gradient(135deg,var(--mint),var(--aqua)); color:#0c5b3d;}
+.btn.yellow{background:linear-gradient(135deg,var(--yellow),var(--peach)); color:#7a5510;}
+.btn.ghost{background:rgba(255,255,255,.7);}
+.btn.big{font-size:1.15rem; padding:15px 30px;}
+.btn.small{font-size:.8rem; padding:8px 14px;}
+.btn.icon{padding:9px 12px; border-radius:14px;}
+.btn[disabled]{opacity:.5; cursor:not-allowed; transform:none;}
+.btn.toggle-on{background:linear-gradient(135deg,var(--mint),var(--aqua));color:#0c5b3d;}
+
+/* ---------- 4. Welcome ---------- */
+.screen{animation:fadeUp .45s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+.welcome{
+  text-align:center; padding:26px 22px 34px; margin-top:6px;
+  background:linear-gradient(160deg,#ffffff,var(--sky-soft) 120%);
+  border-radius:34px; box-shadow:var(--shadow); position:relative; overflow:hidden;
+}
+.welcome .floaty{position:absolute; font-size:2rem; opacity:.7; animation:float 6s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-14px) rotate(6deg);}}
+.welcome h1{font-size:2.4rem; margin-top:6px;}
+.welcome .unit-badge{
+  display:inline-block; background:linear-gradient(135deg,var(--lav),var(--pink)); color:#fff;
+  padding:7px 18px; border-radius:99px; font-weight:800; letter-spacing:1px; box-shadow:var(--shadow-sm);
+}
+.welcome .subtitle{font-size:1.15rem; color:var(--ink-soft); font-weight:600; max-width:620px; margin:10px auto 4px;}
+.mascot{font-size:4.6rem; display:block; margin:6px auto; animation:bob 3s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.namebox{
+  margin:18px auto 6px; max-width:340px; background:#fff; border-radius:var(--radius); padding:16px;
+  box-shadow:var(--shadow-sm); border:2px dashed var(--lav);
+}
+.namebox input{
+  width:100%; font-family:inherit; font-size:1.05rem; font-weight:700; text-align:center;
+  padding:11px 12px; border:2px solid var(--sky-soft); border-radius:14px; color:var(--ink); background:var(--cream);
+}
+.learn-list{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:760px; margin:16px auto;}
+.learn-list .pill{background:#fff; border-radius:99px; padding:8px 15px; font-weight:700; font-size:.85rem; box-shadow:var(--shadow-sm);}
+
+/* ---------- 5. Unit map ---------- */
+.section-head{text-align:center; margin:18px 0 6px;}
+.section-head h2{font-size:1.9rem;}
+.section-head p{color:var(--ink-soft); font-weight:600;}
+.map-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:18px; margin-top:18px;}
+.chapter-card{
+  position:relative; background:#fff; border-radius:var(--radius); padding:20px 18px 18px;
+  box-shadow:var(--shadow); cursor:pointer; transition:transform .15s, box-shadow .2s;
+  border:3px solid transparent; overflow:hidden;
+}
+.chapter-card:hover{transform:translateY(-5px); box-shadow:0 16px 34px rgba(120,120,170,.24);}
+.chapter-card .num{
+  position:absolute; top:-14px; right:-10px; font-size:4.4rem; font-weight:800; opacity:.12; color:var(--ink);
+}
+.chapter-card .cicon{font-size:2.5rem; display:block; margin-bottom:6px;}
+.chapter-card h3{font-size:1.15rem; margin:0 0 4px;}
+.chapter-card .skill{display:inline-block; font-size:.72rem; font-weight:800; letter-spacing:.5px; text-transform:uppercase; padding:4px 10px; border-radius:99px; margin-bottom:8px;}
+.chapter-card .meta{font-size:.82rem; color:var(--ink-soft); font-weight:600;}
+.chapter-card .status{margin-top:12px; display:flex; align-items:center; gap:6px; font-weight:800; font-size:.85rem;}
+.chapter-card .card-stars{color:#e6a90c; letter-spacing:2px;}
+.chapter-card.locked{filter:grayscale(.55); opacity:.72; cursor:not-allowed;}
+.chapter-card.locked:hover{transform:none;}
+.chapter-card.done{border-color:var(--mint);}
+.chapter-card.current{border-color:var(--sky); animation:pulseBorder 2.2s infinite;}
+@keyframes pulseBorder{0%,100%{box-shadow:var(--shadow);}50%{box-shadow:0 0 0 5px rgba(126,200,255,.3),var(--shadow);}}
+.ribbon{position:absolute;top:12px;left:-30px;transform:rotate(-45deg);background:var(--mint);color:#0c5b3d;font-weight:800;font-size:.65rem;padding:3px 34px;box-shadow:var(--shadow-sm);}
+
+/* palette helpers */
+.c-sky{background:var(--sky-soft);} .c-aqua{background:var(--aqua-soft);} .c-mint{background:var(--mint-soft);}
+.c-yellow{background:var(--yellow-soft);} .c-peach{background:var(--peach-soft);} .c-coral{background:var(--coral-soft);}
+.c-lav{background:var(--lav-soft);} .c-pink{background:var(--pink-soft);}
+.sk-sky{background:var(--sky-soft);color:#1c6fa8;} .sk-mint{background:var(--mint-soft);color:#1c7a48;}
+.sk-lav{background:var(--lav-soft);color:#5b45b8;} .sk-pink{background:var(--pink-soft);color:#b83a72;}
+.sk-yellow{background:var(--yellow-soft);color:#a5760f;} .sk-coral{background:var(--coral-soft);color:#c24a3a;}
+
+/* ---------- 6. Lesson content ---------- */
+.lesson-wrap{background:#fff; border-radius:34px; box-shadow:var(--shadow); padding:22px; margin-top:14px;}
+.lesson-head{display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:3px dashed var(--lav-soft); padding-bottom:14px; margin-bottom:6px;}
+.lesson-head .cicon{font-size:2.6rem;}
+.lesson-head h2{font-size:1.7rem; margin:0;}
+.lesson-head .skill{font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:.5px; padding:4px 10px; border-radius:99px;}
+.step-tabs{display:flex; gap:8px; flex-wrap:wrap; margin:14px 0;}
+.step-tab{flex:1; min-width:130px; text-align:center; padding:11px; border-radius:16px; font-weight:800; background:var(--cream); box-shadow:var(--shadow-sm); border:2px solid transparent; color:var(--ink-soft);}
+.step-tab.active{background:linear-gradient(135deg,var(--sky),var(--aqua)); color:#fff; border-color:#fff;}
+.step-tab .n{display:block; font-size:.7rem; opacity:.9;}
+.info-card{background:var(--cream); border-radius:var(--radius); padding:16px 18px; margin:12px 0; box-shadow:var(--shadow-sm); border-left:7px solid var(--sky); animation:fadeUp .4s both;}
+.info-card h3{margin-top:0; font-size:1.2rem;}
+.info-card.tip{border-color:var(--yellow); background:var(--yellow-soft);}
+.info-card.remember{border-color:var(--mint); background:var(--mint-soft);}
+.info-card.mistake{border-color:var(--coral); background:var(--coral-soft);}
+.info-card.example{border-color:var(--lav); background:var(--lav-soft);}
+.badge-inline{display:inline-block; font-weight:800; font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; padding:3px 9px; border-radius:99px; margin-bottom:6px;}
+.math{font-family:'Cambria Math','Georgia',serif; font-weight:700; background:#fff; padding:2px 8px; border-radius:8px; box-shadow:var(--shadow-sm); display:inline-block; margin:2px; font-size:1.05em;}
+.math.big{font-size:1.4rem; padding:8px 16px; display:block; text-align:center; max-width:max-content; margin:10px auto;}
+.eqrow{display:flex; align-items:center; gap:8px; justify-content:center; flex-wrap:wrap; margin:8px 0;}
+.arrow{font-size:1.4rem; color:var(--lav);}
+.vocab-inline{background:var(--yellow-soft); border-bottom:2px dotted var(--yellow); font-weight:700; cursor:help; border-radius:4px; padding:0 3px;}
+.hintbtn{background:var(--lav-soft); color:#5b45b8; border:none; border-radius:99px; padding:6px 13px; font-weight:800; font-family:inherit; cursor:pointer; font-size:.82rem;}
+.hint-text{margin-top:8px; background:var(--lav-soft); border-radius:14px; padding:10px 14px; font-weight:600;}
+.lesson-nav{display:flex; justify-content:space-between; gap:10px; margin-top:18px; flex-wrap:wrap;}
+
+/* ---------- 7. Quiz engine ---------- */
+.quiz-head{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:6px;}
+.qprogress{flex:1; min-width:150px; height:16px; background:var(--lav-soft); border-radius:99px; overflow:hidden;}
+.qprogress > i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--sky),var(--mint)); border-radius:99px; transition:width .4s;}
+.qcount{font-weight:800; white-space:nowrap;}
+.question-card{background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); padding:22px; margin-top:12px; animation:fadeUp .4s both;}
+.q-skill{display:inline-block; font-size:.7rem; font-weight:800; text-transform:uppercase; letter-spacing:.5px; padding:4px 10px; border-radius:99px; margin-bottom:8px;}
+.q-text{font-size:1.25rem; font-weight:700; margin:6px 0 14px;}
+.q-text .math{font-size:1.05em;}
+.options{display:grid; gap:11px;}
+.options.two{grid-template-columns:1fr 1fr;}
+.opt{
+  text-align:left; font-family:inherit; font-size:1.02rem; font-weight:700; cursor:pointer;
+  background:var(--cream); border:2.5px solid var(--sky-soft); border-radius:16px; padding:13px 16px;
+  transition:transform .1s, border-color .2s, background .2s; display:flex; align-items:center; gap:10px;
+}
+.opt:hover:not(.locked){border-color:var(--sky); transform:translateX(3px);}
+.opt .key{width:28px;height:28px;border-radius:9px;background:#fff;display:grid;place-items:center;font-weight:800;box-shadow:var(--shadow-sm); flex-shrink:0;}
+.opt.correct{background:var(--good-soft); border-color:var(--good); color:#1c7a48;}
+.opt.wrong{background:var(--bad-soft); border-color:var(--bad); color:#b8324a;}
+.opt.locked{cursor:default;}
+.opt.pick{border-color:var(--lav); background:var(--lav-soft);}
+.opt img.picimg{width:60px;height:60px;}
+.pic-opt{font-size:2.6rem; text-align:center; justify-content:center;}
+
+/* fill blank / text input */
+.fill-in{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:6px 0;}
+.fill-in input{font-family:inherit; font-size:1.15rem; font-weight:800; text-align:center; width:130px; padding:10px; border:2.5px solid var(--sky-soft); border-radius:14px; background:var(--cream); color:var(--ink);}
+.fill-in input.correct{border-color:var(--good); background:var(--good-soft);}
+.fill-in input.wrong{border-color:var(--bad); background:var(--bad-soft);}
+
+/* matching */
+.match-wrap{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+.match-col{display:flex; flex-direction:column; gap:10px;}
+.match-item{background:var(--cream); border:2.5px solid var(--sky-soft); border-radius:14px; padding:12px; font-weight:700; cursor:pointer; text-align:center; transition:.15s;}
+.match-item.sel{border-color:var(--lav); background:var(--lav-soft); transform:scale(1.03);}
+.match-item.done{border-color:var(--good); background:var(--good-soft); cursor:default; opacity:.85;}
+.match-item .dot{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:middle;}
+
+/* ordering / drag */
+.order-tray, .order-target{display:flex; flex-wrap:wrap; gap:9px; min-height:56px; padding:10px; border-radius:16px; margin:8px 0;}
+.order-target{background:var(--lav-soft); border:2.5px dashed var(--lav);}
+.order-tray{background:var(--cream); border:2.5px solid var(--sky-soft);}
+.token{background:#fff; border:2px solid var(--sky); border-radius:12px; padding:9px 14px; font-weight:800; cursor:pointer; box-shadow:var(--shadow-sm); font-size:1.05rem; transition:transform .1s;}
+.token:hover{transform:translateY(-2px);}
+.token.correct{border-color:var(--good); background:var(--good-soft);}
+.token.wrong{border-color:var(--bad); background:var(--bad-soft);}
+
+/* sorting */
+.sort-bins{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px;}
+.sort-bin{background:var(--cream); border:2.5px dashed var(--aqua); border-radius:18px; padding:12px; min-height:90px;}
+.sort-bin h4{margin:0 0 8px; text-align:center;}
+.sort-bin .drop{display:flex; flex-wrap:wrap; gap:8px; min-height:40px;}
+.sort-pool{display:flex; flex-wrap:wrap; gap:9px; justify-content:center; margin:12px 0;}
+
+/* feedback */
+.feedback{margin-top:16px; border-radius:18px; padding:14px 18px; font-weight:700; animation:fadeUp .35s both; display:none;}
+.feedback.show{display:block;}
+.feedback.good{background:var(--good-soft); border-left:7px solid var(--good); color:#1c7a48;}
+.feedback.bad{background:var(--bad-soft); border-left:7px solid var(--bad); color:#b8324a;}
+.feedback .fb-title{font-size:1.15rem; display:flex; align-items:center; gap:8px;}
+.feedback .explain{color:var(--ink); font-weight:600; margin-top:6px;}
+.quiz-actions{display:flex; gap:10px; justify-content:space-between; margin-top:16px; flex-wrap:wrap;}
+
+/* ---------- 8. Vocabulary / flashcards ---------- */
+.vocab-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px; margin-top:16px;}
+.flip{perspective:1000px; height:190px; cursor:pointer;}
+.flip-inner{position:relative; width:100%; height:100%; transition:transform .6s; transform-style:preserve-3d;}
+.flip.flipped .flip-inner{transform:rotateY(180deg);}
+.flip-face{position:absolute; inset:0; backface-visibility:hidden; border-radius:var(--radius); padding:14px; box-shadow:var(--shadow); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;}
+.flip-front{background:linear-gradient(160deg,#fff,var(--sky-soft));}
+.flip-front .word{font-size:1.35rem; font-weight:800;}
+.flip-front .ipa{color:var(--ink-soft); font-weight:600; margin-top:4px;}
+.flip-front .fico{font-size:2.2rem;}
+.flip-back{background:linear-gradient(160deg,var(--lav-soft),#fff); transform:rotateY(180deg); font-weight:600;}
+.flip-back .th{color:var(--coral); font-weight:800; margin-top:6px;}
+.flip-back .ex{font-size:.85rem; margin-top:8px; color:var(--ink-soft);}
+.mini-tools{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:14px 0;}
+
+/* ---------- 9. Results ---------- */
+.result-hero{text-align:center; background:linear-gradient(160deg,#fff,var(--yellow-soft)); border-radius:34px; box-shadow:var(--shadow); padding:26px; position:relative; overflow:hidden;}
+.result-hero .medal{font-size:5rem; display:block; animation:bob 3s ease-in-out infinite;}
+.result-hero h2{font-size:2rem; margin:4px 0;}
+.score-ring{width:150px;height:150px;margin:10px auto;border-radius:50%;display:grid;place-items:center;font-weight:800;background:conic-gradient(var(--mint) var(--pct,0%), var(--lav-soft) 0);}
+.score-ring .inner{width:118px;height:118px;border-radius:50%;background:#fff;display:grid;place-items:center;flex-direction:column;box-shadow:var(--shadow-sm);}
+.score-ring .inner b{font-size:2.2rem;line-height:1;}
+.score-ring .inner span{font-size:.8rem;color:var(--ink-soft);}
+.stat-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin-top:16px;}
+.stat{background:#fff; border-radius:18px; padding:14px; text-align:center; box-shadow:var(--shadow-sm);}
+.stat b{font-size:1.5rem; display:block;}
+.stat span{font-size:.78rem; color:var(--ink-soft); font-weight:700;}
+.skillbar{margin:10px 0;}
+.skillbar .lab{display:flex; justify-content:space-between; font-weight:700; font-size:.9rem; margin-bottom:4px;}
+.skillbar .track{height:14px; background:var(--lav-soft); border-radius:99px; overflow:hidden;}
+.skillbar .track > i{display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,var(--sky),var(--mint)); transition:width .6s;}
+.achv-row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:14px;}
+.achv{background:#fff; border-radius:18px; padding:12px 16px; box-shadow:var(--shadow-sm); text-align:center; opacity:.4; filter:grayscale(1); min-width:110px;}
+.achv.earned{opacity:1; filter:none; border:2px solid var(--yellow);}
+.achv .ico{font-size:2rem;}
+.achv .nm{font-weight:800; font-size:.82rem;}
+
+/* ---------- 10. Gamification / confetti ---------- */
+.badge-pop{position:fixed; inset:0; display:none; place-items:center; z-index:200; background:rgba(58,58,85,.35); backdrop-filter:blur(3px);}
+.badge-pop.show{display:grid;}
+.badge-pop .card{background:#fff; border-radius:30px; padding:30px 34px; text-align:center; box-shadow:var(--shadow); animation:pop .5s cubic-bezier(.2,1.4,.5,1) both; max-width:340px;}
+@keyframes pop{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
+.badge-pop .big-ico{font-size:4rem;}
+#confetti{position:fixed; inset:0; pointer-events:none; z-index:150;}
+.spark{position:fixed;pointer-events:none;font-size:1.4rem;animation:sparkUp .9s ease-out forwards;z-index:160;}
+@keyframes sparkUp{0%{opacity:1;transform:translateY(0) scale(.6);}100%{opacity:0;transform:translateY(-70px) scale(1.3);}}
+.streak{display:flex;align-items:center;gap:5px;font-weight:800;color:#e6772a;background:var(--peach-soft);padding:5px 11px;border-radius:99px;font-size:.85rem;}
+
+/* checklist */
+.check-list{list-style:none;padding:0;margin:10px 0;}
+.check-list li{background:var(--cream);border-radius:14px;padding:11px 14px;margin:8px 0;font-weight:700;box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:10px;cursor:pointer;}
+.check-list li .box{width:26px;height:26px;border-radius:8px;border:2.5px solid var(--sky);display:grid;place-items:center;font-size:1rem;color:#fff;flex-shrink:0;}
+.check-list li.checked .box{background:var(--mint);border-color:var(--mint);}
+
+/* certificate */
+.cert{background:linear-gradient(160deg,#fff,var(--sky-soft));border:5px double var(--lav);border-radius:24px;padding:26px;text-align:center;box-shadow:var(--shadow);max-width:560px;margin:16px auto;}
+.cert h2{font-size:1.8rem;color:#5b45b8;}
+.cert .seal{font-size:3rem;}
+.cert .who{font-size:1.6rem;font-weight:800;border-bottom:3px dashed var(--lav);display:inline-block;padding:4px 30px;margin:8px 0;}
+
+/* toast */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:99px;font-weight:700;box-shadow:var(--shadow);z-index:300;transition:transform .4s;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ---------- 11. Teacher mode & responsive ---------- */
+body.teacher{--fs:19px;}
+body.teacher .btn{padding:14px 24px; font-size:1.05rem;}
+body.teacher .opt{padding:16px 18px; font-size:1.12rem;}
+body.teacher .chapter-card{padding:24px;}
+body.teacher .q-text{font-size:1.5rem;}
+.teacher-banner{display:none; text-align:center; background:linear-gradient(135deg,var(--lav),var(--sky)); color:#fff; font-weight:800; padding:8px; border-radius:14px; margin-bottom:10px;}
+body.teacher .teacher-banner{display:block;}
+
+.footer{text-align:center; color:var(--ink-soft); font-weight:600; font-size:.82rem; margin-top:40px; padding:20px; border-top:2px dashed var(--lav-soft);}
+.footer .brandline{font-weight:800; color:var(--ink); font-size:1rem;}
+.notice{max-width:640px; margin:10px auto 0; font-size:.75rem; line-height:1.5;}
+
+@media(max-width:640px){
+  .welcome h1{font-size:1.8rem;}
+  .match-wrap{grid-template-columns:1fr 1fr; gap:10px;}
+  .sort-bins{grid-template-columns:1fr;}
+  .options.two{grid-template-columns:1fr;}
+  .topnav .label-hide{display:none;}
+  .lesson-wrap,.question-card{padding:16px;}
+  .step-tab{min-width:100px;font-size:.85rem;}
+}
+</style>
 </head>
 <body>
+<canvas id="confetti"></canvas>
 
-<header class="site-header">
-  <div class="header-inner">
-    <a class="brand" href="#" data-nav="home" aria-label="Bright EngMath – go to home page">
-      <span class="brand-badge" aria-hidden="true">±7</span>
-      <span class="brand-name">Bright EngMath<small>Maths 7 · Unit 1: Integers</small></span>
-    </a>
-    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">☰</button>
-    <nav class="main-nav" id="mainNav" aria-label="Main navigation">
-      <button class="nav-btn" data-nav="home">Home</button>
-      <button class="nav-btn" data-nav="learn">Learn</button>
-      <button class="nav-btn" data-nav="vocab">Key Words</button>
-      <button class="nav-btn" data-nav="practice">Practice</button>
-      <button class="nav-btn" data-nav="problems">Word Problems</button>
-      <button class="nav-btn" data-nav="quick">Quick Zone</button>
-      <button class="nav-btn" data-nav="tests">Test Zone</button>
-    </nav>
+<div class="topbar">
+  <div class="brand" onclick="App.go('welcome')" tabindex="0" role="button" aria-label="Home">
+    <span class="logo">✨</span>
+    <span>Bright EngMath<small>UNIT 2 · EXPRESSIONS</small></span>
   </div>
-</header>
-
-<main class="page">
-  <!-- Every view is rendered by script.js into these containers -->
-  <section id="view-home" class="view" aria-label="Home"></section>
-  <section id="view-learn" class="view" aria-label="Learn"></section>
-  <section id="view-vocab" class="view" aria-label="Key words"></section>
-  <section id="view-practice" class="view" aria-label="Practice"></section>
-  <section id="view-problems" class="view" aria-label="Word problems"></section>
-  <section id="view-quick" class="view" aria-label="Quick practice zone"></section>
-  <section id="view-tests" class="view" aria-label="Test zone"></section>
-</main>
-
-<footer class="site-footer">
-  <div class="foot-brand">Bright EngMath ✦ Maths 7 – Unit 1 Review &amp; Test</div>
-  <div>Created by Bright EngMath © 2026 · All lesson content, questions and stories are original.</div>
-  <div class="reset-zone">
-    <button class="btn btn-danger btn-sm" id="resetProgressBtn">Reset Progress</button>
+  <div class="spacer"></div>
+  <div class="topnav">
+    <div class="progress-mini" title="Your progress">
+      <span aria-hidden="true">📈</span>
+      <div class="bar"><i id="topProgress"></i></div>
+    </div>
+    <span class="star-count" title="Stars earned">⭐ <span id="topStars">0</span></span>
+    <button class="btn small ghost icon" id="teacherBtn" onclick="App.toggleTeacher()" title="Teacher / Presentation Mode" aria-label="Toggle teacher mode">👩‍🏫</button>
+    <button class="btn small ghost icon" id="soundBtn" onclick="App.toggleSound()" title="Sound on/off" aria-label="Toggle sound">🔊</button>
+    <button class="btn small ghost icon" onclick="App.toggleFull()" title="Full screen" aria-label="Full screen">⛶</button>
+    <button class="btn small ghost" onclick="App.go('map')" title="Unit Map"><span aria-hidden="true">🗺️</span><span class="label-hide"> Map</span></button>
   </div>
-</footer>
+</div>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="app">
+  <div class="teacher-banner">👩‍🏫 Teacher / Presentation Mode is ON — bigger text, answers can be revealed on click, chapters unlocked.</div>
+  <div id="root"></div>
+  <div class="footer">
+    <div class="brandline">✨ Created by Bright EngMath</div>
+    <p class="notice">This interactive learning resource was independently created by Bright EngMath. Vocabulary themes and learning objectives may be aligned with commonly used educational materials, while all explanations, examples, activities, and quiz questions are original.</p>
+    <p style="margin-top:8px;"><button class="btn small ghost" onclick="App.resetAll()">🔄 Reset all progress</button></p>
+  </div>
+</div>
 
-<script src="data.js"></script>
-<script src="tests.js"></script>
-<script src="script.js"></script>
+<div class="badge-pop" id="badgePop" onclick="this.classList.remove('show')">
+  <div class="card">
+    <div class="big-ico" id="badgeIco">🏅</div>
+    <h2 id="badgeTitle">Well done!</h2>
+    <p id="badgeMsg"></p>
+    <button class="btn primary" onclick="document.getElementById('badgePop').classList.remove('show')">Keep going!</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   BRIGHT ENGMATH · UNIT 2 DATA
+   All content original. Aligned to learning objectives of a Year 7
+   "Expressions, formulae & equations" unit (six sub-topics).
+   Question schema fields: id, skill, skillClass, type, q, options,
+   correct, hint, explanation, incorrect, answers, pairs, tokens, bins, pool
+   Types: mc | tf | pic | fill | match | order | sort
+   ===================================================================== */
+
+const M = s => `<span class="math">${s}</span>`;     // inline math
+const MB = s => `<span class="math big">${s}</span>`; // block math
+
+const DATA = {
+  vocab: [
+    {w:"expression", ipa:"/ɪkˈspreʃ.ən/", ico:"🧩", en:"A group of numbers and letters, with NO equals sign.", th:"นิพจน์", ex:"n + 5 is an expression.", cat:"Building"},
+    {w:"formula", ipa:"/ˈfɔː.mjə.lə/", ico:"📐", en:"A rule written with letters that HAS an equals sign.", th:"สูตร", ex:"A = b × h is a formula.", cat:"Building"},
+    {w:"substitute", ipa:"/ˈsʌb.stɪ.tʃuːt/", ico:"🔁", en:"To swap a letter for a number, then work it out.", th:"แทนค่า", ex:"If x = 5, then x + 2 = 7.", cat:"Using"},
+    {w:"variable", ipa:"/ˈveə.ri.ə.bəl/", ico:"🔤", en:"A letter that stands for a number we don't know yet.", th:"ตัวแปร", ex:"In 3n, the variable is n.", cat:"Building"},
+    {w:"term", ipa:"/tɜːm/", ico:"🍎", en:"One part of an expression, like 3x or 5.", th:"พจน์", ex:"2a + 4 has two terms.", cat:"Simplifying"},
+    {w:"like terms", ipa:"/laɪk tɜːmz/", ico:"👯", en:"Terms with the SAME letter, so they can be added.", th:"พจน์ที่คล้ายกัน", ex:"2a and 3a are like terms.", cat:"Simplifying"},
+    {w:"coefficient", ipa:"/ˌkəʊ.ɪˈfɪʃ.ənt/", ico:"🔢", en:"The number in front of a letter.", th:"สัมประสิทธิ์", ex:"In 5y, the coefficient is 5.", cat:"Simplifying"},
+    {w:"simplify", ipa:"/ˈsɪm.plɪ.faɪ/", ico:"✨", en:"To make an expression shorter and tidier.", th:"ทำให้ง่ายขึ้น", ex:"a + a + a = 3a.", cat:"Simplifying"},
+    {w:"expand", ipa:"/ɪkˈspænd/", ico:"📦", en:"To multiply everything inside brackets.", th:"กระจาย (คูณ)", ex:"3(x+2) = 3x + 6.", cat:"Brackets"},
+    {w:"brackets", ipa:"/ˈbræk.ɪts/", ico:"( )", en:"The ( ) symbols that group things together.", th:"วงเล็บ", ex:"2(a + 4)", cat:"Brackets"},
+    {w:"equation", ipa:"/ɪˈkweɪ.ʒən/", ico:"⚖️", en:"A maths sentence with an equals sign to balance.", th:"สมการ", ex:"x + 3 = 10", cat:"Equations"},
+    {w:"solve", ipa:"/sɒlv/", ico:"🔓", en:"To find the value of the unknown letter.", th:"แก้ (หาค่า)", ex:"x + 3 = 10, so x = 7.", cat:"Equations"},
+    {w:"inverse operation", ipa:"/ˈɪn.vɜːs/", ico:"↔️", en:"The opposite operation that undoes another.", th:"การดำเนินการผกผัน", ex:"+ undoes −, × undoes ÷.", cat:"Equations"},
+    {w:"inequality", ipa:"/ˌɪn.ɪˈkwɒl.ə.ti/", ico:"↔", en:"A statement using < or > instead of =.", th:"อสมการ", ex:"x > 5", cat:"Inequalities"},
+    {w:"integer", ipa:"/ˈɪn.tɪ.dʒər/", ico:"🧮", en:"A whole number (no fractions), positive or negative.", th:"จำนวนเต็ม", ex:"−3, 0 and 7 are integers.", cat:"Inequalities"}
+  ],
+
+  chapters: [
+    /* ================= CHAPTER 1 ================= */
+    {
+      id:"c1", num:1, title:"Constructing Expressions", icon:"🧩",
+      cardColor:"c-sky", skill:"Algebra · Building", skillClass:"sk-sky",
+      meta:"Learn · Practice · 7 Qs", blurb:"Turn word stories into short algebra expressions using letters.",
+      learn:[
+        {type:"info", title:"What is an expression?", html:`An <b>expression</b> is a short way to write maths using letters and numbers. A letter stands for a number we do not know yet.<br>Imagine a bag with a secret number of sweets. We call it ${M("b")}. If we add 3 more sweets, we write ${M("b + 3")}. Easy!`, hint:"A letter is just a mystery number waiting to be found."},
+        {type:"example", title:"Words → Expression", html:`Watch how words become maths:<div class="eqrow">${M("3 more than n")} <span class="arrow">→</span> ${M("n + 3")}</div><div class="eqrow">${M("6 fewer than s")} <span class="arrow">→</span> ${M("s − 6")}</div><div class="eqrow">${M("twice t")} <span class="arrow">→</span> ${M("2t")}</div><div class="eqrow">${M("half of t")} <span class="arrow">→</span> ${M("t ÷ 2")}</div>`},
+        {type:"remember", title:"Remember this!", html:`${M("2t")} means <b>2 × t</b>. In algebra we hide the × sign to keep things tidy. And ${M("t ÷ 2")} can be written as ${M("t/2")}.`},
+        {type:"tip", title:"Order matters", html:`Multiply and divide happen <b>before</b> add and subtract.<br>"Multiply ${M("x")} by 5, then add 1" is ${M("5x + 1")} — not ${M("5(x+1)")}.`},
+        {type:"mistake", title:"Common mistake", html:`"Subtract ${M("x")} from 4" means we start with 4 and take away ${M("x")}: ${M("4 − x")}. It is <b>not</b> ${M("x − 4")}. The order of the words is important!`}
+      ],
+      guided:[
+        {id:"c1g1", skill:"Building", skillClass:"sk-sky", type:"match",
+          q:`Match each phrase to its expression.`,
+          pairs:[{l:"5 more than n", r:"n + 5"},{l:"double n", r:"2n"},{l:"n take away 4", r:"n − 4"}],
+          hint:"'More than' means +, 'double' means ×2.",
+          explanation:`'More than' adds, 'double' means 2×n = 2n, 'take away' subtracts.`},
+        {id:"c1g2", skill:"Building", skillClass:"sk-sky", type:"fill",
+          q:`Sofia has ${M("t")} toys and adds 4 more. Write the expression.`,
+          answers:["t+4","4+t","t + 4","4 + t"], correct:"t + 4",
+          hint:"Adding more means the + sign.",
+          explanation:`She starts with ${M("t")} and gains 4, so it is ${M("t + 4")}.`}
+      ],
+      practice:[
+        {id:"c1p1", skill:"Building", skillClass:"sk-sky", type:"mc",
+          q:`Sara has ${M("c")} cookies and eats 2. How many are left?`,
+          options:["c + 2","c − 2","2c","2 − c"], correct:1,
+          hint:"Eating cookies means they go away.",
+          explanation:`She loses 2 cookies, so ${M("c − 2")} is correct.`,
+          incorrect:`Not quite — eating cookies means we <b>subtract</b>. Start with ${M("c")} and take away 2.`},
+        {id:"c1p2", skill:"Building", skillClass:"sk-sky", type:"mc",
+          q:`Which expression means "twice as many as ${M("p")}"?`,
+          options:["p + 2","p − 2","2p","p/2"], correct:2,
+          hint:"'Twice' means two times.",
+          explanation:`'Twice' means × 2, and ${M("2 × p = 2p")}.`,
+          incorrect:`'Twice' means two <i>times</i> as many, so we multiply: ${M("2p")}.`},
+        {id:"c1p3", skill:"Building", skillClass:"sk-sky", type:"fill",
+          q:`Write an expression: multiply ${M("n")} by 4, then add 3.`,
+          answers:["4n+3","3+4n","4n + 3","3 + 4n"], correct:"4n + 3",
+          hint:"Do the multiply first, then the add.",
+          explanation:`${M("n × 4 = 4n")}, then + 3 gives ${M("4n + 3")}.`},
+        {id:"c1p4", skill:"Building", skillClass:"sk-sky", type:"tf",
+          q:`True or False: ${M("t + 5")} means "5 more than ${M("t")}".`,
+          options:["True","False"], correct:0,
+          hint:"Does adding 5 make the number bigger?",
+          explanation:`Correct! Adding 5 gives 5 more, so ${M("t + 5")} = "5 more than t".`,
+          incorrect:`Actually this one is True — ${M("t + 5")} really does mean 5 more than ${M("t")}.`},
+        {id:"c1p5", skill:"Building", skillClass:"sk-sky", type:"pic",
+          q:`One bag holds ${M("b")} apples 🍎. You take out HALF. Which expression is right?`,
+          options:["b − 2","2b","b/2","b + 2"], correct:2,
+          hint:"Half means split into two equal parts.",
+          explanation:`Half of ${M("b")} is ${M("b ÷ 2")}, written ${M("b/2")}.`,
+          incorrect:`Half means dividing by 2, so the answer is ${M("b/2")}.`},
+        {id:"c1p6", skill:"Building", skillClass:"sk-sky", type:"order",
+          q:`Drag the tiles to build: "multiply ${M("x")} by 5, then subtract 4".`,
+          tokens:["5x","−","4"],
+          hint:"Multiply comes first, then the subtract.",
+          explanation:`Multiply first: ${M("5x")}, then subtract 4 → ${M("5x − 4")}.`},
+        {id:"c1p7", skill:"Building", skillClass:"sk-sky", type:"mc",
+          q:`An adult meal costs $${M("a")} and a child meal costs $${M("c")}. What is the cost of 2 adult meals and 1 child meal?`,
+          options:["2a + c","a + 2c","2ac","2a + 2c"], correct:0,
+          hint:"Two adult meals is a + a = 2a.",
+          explanation:`Two adults cost ${M("2a")} and one child costs ${M("c")}, so ${M("2a + c")}.`,
+          incorrect:`Two adult meals = ${M("2a")}, plus one child = ${M("c")}. Together: ${M("2a + c")}.`}
+      ]
+    },
+
+    /* ================= CHAPTER 2 ================= */
+    {
+      id:"c2", num:2, title:"Using Expressions & Formulae", icon:"🔁",
+      cardColor:"c-aqua", skill:"Substitution", skillClass:"sk-mint",
+      meta:"Learn · Practice · 8 Qs", blurb:"Put numbers into expressions and formulae to find their value.",
+      learn:[
+        {type:"info", title:"Substitute means swap", html:`To <b>substitute</b> is to swap a letter for a number, then work it out.<br>Find the value of ${M("x + 2")} when ${M("x = 5")}:<div class="eqrow">${M("x + 2")} <span class="arrow">→</span> ${M("5 + 2")} <span class="arrow">→</span> ${M("7")}</div>`, hint:"Cover the letter, write the number in its place."},
+        {type:"example", title:"Expression or Formula?", html:`A <b>formula</b> has an equals sign. An <b>expression</b> does not.<br>${M("4m")} → expression (no =)<br>${M("A = b × h")} → formula (has =)`},
+        {type:"remember", title:"Remember this!", html:`${M("2m")} means ${M("2 × m")}, so if ${M("m = 5")} then ${M("2m = 10")}. And ${M("w/2")} means ${M("w ÷ 2")}.`},
+        {type:"tip", title:"Real formula example", html:`Area of a rectangle: ${M("A = b × h")}. If ${M("b = 4")} and ${M("h = 5")}, then ${M("A = 4 × 5 = 20")}.`},
+        {type:"mistake", title:"Common mistake", html:`${M("9p")} when ${M("p = 2")} is NOT 11. It means ${M("9 × 2 = 18")}. Do not add the number and the letter together!`}
+      ],
+      guided:[
+        {id:"c2g1", skill:"Substitution", skillClass:"sk-mint", type:"fill",
+          q:`Work out ${M("x + 6")} when ${M("x = 3")}.`,
+          answers:["9"], correct:"9",
+          hint:"Replace x with 3, then add.",
+          explanation:`${M("3 + 6 = 9")}.`},
+        {id:"c2g2", skill:"Substitution", skillClass:"sk-mint", type:"tf",
+          q:`Is ${M("v = 9u")} a formula? (True) or an expression? (False)`,
+          options:["True (formula)","False (expression)"], correct:0,
+          hint:"Does it have an equals sign?",
+          explanation:`It has an = sign, so ${M("v = 9u")} is a formula.`,
+          incorrect:`It has an equals sign, which makes it a formula.`}
+      ],
+      practice:[
+        {id:"c2p1", skill:"Substitution", skillClass:"sk-mint", type:"fill",
+          q:`Work out ${M("n − 1")} when ${M("n = 8")}.`,
+          answers:["7"], correct:"7",
+          hint:"Swap n for 8, then subtract 1.",
+          explanation:`${M("8 − 1 = 7")}.`},
+        {id:"c2p2", skill:"Substitution", skillClass:"sk-mint", type:"mc",
+          q:`What is ${M("3m")} when ${M("m = 8")}?`,
+          options:["11","24","38","83"], correct:1,
+          hint:"3m means 3 × m.",
+          explanation:`${M("3 × 8 = 24")}.`,
+          incorrect:`${M("3m")} means ${M("3 × m")}, so ${M("3 × 8 = 24")}, not adding.`},
+        {id:"c2p3", skill:"Substitution", skillClass:"sk-mint", type:"tf",
+          q:`True or False: ${M("9p")} when ${M("p = 2")} equals 11.`,
+          options:["True","False"], correct:1,
+          hint:"9p means 9 times p.",
+          explanation:`False! ${M("9p = 9 × 2 = 18")}, not 11.`,
+          incorrect:`It is False — ${M("9 × 2 = 18")}. We multiply, we do not add.`},
+        {id:"c2p4", skill:"Substitution", skillClass:"sk-mint", type:"fill",
+          q:`Use ${M("A = b × h")}. Find ${M("A")} when ${M("b = 4")} and ${M("h = 5")}.`,
+          answers:["20"], correct:"20",
+          hint:"Multiply b and h together.",
+          explanation:`${M("A = 4 × 5 = 20")}.`},
+        {id:"c2p5", skill:"Substitution", skillClass:"sk-mint", type:"mc",
+          q:`Which one is a FORMULA?`,
+          options:["8h","9u + 3","v = 9u","b − c"], correct:2,
+          hint:"A formula has an equals sign.",
+          explanation:`${M("v = 9u")} has an = sign, so it is a formula.`,
+          incorrect:`A formula needs an equals sign. Only ${M("v = 9u")} has one.`},
+        {id:"c2p6", skill:"Substitution", skillClass:"sk-mint", type:"mc",
+          q:`Use ${M("w = 2x + y")}. Find ${M("w")} when ${M("x = 3")} and ${M("y = 4")}.`,
+          options:["10","14","24","9"], correct:0,
+          hint:"Work out 2x first, then add y.",
+          explanation:`${M("2 × 3 = 6")}, then ${M("6 + 4 = 10")}.`,
+          incorrect:`Do ${M("2x")} first: ${M("2 × 3 = 6")}. Then ${M("6 + 4 = 10")}.`},
+        {id:"c2p7", skill:"Substitution", skillClass:"sk-mint", type:"fill",
+          q:`There are 24 hours in a day. Using ${M("h = 24d")}, how many hours are in 4 days?`,
+          answers:["96"], correct:"96",
+          hint:"Multiply 24 by the number of days.",
+          explanation:`${M("24 × 4 = 96")} hours.`},
+        {id:"c2p8", skill:"Substitution", skillClass:"sk-mint", type:"mc",
+          q:`Use ${M("T = D ÷ S")}. A trip of ${M("D = 60")} km at ${M("S = 20")} km/h takes:`,
+          options:["3 hours","40 hours","80 hours","1200 hours"], correct:0,
+          hint:"Divide the distance by the speed.",
+          explanation:`${M("60 ÷ 20 = 3")} hours.`,
+          incorrect:`Divide distance by speed: ${M("60 ÷ 20 = 3")} hours.`}
+      ]
+    },
+
+    /* ================= CHAPTER 3 ================= */
+    {
+      id:"c3", num:3, title:"Collecting Like Terms", icon:"🍎",
+      cardColor:"c-mint", skill:"Simplifying", skillClass:"sk-mint",
+      meta:"Learn · Practice · 8 Qs", blurb:"Tidy up expressions by adding terms that share the same letter.",
+      learn:[
+        {type:"info", title:"Like terms are friends", html:`<b>Like terms</b> have the same letter, so they can join together.<div class="eqrow">${M("a + a")} <span class="arrow">→</span> ${M("2a")}</div><div class="eqrow">${M("2b + 3b")} <span class="arrow">→</span> ${M("5b")}</div>Think of ${M("a")} as apples 🍎 — 2 apples + 3 apples = 5 apples!`, hint:"Same letter = you can add them."},
+        {type:"mistake", title:"Different letters stay apart", html:`You can only add like terms. ${M("2a + 3b")} cannot be made shorter — apples and bananas are different! It stays as ${M("2a + 3b")}.`},
+        {type:"remember", title:"Remember this!", html:`A lonely letter means 1 of it: ${M("a")} is really ${M("1a")}. So ${M("a + 3a = 4a")}.`},
+        {type:"tip", title:"Watch the power", html:`${M("x")} and ${M("x²")} are NOT like terms. Same letter, but different power, so they do not join.`}
+      ],
+      guided:[
+        {id:"c3g1", skill:"Simplifying", skillClass:"sk-mint", type:"fill",
+          q:`Simplify ${M("a + 4a")}.`,
+          answers:["5a"], correct:"5a",
+          hint:"A lonely a counts as 1a.",
+          explanation:`${M("1a + 4a = 5a")}.`},
+        {id:"c3g2", skill:"Simplifying", skillClass:"sk-mint", type:"tf",
+          q:`True or False: ${M("b + 2b = 3b")}.`,
+          options:["True","False"], correct:0,
+          hint:"1 banana + 2 bananas = ?",
+          explanation:`True! ${M("1b + 2b = 3b")}.`,
+          incorrect:`It is True: ${M("1b + 2b = 3b")}.`}
+      ],
+      practice:[
+        {id:"c3p1", skill:"Simplifying", skillClass:"sk-mint", type:"fill",
+          q:`Simplify ${M("4c + 7c")}.`,
+          answers:["11c"], correct:"11c",
+          hint:"Add the numbers, keep the letter.",
+          explanation:`${M("4 + 7 = 11")}, so ${M("11c")}.`},
+        {id:"c3p2", skill:"Simplifying", skillClass:"sk-mint", type:"tf",
+          q:`True or False: ${M("6f + 4f = 11f")}.`,
+          options:["True","False"], correct:1,
+          hint:"What is 6 + 4?",
+          explanation:`False — ${M("6 + 4 = 10")}, so it should be ${M("10f")}.`,
+          incorrect:`Careful: ${M("6 + 4 = 10")}, so the answer is ${M("10f")}, not ${M("11f")}.`},
+        {id:"c3p3", skill:"Simplifying", skillClass:"sk-mint", type:"fill",
+          q:`Simplify ${M("8j + 2j − 4j")}.`,
+          answers:["6j"], correct:"6j",
+          hint:"8 + 2 − 4.",
+          explanation:`${M("8 + 2 − 4 = 6")}, so ${M("6j")}.`},
+        {id:"c3p4", skill:"Simplifying", skillClass:"sk-mint", type:"mc",
+          q:`Simplify ${M("3a + 4b + 4a + 5b")}.`,
+          options:["7a + 9b","16ab","9a + 7b","7ab + 9"], correct:0,
+          hint:"Add the a's together, then the b's.",
+          explanation:`${M("3a + 4a = 7a")} and ${M("4b + 5b = 9b")}, giving ${M("7a + 9b")}.`,
+          incorrect:`Group the same letters: ${M("3a+4a=7a")}, ${M("4b+5b=9b")} → ${M("7a + 9b")}.`},
+        {id:"c3p5", skill:"Simplifying", skillClass:"sk-mint", type:"sort",
+          q:`Sort each term into the correct family.`,
+          bins:[{name:"Goes with 3x",items:[]},{name:"Goes with 2y",items:[]}],
+          pool:[{t:"5x",bin:0},{t:"4y",bin:1},{t:"x",bin:0},{t:"7y",bin:1}],
+          hint:"Match the letter, not the number.",
+          explanation:`x-terms (5x, x) are one family; y-terms (4y, 7y) are the other.`},
+        {id:"c3p6", skill:"Simplifying", skillClass:"sk-mint", type:"mc",
+          q:`Simplify ${M("7x + 5y − 3x + y")}.`,
+          options:["4x + 6y","10x + 6y","4x + 4y","4xy + 6"], correct:0,
+          hint:"7x − 3x, then 5y + y.",
+          explanation:`${M("7x − 3x = 4x")} and ${M("5y + y = 6y")} → ${M("4x + 6y")}.`,
+          incorrect:`x-terms: ${M("7x − 3x = 4x")}. y-terms: ${M("5y + 1y = 6y")}. So ${M("4x + 6y")}.`},
+        {id:"c3p7", skill:"Simplifying", skillClass:"sk-mint", type:"tf",
+          q:`True or False: ${M("2a + 3b")} can be simplified to ${M("5ab")}.`,
+          options:["True","False"], correct:1,
+          hint:"Are a and b the same letter?",
+          explanation:`False — ${M("a")} and ${M("b")} are different, so it stays ${M("2a + 3b")}.`,
+          incorrect:`Different letters cannot join, so ${M("2a + 3b")} stays the same. The answer is False.`},
+        {id:"c3p8", skill:"Simplifying", skillClass:"sk-mint", type:"fill",
+          q:`In an addition pyramid, two blocks below say ${M("2x")} and ${M("7x")}. What goes in the block above (add them)?`,
+          answers:["9x"], correct:"9x",
+          hint:"Add the two blocks below.",
+          explanation:`${M("2x + 7x = 9x")}.`}
+      ]
+    },
+
+    /* ================= CHAPTER 4 ================= */
+    {
+      id:"c4", num:4, title:"Expanding Brackets", icon:"📦",
+      cardColor:"c-lav", skill:"Brackets", skillClass:"sk-lav",
+      meta:"Learn · Practice · 8 Qs", blurb:"Open up brackets by multiplying everything inside.",
+      learn:[
+        {type:"info", title:"Expand = multiply inside", html:`To <b>expand</b> brackets, multiply the number outside by <u>everything</u> inside.<div class="eqrow">${M("3(x + 2)")} <span class="arrow">→</span> ${M("3×x + 3×2")} <span class="arrow">→</span> ${M("3x + 6")}</div>`, hint:"The outside number touches every term inside."},
+        {type:"example", title:"The box method", html:`Split it into a little table:<br>${M("4(x + 3)")}: ${M("4×x = 4x")} and ${M("4×3 = 12")}, so ${M("4x + 12")}.`},
+        {type:"mistake", title:"Common mistake", html:`${M("5(a + 3)")} is NOT ${M("5a + 3")}. You must multiply the 3 too! The correct answer is ${M("5a + 15")}.`},
+        {type:"tip", title:"Watch the minus", html:`Keep the sign: ${M("3(x − 2) = 3x − 6")}. The − stays with the 6.`}
+      ],
+      guided:[
+        {id:"c4g1", skill:"Brackets", skillClass:"sk-lav", type:"fill",
+          q:`Expand ${M("2(x + 3)")}.`,
+          answers:["2x+6","2x + 6"], correct:"2x + 6",
+          hint:"2 × x and 2 × 3.",
+          explanation:`${M("2×x = 2x")} and ${M("2×3 = 6")} → ${M("2x + 6")}.`},
+        {id:"c4g2", skill:"Brackets", skillClass:"sk-lav", type:"mc",
+          q:`What is ${M("5 × m")} written simply?`,
+          options:["5m","m5","5 + m","m/5"], correct:0,
+          hint:"Hide the × sign.",
+          explanation:`${M("5 × m = 5m")}.`,
+          incorrect:`We write the number first and hide the ×: ${M("5m")}.`}
+      ],
+      practice:[
+        {id:"c4p1", skill:"Brackets", skillClass:"sk-lav", type:"mc",
+          q:`Expand ${M("3(a + 2)")}.`,
+          options:["3a + 2","3a + 6","a + 6","3a + 5"], correct:1,
+          hint:"Multiply 3 by both parts.",
+          explanation:`${M("3×a = 3a")}, ${M("3×2 = 6")} → ${M("3a + 6")}.`,
+          incorrect:`Multiply the 2 as well: ${M("3×2 = 6")}, so ${M("3a + 6")}.`},
+        {id:"c4p2", skill:"Brackets", skillClass:"sk-lav", type:"fill",
+          q:`Expand ${M("5(b + 3)")}.`,
+          answers:["5b+15","5b + 15"], correct:"5b + 15",
+          hint:"5 × b and 5 × 3.",
+          explanation:`${M("5×b = 5b")}, ${M("5×3 = 15")} → ${M("5b + 15")}.`},
+        {id:"c4p3", skill:"Brackets", skillClass:"sk-lav", type:"mc",
+          q:`Expand ${M("4(e − 9)")}.`,
+          options:["4e − 9","4e − 36","4e − 13","e − 36"], correct:1,
+          hint:"Keep the minus with 4 × 9.",
+          explanation:`${M("4×e = 4e")}, ${M("4×9 = 36")} → ${M("4e − 36")}.`,
+          incorrect:`Multiply the 9 too: ${M("4×9 = 36")}, so ${M("4e − 36")}.`},
+        {id:"c4p4", skill:"Brackets", skillClass:"sk-lav", type:"tf",
+          q:`True or False: ${M("3(4b − 5) = 12b − 8")}.`,
+          options:["True","False"], correct:1,
+          hint:"What is 3 × 5?",
+          explanation:`False — ${M("3×5 = 15")}, so it should be ${M("12b − 15")}.`,
+          incorrect:`${M("3 × 5 = 15")}, not 8. The correct answer is ${M("12b − 15")}, so it is False.`},
+        {id:"c4p5", skill:"Brackets", skillClass:"sk-lav", type:"mc",
+          q:`Expand ${M("5(2p + 1)")}.`,
+          options:["10p + 5","7p + 5","10p + 1","2p + 5"], correct:0,
+          hint:"5 × 2p and 5 × 1.",
+          explanation:`${M("5×2p = 10p")}, ${M("5×1 = 5")} → ${M("10p + 5")}.`,
+          incorrect:`${M("5 × 2p = 10p")} and ${M("5 × 1 = 5")}, giving ${M("10p + 5")}.`},
+        {id:"c4p6", skill:"Brackets", skillClass:"sk-lav", type:"order",
+          q:`Drag the tiles to expand ${M("2(y − 4)")}.`,
+          tokens:["2y","−","8"],
+          hint:"2 × y, then keep the minus, then 2 × 4.",
+          explanation:`${M("2×y = 2y")} and ${M("2×4 = 8")} → ${M("2y − 8")}.`},
+        {id:"c4p7", skill:"Brackets", skillClass:"sk-lav", type:"mc",
+          q:`Which one is the ODD one out (not equal to the others)?`,
+          options:["2(9x + 12)","2(10x + 8)","6(4 + 3x)","3(8 + 6x)"], correct:1,
+          hint:"Expand each and compare.",
+          explanation:`Most give ${M("18x + 24")}, but ${M("2(10x + 8) = 20x + 16")} — the odd one out.`,
+          incorrect:`Expand each: three give ${M("18x + 24")}. ${M("2(10x+8) = 20x + 16")} is different.`},
+        {id:"c4p8", skill:"Brackets", skillClass:"sk-lav", type:"mc",
+          q:`Expand ${M("4(3 − c)")}.`,
+          options:["12 − c","12 − 4c","7 − 4c","12c − 4"], correct:1,
+          hint:"4 × 3 and 4 × c.",
+          explanation:`${M("4×3 = 12")}, ${M("4×c = 4c")} → ${M("12 − 4c")}.`,
+          incorrect:`Multiply both: ${M("4×3 = 12")} and ${M("4×c = 4c")}, so ${M("12 − 4c")}.`}
+      ]
+    },
+
+    /* ================= CHAPTER 5 ================= */
+    {
+      id:"c5", num:5, title:"Constructing & Solving Equations", icon:"⚖️",
+      cardColor:"c-pink", skill:"Equations", skillClass:"sk-pink",
+      meta:"Learn · Practice · 8 Qs", blurb:"Balance both sides and use inverse operations to find the letter.",
+      learn:[
+        {type:"info", title:"What is an equation?", html:`An <b>equation</b> has an equals sign, like a see-saw ⚖️ that must stay balanced. To <b>solve</b> it, we find the mystery number.<div class="eqrow">${M("x + 5 = 12")} <span class="arrow">→</span> ${M("x = 7")}</div>`, hint:"Whatever you do to one side, do to the other."},
+        {type:"example", title:"Use inverse operations", html:`An <b>inverse</b> undoes an operation. + undoes −, and × undoes ÷.<br>${M("x + 5 = 12")}: take away 5 from both sides → ${M("x = 7")}.<br>${M("2y = 6")}: divide both sides by 2 → ${M("y = 3")}.`},
+        {type:"tip", title:"Two steps? Undo backwards", html:`${M("2a + 4 = 18")}. First subtract 4 → ${M("2a = 14")}. Then divide by 2 → ${M("a = 7")}.`},
+        {type:"remember", title:"Remember this!", html:`Always check your answer by putting it back in. For ${M("a = 7")}: ${M("2×7 + 4 = 18")} ✓ It works!`}
+      ],
+      guided:[
+        {id:"c5g1", skill:"Equations", skillClass:"sk-pink", type:"fill",
+          q:`Solve ${M("x + 3 = 7")}.`,
+          answers:["4","x=4","x = 4"], correct:"x = 4",
+          hint:"Take 3 away from both sides.",
+          explanation:`${M("7 − 3 = 4")}, so ${M("x = 4")}.`},
+        {id:"c5g2", skill:"Equations", skillClass:"sk-pink", type:"mc",
+          q:`What is the inverse (opposite) of "add 5"?`,
+          options:["multiply by 5","subtract 5","divide by 5","add 5 again"], correct:1,
+          hint:"What undoes adding?",
+          explanation:`Subtracting 5 undoes adding 5.`,
+          incorrect:`The opposite of adding is subtracting. So "subtract 5".`}
+      ],
+      practice:[
+        {id:"c5p1", skill:"Equations", skillClass:"sk-pink", type:"mc",
+          q:`Solve ${M("x + 2 = 6")}.`,
+          options:["x = 3","x = 4","x = 8","x = 2"], correct:1,
+          hint:"Subtract 2 from both sides.",
+          explanation:`${M("6 − 2 = 4")}, so ${M("x = 4")}.`,
+          incorrect:`Undo the +2 by subtracting: ${M("6 − 2 = 4")}, so ${M("x = 4")}.`},
+        {id:"c5p2", skill:"Equations", skillClass:"sk-pink", type:"fill",
+          q:`Solve ${M("x − 5 = 10")}.`,
+          answers:["15","x=15","x = 15"], correct:"x = 15",
+          hint:"Add 5 to both sides.",
+          explanation:`${M("10 + 5 = 15")}, so ${M("x = 15")}.`},
+        {id:"c5p3", skill:"Equations", skillClass:"sk-pink", type:"mc",
+          q:`Solve ${M("5x = 20")}.`,
+          options:["x = 100","x = 15","x = 4","x = 25"], correct:2,
+          hint:"Divide both sides by 5.",
+          explanation:`${M("20 ÷ 5 = 4")}, so ${M("x = 4")}.`,
+          incorrect:`${M("5x")} means ${M("5 × x")}, so divide: ${M("20 ÷ 5 = 4")}.`},
+        {id:"c5p4", skill:"Equations", skillClass:"sk-pink", type:"fill",
+          q:`Solve ${M("2a + 4 = 18")}.`,
+          answers:["7","a=7","a = 7"], correct:"a = 7",
+          hint:"First subtract 4, then divide by 2.",
+          explanation:`${M("18 − 4 = 14")}, then ${M("14 ÷ 2 = 7")}, so ${M("a = 7")}.`},
+        {id:"c5p5", skill:"Equations", skillClass:"sk-pink", type:"tf",
+          q:`I think of a number and add 14. The answer is 20. True or False: the number was 6.`,
+          options:["True","False"], correct:0,
+          hint:"20 − 14 = ?",
+          explanation:`True! ${M("20 − 14 = 6")}.`,
+          incorrect:`${M("20 − 14 = 6")}, so it really was 6 — the answer is True.`},
+        {id:"c5p6", skill:"Equations", skillClass:"sk-pink", type:"mc",
+          q:`Solve ${M("30 = 7b + 9")}.`,
+          options:["b = 3","b = 21","b = 7","b = 39"], correct:0,
+          hint:"Subtract 9 first, then divide by 7.",
+          explanation:`${M("30 − 9 = 21")}, then ${M("21 ÷ 7 = 3")}, so ${M("b = 3")}.`,
+          incorrect:`Take 9 away: ${M("30 − 9 = 21")}. Divide by 7: ${M("21 ÷ 7 = 3")}.`},
+        {id:"c5p7", skill:"Equations", skillClass:"sk-pink", type:"mc",
+          q:`Solve ${M("3z + 6 = −30")}.`,
+          options:["z = −12","z = −8","z = 12","z = −24"], correct:0,
+          hint:"Subtract 6, then divide by 3.",
+          explanation:`${M("−30 − 6 = −36")}, then ${M("−36 ÷ 3 = −12")}, so ${M("z = −12")}.`,
+          incorrect:`${M("−30 − 6 = −36")}, and ${M("−36 ÷ 3 = −12")}, so ${M("z = −12")}.`},
+        {id:"c5p8", skill:"Equations", skillClass:"sk-pink", type:"fill",
+          q:`Solve ${M("14 = 2x")}.`,
+          answers:["7","x=7","x = 7"], correct:"x = 7",
+          hint:"Divide 14 by 2.",
+          explanation:`${M("14 ÷ 2 = 7")}, so ${M("x = 7")}.`}
+      ]
+    },
+
+    /* ================= CHAPTER 6 ================= */
+    {
+      id:"c6", num:6, title:"Inequalities", icon:"↔️",
+      cardColor:"c-yellow", skill:"Inequalities", skillClass:"sk-yellow",
+      meta:"Learn · Practice · 8 Qs", blurb:"Compare numbers using 'less than' and 'greater than'.",
+      learn:[
+        {type:"info", title:"Less than & greater than", html:`An <b>inequality</b> compares two numbers.<br>${M("<")} means <b>is less than</b> · ${M(">")} means <b>is greater than</b>.<div class="eqrow">${M("x < 9")} <span class="arrow">→</span> "x is less than 9"</div>`, hint:"The open mouth of < or > always points to the bigger number."},
+        {type:"tip", title:"The hungry crocodile 🐊", html:`The wide-open end always eats the <b>bigger</b> number. ${M("5 < 8")} — the mouth opens to 8.`},
+        {type:"example", title:"Number lines", html:`We use an <b>open circle</b> ○ for < and >. The arrow points the way: right for greater, left for less. ${M("x > 3")} points right from 3.`},
+        {type:"remember", title:"Integers", html:`An <b>integer</b> is a whole number. For ${M("p > 8")}, the smallest integer ${M("p")} can be is 9 (not 8, because 8 is not greater than 8).`}
+      ],
+      guided:[
+        {id:"c6g1", skill:"Inequalities", skillClass:"sk-yellow", type:"match",
+          q:`Match each inequality to its meaning.`,
+          pairs:[{l:"x > 4", r:"x is greater than 4"},{l:"x < 4", r:"x is less than 4"},{l:"x < 12", r:"x is less than 12"}],
+          hint:"< is less, > is greater.",
+          explanation:`> means greater than, < means less than. The mouth opens to the bigger side.`},
+        {id:"c6g2", skill:"Inequalities", skillClass:"sk-yellow", type:"tf",
+          q:`True or False: ${M("x > 3")} means "x is less than 3".`,
+          options:["True","False"], correct:1,
+          hint:"Which symbol means greater than?",
+          explanation:`False — ${M(">")} means greater than, so ${M("x > 3")} means "x is more than 3".`,
+          incorrect:`${M(">")} means greater than, so this is False.`}
+      ],
+      practice:[
+        {id:"c6p1", skill:"Inequalities", skillClass:"sk-yellow", type:"tf",
+          q:`True or False: ${M("x < 2")} means "x is greater than 2".`,
+          options:["True","False"], correct:1,
+          hint:"< points to the smaller side.",
+          explanation:`False — ${M("<")} means less than, so ${M("x < 2")} means "x is less than 2".`,
+          incorrect:`${M("<")} means less than. So it is False.`},
+        {id:"c6p2", skill:"Inequalities", skillClass:"sk-yellow", type:"mc",
+          q:`Write "m is less than 15" as an inequality.`,
+          options:["m > 15","m < 15","15 < m","m = 15"], correct:1,
+          hint:"Less than uses the < symbol.",
+          explanation:`"Less than" is ${M("<")}, so ${M("m < 15")}.`,
+          incorrect:`Less than uses ${M("<")}, so ${M("m < 15")}.`},
+        {id:"c6p3", skill:"Inequalities", skillClass:"sk-yellow", type:"mc",
+          q:`For ${M("h > 5")}, the smallest integer ${M("h")} can be is:`,
+          options:["4","5","6","7"], correct:2,
+          hint:"It must be bigger than 5, and a whole number.",
+          explanation:`5 is not greater than 5, so the smallest whole number is 6.`,
+          incorrect:`${M("h")} must be MORE than 5, so the smallest whole number is 6.`},
+        {id:"c6p4", skill:"Inequalities", skillClass:"sk-yellow", type:"mc",
+          q:`For ${M("k < 12")}, the largest integer ${M("k")} can be is:`,
+          options:["11","12","13","10"], correct:0,
+          hint:"It must be smaller than 12, and a whole number.",
+          explanation:`12 is not less than 12, so the largest whole number is 11.`,
+          incorrect:`${M("k")} must be LESS than 12, so the largest whole number is 11.`},
+        {id:"c6p5", skill:"Inequalities", skillClass:"sk-yellow", type:"mc",
+          q:`Which symbol makes this true: ${M("7 __ 3")}?`,
+          options:["<",">","=","÷"], correct:1,
+          hint:"Is 7 bigger or smaller than 3?",
+          explanation:`7 is greater than 3, so ${M("7 > 3")}.`,
+          incorrect:`7 is bigger than 3, so we use ${M(">")}: ${M("7 > 3")}.`},
+        {id:"c6p6", skill:"Inequalities", skillClass:"sk-yellow", type:"tf",
+          q:`For ${M("j > −7")}, the smallest integer is ${M("−6")}. True or False?`,
+          options:["True","False"], correct:0,
+          hint:"On a number line, −6 is just to the right of −7.",
+          explanation:`True! −6 is greater than −7 and is the smallest whole number that works.`,
+          incorrect:`−6 is just bigger than −7, so it IS the smallest integer. The answer is True.`},
+        {id:"c6p7", skill:"Inequalities", skillClass:"sk-yellow", type:"mc",
+          q:`For ${M("p > 4.7")}, the smallest integer ${M("p")} can be is:`,
+          options:["4","5","4.7","6"], correct:1,
+          hint:"Find the first whole number bigger than 4.7.",
+          explanation:`5 is the first whole number greater than 4.7.`,
+          incorrect:`We need a whole number bigger than 4.7 — that is 5.`},
+        {id:"c6p8", skill:"Inequalities", skillClass:"sk-yellow", type:"mc",
+          q:`For ${M("q < 3.9")}, the largest integer ${M("q")} can be is:`,
+          options:["4","3.9","3","2"], correct:2,
+          hint:"Find the biggest whole number under 3.9.",
+          explanation:`3 is the largest whole number less than 3.9.`,
+          incorrect:`We need a whole number smaller than 3.9 — that is 3.`}
+      ]
+    }
+  ],
+
+  /* ============ SYMBOLS & NOTATION (the "phonics/spelling" of maths) ============ */
+  symbols:{
+    intro:"Just like reading has letters and sounds, maths has symbols and notation. Learn to READ and WRITE algebra correctly!",
+    cards:[
+      {sym:"2n", say:"“two n”", mean:`Means ${M("2 × n")}. We hide the × and put the number first.`},
+      {sym:"n²", say:"“n squared”", mean:`Means ${M("n × n")}.`},
+      {sym:"n/2", say:"“n over two”", mean:`Means ${M("n ÷ 2")}.`},
+      {sym:"=", say:"“equals”", mean:"Both sides have the same value (balanced)."},
+      {sym:"<", say:"“less than”", mean:`${M("3 < 8")}: 3 is smaller than 8.`},
+      {sym:">", say:"“greater than”", mean:`${M("8 > 3")}: 8 is bigger than 3.`},
+      {sym:"( )", say:"“brackets”", mean:"Group terms together to multiply."},
+      {sym:"≡", say:"“is equivalent to”", mean:"Always the same, no matter the value."}
+    ],
+    quiz:[
+      {id:"sy1", skill:"Notation", skillClass:"sk-coral", type:"mc",
+        q:`How do we write ${M("3 × x")} the tidy algebra way?`,
+        options:["x3","3x","3 + x","x/3"], correct:1,
+        hint:"Number first, hide the ×.",
+        explanation:`${M("3 × x = 3x")}.`,
+        incorrect:`Put the number first and hide the ×: ${M("3x")}.`},
+      {id:"sy2", skill:"Notation", skillClass:"sk-coral", type:"mc",
+        q:`What does ${M("n²")} mean?`,
+        options:["n × 2","n + n","n × n","2 ÷ n"], correct:2,
+        hint:"'Squared' means times itself.",
+        explanation:`${M("n² = n × n")}.`,
+        incorrect:`Squared means multiply by itself: ${M("n × n")}.`},
+      {id:"sy3", skill:"Notation", skillClass:"sk-coral", type:"match",
+        q:`Match each symbol to what we say.`,
+        pairs:[{l:"<",r:"less than"},{l:">",r:"greater than"},{l:"=",r:"equals"}],
+        hint:"Remember the hungry crocodile!",
+        explanation:`< is less than, > is greater than, = is equals.`},
+      {id:"sy4", skill:"Notation", skillClass:"sk-coral", type:"mc",
+        q:`Which is the correct way to write ${M("m ÷ 4")}?`,
+        options:["4m","m4","m/4","m − 4"], correct:2,
+        hint:"Division is written as a fraction.",
+        explanation:`${M("m ÷ 4 = m/4")}.`,
+        incorrect:`Division becomes a fraction: ${M("m/4")}.`},
+      {id:"sy5", skill:"Notation", skillClass:"sk-coral", type:"tf",
+        q:`True or False: ${M("5y")} means ${M("5 + y")}.`,
+        options:["True","False"], correct:1,
+        hint:"A number next to a letter means multiply.",
+        explanation:`False — ${M("5y")} means ${M("5 × y")}, not plus.`,
+        incorrect:`A number stuck to a letter means multiply: ${M("5 × y")}. So it is False.`}
+    ]
+  },
+
+  /* ============ ALGEBRA RULES (the "grammar" of maths) ============ */
+  grammar:{
+    intro:"Algebra has rules, just like grammar in English. Follow them and your maths will always be correct and neat!",
+    cards:[
+      {rule:"Number before letter", ex:`Write ${M("3n")}, not ${M("n3")}.`, ico:"1️⃣"},
+      {rule:"Multiply before add", ex:`In ${M("5n + 1")}, do ${M("5 × n")} first.`, ico:"✖️"},
+      {rule:"Same letter to add", ex:`${M("2a + 3a = 5a")}, but ${M("2a + 3b")} stays.`, ico:"🍎"},
+      {rule:"Balance an equation", ex:`Do the same to BOTH sides of ${M("=")}.`, ico:"⚖️"},
+      {rule:"Keep the sign", ex:`${M("3(x − 2) = 3x − 6")} — the minus stays.`, ico:"➖"}
+    ],
+    quiz:[
+      {id:"gr1", skill:"Algebra Rules", skillClass:"sk-lav", type:"mc",
+        q:`Which is written correctly?`,
+        options:["n7","7n","7 × n","n + 7"], correct:1,
+        hint:"Number first, hide the ×.",
+        explanation:`${M("7n")} is the neat way to write ${M("7 × n")}.`,
+        incorrect:`Put the number in front: ${M("7n")}.`},
+      {id:"gr2", skill:"Algebra Rules", skillClass:"sk-lav", type:"tf",
+        q:`True or False: in ${M("4x + 2")}, we add before we multiply.`,
+        options:["True","False"], correct:1,
+        hint:"Remember the order of operations.",
+        explanation:`False — multiply first (${M("4 × x")}), then add 2.`,
+        incorrect:`Multiplying comes first, so it is False.`},
+      {id:"gr3", skill:"Algebra Rules", skillClass:"sk-lav", type:"mc",
+        q:`Which pair can be added together?`,
+        options:["2a + 3b","5x + 2x","4 + y","6p + 2q"], correct:1,
+        hint:"They must share the same letter.",
+        explanation:`${M("5x")} and ${M("2x")} share the letter x, so ${M("5x + 2x = 7x")}.`,
+        incorrect:`Only terms with the SAME letter can join: ${M("5x + 2x")}.`},
+      {id:"gr4", skill:"Algebra Rules", skillClass:"sk-lav", type:"tf",
+        q:`To keep an equation balanced, you must do the same thing to both sides. True or False?`,
+        options:["True","False"], correct:0,
+        hint:"Think of a see-saw.",
+        explanation:`True! An equation is like a balanced see-saw ⚖️.`,
+        incorrect:`Yes — both sides must stay equal, so the answer is True.`},
+      {id:"gr5", skill:"Algebra Rules", skillClass:"sk-lav", type:"mc",
+        q:`Expand keeping the sign: ${M("5(x − 3)")} = ?`,
+        options:["5x − 3","5x − 15","5x + 15","x − 15"], correct:1,
+        hint:"Multiply the 3, keep the minus.",
+        explanation:`${M("5×x = 5x")}, ${M("5×3 = 15")}, minus stays → ${M("5x − 15")}.`,
+        incorrect:`Multiply the 3 too and keep the −: ${M("5x − 15")}.`}
+    ]
+  },
+
+  /* ============ READING: Maths in the Real World ============ */
+  reading:{
+    title:"Nadia's Lemonade Stand 🍋",
+    subtitle:"Read the story, then answer the questions. Tap a highlighted word for its meaning!",
+    passage:[
+      `It was a hot Saturday, and Nadia decided to open a lemonade stand. She wanted to use maths to plan everything.`,
+      `Nadia sold each cup of lemonade for the same price. She let the price of one cup be the letter <span class="vocab-inline" data-th="ตัวแปร" title="a letter for an unknown number">c</span>. If she sold 5 cups, she could write an <span class="vocab-inline" data-th="นิพจน์" title="numbers and letters, no equals sign">expression</span> for her money: 5c.`,
+      `Her brother helped for free, but she still had costs. Lemons and cups cost her $8 in total. To find her <b>profit</b> (money left over), Nadia used a <span class="vocab-inline" data-th="สูตร" title="a rule with an equals sign">formula</span>: P = 5c − 8, where P is the profit.`,
+      `By lunchtime, each cup was priced at c = 3 dollars. Nadia <span class="vocab-inline" data-th="แทนค่า" title="swap the letter for a number">substituted</span> the number in: P = 5 × 3 − 8 = 7. She had made a profit of $7!`,
+      `Nadia set a goal. She wanted her profit to be greater than $20. She wrote this as an <span class="vocab-inline" data-th="อสมการ" title="uses < or > instead of =">inequality</span>: P > 20. "If I keep selling," she smiled, "I will reach my goal by the end of the day!"`
+    ],
+    quiz:[
+      {id:"rd1", skill:"Reading · Main Idea", skillClass:"sk-sky", type:"mc",
+        q:`What is the story mostly about?`,
+        options:["A girl using maths to run a lemonade stand","How to make lemonade taste sweet","A boy who loves summer","A trip to the market"], correct:0,
+        hint:"Look at what Nadia does in every paragraph.",
+        explanation:`The whole story shows Nadia using expressions, formulae and inequalities for her stand.`,
+        incorrect:`Every paragraph is about Nadia using MATHS for her lemonade stand.`},
+      {id:"rd2", skill:"Reading · Detail", skillClass:"sk-sky", type:"mc",
+        q:`What expression did Nadia write for selling 5 cups?`,
+        options:["c + 5","5 − c","5c","c/5"], correct:2,
+        hint:"5 cups at price c each.",
+        explanation:`5 cups × price ${M("c")} = ${M("5c")}.`,
+        incorrect:`5 cups each costing ${M("c")} gives ${M("5c")}.`},
+      {id:"rd3", skill:"Reading · Vocabulary", skillClass:"sk-sky", type:"mc",
+        q:`In the story, what does "substituted" mean?`,
+        options:["Poured out the lemonade","Swapped the letter for a number","Sold more cups","Made a mistake"], correct:1,
+        hint:"She put a number where the letter was.",
+        explanation:`To substitute is to swap a letter for a number, then work it out.`,
+        incorrect:`"Substituted" means she swapped the letter ${M("c")} for the number 3.`},
+      {id:"rd4", skill:"Reading · Application", skillClass:"sk-sky", type:"fill",
+        q:`Use ${M("P = 5c − 8")}. If ${M("c = 4")}, what is the profit ${M("P")}?`,
+        answers:["12","$12"], correct:"12",
+        hint:"5 × 4, then subtract 8.",
+        explanation:`${M("5 × 4 = 20")}, then ${M("20 − 8 = 12")}. Profit = $12.`},
+      {id:"rd5", skill:"Reading · Inference", skillClass:"sk-sky", type:"tf",
+        q:`True or False: Nadia's goal was a profit of exactly $20.`,
+        options:["True","False"], correct:1,
+        hint:"Look at the symbol she used: P > 20.",
+        explanation:`False — she wrote ${M("P > 20")}, which means MORE than $20, not exactly $20.`,
+        incorrect:`She wrote ${M("P > 20")} — greater than $20, not exactly. So it is False.`},
+      {id:"rd6", skill:"Reading · Detail", skillClass:"sk-sky", type:"mc",
+        q:`How much did Nadia's lemons and cups cost her?`,
+        options:["$3","$5","$7","$8"], correct:3,
+        hint:"Look in the paragraph about profit.",
+        explanation:`The story says her costs were $8 in total.`,
+        incorrect:`The story says lemons and cups cost $8 — that is why the formula subtracts 8.`}
+    ]
+  },
+
+  /* ============ FINAL UNIT REVIEW ============ */
+  review:{
+    cards:[
+      {t:"Building Expressions", ico:"🧩", c:"c-sky", html:`Turn words into algebra: "3 more than n" = ${M("n + 3")}, "twice t" = ${M("2t")}, "half of t" = ${M("t/2")}.`},
+      {t:"Substitution", ico:"🔁", c:"c-aqua", html:`Swap the letter for a number. ${M("x + 2")} when ${M("x = 5")} is ${M("7")}. A formula has an ${M("=")} sign.`},
+      {t:"Like Terms", ico:"🍎", c:"c-mint", html:`Add same letters only. ${M("2a + 3a = 5a")}, but ${M("2a + 3b")} stays the same.`},
+      {t:"Expanding Brackets", ico:"📦", c:"c-lav", html:`Multiply everything inside. ${M("3(x + 2) = 3x + 6")}. Do not forget the second term!`},
+      {t:"Solving Equations", ico:"⚖️", c:"c-pink", html:`Use inverse operations. ${M("x + 5 = 12")} → ${M("x = 7")}. Two steps: undo backwards.`},
+      {t:"Inequalities", ico:"↔️", c:"c-yellow", html:`${M("<")} less than, ${M(">")} greater than. For ${M("p > 8")}, smallest integer is 9.`}
+    ],
+    mistakes:[
+      `${M("5(a + 3)")} is ${M("5a + 15")}, NOT ${M("5a + 3")} — multiply everything.`,
+      `${M("9p")} when ${M("p = 2")} is ${M("18")}, NOT ${M("11")} — multiply, don't add.`,
+      `${M("2a + 3b")} cannot become ${M("5ab")} — different letters stay apart.`,
+      `For ${M("h > 5")}, the smallest integer is ${M("6")}, not 5.`
+    ],
+    tips:[
+      "Read the whole question twice before you answer.",
+      "In algebra, a number next to a letter always means multiply.",
+      "Always check an equation by putting your answer back in.",
+      "The < or > mouth always opens to the bigger number."
+    ],
+    checklist:[
+      "I can write an expression from a word problem.",
+      "I can substitute a number into an expression or formula.",
+      "I can collect like terms to simplify.",
+      "I can expand brackets correctly.",
+      "I can solve one-step and two-step equations.",
+      "I can read and write inequalities."
+    ]
+  }
+};
+/* ============ FINAL QUIZ · 30 questions, all skills ============ */
+DATA.finalQuiz = [
+  {id:"f1", skill:"Building", skillClass:"sk-sky", type:"mc", q:`"7 more than ${M("k")}" is written as:`, options:["7k","k − 7","k + 7","7 − k"], correct:2, hint:"'More than' means add.", explanation:`Adding 7 gives ${M("k + 7")}.`, incorrect:`'More than' means +, so ${M("k + 7")}.`},
+  {id:"f2", skill:"Building", skillClass:"sk-sky", type:"mc", q:`"6 fewer than ${M("s")}" is:`, options:["s − 6","6 − s","6s","s + 6"], correct:0, hint:"Start with s, take 6 away.", explanation:`${M("s − 6")}.`, incorrect:`Fewer means subtract from ${M("s")}: ${M("s − 6")}.`},
+  {id:"f3", skill:"Building", skillClass:"sk-sky", type:"fill", q:`Write: multiply ${M("y")} by 3, then add 2.`, answers:["3y+2","3y + 2","2+3y","2 + 3y"], correct:"3y + 2", hint:"Multiply first.", explanation:`${M("3y + 2")}.`},
+  {id:"f4", skill:"Building", skillClass:"sk-sky", type:"tf", q:`True or False: ${M("2n")} means "2 more than n".`, options:["True","False"], correct:1, hint:"A number next to a letter means times.", explanation:`False — ${M("2n")} means ${M("2 × n")}.`, incorrect:`${M("2n")} means multiply, so it is False.`},
+  {id:"f5", skill:"Substitution", skillClass:"sk-mint", type:"fill", q:`Find ${M("x + 7")} when ${M("x = 6")}.`, answers:["13"], correct:"13", hint:"6 + 7.", explanation:`${M("6 + 7 = 13")}.`},
+  {id:"f6", skill:"Substitution", skillClass:"sk-mint", type:"mc", q:`What is ${M("4m")} when ${M("m = 5")}?`, options:["9","20","45","1"], correct:1, hint:"4 × 5.", explanation:`${M("4 × 5 = 20")}.`, incorrect:`${M("4m = 4 × 5 = 20")}.`},
+  {id:"f7", skill:"Substitution", skillClass:"sk-mint", type:"mc", q:`Which is a formula?`, options:["3x + 1","A = lw","6t","p − q"], correct:1, hint:"Look for the = sign.", explanation:`${M("A = lw")} has an = sign.`, incorrect:`A formula needs =, so ${M("A = lw")}.`},
+  {id:"f8", skill:"Substitution", skillClass:"sk-mint", type:"fill", q:`Use ${M("P = 2a + b")}. Find ${M("P")} when ${M("a = 4")}, ${M("b = 3")}.`, answers:["11"], correct:"11", hint:"2×4 first, then +3.", explanation:`${M("2×4 = 8")}, ${M("8 + 3 = 11")}.`},
+  {id:"f9", skill:"Substitution", skillClass:"sk-mint", type:"tf", q:`True or False: ${M("w/2")} when ${M("w = 10")} is 5.`, options:["True","False"], correct:0, hint:"10 ÷ 2.", explanation:`True — ${M("10 ÷ 2 = 5")}.`, incorrect:`${M("w/2")} means ${M("10 ÷ 2 = 5")}, so True.`},
+  {id:"f10", skill:"Simplifying", skillClass:"sk-mint", type:"fill", q:`Simplify ${M("6a + 3a")}.`, answers:["9a"], correct:"9a", hint:"6 + 3.", explanation:`${M("9a")}.`},
+  {id:"f11", skill:"Simplifying", skillClass:"sk-mint", type:"mc", q:`Simplify ${M("5x + 2y + 3x")}.`, options:["10xy","8x + 2y","5x + 5y","10x + 2y"], correct:1, hint:"Add the x's only.", explanation:`${M("5x + 3x = 8x")}, so ${M("8x + 2y")}.`, incorrect:`Add x-terms: ${M("5x + 3x = 8x")}. Answer: ${M("8x + 2y")}.`},
+  {id:"f12", skill:"Simplifying", skillClass:"sk-mint", type:"tf", q:`True or False: ${M("4c + 3d")} simplifies to ${M("7cd")}.`, options:["True","False"], correct:1, hint:"Different letters?", explanation:`False — different letters cannot join.`, incorrect:`Different letters stay apart, so it is False.`},
+  {id:"f13", skill:"Simplifying", skillClass:"sk-mint", type:"fill", q:`Simplify ${M("10y − 4y − y")}.`, answers:["5y"], correct:"5y", hint:"10 − 4 − 1.", explanation:`${M("10 − 4 − 1 = 5")}, so ${M("5y")}.`},
+  {id:"f14", skill:"Brackets", skillClass:"sk-lav", type:"mc", q:`Expand ${M("2(x + 5)")}.`, options:["2x + 5","2x + 10","x + 10","2x + 7"], correct:1, hint:"2 × x and 2 × 5.", explanation:`${M("2x + 10")}.`, incorrect:`Multiply both: ${M("2x + 10")}.`},
+  {id:"f15", skill:"Brackets", skillClass:"sk-lav", type:"fill", q:`Expand ${M("3(a + 4)")}.`, answers:["3a+12","3a + 12"], correct:"3a + 12", hint:"3 × a and 3 × 4.", explanation:`${M("3a + 12")}.`},
+  {id:"f16", skill:"Brackets", skillClass:"sk-lav", type:"mc", q:`Expand ${M("4(2b − 1)")}.`, options:["8b − 1","8b − 4","6b − 4","2b − 4"], correct:1, hint:"4 × 2b and 4 × 1.", explanation:`${M("8b − 4")}.`, incorrect:`${M("4×2b = 8b")}, ${M("4×1 = 4")} → ${M("8b − 4")}.`},
+  {id:"f17", skill:"Brackets", skillClass:"sk-lav", type:"tf", q:`True or False: ${M("6(n + 2) = 6n + 2")}.`, options:["True","False"], correct:1, hint:"Did you multiply the 2?", explanation:`False — ${M("6 × 2 = 12")}, so ${M("6n + 12")}.`, incorrect:`Multiply the 2 as well: ${M("6n + 12")}. It is False.`},
+  {id:"f18", skill:"Equations", skillClass:"sk-pink", type:"fill", q:`Solve ${M("x + 8 = 15")}.`, answers:["7","x=7","x = 7"], correct:"x = 7", hint:"Subtract 8.", explanation:`${M("15 − 8 = 7")}.`},
+  {id:"f19", skill:"Equations", skillClass:"sk-pink", type:"mc", q:`Solve ${M("x − 6 = 9")}.`, options:["x = 3","x = 15","x = 54","x = 2"], correct:1, hint:"Add 6.", explanation:`${M("9 + 6 = 15")}.`, incorrect:`Add 6 to both sides: ${M("x = 15")}.`},
+  {id:"f20", skill:"Equations", skillClass:"sk-pink", type:"mc", q:`Solve ${M("4x = 24")}.`, options:["x = 6","x = 20","x = 28","x = 96"], correct:0, hint:"Divide by 4.", explanation:`${M("24 ÷ 4 = 6")}.`, incorrect:`Divide both sides by 4: ${M("x = 6")}.`},
+  {id:"f21", skill:"Equations", skillClass:"sk-pink", type:"fill", q:`Solve ${M("3a + 2 = 20")}.`, answers:["6","a=6","a = 6"], correct:"a = 6", hint:"Subtract 2, then divide by 3.", explanation:`${M("20 − 2 = 18")}, ${M("18 ÷ 3 = 6")}.`},
+  {id:"f22", skill:"Equations", skillClass:"sk-pink", type:"mc", q:`I think of a number and multiply by 5. The answer is 35. The number is:`, options:["7","30","40","175"], correct:0, hint:"35 ÷ 5.", explanation:`${M("35 ÷ 5 = 7")}.`, incorrect:`Undo the ×5 by dividing: ${M("35 ÷ 5 = 7")}.`},
+  {id:"f23", skill:"Equations", skillClass:"sk-pink", type:"tf", q:`True or False: the solution to ${M("2x = 10")} is ${M("x = 5")}.`, options:["True","False"], correct:0, hint:"10 ÷ 2.", explanation:`True — ${M("10 ÷ 2 = 5")}.`, incorrect:`${M("10 ÷ 2 = 5")}, so it is True.`},
+  {id:"f24", skill:"Inequalities", skillClass:"sk-yellow", type:"mc", q:`"x is greater than 6" is written:`, options:["x < 6","x > 6","x = 6","6 > x"], correct:1, hint:"Greater than uses >.", explanation:`${M("x > 6")}.`, incorrect:`Greater than is ${M(">")}: ${M("x > 6")}.`},
+  {id:"f25", skill:"Inequalities", skillClass:"sk-yellow", type:"mc", q:`For ${M("p < 10")}, the largest integer is:`, options:["10","9","11","8"], correct:1, hint:"Whole number under 10.", explanation:`9 is the largest whole number less than 10.`, incorrect:`10 is not less than 10, so the answer is 9.`},
+  {id:"f26", skill:"Inequalities", skillClass:"sk-yellow", type:"tf", q:`True or False: ${M("4 > 9")}.`, options:["True","False"], correct:1, hint:"Is 4 bigger than 9?", explanation:`False — 4 is smaller, so ${M("4 < 9")}.`, incorrect:`4 is smaller than 9, so ${M("4 > 9")} is False.`},
+  {id:"f27", skill:"Inequalities", skillClass:"sk-yellow", type:"mc", q:`Which symbol makes ${M("2 __ 11")} true?`, options:[">","<","=","×"], correct:1, hint:"2 is smaller.", explanation:`${M("2 < 11")}.`, incorrect:`2 is smaller than 11, so ${M("<")}.`},
+  {id:"f28", skill:"Notation", skillClass:"sk-coral", type:"mc", q:`Write ${M("6 × y")} neatly:`, options:["y6","6y","6 + y","y/6"], correct:1, hint:"Number first.", explanation:`${M("6y")}.`, incorrect:`Number first, hide the ×: ${M("6y")}.`},
+  {id:"f29", skill:"Algebra Rules", skillClass:"sk-lav", type:"tf", q:`True or False: in ${M("3x + 4")}, you multiply before adding.`, options:["True","False"], correct:0, hint:"Order of operations.", explanation:`True — multiply ${M("3 × x")} first.`, incorrect:`Multiplying comes first, so True.`},
+  {id:"f30", skill:"Building", skillClass:"sk-sky", type:"mc", q:`A pen costs $${M("p")} and a ruler costs $${M("r")}. The cost of 3 pens and 2 rulers is:`, options:["3p + 2r","2p + 3r","6pr","5pr"], correct:0, hint:"3 pens is 3p.", explanation:`${M("3p + 2r")}.`, incorrect:`3 pens = ${M("3p")}, 2 rulers = ${M("2r")} → ${M("3p + 2r")}.`}
+];
+
+DATA.achievements = [
+  {id:"explorer", ico:"🧭", nm:"Learning Explorer", min:0},
+  {id:"rising", ico:"🌟", nm:"Rising Star", min:50},
+  {id:"super", ico:"🚀", nm:"Super Learner", min:70},
+  {id:"champion", ico:"🏆", nm:"Unit 2 Champion", min:90}
+];
+
+/* extra "stations" shown on the unit map after the 6 chapters */
+DATA.stations = [
+  {id:"vocab", num:7, title:"Vocabulary Review", icon:"📚", cardColor:"c-coral", skill:"Key Words", skillClass:"sk-coral", meta:"Flashcards + game"},
+  {id:"symbols", num:8, title:"Symbols & Notation", icon:"🔣", cardColor:"c-peach", skill:"Notation", skillClass:"sk-coral", meta:"Learn + 5 Qs"},
+  {id:"grammar", num:9, title:"Algebra Rules", icon:"📏", cardColor:"c-lav", skill:"Rules", skillClass:"sk-lav", meta:"Learn + 5 Qs"},
+  {id:"reading", num:10, title:"Maths in the Real World", icon:"📖", cardColor:"c-sky", skill:"Reading", skillClass:"sk-sky", meta:"Story + 6 Qs"},
+  {id:"review", num:11, title:"Final Unit Review", icon:"🎯", cardColor:"c-mint", skill:"Review", skillClass:"sk-mint", meta:"Recap + checklist"},
+  {id:"final", num:12, title:"Final Quiz", icon:"🏁", cardColor:"c-pink", skill:"Big Test", skillClass:"sk-pink", meta:"30 questions"}
+];
+/* =====================================================================
+   ENGINE
+   ===================================================================== */
+const KEY = "brightengmath_unit2_v1";
+const State = {
+  data:{ name:"", stars:0, streak:0, done:{}, chScores:{}, teacher:false, sound:true,
+         bestFinal:null, finalSkills:null, sawWelcome:false },
+  load(){ try{ const s=JSON.parse(localStorage.getItem(KEY)); if(s) this.data=Object.assign(this.data,s);}catch(e){} },
+  save(){ try{ localStorage.setItem(KEY, JSON.stringify(this.data)); }catch(e){} }
+};
+
+const CHAP_ORDER = () => DATA.chapters.map(c=>c.id);
+const ALL_UNLOCK_STATIONS = ["vocab","symbols","grammar","reading","review","final"];
+
+/* ---------- helpers ---------- */
+const $ = sel => document.querySelector(sel);
+const root = () => document.getElementById('root');
+function normalize(s){
+  return String(s).toLowerCase().replace(/\s+/g,'').replace(/[×xX]/g,'x')
+    .replace(/[$]/g,'').replace(/^[a-z]=/,'').replace(/[−–—]/g,'-').trim();
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* =====================================================================
+   APP
+   ===================================================================== */
+const App = {
+  route:"welcome", param:null,
+
+  init(){
+    State.load();
+    document.body.classList.toggle('teacher', !!State.data.teacher);
+    $('#teacherBtn').classList.toggle('toggle-on', !!State.data.teacher);
+    $('#soundBtn').textContent = State.data.sound ? '🔊' : '🔇';
+    this.go(State.data.sawWelcome ? 'map' : 'welcome');
+    this.refreshTop();
+  },
+
+  go(route, param){
+    this.route=route; this.param=param;
+    window.scrollTo({top:0, behavior:'smooth'});
+    this.render();
+    this.refreshTop();
+  },
+
+  refreshTop(){
+    const total = DATA.chapters.length + 4; // 6 chapters + symbols,grammar,reading,final
+    const done = Object.keys(State.data.done).length;
+    $('#topProgress').style.width = Math.min(100, Math.round(done/total*100))+'%';
+    $('#topStars').textContent = State.data.stars;
+  },
+
+  render(){
+    const r = root();
+    const map = {welcome:this.welcome, map:this.mapScreen, chapter:this.chapter,
+      vocab:this.vocab, symbols:this.sectionLesson, grammar:this.sectionLesson,
+      reading:this.reading, review:this.review, final:this.finalIntro, results:this.results};
+    const fn = map[this.route] || this.mapScreen;
+    r.innerHTML = `<div class="screen">${fn.call(this)}</div>`;
+    if(this.route==='chapter') this.mountChapter();
+    if(this.route==='symbols') this.mountSection('symbols');
+    if(this.route==='grammar') this.mountSection('grammar');
+    if(this.route==='reading') this.mountReading();
+  },
+  mountReading(){
+    Quiz.start(DATA.reading.quiz, {mount:document.getElementById('readingQuiz'), title:"📖 Reading Comprehension",
+      nextLabel:"Finish 🎉", onDone:(res)=>{
+        const first=!State.data.done['reading']; State.data.done['reading']=true;
+        State.data.chScores['reading']=Math.round(res.correct/res.total*100);
+        if(first) this.award(res.correct); State.save();
+        this.badge('📖','Reading Complete!',`You answered ${res.correct}/${res.total} correctly!`); this.confettiBurst();
+        document.getElementById('readingQuiz').insertAdjacentHTML('beforeend',
+          `<div class="lesson-nav" style="justify-content:center"><button class="btn primary" onclick="App.go('map')">🗺️ Back to Map</button></div>`);
+        this.refreshTop();
+      }});
+  },
+
+  /* -------------------- WELCOME -------------------- */
+  welcome(){
+    const nm = State.data.name || "";
+    return `
+    <div class="welcome">
+      <span class="floaty" style="top:14px;left:20px">➕</span>
+      <span class="floaty" style="top:30px;right:26px;animation-delay:1s">✖️</span>
+      <span class="floaty" style="bottom:20px;left:40px;animation-delay:2s">🟰</span>
+      <span class="floaty" style="bottom:30px;right:40px;animation-delay:1.5s">📐</span>
+      <div class="unit-badge">UNIT 2</div>
+      <span class="mascot">🦉</span>
+      <h1>Expressions, Formulae &amp; Equations</h1>
+      <p class="subtitle">Become an algebra hero! Learn to build expressions, solve equations, and crack inequalities — one fun step at a time. 🌟</p>
+      <div class="learn-list">
+        <span class="pill">🧩 Build expressions</span>
+        <span class="pill">🔁 Use formulae</span>
+        <span class="pill">🍎 Collect like terms</span>
+        <span class="pill">📦 Expand brackets</span>
+        <span class="pill">⚖️ Solve equations</span>
+        <span class="pill">↔️ Inequalities</span>
+      </div>
+      <div class="namebox">
+        <label for="nameInput" style="font-weight:800;display:block;margin-bottom:6px">👋 What's your name, learner?</label>
+        <input id="nameInput" type="text" placeholder="Type your name..." value="${esc(nm)}" maxlength="24"
+          aria-label="Your name" onkeydown="if(event.key==='Enter')App.startLearning()"/>
+      </div>
+      <button class="btn primary big" onclick="App.startLearning()">🚀 Start Learning</button>
+      <p style="margin-top:14px;color:var(--ink-soft);font-weight:600">
+        ${Object.keys(State.data.done).length>0 ? `⭐ You have ${State.data.stars} stars. Welcome back!` : 'A 12-station learning adventure awaits you!'}
+      </p>
+    </div>`;
+  },
+  startLearning(){
+    const v = $('#nameInput'); if(v && v.value.trim()) State.data.name = v.value.trim();
+    State.data.sawWelcome = true; State.save();
+    this.go('map');
+  },
+
+  /* -------------------- UNIT MAP -------------------- */
+  mapScreen(){
+    const chapters = DATA.chapters.map((c,i)=>this.card(c, i, false)).join('');
+    const stations = DATA.stations.map(s=>this.card(s, null, true)).join('');
+    const hi = State.data.name ? `, ${esc(State.data.name)}` : '';
+    return `
+    <div class="section-head">
+      <h2>🗺️ Your Unit 2 Adventure Map</h2>
+      <p>Hello${hi}! Tap a station to begin. Finish a station to earn ⭐ and unlock the next!</p>
+    </div>
+    <div class="map-grid">${chapters}${stations}</div>`;
+  },
+  isUnlocked(id, idx, isStation){
+    if(State.data.teacher) return true;
+    if(idx===0) return true;
+    if(!isStation){ // chapters unlock in sequence
+      const prev = DATA.chapters[idx-1];
+      return !!State.data.done[prev.id];
+    }
+    // stations unlock once all 6 chapters done, except review/final need everything
+    const allCh = DATA.chapters.every(c=>State.data.done[c.id]);
+    if(id==='final') return allCh; // final needs chapters
+    return allCh || Object.keys(State.data.done).length>=1 ? allCh : false;
+  },
+  card(c, idx, isStation){
+    let unlocked;
+    if(isStation){ unlocked = State.data.teacher || DATA.chapters.every(ch=>State.data.done[ch.id]); }
+    else { unlocked = this.isUnlocked(c.id, idx, false); }
+    const done = !!State.data.done[c.id];
+    const score = State.data.chScores[c.id];
+    let stars = '';
+    if(done && score!=null){ const s = score>=90?3:score>=70?2:1; stars = '★'.repeat(s)+'☆'.repeat(3-s); }
+    // current = first not-done unlocked chapter
+    let current=false;
+    if(!isStation && unlocked && !done){
+      const firstUndone = DATA.chapters.find((ch,i)=>this.isUnlocked(ch.id,i,false)&&!State.data.done[ch.id]);
+      current = firstUndone && firstUndone.id===c.id;
+    }
+    const cls = ['chapter-card', c.cardColor, done?'done':'', current?'current':'', !unlocked?'locked':''].join(' ');
+    const statusTxt = !unlocked ? '🔒 Locked' : done ? '✅ Completed' : current ? '👉 Start here' : '▶ Ready';
+    const onclick = unlocked ? `onclick="App.open('${c.id}',${isStation})"` : '';
+    return `
+    <div class="${cls}" ${onclick} tabindex="${unlocked?0:-1}" role="button" aria-label="${esc(c.title)} ${statusTxt}"
+      ${unlocked?`onkeydown="if(event.key==='Enter')App.open('${c.id}',${isStation})"`:''}>
+      ${done?'<div class="ribbon">DONE</div>':''}
+      <span class="num">${c.num}</span>
+      <span class="cicon" aria-hidden="true">${c.icon}</span>
+      <span class="skill ${c.skillClass}">${c.skill}</span>
+      <h3>${c.title}</h3>
+      <p class="meta">${c.meta}</p>
+      <div class="status">${statusTxt} <span class="card-stars">${stars}</span></div>
+    </div>`;
+  },
+  open(id, isStation){
+    if(isStation){
+      if(id==='vocab') return this.go('vocab');
+      if(id==='review') return this.go('review');
+      if(id==='final') return this.go('final');
+      return this.go(id); // symbols, grammar, reading
+    }
+    this.go('chapter', id);
+  },
+
+  /* -------------------- CHAPTER (Learn / Guided / Practice) -------------------- */
+  chapter(){
+    const c = DATA.chapters.find(x=>x.id===this.param);
+    if(!c) return this.mapScreen();
+    return `
+      <div class="lesson-wrap">
+        <div class="lesson-head">
+          <span class="cicon">${c.icon}</span>
+          <div>
+            <span class="skill ${c.skillClass}">${c.skill}</span>
+            <h2>Chapter ${c.num}: ${c.title}</h2>
+          </div>
+        </div>
+        <div class="step-tabs" id="stepTabs">
+          <div class="step-tab active" data-step="learn"><span class="n">STEP 1</span>📘 Learn</div>
+          <div class="step-tab" data-step="guided"><span class="n">STEP 2</span>🤝 Guided</div>
+          <div class="step-tab" data-step="practice"><span class="n">STEP 3</span>✏️ Practice</div>
+        </div>
+        <div id="chapterBody"></div>
+      </div>`;
+  },
+  mountChapter(){
+    const c = DATA.chapters.find(x=>x.id===this.param);
+    this._chapter=c; this._step='learn'; this._learnIdx=0;
+    document.querySelectorAll('#stepTabs .step-tab').forEach(t=>{
+      t.onclick = ()=>{ const s=t.dataset.step;
+        if(s==='guided' || s==='practice'){ /* allow jump only after learn opened */ }
+        this.showStep(s);
+      };
+    });
+    this.showStep('learn');
+  },
+  showStep(step){
+    this._step=step;
+    document.querySelectorAll('#stepTabs .step-tab').forEach(t=>t.classList.toggle('active', t.dataset.step===step));
+    const body = document.getElementById('chapterBody');
+    if(step==='learn'){ body.innerHTML=this.renderLearn(this._chapter); }
+    else if(step==='guided'){
+      Quiz.start(this._chapter.guided, {mount:body, title:"🤝 Guided Practice — take it slow!",
+        onDone:()=>this.showStep('practice'), nextLabel:"Go to Practice ✏️", small:true});
+    } else {
+      Quiz.start(this._chapter.practice, {mount:body, title:"✏️ Practice Time!",
+        onDone:(res)=>this.finishChapter(this._chapter, res), nextLabel:"Finish Chapter 🎉"});
+    }
+  },
+  renderLearn(c){
+    const cards = c.learn.map((card,i)=>{
+      const cls = {info:'',tip:'tip',remember:'remember',mistake:'mistake',example:'example'}[card.type]||'';
+      const label = {info:'📘 Learn',tip:'💡 Tip',remember:'🧠 Remember This',mistake:'⚠️ Common Mistake',example:'✨ Example'}[card.type]||'';
+      const badgeCls = {info:'sk-sky',tip:'sk-yellow',remember:'sk-mint',mistake:'sk-coral',example:'sk-lav'}[card.type];
+      const hint = card.hint ? `<div><button class="hintbtn" onclick="App.toggleHint(this)">💭 Hint</button><div class="hint-text hidden">${card.hint}</div></div>` : '';
+      return `<div class="info-card ${cls}"><span class="badge-inline ${badgeCls}">${label}</span><h3>${card.title}</h3><div>${card.html}</div>${hint}</div>`;
+    }).join('');
+    return `${cards}
+      <div class="lesson-nav">
+        <button class="btn ghost" onclick="App.go('map')">🗺️ Back to Map</button>
+        <button class="btn primary" onclick="App.showStep('guided')">Next: Guided Practice 🤝</button>
+      </div>`;
+  },
+  toggleHint(btn){ const t=btn.nextElementSibling; t.classList.toggle('hidden'); btn.textContent = t.classList.contains('hidden')?'💭 Hint':'🙈 Hide hint'; },
+
+  finishChapter(c, res){
+    const pct = Math.round(res.correct/res.total*100);
+    const firstTime = !State.data.done[c.id];
+    State.data.done[c.id]=true;
+    State.data.chScores[c.id]=pct;
+    const earned = res.correct; // 1 star per correct
+    if(firstTime){ this.award(earned); }
+    State.save();
+    const s = pct>=90?3:pct>=70?2:1;
+    this.badge('🎉', `Chapter ${c.num} Complete!`, `You scored ${pct}% and earned ${'★'.repeat(s)}. ${firstTime?`+${earned} stars!`:''}`);
+    this.confettiBurst();
+    // show a completion panel
+    const body = document.getElementById('chapterBody');
+    if(body){
+      const nextCh = DATA.chapters[c.num]; // num is 1-based, next index = num
+      body.innerHTML = `
+        <div class="info-card remember" style="text-align:center">
+          <h3>🎉 Great work${State.data.name?', '+esc(State.data.name):''}!</h3>
+          <p>You finished <b>${c.title}</b> with <b>${pct}%</b> ${'★'.repeat(s)}${'☆'.repeat(3-s)}</p>
+          <div class="lesson-nav" style="justify-content:center">
+            <button class="btn ghost" onclick="App.showStep('learn')">🔁 Review Lesson</button>
+            <button class="btn ghost" onclick="App.showStep('practice')">↩️ Retry Practice</button>
+            ${nextCh?`<button class="btn primary" onclick="App.go('chapter','${nextCh.id}')">Next Chapter ▶</button>`
+              :`<button class="btn primary" onclick="App.go('map')">Back to Map 🗺️</button>`}
+          </div>
+        </div>`;
+    }
+    this.refreshTop();
+  },
+
+  /* -------------------- VOCABULARY -------------------- */
+  vocab(){
+    const cards = DATA.vocab.map((v,i)=>`
+      <div class="flip" onclick="this.classList.toggle('flipped')" tabindex="0" role="button"
+        aria-label="Flashcard: ${esc(v.w)}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.classList.toggle('flipped')}">
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <div class="fico">${v.ico}</div>
+            <div class="word">${v.w}</div>
+            <div class="ipa">${v.ipa}</div>
+            <div style="font-size:.72rem;color:var(--ink-soft);margin-top:6px">tap to flip 🔄</div>
+          </div>
+          <div class="flip-face flip-back">
+            <div>${v.en}</div>
+            <div class="th">🇹🇭 ${v.th}</div>
+            <div class="ex">📝 ${v.ex}</div>
+          </div>
+        </div>
+      </div>`).join('');
+    return `
+      <div class="section-head"><h2>📚 Vocabulary Review</h2><p>Tap each card to flip it. Then test yourself with the word game!</p></div>
+      <div class="mini-tools">
+        <button class="btn mint" onclick="App.startVocabGame()">🎮 Play: Match the Meaning</button>
+        <button class="btn ghost" onclick="App.go('map')">🗺️ Back to Map</button>
+      </div>
+      <div class="vocab-grid">${cards}</div>`;
+  },
+  startVocabGame(){
+    // build MC questions from vocab (meaning matching + unscramble)
+    const qs=[];
+    const shuffled=[...DATA.vocab].sort(()=>Math.random()-0.5).slice(0,6);
+    shuffled.forEach((v,i)=>{
+      const wrongs=DATA.vocab.filter(x=>x.w!==v.w).sort(()=>Math.random()-0.5).slice(0,3).map(x=>x.en);
+      const opts=[v.en,...wrongs].sort(()=>Math.random()-0.5);
+      qs.push({id:'vg'+i, skill:'Vocabulary', skillClass:'sk-coral', type:'mc',
+        q:`What does <b>“${v.w}”</b> mean?`, options:opts, correct:opts.indexOf(v.en),
+        hint:`Think about the ${v.cat.toLowerCase()} topic.`,
+        explanation:`“${v.w}” means: ${v.en}`, incorrect:`Not quite — “${v.w}” means: ${v.en}`});
+    });
+    // one unscramble
+    const uv = shuffled[0];
+    const scrambled = uv.w.replace(/ /g,'').split('').sort(()=>Math.random()-0.5).join(' ');
+    qs.push({id:'vgU', skill:'Vocabulary', skillClass:'sk-coral', type:'fill',
+      q:`Unscramble these letters to spell a key word: <b>${scrambled}</b> <br><span style="font-size:.85rem;color:var(--ink-soft)">Clue: ${uv.en}</span>`,
+      answers:[uv.w.replace(/ /g,'')], correct:uv.w,
+      hint:`It starts with “${uv.w[0]}”.`, explanation:`The word is “${uv.w}”.`});
+    const wrap=document.createElement('div');
+    root().querySelector('.screen').prepend(wrap);
+    window.scrollTo({top:0,behavior:'smooth'});
+    Quiz.start(qs,{mount:wrap, title:"🎮 Vocabulary Challenge", nextLabel:"Finish 🎉",
+      onDone:(res)=>{ this.award(res.correct); const pct=Math.round(res.correct/res.total*100);
+        this.badge('📚','Vocabulary Star!',`You got ${res.correct}/${res.total} right!`); this.confettiBurst();
+        wrap.innerHTML=`<div class="info-card remember" style="text-align:center"><h3>Nice work! ${pct}% 🌟</h3>
+        <button class="btn primary" onclick="App.go('vocab')">Back to Flashcards</button>
+        <button class="btn ghost" onclick="App.go('map')">🗺️ Map</button></div>`; }});
+  },
+
+  /* -------------------- SECTION LESSON (symbols / grammar) -------------------- */
+  sectionLesson(){
+    const key=this.route;
+    const d=DATA[key];
+    let cards;
+    if(key==='symbols'){
+      cards = d.cards.map(c=>`<div class="info-card example"><span class="math big">${c.sym}</span>
+        <p style="text-align:center;font-weight:800;color:var(--lav)">${c.say}</p><div>${c.mean}</div></div>`).join('');
+    } else {
+      cards = d.cards.map(c=>`<div class="info-card tip"><h3>${c.ico} ${c.rule}</h3><div>${c.ex}</div></div>`).join('');
+    }
+    const title = key==='symbols'?'🔣 Symbols &amp; Notation':'📏 Algebra Rules';
+    return `
+      <div class="section-head"><h2>${title}</h2><p>${d.intro}</p></div>
+      ${cards}
+      <div id="sectionQuiz"></div>`;
+  },
+  mountSection(key){
+    const d=DATA[key];
+    Quiz.start(d.quiz,{mount:document.getElementById('sectionQuiz'), title:"✏️ Quick Check",
+      nextLabel:"Finish 🎉", onDone:(res)=>{
+        const first=!State.data.done[key]; State.data.done[key]=true;
+        State.data.chScores[key]=Math.round(res.correct/res.total*100);
+        if(first) this.award(res.correct); State.save();
+        this.badge('🌟','Section Complete!',`You scored ${res.correct}/${res.total}!`); this.confettiBurst();
+        document.getElementById('sectionQuiz').insertAdjacentHTML('beforeend',
+          `<div class="lesson-nav" style="justify-content:center"><button class="btn primary" onclick="App.go('map')">🗺️ Back to Map</button></div>`);
+        this.refreshTop();
+      }});
+  },
+
+  /* -------------------- READING -------------------- */
+  reading(){
+    const d=DATA.reading;
+    const paras=d.passage.map(p=>`<p>${p}</p>`).join('');
+    return `
+      <div class="section-head"><h2>${d.title}</h2><p>${d.subtitle}</p></div>
+      <div class="lesson-wrap">
+        <div class="info-card" style="border-color:var(--sky)">${paras}
+          <p style="font-size:.8rem;color:var(--ink-soft);margin-top:10px">💡 Highlighted words show key vocabulary — hover or tap to see a Thai hint.</p>
+        </div>
+        <div id="readingQuiz"></div>
+      </div>`;
+  },
+
+  /* -------------------- FINAL UNIT REVIEW -------------------- */
+  review(){
+    const d=DATA.review;
+    const cards=d.cards.map(c=>`<div class="chapter-card ${c.c}" style="cursor:default"><span class="cicon">${c.ico}</span><h3>${c.t}</h3><div class="meta" style="color:var(--ink)">${c.html}</div></div>`).join('');
+    const mistakes=d.mistakes.map(m=>`<li style="cursor:default"><span class="box" style="border-color:var(--coral);background:var(--coral);color:#fff">⚠️</span><span>${m}</span></li>`).join('');
+    const tips=d.tips.map(t=>`<li style="cursor:default"><span class="box" style="border-color:var(--yellow);background:var(--yellow);color:#fff">💡</span><span>${t}</span></li>`).join('');
+    const checks=d.checklist.map((c,i)=>`<li onclick="this.classList.toggle('checked')" tabindex="0" role="checkbox" aria-checked="false"
+        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.classList.toggle('checked')}"><span class="box">✓</span><span>${c}</span></li>`).join('');
+    return `
+      <div class="section-head"><h2>🎯 Final Unit Review</h2><p>Recap everything before the big test. Tick each box when you feel ready!</p></div>
+      <div class="map-grid">${cards}</div>
+      <div class="lesson-wrap" style="margin-top:18px">
+        <h3>⚠️ Watch Out For These Mistakes</h3>
+        <ul class="check-list">${mistakes}</ul>
+        <h3>💡 Top Test Tips</h3>
+        <ul class="check-list">${tips}</ul>
+        <h3>✅ Ready for the Test? Checklist</h3>
+        <ul class="check-list">${checks}</ul>
+        <div class="lesson-nav" style="justify-content:center;margin-top:16px">
+          <button class="btn ghost" onclick="App.go('map')">🗺️ Map</button>
+          <button class="btn pink big" onclick="App.go('final')">🏁 I'm Ready — Take the Final Quiz!</button>
+        </div>
+      </div>`;
+  },
+
+  /* -------------------- FINAL QUIZ -------------------- */
+  finalIntro(){
+    const allCh = DATA.chapters.every(c=>State.data.done[c.id]);
+    if(!allCh && !State.data.teacher){
+      return `<div class="section-head"><h2>🔒 Final Quiz Locked</h2>
+        <p>Finish all 6 chapters first to unlock the Final Quiz. You've got this!</p></div>
+        <div style="text-align:center"><button class="btn primary" onclick="App.go('map')">🗺️ Back to Map</button></div>`;
+    }
+    return `
+      <div class="result-hero">
+        <span class="medal">🏁</span>
+        <h2>The Big Unit 2 Final Quiz</h2>
+        <p style="color:var(--ink-soft);font-weight:600;max-width:520px;margin:6px auto">
+          30 questions covering everything you've learned. One question at a time, with a progress bar and instant feedback. Do your best — you can retry any you miss!</p>
+        <div class="lesson-nav" style="justify-content:center;margin-top:14px">
+          <button class="btn ghost" onclick="App.go('review')">📖 Review First</button>
+          <button class="btn pink big" onclick="App.startFinal()">🚀 Start the Final Quiz</button>
+        </div>
+      </div>`;
+  },
+  startFinal(){
+    root().querySelector('.screen').innerHTML=`<div id="finalQuiz"></div>`;
+    Quiz.start(DATA.finalQuiz, {mount:document.getElementById('finalQuiz'), title:"🏁 Final Quiz", isFinal:true,
+      nextLabel:"See My Results 🏆", onDone:(res)=>this.showResults(res)});
+  },
+  startRetry(){
+    const wrong = (State.data._lastWrong||[]).map(id=>DATA.finalQuiz.find(q=>q.id===id)).filter(Boolean);
+    if(!wrong.length){ this.toast("No questions to retry — you got them all! 🎉"); return; }
+    root().querySelector('.screen').innerHTML=`<div id="finalQuiz"></div>`;
+    Quiz.start(wrong, {mount:document.getElementById('finalQuiz'), title:"🔁 Retry Missed Questions", isFinal:true, retry:true,
+      nextLabel:"See Results 🏆", onDone:(res)=>this.showResults(res, true)});
+  },
+
+  showResults(res, isRetry){
+    // record best + skills
+    const pct = Math.round(res.correct/res.total*100);
+    if(!isRetry){
+      State.data._lastWrong = res.wrong;
+      if(State.data.bestFinal==null || pct>State.data.bestFinal){ State.data.bestFinal=pct; }
+      State.data.finalSkills = res.skills;
+      State.data.done['final']=true;
+      this.award(res.correct);
+    }
+    State.save();
+    this.go('results');
+    this._lastRes = res;
+    this.confettiBurst();
+  },
+  results(){
+    const res = this._lastRes || {correct:State.data.bestFinal? Math.round(State.data.bestFinal/100*30):0, total:30, wrong:[], skills:State.data.finalSkills||{}};
+    const pct = Math.round(res.correct/res.total*100);
+    const skills = res.skills || {};
+    // achievement
+    let achLevel = DATA.achievements[0];
+    DATA.achievements.forEach(a=>{ if(pct>=a.min) achLevel=a; });
+    const feedback = pct>=90?"Outstanding! You've truly mastered Unit 2! 🏆"
+      : pct>=70?"Great job! You know this unit really well. A little review and you'll be perfect! 🌟"
+      : pct>=50?"Good effort! You're getting there. Review the tricky chapters and try again! 💪"
+      : "Nice try! Every expert was once a beginner. Let's review together and grow! 🌱";
+    const skillBars = Object.keys(skills).map(k=>{
+      const s=skills[k]; const p=Math.round(s.correct/s.total*100);
+      return `<div class="skillbar"><div class="lab"><span>${k}</span><span>${s.correct}/${s.total}</span></div>
+        <div class="track"><i style="width:${p}%"></i></div></div>`;
+    }).join('');
+    // recommend weak chapters
+    const skillToChapter = {Building:'c1',Substitution:'c2',Simplifying:'c3',Brackets:'c4',Equations:'c5',Inequalities:'c6',Notation:'symbols','Algebra Rules':'grammar'};
+    const weak = Object.keys(skills).filter(k=>{const s=skills[k];return s.correct/s.total<0.7;});
+    const recs = weak.length? weak.map(k=>{
+      const cid=skillToChapter[k]; const ch=DATA.chapters.find(c=>c.id===cid);
+      const label = ch?ch.title:(k==='Notation'?'Symbols & Notation':'Algebra Rules');
+      const route = ch?`App.go('chapter','${cid}')`:`App.go('${cid}')`;
+      return `<button class="btn yellow small" onclick="${route}">📖 ${label}</button>`;
+    }).join(' ') : `<span style="font-weight:700;color:var(--good)">🎉 No weak spots — brilliant!</span>`;
+    const achs = DATA.achievements.map(a=>`<div class="achv ${pct>=a.min?'earned':''}"><div class="ico">${a.ico}</div><div class="nm">${a.nm}</div></div>`).join('');
+    const cert = pct>=70 ? `
+      <div class="cert">
+        <div class="seal">🏅</div>
+        <h2>Certificate of Achievement</h2>
+        <p>This certifies that</p>
+        <div class="who">${esc(State.data.name||'Star Learner')}</div>
+        <p>has successfully completed <b>Unit 2: Expressions, Formulae &amp; Equations</b><br>
+        with a score of <b>${pct}%</b> — earning the rank of <b>${achLevel.nm}</b>!</p>
+        <p style="margin-top:8px">✨ Bright EngMath ✨</p>
+      </div>` : '';
+    return `
+      <div class="result-hero">
+        <span class="medal">${achLevel.ico}</span>
+        <h2>${achLevel.nm}!</h2>
+        <div class="score-ring" style="--pct:${pct}%"><div class="inner"><b>${pct}%</b><span>score</span></div></div>
+        <p style="font-weight:700;max-width:520px;margin:6px auto">${feedback}</p>
+        <div class="stat-grid">
+          <div class="stat"><b>${res.correct}</b><span>Correct</span></div>
+          <div class="stat"><b>${res.total-res.correct}</b><span>To review</span></div>
+          <div class="stat"><b>${res.total}</b><span>Questions</span></div>
+          <div class="stat"><b>⏱️ ${res.time||'—'}</b><span>Time</span></div>
+        </div>
+      </div>
+      <div class="lesson-wrap">
+        <h3>📊 Your Skills Breakdown</h3>
+        ${skillBars||'<p>Complete the final quiz to see your skill breakdown.</p>'}
+        <h3 style="margin-top:16px">📚 Recommended Review</h3>
+        <p>${recs}</p>
+        <h3 style="margin-top:16px">🏅 Achievement Badges</h3>
+        <div class="achv-row">${achs}</div>
+        <div class="lesson-nav" style="justify-content:center;margin-top:18px">
+          <button class="btn pink" onclick="App.startRetry()">🔁 Retry Missed Questions</button>
+          <button class="btn lav" onclick="App.startFinal()">↩️ Restart Quiz</button>
+          <button class="btn mint" onclick="window.print()">🖨️ Print / Save Result</button>
+          <button class="btn ghost" onclick="App.go('map')">🗺️ Back to Map</button>
+        </div>
+      </div>
+      ${cert}`;
+  },
+
+  /* -------------------- GAMIFICATION -------------------- */
+  award(stars){
+    State.data.stars += stars;
+    State.data.streak += 1;
+    State.save(); this.refreshTop();
+  },
+  badge(ico, title, msg){
+    $('#badgeIco').textContent=ico; $('#badgeTitle').textContent=title; $('#badgeMsg').textContent=msg;
+    $('#badgePop').classList.add('show'); this.ding();
+  },
+  toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(this._tt); this._tt=setTimeout(()=>t.classList.remove('show'),2600); },
+  sparkleAt(x,y){
+    ['✨','⭐','🌟'].forEach((e,i)=>{ const s=document.createElement('div'); s.className='spark'; s.textContent=e;
+      s.style.left=(x+(i-1)*18)+'px'; s.style.top=y+'px'; document.body.appendChild(s); setTimeout(()=>s.remove(),900); });
+  },
+  confettiBurst(){
+    const cv=$('#confetti'); const ctx=cv&&cv.getContext&&cv.getContext('2d'); if(!ctx) return;
+    cv.width=innerWidth; cv.height=innerHeight;
+    const colors=['#7ec8ff','#6fe0d6','#8fe3a8','#ffd76b','#ffb3d1','#c3b1ff','#ff9a8b'];
+    let parts=Array.from({length:120},()=>({x:innerWidth/2,y:innerHeight/3,
+      vx:(Math.random()-.5)*12,vy:Math.random()*-12-4,g:.4,
+      s:Math.random()*8+4,c:colors[Math.floor(Math.random()*colors.length)],r:Math.random()*6}));
+    let t=0; const anim=()=>{ ctx.clearRect(0,0,cv.width,cv.height); t++;
+      parts.forEach(p=>{ p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.r+=.2;
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c;
+        ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6); ctx.restore(); });
+      if(t<90) requestAnimationFrame(anim); else ctx.clearRect(0,0,cv.width,cv.height); };
+    anim();
+  },
+  ding(){ if(!State.data.sound) return;
+    try{ const a=new (window.AudioContext||window.webkitAudioContext)();
+      const notes=[[660,0],[880,.12],[1046,.24]];
+      notes.forEach(([f,d])=>{ const o=a.createOscillator(),g=a.createGain();
+        o.type='sine'; o.frequency.value=f; o.connect(g); g.connect(a.destination);
+        g.gain.setValueAtTime(.001,a.currentTime+d); g.gain.exponentialRampToValueAtTime(.18,a.currentTime+d+.02);
+        g.gain.exponentialRampToValueAtTime(.001,a.currentTime+d+.22);
+        o.start(a.currentTime+d); o.stop(a.currentTime+d+.24); });
+    }catch(e){}
+  },
+  buzz(){ if(!State.data.sound) return;
+    try{ const a=new (window.AudioContext||window.webkitAudioContext)();
+      const o=a.createOscillator(),g=a.createGain(); o.type='triangle'; o.frequency.value=200;
+      o.connect(g); g.connect(a.destination); g.gain.setValueAtTime(.12,a.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.2); o.start(); o.stop(a.currentTime+.2);
+    }catch(e){}
+  },
+
+  /* -------------------- CONTROLS -------------------- */
+  toggleTeacher(){ State.data.teacher=!State.data.teacher; State.save();
+    document.body.classList.toggle('teacher',State.data.teacher);
+    $('#teacherBtn').classList.toggle('toggle-on',State.data.teacher);
+    this.toast(State.data.teacher?'👩‍🏫 Teacher Mode ON — all stations unlocked':'🎒 Student Mode ON');
+    if(this.route==='map'||this.route==='final') this.render();
+  },
+  toggleSound(){ State.data.sound=!State.data.sound; State.save();
+    $('#soundBtn').textContent=State.data.sound?'🔊':'🔇'; this.toast(State.data.sound?'🔊 Sound on':'🔇 Sound off'); },
+  toggleFull(){ if(!document.fullscreenElement){ document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); }
+    else { document.exitFullscreen&&document.exitFullscreen(); } },
+  resetAll(){ if(confirm('Reset ALL progress, stars and your name? This cannot be undone.')){
+    localStorage.removeItem(KEY); State.data={name:"",stars:0,streak:0,done:{},chScores:{},teacher:false,sound:true,bestFinal:null,finalSkills:null,sawWelcome:false};
+    document.body.classList.remove('teacher'); $('#teacherBtn').classList.remove('toggle-on');
+    this.go('welcome'); this.toast('🔄 Progress reset. Fresh start!'); } }
+};
+
+/* =====================================================================
+   QUIZ ENGINE — handles all question types
+   ===================================================================== */
+const Quiz = {
+  start(questions, opts){
+    this.qs=questions; this.opts=opts||{}; this.i=0;
+    this.correct=0; this.wrong=[]; this.skills={};
+    this.startTime=Date.now();
+    this.mount=opts.mount;
+    this.mount.innerHTML=`
+      <div class="quiz-head" style="margin-top:12px">
+        <span class="qcount" id="qCount"></span>
+        <div class="qprogress"><i id="qBar"></i></div>
+        <span class="streak" title="streak">🔥 <span id="qStreak">0</span></span>
+      </div>
+      <div style="font-weight:800;font-size:1.1rem;margin-top:6px">${opts.title||''}</div>
+      <div id="qHolder"></div>`;
+    this.streak=0;
+    this.renderQ();
+  },
+  renderQ(){
+    const question=this.qs[this.i];
+    $('#qCount').textContent=`Question ${this.i+1} of ${this.qs.length}`;
+    $('#qBar').style.width=Math.round(this.i/this.qs.length*100)+'%';
+    $('#qStreak').textContent=this.streak;
+    const holder=document.getElementById('qHolder');
+    question._first=undefined; question._done=false;
+    holder.innerHTML=`
+      <div class="question-card">
+        <span class="q-skill ${question.skillClass||'sk-sky'}">${question.skill||''}</span>
+        <div class="q-text">${question.q}</div>
+        <div id="qBody"></div>
+        ${question.hint?`<div style="margin-top:10px"><button class="hintbtn" onclick="App.toggleHint(this)">💭 Need a hint?</button><div class="hint-text hidden">${question.hint}</div></div>`:''}
+        <div class="feedback" id="qFeedback"></div>
+        <div class="quiz-actions">
+          <span></span>
+          <button class="btn primary hidden" id="qNext" onclick="Quiz.next()">Next ▶</button>
+        </div>
+      </div>`;
+    this['render_'+question.type](question);
+  },
+
+  /* ----- renderers ----- */
+  render_mc(q){ this._renderOptions(q,false); },
+  render_tf(q){ this._renderOptions(q,false); },
+  render_pic(q){ this._renderOptions(q,true); },
+  _renderOptions(q,pic){
+    const body=document.getElementById('qBody');
+    const keys=['A','B','C','D','E','F'];
+    const twoCls = q.options.length===2?'two':'';
+    body.innerHTML=`<div class="options ${twoCls}" id="optWrap">`+
+      q.options.map((o,idx)=>`<button class="opt ${pic?'pic-opt':''}" data-idx="${idx}" onclick="Quiz.pick(${idx})">
+        ${pic?'':`<span class="key">${keys[idx]}</span>`}<span>${o}</span></button>`).join('')+`</div>`;
+  },
+  pick(idx){
+    const q=this.qs[this.i]; if(q._done) return;
+    const wrap=document.getElementById('optWrap');
+    const btns=[...wrap.children];
+    const correct = idx===q.correct;
+    if(q._first===undefined) q._first=correct;
+    if(correct){
+      btns[idx].classList.add('correct');
+      btns.forEach(b=>b.classList.add('locked'));
+      this._resolve(q,true);
+    } else {
+      btns[idx].classList.add('wrong','locked');
+      this._feedback(false, q, `Try again! ${q.hint?'💭 '+q.hint:''}`);
+      App.buzz();
+      // reveal correct if already tried twice
+      q._tries=(q._tries||0)+1;
+      if(q._tries>=2){ btns[q.correct].classList.add('correct'); btns.forEach(b=>b.classList.add('locked'));
+        this._resolve(q,false); }
+    }
+  },
+
+  render_fill(q){
+    const body=document.getElementById('qBody');
+    body.innerHTML=`<div class="fill-in"><input id="fillIn" type="text" placeholder="type answer" aria-label="Your answer"
+      onkeydown="if(event.key==='Enter')Quiz.checkFill()"/>
+      <button class="btn mint" onclick="Quiz.checkFill()">✓ Check</button></div>`;
+    setTimeout(()=>{const el=$('#fillIn'); el&&el.focus();},50);
+  },
+  checkFill(){
+    const q=this.qs[this.i]; if(q._done) return;
+    const el=$('#fillIn'); const val=el.value;
+    if(!val.trim()){ App.toast('Type your answer first ✏️'); return; }
+    const ok=q.answers.some(a=>normalize(a)===normalize(val));
+    if(q._first===undefined) q._first=ok;
+    if(ok){ el.classList.add('correct'); el.disabled=true; this._resolve(q,true); }
+    else {
+      el.classList.add('wrong');
+      q._tries=(q._tries||0)+1;
+      if(q._tries>=2){ el.disabled=true; this._resolve(q,false); }
+      else { this._feedback(false,q,`Not quite — try once more! ${q.hint?'💭 '+q.hint:''}`); App.buzz();
+        setTimeout(()=>{el.classList.remove('wrong');},900); }
+    }
+  },
+
+  render_match(q){
+    const body=document.getElementById('qBody');
+    const lefts=q.pairs.map((p,i)=>({t:p.l,i}));
+    const rights=q.pairs.map((p,i)=>({t:p.r,i})).sort(()=>Math.random()-0.5);
+    const colors=['#7ec8ff','#ffb3d1','#8fe3a8','#ffd76b','#c3b1ff'];
+    body.innerHTML=`<p style="font-size:.85rem;color:var(--ink-soft)">Tap one on the left, then its match on the right.</p>
+      <div class="match-wrap">
+        <div class="match-col" id="mLeft">${lefts.map(l=>`<div class="match-item" data-i="${l.i}" onclick="Quiz.matchPick('L',${l.i},this)"><span class="dot" style="background:${colors[l.i%5]}"></span>${l.t}</div>`).join('')}</div>
+        <div class="match-col" id="mRight">${rights.map(r=>`<div class="match-item" data-i="${r.i}" onclick="Quiz.matchPick('R',${r.i},this)">${r.t}</div>`).join('')}</div>
+      </div>`;
+    this._matchSel=null; this._matchDone=0; this._matchWrong=false;
+  },
+  matchPick(side,i,el){
+    const q=this.qs[this.i]; if(q._done||el.classList.contains('done')) return;
+    if(!this._matchSel){ if(side!=='L'){ App.toast('Start with the left side 👈'); return; }
+      document.querySelectorAll('#mLeft .match-item').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); this._matchSel={i,el}; return; }
+    if(side==='L'){ document.querySelectorAll('#mLeft .match-item').forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); this._matchSel={i,el}; return; }
+    // right clicked
+    if(i===this._matchSel.i){
+      el.classList.add('done'); this._matchSel.el.classList.remove('sel'); this._matchSel.el.classList.add('done');
+      this._matchSel=null; this._matchDone++;
+      if(this._matchDone===q.pairs.length){ if(q._first===undefined) q._first=!this._matchWrong; this._resolve(q,true); }
+    } else {
+      this._matchWrong=true; if(q._first===undefined) q._first=false;
+      el.classList.add('wrong'); App.buzz(); const e2=el; setTimeout(()=>e2.classList.remove('wrong'),700);
+      this._feedback(false,q,'Not a match — try a different pair! 💭');
+    }
+  },
+
+  render_order(q){
+    const body=document.getElementById('qBody');
+    const shuffled=[...q.tokens].map((t,i)=>({t,i})).sort(()=>Math.random()-0.5);
+    body.innerHTML=`<p style="font-size:.85rem;color:var(--ink-soft)">Tap tiles in the right order to build the answer.</p>
+      <div class="order-target" id="oTarget" aria-label="your answer"></div>
+      <div class="order-tray" id="oTray">${shuffled.map(s=>`<button class="token" data-t="${esc(s.t)}" onclick="Quiz.orderMove(this)">${s.t}</button>`).join('')}</div>
+      <div style="margin-top:8px"><button class="btn mint small" onclick="Quiz.checkOrder()">✓ Check</button>
+      <button class="btn ghost small" onclick="Quiz.orderReset()">↺ Reset</button></div>`;
+    this._order=[];
+  },
+  orderMove(btn){ const tgt=$('#oTarget'); btn.remove(); const clone=btn.cloneNode(true);
+    clone.onclick=()=>{ clone.remove(); const back=clone.cloneNode(true); back.onclick=()=>Quiz.orderMove(back); $('#oTray').appendChild(back); };
+    tgt.appendChild(clone); },
+  orderReset(){ this.render_order(this.qs[this.i]); },
+  checkOrder(){
+    const q=this.qs[this.i]; if(q._done) return;
+    const got=[...document.querySelectorAll('#oTarget .token')].map(t=>t.dataset.t);
+    const ok = got.length===q.tokens.length && got.every((t,i)=>t===q.tokens[i]);
+    if(q._first===undefined) q._first=ok;
+    const tks=[...document.querySelectorAll('#oTarget .token')];
+    if(ok){ tks.forEach(t=>t.classList.add('correct')); this._resolve(q,true); }
+    else { tks.forEach((t,i)=>t.classList.add(t.dataset.t===q.tokens[i]?'correct':'wrong'));
+      q._tries=(q._tries||0)+1; App.buzz();
+      if(q._tries>=2){ this._resolve(q,false); }
+      else { this._feedback(false,q,`Not the right order yet — ${q.hint||'try again!'}`);
+        setTimeout(()=>this.render_order(q),1000); } }
+  },
+
+  render_sort(q){
+    const body=document.getElementById('qBody');
+    const pool=[...q.pool].sort(()=>Math.random()-0.5);
+    body.innerHTML=`<div class="sort-pool" id="sortPool">${pool.map((p,i)=>`<button class="token" data-bin="${p.bin}" data-t="${esc(p.t)}" onclick="Quiz.sortSel(this)">${p.t}</button>`).join('')}</div>
+      <div class="sort-bins">${q.bins.map((b,i)=>`<div class="sort-bin"><h4>${b.name}</h4><div class="drop" id="bin${i}" onclick="Quiz.sortDrop(${i})"></div></div>`).join('')}</div>
+      <div style="margin-top:10px;text-align:center"><button class="btn mint small" onclick="Quiz.checkSort()">✓ Check</button>
+      <button class="btn ghost small" onclick="Quiz.render_sort(Quiz.qs[Quiz.i])">↺ Reset</button></div>`;
+    this._sortSel=null;
+  },
+  sortSel(btn){ document.querySelectorAll('#sortPool .token,.sort-bin .token').forEach(t=>t.classList.remove('sel'));
+    btn.classList.add('sel'); this._sortSel=btn; App.toast('Now tap the family it belongs to 👇'); },
+  sortDrop(binIdx){ if(!this._sortSel) return; const el=this._sortSel; el.classList.remove('sel');
+    document.getElementById('bin'+binIdx).appendChild(el); el.dataset.placed=binIdx;
+    el.onclick=()=>{ document.getElementById('sortPool').appendChild(el); delete el.dataset.placed; el.onclick=()=>Quiz.sortSel(el); };
+    this._sortSel=null; },
+  checkSort(){
+    const q=this.qs[this.i]; if(q._done) return;
+    const placed=[...document.querySelectorAll('.sort-bin .token')];
+    if(placed.length<q.pool.length){ App.toast('Place every tile first!'); return; }
+    let ok=true; placed.forEach(t=>{ const good=String(t.dataset.bin)===String(t.dataset.placed);
+      t.classList.add(good?'correct':'wrong'); if(!good) ok=false; });
+    if(q._first===undefined) q._first=ok;
+    if(ok){ this._resolve(q,true); }
+    else { q._tries=(q._tries||0)+1; App.buzz();
+      if(q._tries>=2){ this._resolve(q,false); }
+      else { this._feedback(false,q,'Some are in the wrong family — try again! 💭');
+        setTimeout(()=>{document.querySelectorAll('.sort-bin .token').forEach(t=>t.classList.remove('wrong','correct'));},900); } }
+  },
+
+  /* ----- resolve / feedback ----- */
+  _resolve(q, correctNow){
+    q._done=true;
+    const wasFirst = q._first===true;
+    this._tallySkill(q, wasFirst);
+    if(wasFirst){ this.correct++; this.streak++; $('#qStreak')&&($('#qStreak').textContent=this.streak);
+    } else { this.streak=0; if(!this.wrong.includes(q.id)) this.wrong.push(q.id); }
+    if(correctNow && wasFirst){
+      this._feedback(true,q, this._praise()+' '+(q.explanation||''));
+      App.ding();
+      const rect=this.mount.getBoundingClientRect?this.mount.getBoundingClientRect():{top:120};
+      App.sparkleAt(innerWidth/2, rect.top+120);
+    } else if(correctNow){ // got it right after retry
+      this._feedback(true,q, 'You got there! '+(q.explanation||''));
+      App.ding();
+    } else { // revealed after tries
+      this._feedback(false,q, (q.incorrect||'The correct answer is shown above.')+'<br>'+(q.explanation||''));
+    }
+    $('#qNext').classList.remove('hidden');
+    if(this.i===this.qs.length-1) $('#qNext').textContent=this.opts.nextLabel||'Finish 🎉';
+    $('#qBar').style.width=Math.round((this.i+1)/this.qs.length*100)+'%';
+  },
+  _tallySkill(q, correct){
+    const k=q.skill||'General';
+    if(!this.skills[k]) this.skills[k]={correct:0,total:0};
+    this.skills[k].total++; if(correct) this.skills[k].correct++;
+  },
+  _praise(){ const p=['Great job!','Well done!','Brilliant!','Superb!','You nailed it!','Fantastic!','Awesome!']; return p[Math.floor(Math.random()*p.length)]; },
+  _feedback(good,q,msg){
+    const f=document.getElementById('qFeedback');
+    f.className='feedback show '+(good?'good':'bad');
+    f.innerHTML=`<div class="fb-title">${good?'🎉':'💡'} ${good?'Correct!':"Let's learn!"}</div><div class="explain">${msg}</div>`;
+  },
+  next(){
+    if(this.i<this.qs.length-1){ this.i++; this.renderQ();
+      const top=this.mount.getBoundingClientRect?this.mount.getBoundingClientRect().top:0;
+      window.scrollTo({top:top+scrollY-70,behavior:'smooth'}); }
+    else { this.finish(); }
+  },
+  finish(){
+    const secs=Math.round((Date.now()-this.startTime)/1000);
+    const time = secs<60?secs+'s':Math.floor(secs/60)+'m '+(secs%60)+'s';
+    const res={correct:this.correct,total:this.qs.length,wrong:this.wrong,skills:this.skills,time};
+    this.opts.onDone && this.opts.onDone(res);
+  }
+};
+
+document.addEventListener('DOMContentLoaded',()=>App.init());
+</script>
 </body>
 </html>
