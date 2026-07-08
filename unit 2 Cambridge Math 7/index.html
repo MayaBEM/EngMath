@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maths 7 – Unit 2: Expressions, Formulae &amp; Equations · Interactive Review &amp; Test | Bright EngMath</title>
+<meta name="description" content="A complete interactive learning, review, practice and test-preparation course for Cambridge-style Maths Stage 7, Unit 2: Expressions, Formulae and Equations. Created by Bright EngMath.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#mainContent">Skip to main content</a>
+
+<header class="site-header glass">
+  <div class="header-inner">
+    <a class="brand" href="#" data-nav="home" aria-label="Bright EngMath – go to home page">
+      <span class="brand-badge" aria-hidden="true">B</span>
+      <span class="brand-name tg-blue">Bright EngMath<small>Maths 7 · Unit 2</small></span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">☰</button>
+    <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+      <button class="nav-btn" data-nav="home"><span>🏠</span><span class="nav-txt">Home</span></button>
+      <button class="nav-btn" data-nav="learn"><span>📖</span><span class="nav-txt">Learn</span></button>
+      <button class="nav-btn" data-nav="vocab"><span>🔤</span><span class="nav-txt">Key Words</span></button>
+      <button class="nav-btn" data-nav="lab"><span>🔬</span><span class="nav-txt">Lab</span></button>
+      <button class="nav-btn" data-nav="reading"><span>📚</span><span class="nav-txt">Reading</span></button>
+      <button class="nav-btn" data-nav="practice"><span>✏️</span><span class="nav-txt">Practice</span></button>
+      <button class="nav-btn" data-nav="tests"><span>🎮</span><span class="nav-txt">Quiz</span></button>
+      <button class="nav-btn" data-nav="progress"><span>📊</span><span class="nav-txt">Progress</span></button>
+      <button class="nav-btn nav-btn-teacher" data-nav="teacher"><span>🍎</span><span class="nav-txt">Teacher</span></button>
+    </nav>
+    <div class="hud" aria-label="Rewards">
+      <span class="hud-pill hud-coin" title="Coins — earn 1 per correct answer">🪙 <b id="hudCoins">0</b></span>
+      <span class="hud-pill hud-star" title="Stars — earn up to 3 per quiz">⭐ <b id="hudStars">0</b></span>
+      <span class="hud-pill hud-xp" title="Experience points">XP <b id="hudXp">0</b></span>
+      <button class="hud-btn" id="darkToggle" aria-label="Toggle dark mode" aria-pressed="false"><span id="darkIco">🌙</span></button>
+      <button class="hud-btn" id="soundToggle" aria-label="Toggle sound effects" aria-pressed="true"><span id="soundIco">🔊</span></button>
+    </div>
+  </div>
+  <div class="nav-progress"><div class="nav-progress-fill" id="navProgressFill"></div></div>
+</header>
+
+<main class="page" id="mainContent">
+  <!-- Every view is rendered by script.js into these containers -->
+  <section id="view-home" class="view" aria-label="Home"></section>
+  <section id="view-learn" class="view" aria-label="Learn"></section>
+  <section id="view-vocab" class="view" aria-label="Key words"></section>
+  <section id="view-lab" class="view" aria-label="Algebra Lab"></section>
+  <section id="view-reading" class="view" aria-label="Reading practice"></section>
+  <section id="view-practice" class="view" aria-label="Quick practice zone"></section>
+  <section id="view-tests" class="view" aria-label="Test zone"></section>
+  <section id="view-progress" class="view" aria-label="Progress dashboard"></section>
+</main>
+
+<!-- Teacher Presentation Mode overlay -->
+<div id="teacherMode" class="teacher-mode" hidden>
+  <div class="tm-toolbar" role="toolbar" aria-label="Presentation toolbar">
+    <button class="btn btn-sm" id="tmHome">🏠 Menu</button>
+    <button class="btn btn-sm" id="tmPrev">◀ Previous</button>
+    <button class="btn btn-sm" id="tmNext">Next ▶</button>
+    <button class="btn btn-sm" id="tmReveal">👁 Reveal</button>
+    <button class="btn btn-sm" id="tmHide">🙈 Hide</button>
+    <button class="btn btn-sm" id="tmSmaller">A−</button>
+    <button class="btn btn-sm" id="tmBigger">A+</button>
+    <button class="btn btn-sm" id="tmFullscreen">⛶ Full Screen</button>
+    <button class="btn btn-sm btn-danger" id="tmExit">✕ Exit</button>
+  </div>
+  <div class="tm-stage" id="tmStage" tabindex="-1"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="foot-brand">Bright EngMath ✦ Maths 7 – Unit 2 Interactive Review &amp; Test</div>
+  <div>Created by Bright EngMath © 2026 · All lessons, stories and questions are original.</div>
+  <div class="foot-note">🔊 Optional read-aloud uses your device's voice, so pronunciation may vary between devices.</div>
+  <div class="reset-zone">
+    <button class="btn btn-danger btn-sm" id="resetProgressBtn">Reset Progress</button>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+
+<script src="data.js"></script>
+<script src="tests.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
