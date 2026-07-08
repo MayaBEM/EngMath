@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maths 7 – Unit 1: Integers · Review &amp; Test | Bright EngMath</title>
+<meta name="description" content="A complete interactive review and test-preparation course for Cambridge-style Maths Stage 7, Unit 1: Integers. Created by Bright EngMath.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#" data-nav="home" aria-label="Bright EngMath – go to home page">
+      <span class="brand-badge" aria-hidden="true">±7</span>
+      <span class="brand-name">Bright EngMath<small>Maths 7 · Unit 1: Integers</small></span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">☰</button>
+    <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+      <button class="nav-btn" data-nav="home">Home</button>
+      <button class="nav-btn" data-nav="learn">Learn</button>
+      <button class="nav-btn" data-nav="vocab">Key Words</button>
+      <button class="nav-btn" data-nav="practice">Practice</button>
+      <button class="nav-btn" data-nav="problems">Word Problems</button>
+      <button class="nav-btn" data-nav="quick">Quick Zone</button>
+      <button class="nav-btn" data-nav="tests">Test Zone</button>
+    </nav>
+  </div>
+</header>
+
+<main class="page">
+  <!-- Every view is rendered by script.js into these containers -->
+  <section id="view-home" class="view" aria-label="Home"></section>
+  <section id="view-learn" class="view" aria-label="Learn"></section>
+  <section id="view-vocab" class="view" aria-label="Key words"></section>
+  <section id="view-practice" class="view" aria-label="Practice"></section>
+  <section id="view-problems" class="view" aria-label="Word problems"></section>
+  <section id="view-quick" class="view" aria-label="Quick practice zone"></section>
+  <section id="view-tests" class="view" aria-label="Test zone"></section>
+</main>
+
+<footer class="site-footer">
+  <div class="foot-brand">Bright EngMath ✦ Maths 7 – Unit 1 Review &amp; Test</div>
+  <div>Created by Bright EngMath © 2026 · All lesson content, questions and stories are original.</div>
+  <div class="reset-zone">
+    <button class="btn btn-danger btn-sm" id="resetProgressBtn">Reset Progress</button>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<script src="tests.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
