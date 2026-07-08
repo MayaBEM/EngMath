@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Present Simple Superstars • Grade 4 English</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+
+:root{
+  --c1:#ff9aa2; --c2:#ffd6a5; --c3:#fdffb6; --c4:#caffbf;
+  --c5:#9bf6ff; --c6:#a0c4ff; --c7:#bdb2ff; --c8:#ffc6ff;
+  --coral:#ff7d94; --sky:#5db7ff; --grape:#9d7bff; --sun:#ffc24b; --leaf:#3fd39a;
+  --ink:#4c4165; --ink-soft:#8579a0;
+  --card:#ffffff;
+  --shadow:0 16px 40px rgba(150,120,190,.22);
+  --shadow-sm:0 8px 20px rgba(150,120,190,.16);
+  --radius:28px; --good:#3ec98a; --bad:#ff7a97;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Nunito',system-ui,sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;
+  background:linear-gradient(125deg,#ffe3ec,#ffe9d6,#fbffd6,#dcffe0,#d6f6ff,#e3e6ff,#f2dcff,#ffe0f4);
+  background-size:400% 400%;animation:sweep 26s ease infinite;
+}
+@keyframes sweep{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.sky{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.float{position:absolute;opacity:.75;animation:rise linear infinite}
+@keyframes rise{from{transform:translateY(20px) rotate(0)}to{transform:translateY(-20px) rotate(8deg)}}
+.twk{position:absolute;animation:tw 3s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+h1,h2,h3,.brand,.btn,.badge-title{font-family:'Baloo 2',cursive}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(255,255,255,.66);border-bottom:2px solid rgba(255,255,255,.6);box-shadow:0 6px 24px rgba(170,140,210,.14)}
+.nav-inner{max-width:1040px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.2rem;color:var(--ink)}
+.brand .logo{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;font-size:1.2rem;background:linear-gradient(135deg,var(--c1),var(--c7),var(--c5));box-shadow:var(--shadow-sm)}
+.nav-links{display:flex;gap:5px;flex-wrap:wrap}
+.nav-links button{font-family:'Fredoka';font-weight:600;font-size:.95rem;color:var(--ink-soft);background:transparent;border:none;padding:8px 13px;border-radius:14px;cursor:pointer;transition:.2s}
+.nav-links button:hover{background:rgba(255,255,255,.7);color:var(--ink)}
+.nav-links button.active{background:linear-gradient(135deg,var(--c8),var(--c6));color:var(--ink);box-shadow:var(--shadow-sm)}
+
+main{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:26px 18px 60px}
+.page{display:none;animation:pop .5s cubic-bezier(.2,.9,.3,1.3)}
+.page.show{display:block}
+@keyframes pop{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:none}}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;border:2px solid rgba(255,255,255,.9);position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c4),var(--c5),var(--c7),var(--c8))}
+.soft::before{display:none}
+
+/* BUTTONS */
+.btn{font-family:'Baloo 2';font-weight:700;font-size:1.05rem;color:var(--ink);border:none;border-radius:18px;padding:14px 22px;cursor:pointer;box-shadow:var(--shadow-sm);transition:transform .15s;display:inline-flex;align-items:center;gap:9px}
+.btn:hover{transform:translateY(-3px)}.btn:active{transform:translateY(0)}
+.btn-coral{background:linear-gradient(135deg,#ffb0bd,#ff8fa3)}
+.btn-sky{background:linear-gradient(135deg,#bfe6ff,#8fcaff)}
+.btn-mint{background:linear-gradient(135deg,#c8ffd8,#8fe6b6)}
+.btn-sun{background:linear-gradient(135deg,#ffe9a8,#ffc94b)}
+.btn-grape{background:linear-gradient(135deg,#e0d3ff,#b9a0ff)}
+.btn-ghost{background:#fff;border:2px solid #efe4ff;box-shadow:none}
+.btn-lg{font-size:1.15rem;padding:16px 30px}
+
+/* HOME */
+.hero{text-align:center;padding:30px 20px 6px}
+.hero .mascot{font-size:4.4rem;display:inline-block;animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
+.hero h1{font-size:clamp(2.2rem,6.5vw,3.7rem);line-height:1.04;background:linear-gradient(90deg,#ff7d94,#9d7bff,#5db7ff,#3fd39a);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 rgba(255,255,255,.7))}
+.hero .sub{font-size:clamp(1.05rem,2.6vw,1.4rem);color:var(--ink-soft);font-weight:700;margin-top:10px}
+.welcome{max-width:650px;margin:20px auto 0;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.7));border:2px dashed #ffb7c9;border-radius:24px;padding:18px 22px;font-weight:600;line-height:1.6}
+.home-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:24px}
+.feature-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:32px}
+.feature{background:rgba(255,255,255,.85);border-radius:22px;padding:18px;text-align:center;box-shadow:var(--shadow-sm);border:2px solid rgba(255,255,255,.9)}
+.feature .ico{font-size:2rem}.feature h4{font-family:'Baloo 2';margin:8px 0 4px}.feature p{font-size:.9rem;color:var(--ink-soft)}
+
+/* REVIEW */
+.section-title{display:flex;align-items:center;gap:12px;font-size:1.7rem;margin-bottom:6px}
+.section-title .chip{font-size:1.8rem}
+.lead{color:var(--ink-soft);font-weight:700;margin-bottom:20px}
+.rev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.rev-card{background:#fff;border-radius:22px;padding:18px 20px;box-shadow:var(--shadow-sm);border:2px solid #f4ecff}
+.rev-card h3{font-size:1.15rem;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.rev-card p{font-weight:600;line-height:1.55}
+.rev-card p b{color:var(--coral)}
+.ex{display:flex;align-items:center;gap:10px;background:#fbf7ff;border-radius:12px;padding:9px 12px;margin:7px 0;font-weight:600}
+.ex .em{font-size:1.3rem}.ex b{color:var(--grape)}
+.rtag-pos{color:#22a06a;font-weight:800}.rtag-neg{color:#e0688a;font-weight:800}.rtag-q{color:#4f8fe0;font-weight:800}
+table.rule{width:100%;border-collapse:separate;border-spacing:0;margin-top:10px;border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm)}
+table.rule th,table.rule td{padding:11px 13px;text-align:left}
+table.rule th{background:linear-gradient(135deg,var(--c7),#b9a0ff);color:#493a6a;font-family:'Baloo 2'}
+table.rule tr:nth-child(even) td{background:#fbf7ff}
+table.rule td b{color:var(--sky)}
+
+/* LEVEL SELECT */
+.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:8px}
+.level-card{border-radius:26px;padding:26px 22px;text-align:center;cursor:pointer;border:3px solid rgba(255,255,255,.9);box-shadow:var(--shadow);transition:transform .18s;position:relative;overflow:hidden}
+.level-card:hover{transform:translateY(-6px) scale(1.02)}
+.level-card .lem{font-size:3rem}
+.level-card h3{font-size:1.5rem;margin:6px 0 2px}
+.level-card p{font-weight:700;color:#6a5d85}
+.level-card .go{margin-top:14px;display:inline-block;background:#fff;border-radius:14px;padding:9px 18px;font-family:'Baloo 2';font-weight:800;box-shadow:var(--shadow-sm)}
+.lc-easy{background:linear-gradient(150deg,#d3ffe4,#a8f0c8)}
+.lc-med{background:linear-gradient(150deg,#cfe8ff,#a9d2ff)}
+.lc-hard{background:linear-gradient(150deg,#ffd9ec,#ffc0dc)}
+.level-card .stars{position:absolute;top:10px;right:14px;font-size:1rem;opacity:.75}
+
+/* QUIZ */
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.counter{font-family:'Baloo 2';font-weight:800;background:#fff;border-radius:14px;padding:8px 14px;box-shadow:var(--shadow-sm)}
+.counter b{color:var(--coral)}
+.lvl-chip{font-family:'Baloo 2';font-weight:800;border-radius:14px;padding:8px 14px;box-shadow:var(--shadow-sm)}
+.score-chip{font-family:'Baloo 2';font-weight:800;background:linear-gradient(135deg,var(--c3),#ffd766);border-radius:14px;padding:8px 14px;box-shadow:var(--shadow-sm)}
+.progress{height:16px;background:rgba(255,255,255,.7);border-radius:999px;overflow:hidden;box-shadow:inset 0 2px 5px rgba(150,120,190,.15);margin-bottom:20px}
+.progress .bar{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--coral),var(--grape),var(--sky),var(--leaf));transition:width .5s cubic-bezier(.2,.9,.3,1)}
+
+/* PREMIUM QUESTION BANNER */
+.qbanner{position:relative;border-radius:26px;padding:22px 20px 26px;margin-bottom:18px;overflow:hidden;background:radial-gradient(130px 90px at 12% 8%,#fff2f8 0%,transparent 70%),radial-gradient(150px 90px at 88% 6%,#eef7ff 0%,transparent 70%),linear-gradient(160deg,#fff6fb 0%,#f3f9ff 55%,#f2fff6 100%);border:2px solid rgba(255,255,255,.9);box-shadow:inset 0 2px 12px rgba(150,120,190,.06)}
+.qbanner .inner-card{position:relative;z-index:2;background:#fff;border-radius:24px;box-shadow:0 12px 28px rgba(150,120,190,.16);border:2px solid #fff;padding:20px 20px 22px;text-align:center}
+.qdeco{position:absolute;z-index:1;pointer-events:none;user-select:none;opacity:.85}
+.qdeco.f{animation:floaty 4s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-9px) rotate(5deg)}}
+.qdeco.d1{top:8px;left:14px;font-size:1.2rem;animation-delay:-.2s}
+.qdeco.d2{top:14px;right:18px;font-size:1.4rem;animation-delay:-1.1s}
+.qdeco.d3{bottom:10px;left:22px;font-size:1.1rem;animation-delay:-2s}
+.qdeco.d4{bottom:14px;right:24px;font-size:1.25rem;animation-delay:-1.6s}
+.qdeco.d5{top:44%;left:6px;font-size:1rem;animation-delay:-.7s}
+.qdeco.d6{top:50%;right:8px;font-size:1rem;animation-delay:-2.4s}
+.qmeta{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.qtype{display:inline-block;font-family:'Fredoka';font-weight:600;font-size:.82rem;color:#6a5a80;background:#f3ecff;border-radius:999px;padding:4px 12px}
+.qdiff{font-family:'Fredoka';font-weight:600;font-size:.82rem;border-radius:999px;padding:4px 13px;box-shadow:var(--shadow-sm)}
+.qdiff.easy{background:#e2fbef;color:#1f9c66}
+.qdiff.medium{background:#e6f2ff;color:#3877c9}
+.qdiff.hard{background:#ffe1ea;color:#d64b74}
+.qsticker{width:78px;height:78px;margin:8px auto 4px;border-radius:50%;display:grid;place-items:center;font-size:2.4rem;background:conic-gradient(from 0deg,#ffd6e6,#ffe9c9,#e2ffe9,#d6f3ff,#e6dcff,#ffd6e6);box-shadow:var(--shadow-sm);animation:spinp 10s linear infinite}
+@keyframes spinp{to{transform:rotate(360deg)}}
+.qsticker span{animation:spinpr 10s linear infinite}
+@keyframes spinpr{to{transform:rotate(-360deg)}}
+.qmascot{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 12px}
+.qmascot .face{font-size:2.2rem;animation:mbob 2.4s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(150,120,190,.25))}
+@keyframes mbob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(5deg)}}
+.qmascot .bubble{position:relative;background:linear-gradient(135deg,#fff6fb,#f3f9ff);border:2px solid #ffd0e2;border-radius:16px;padding:8px 14px;font-family:'Fredoka';font-weight:600;font-size:.98rem;box-shadow:var(--shadow-sm)}
+.qmascot .bubble::before{content:"";position:absolute;left:-9px;top:50%;transform:translateY(-50%);border:7px solid transparent;border-right-color:#ffd0e2}
+.qtext{font-family:'Fredoka','Nunito',sans-serif;font-weight:700;font-size:clamp(1.5rem,4.1vw,2.45rem);line-height:1.3;letter-spacing:.2px;color:#3e3357;text-align:center;margin:2px auto 2px;max-width:640px;animation:qfade .5s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes qfade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.qtext .hl{position:relative;white-space:nowrap;font-weight:700}
+.qtext .hl::after{content:"";position:absolute;left:-2px;right:-2px;bottom:2px;height:.4em;border-radius:8px;z-index:-1;background:linear-gradient(90deg,#ffe0ef,#dcecff)}
+.qtext .hl.g::after{background:linear-gradient(90deg,#d3ffe4,#cdefff)}
+.qtext .hl.y::after{background:linear-gradient(90deg,#fff0bd,#ffe8d1)}
+.qtext .hl.p::after{background:linear-gradient(90deg,#efe4ff,#ffe0ef)}
+.qhint{font-size:.95rem;color:var(--ink-soft);font-weight:700;font-style:italic;margin-top:6px}
+
+/* CHOICES */
+.choices{display:grid;gap:12px;margin-top:14px}
+.choice{display:flex;align-items:center;gap:14px;text-align:left;width:100%;background:#fff;border:2.5px solid #eee3ff;border-radius:18px;padding:15px 18px;cursor:pointer;font-size:1.08rem;font-weight:700;color:var(--ink);transition:.15s}
+.choice:hover:not(:disabled){border-color:var(--grape);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.choice .key{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;font-family:'Baloo 2';font-weight:800;background:linear-gradient(135deg,var(--c6),var(--c4));color:#4a5a63}
+.choice:disabled{cursor:default}
+.choice.correct{border-color:var(--good);background:#eafff5}.choice.correct .key{background:var(--good);color:#fff}
+.choice.wrong{border-color:var(--bad);background:#fff0f3}.choice.wrong .key{background:var(--bad);color:#fff}
+.choice.dim{opacity:.55}
+.feedback{margin-top:16px;border-radius:18px;padding:16px 18px;display:none;animation:pop .35s;font-weight:600;line-height:1.5}
+.feedback.show{display:block}
+.feedback.ok{background:linear-gradient(135deg,#eafff5,#f6fff9);border:2px solid #a7ecca}
+.feedback.no{background:linear-gradient(135deg,#fff0f3,#fff7f9);border:2px solid #ffc2d0}
+.feedback .react{font-family:'Baloo 2';font-size:1.15rem;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.feedback.ok .react{color:#22a06a}.feedback.no .react{color:#e0688a}
+.feedback .exp b{color:var(--grape)}
+.quiz-nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+
+/* RESULTS */
+.result-hero{text-align:center;padding:14px 10px}
+.badge-big{font-size:5rem;animation:bob 2.6s ease-in-out infinite;display:inline-block}
+.scorecircle{width:180px;height:180px;margin:12px auto;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--coral) var(--deg,0deg),#efe8ff 0deg);box-shadow:var(--shadow)}
+.scorecircle .inner{width:142px;height:142px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center}
+.scorecircle .pct{font-family:'Baloo 2';font-size:2.6rem;font-weight:800;line-height:1}
+.scorecircle .frac{color:var(--ink-soft);font-weight:700}
+.badge-title{font-size:2rem;margin-top:6px;background:linear-gradient(90deg,#ff7d94,#9d7bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.badge-desc{color:var(--ink-soft);font-weight:700;margin-top:4px}
+.lvl-done{font-weight:800;margin-top:8px}
+.result-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:22px 0}
+.ra{border-radius:16px;padding:14px 16px;margin-bottom:12px;border:2px solid #eee3ff;background:#fff}
+.ra.correct{border-color:#bdeecf;background:#f6fff9}.ra.wrong{border-color:#ffc9d6;background:#fff6f8}
+.ra .rq{font-weight:800;font-family:'Baloo 2';margin-bottom:6px}
+.ra .line{font-weight:600;margin:2px 0}.ra .yes{color:#22a06a}.ra .noo{color:#e0688a}
+.ra .exp{color:var(--ink-soft);font-size:.95rem;margin-top:6px}
+.filter-btns{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.filter-btns button{font-family:'Baloo 2';font-weight:700;border:2px solid #efe4ff;background:#fff;border-radius:12px;padding:7px 14px;cursor:pointer}
+.filter-btns button.on{background:linear-gradient(135deg,var(--c7),var(--c6))}
+
+/* CERTIFICATE */
+.certificate{position:relative;background:repeating-linear-gradient(45deg,#fff,#fff 12px,#fffdf7 12px,#fffdf7 24px);border:8px double var(--grape);border-radius:20px;padding:34px 26px;text-align:center;box-shadow:var(--shadow);overflow:hidden}
+.certificate::before,.certificate::after{content:"★";position:absolute;font-size:1.6rem;color:var(--sun)}
+.certificate::before{top:12px;left:16px}.certificate::after{bottom:12px;right:16px}
+.cert-seal{position:absolute;top:18px;right:22px;width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ffe7a0,#ffce4d);display:grid;place-items:center;font-family:'Baloo 2';font-weight:800;font-size:.66rem;color:#8a6a10;text-align:center;line-height:1.05;transform:rotate(-8deg);box-shadow:var(--shadow-sm)}
+.cert-k{font-family:'Baloo 2';letter-spacing:3px;color:var(--grape);font-weight:700;font-size:.9rem}
+.cert-h{font-family:'Baloo 2';font-size:2rem;margin:4px 0 2px}
+.cert-name{font-family:'Baloo 2';font-size:1.8rem;color:var(--coral);border-bottom:3px dashed #ffc9e2;display:inline-block;padding:6px 24px;margin:12px 0}
+.cert-line{color:var(--ink-soft);font-weight:700;max-width:470px;margin:6px auto}
+.cert-badge{font-family:'Baloo 2';font-size:1.3rem;color:var(--grape);margin-top:8px}
+.cert-foot{display:flex;justify-content:space-between;max-width:430px;margin:22px auto 0;font-weight:700}
+.cert-foot span{border-top:2px solid #e0d3ff;padding-top:6px;font-size:.9rem}
+.name-input{font-family:'Nunito';font-weight:700;border:2px solid #efe4ff;border-radius:14px;padding:10px 14px;font-size:1rem;color:var(--ink);text-align:center;min-width:220px}
+.name-input:focus{outline:none;border-color:var(--grape)}
+
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:100}
+footer{position:relative;z-index:1;text-align:center;padding:24px 18px 40px;color:var(--ink-soft);font-weight:700}
+.footer-badge{display:inline-block;background:#fff;border:2px solid #f0e4ff;border-radius:999px;padding:7px 18px;box-shadow:var(--shadow-sm);margin-bottom:10px;font-family:'Baloo 2';color:var(--ink)}
+footer .made{font-size:.85rem;opacity:.85}
+.sound-note{font-size:.78rem;opacity:.7;margin-top:6px}
+
+@media print{nav,footer,.result-btns,#rReview,.section-title,.print-hide,#confetti,.sky,.filter-btns{display:none!important}body{background:#fff;animation:none}.certificate{box-shadow:none;border-color:#9d7bff}main{padding:0}}
+@media(max-width:560px){.card{padding:18px}.qtext{font-size:1.15rem}.nav-links button{padding:7px 9px;font-size:.85rem}.brand span.t{display:none}}
+</style>
+</head>
+<body>
+<div class="sky" id="sky"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand"><span class="logo">🌟</span><span class="t">Present Simple Superstars</span></div>
+    <div class="nav-links">
+      <button data-go="home" class="active">🏠 Home</button>
+      <button data-go="review">📚 Review</button>
+      <button data-go="levels">🎯 Quiz</button>
+      <button data-go="results">🏆 Results</button>
+      <button data-go="certificate">🎓 Certificate</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- HOME -->
+<section id="home" class="page show">
+  <div class="hero">
+    <div class="mascot">🐱</div>
+    <h1>Present Simple Superstars</h1>
+    <p class="sub">Learn grammar, play 3 quiz levels, and shine! ✨</p>
+    <div class="welcome">🌈 <b>Hello, Grade 4 superstars!</b> Milo the Cat is here to help you master the
+      <b>Present Simple Tense</b>. First take a quick <b>review</b>, then climb three quiz levels —
+      <b>Easy → Medium → Hard</b> — and earn your sparkly certificate! 🚀</div>
+    <div class="home-btns">
+      <button class="btn btn-mint btn-lg" data-go="review">📚 Start Review</button>
+      <button class="btn btn-coral btn-lg" data-go="levels">🎯 Choose Quiz Level</button>
+      <button class="btn btn-sun btn-lg" data-go="results">🏆 My Results</button>
+    </div>
+  </div>
+  <div class="feature-row">
+    <div class="feature"><div class="ico">✅</div><h4>Positive</h4><p>I play • She plays</p></div>
+    <div class="feature"><div class="ico">❌</div><h4>Negative</h4><p>don't • doesn't</p></div>
+    <div class="feature"><div class="ico">❓</div><h4>Questions</h4><p>Do • Does</p></div>
+    <div class="feature"><div class="ico">🎓</div><h4>Certificate</h4><p>Print your reward!</p></div>
+  </div>
+</section>
+
+<!-- REVIEW -->
+<section id="review" class="page">
+  <h2 class="section-title"><span class="chip">📚</span> Quick Review</h2>
+  <p class="lead">Warm up with Milo the Cat 🐱 before your quiz!</p>
+  <div class="rev-grid">
+    <div class="rev-card"><h3>🌱 What is the Present Simple?</h3>
+      <p>We use the <b>Present Simple</b> for things that are <b>true now</b>, happen <b>again and again</b> (habits &amp; routines), or are <b>always true</b> (facts).</p></div>
+    <div class="rev-card"><h3>🕒 When do we use it?</h3>
+      <div class="ex"><span class="em">🌅</span> Daily routines — I <b>wake up</b> at 7.</div>
+      <div class="ex"><span class="em">🌍</span> Facts — The sun <b>rises</b> in the east.</div>
+      <div class="ex"><span class="em">🔁</span> Habits — She <b>reads</b> every night.</div>
+      <div class="ex"><span class="em">❤️</span> Likes/dislikes — We <b>love</b> ice cream.</div></div>
+    <div class="rev-card"><h3>✅ Positive</h3>
+      <div class="ex"><span class="em">⚽</span> I <b>play</b> football. <span class="rtag-pos">✔</span></div>
+      <div class="ex"><span class="em">🎹</span> She <b>plays</b> the piano. <span class="rtag-pos">+s</span></div></div>
+    <div class="rev-card"><h3>❌ Negative</h3>
+      <div class="ex"><span class="em">🥕</span> I <b>don't</b> like carrots. <span class="rtag-neg">✘</span></div>
+      <div class="ex"><span class="em">📺</span> He <b>doesn't</b> watch TV. <span class="rtag-neg">✘</span></div></div>
+    <div class="rev-card"><h3>❓ Questions</h3>
+      <div class="ex"><span class="em">🍕</span> <b>Do</b> you like pizza? <span class="rtag-q">?</span></div>
+      <div class="ex"><span class="em">🏫</span> <b>Does</b> she go to school? <span class="rtag-q">?</span></div></div>
+    <div class="rev-card"><h3>⭐ The Golden Rule</h3>
+      <p>Add <b>s / es</b> to the verb with <b>he, she, it</b>. Add <b>es</b> after -o, -ch, -sh, -ss, -x (go→goes, watch→watches). Consonant + y → <b>ies</b> (cry→cries).</p>
+      <table class="rule"><tr><th>Subject</th><th>Verb</th></tr>
+        <tr><td>I / You / We / They</td><td><b>play</b></td></tr>
+        <tr><td>He / She / It</td><td><b>plays</b></td></tr></table></div>
+  </div>
+  <div style="text-align:center;margin-top:24px">
+    <button class="btn btn-coral btn-lg" data-go="levels">🎯 I'm ready — Go to Quiz!</button>
+  </div>
+</section>
+
+<!-- LEVEL SELECT -->
+<section id="levels" class="page">
+  <h2 class="section-title"><span class="chip">🎯</span> Choose Your Quiz Level</h2>
+  <p class="lead">Three sets, 15 questions each — from easy to hard! 💫</p>
+  <div class="levels">
+    <div class="level-card lc-easy" data-level="easy"><div class="stars">⭐</div><div class="lem">🐣</div><h3>Easy</h3><p>Basic verb forms &amp; recognition</p><div class="go">Start Easy →</div></div>
+    <div class="level-card lc-med" data-level="medium"><div class="stars">⭐⭐</div><div class="lem">🦊</div><h3>Medium</h3><p>Spelling, do/does &amp; questions</p><div class="go">Start Medium →</div></div>
+    <div class="level-card lc-hard" data-level="hard"><div class="stars">⭐⭐⭐</div><div class="lem">🦉</div><h3>Hard</h3><p>Error correction &amp; reading</p><div class="go">Start Hard →</div></div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" class="page">
+  <h2 class="section-title"><span class="chip">🧠</span> <span id="qLevelTitle">Quiz</span></h2>
+  <div class="quiz-top">
+    <div class="counter">Question <b id="qNow">1</b> / <span id="qTotal">15</span></div>
+    <div class="lvl-chip" id="qLvlChip">Easy</div>
+    <div class="score-chip">⭐ Score: <span id="qScore">0</span></div>
+  </div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="card soft" id="qCard">
+    <div class="qbanner">
+      <span class="qdeco f d1">⭐</span><span class="qdeco f d2">🌈</span>
+      <span class="qdeco f d3">☁️</span><span class="qdeco f d4">✨</span>
+      <span class="qdeco f d5">💖</span><span class="qdeco f d6">🎈</span>
+      <div class="inner-card">
+        <div class="qmeta">
+          <span class="qtype" id="qType">…</span>
+          <span class="qdiff easy" id="qDiff">🟢 Easy</span>
+        </div>
+        <div class="qsticker" id="qSticker"><span>📝</span></div>
+        <div class="qmascot">
+          <span class="face" id="qMascot">🐱</span>
+          <span class="bubble" id="qMascotMsg">Let's think!</span>
+        </div>
+        <div class="qtext" id="qText">…</div>
+        <div class="qhint" id="qHint" style="display:none"></div>
+      </div>
+    </div>
+    <div class="choices" id="qChoices"></div>
+    <div class="feedback" id="qFeedback"><div class="react" id="qReact"></div><div class="exp" id="qExp"></div></div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost print-hide" data-go="levels">🔙 Levels</button>
+      <button class="btn btn-sky" id="qNext" style="display:none">Next ➡️</button>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results" class="page">
+  <div id="noResult" class="card" style="text-align:center">
+    <div style="font-size:3rem">🧭</div>
+    <h2 class="section-title" style="justify-content:center">No results yet!</h2>
+    <p class="lead">Finish a quiz level first, then come back for your badge.</p>
+    <button class="btn btn-coral btn-lg" data-go="levels">🎯 Choose a Level</button>
+  </div>
+  <div id="hasResult" style="display:none">
+    <div class="card result-hero">
+      <div class="badge-big" id="rBadgeEmoji">🌟</div>
+      <div class="scorecircle" id="rCircle"><div class="inner"><div class="pct" id="rPct">0%</div><div class="frac" id="rFrac">0 / 15</div></div></div>
+      <div class="badge-title" id="rBadge">Grammar Star</div>
+      <div class="badge-desc" id="rDesc">Amazing work!</div>
+      <div class="lvl-done" id="rLevel">Level: Easy</div>
+      <div class="result-btns">
+        <button class="btn btn-mint btn-lg" id="rRetry">🔄 Retry Quiz</button>
+        <button class="btn btn-sky btn-lg" id="rNext">⏭️ Next Level</button>
+        <button class="btn btn-sun btn-lg" data-go="certificate">🎓 Certificate</button>
+        <button class="btn btn-ghost btn-lg" data-go="home">🏠 Home</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3 class="section-title" style="font-size:1.35rem"><span class="chip">🔍</span> Review Mistakes</h3>
+      <p class="lead">See every question, or only the ones to fix. ✨</p>
+      <div class="filter-btns"><button id="fAll" class="on">Show All</button><button id="fWrong">❌ Only Mistakes</button></div>
+      <div id="rReview"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATE -->
+<section id="certificate" class="page">
+  <h2 class="section-title print-hide"><span class="chip">🎓</span> Your Certificate</h2>
+  <div id="certLocked" class="card" style="text-align:center">
+    <div style="font-size:3rem">🔒</div>
+    <p class="lead" style="margin-top:10px">Finish a quiz level to unlock your certificate!</p>
+    <button class="btn btn-coral btn-lg" data-go="levels">🎯 Take a Quiz</button>
+  </div>
+  <div id="certUnlocked" style="display:none">
+    <div class="card soft">
+      <div class="print-hide" style="margin:2px 0 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <label style="font-weight:700">Your name:</label>
+        <input class="name-input" id="certName" placeholder="Type your name ✏️" maxlength="26">
+        <button class="btn btn-grape" id="printBtn">🖨️ Print Certificate</button>
+      </div>
+      <div class="certificate" id="certificate">
+        <div class="cert-seal">OFFICIAL<br>★<br>GRADE 4</div>
+        <div class="cert-k">CERTIFICATE OF ACHIEVEMENT</div>
+        <div class="cert-h">Present Simple Superstars 🌟</div>
+        <div class="cert-line">This certificate is proudly awarded to</div>
+        <div class="cert-name" id="certNameOut">Star Student</div>
+        <div class="cert-line">for completing the <b>Present Simple Tense</b> quiz
+          (<span id="certLevel">Easy</span> level) with a score of <b id="certScore">0%</b> and wonderful grammar skills!</div>
+        <div class="cert-badge" id="certBadge">🏆 Grammar Star</div>
+        <div class="cert-foot"><span>🐱 Milo the Cat<br>English Guide</span><span id="certDate">Date</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-badge">🍎 Made for Grade 4 English Learners</div>
+  <div class="made">Present Simple Superstars • Learn • Practice • Shine 🌈</div>
+  <div class="made">© 2026 Bright EngMath. All rights reserved.</div>
+  <div class="sound-note">🔊 Sound effects ready (placeholder — no audio files needed)</div>
+</footer>
+
+<canvas id="confetti"></canvas>
+
+<script>
+/* ============================================================
+   QUIZ BANK — Present Simple. 3 levels × 15 questions.
+   Fully editable: {type, q, choices[A,B,C,D], answer(0-3), exp}
+   Optional: read (reading passage shown as a hint above question)
+   ============================================================ */
+const QUIZ = {
+easy:[
+ {type:"Choose the verb", q:"I ____ to school every day.", choices:["go","goes","going","gone"], answer:0, exp:"With <b>I</b> use the base verb: <b>go</b>."},
+ {type:"He/She/It + s", q:"She ____ tennis after class.", choices:["play","plays","playing","played"], answer:1, exp:"With <b>she</b> add <b>-s</b>: play → <b>plays</b>."},
+ {type:"Choose the verb", q:"They ____ books in the library.", choices:["reads","read","reading","to read"], answer:1, exp:"<b>They</b> use the base verb: <b>read</b>."},
+ {type:"He/She/It + es", q:"He ____ TV every evening.", choices:["watch","watchs","watches","watching"], answer:2, exp:"Verbs ending in <b>-ch</b> add <b>-es</b>: watch → <b>watches</b>."},
+ {type:"Positive sentence", q:"Which sentence is correct?", choices:["We plays outside.","We play outside.","We playing outside.","We to play outside."], answer:1, exp:"With <b>we</b> use the base verb: <b>We play outside.</b>"},
+ {type:"Negative sentence", q:"I ____ like carrots.", choices:["doesn't","don't","am not","not"], answer:1, exp:"With <b>I</b> the negative is <b>don't</b>."},
+ {type:"Negative sentence", q:"He ____ eat meat.", choices:["don't","doesn't","not","isn't"], answer:1, exp:"With <b>he</b> use <b>doesn't</b> + base verb: doesn't eat."},
+ {type:"Question with Do/Does", q:"____ you like pizza?", choices:["Does","Do","Are","Is"], answer:1, exp:"With <b>you</b>, questions start with <b>Do</b>."},
+ {type:"Question with Do/Does", q:"____ she go to school by bus?", choices:["Do","Does","Is","Are"], answer:1, exp:"With <b>she</b>, questions start with <b>Does</b>."},
+ {type:"He/She/It + s", q:"My cat ____ milk.", choices:["drink","drinks","drinking","to drink"], answer:1, exp:"<b>Cat</b> = it, so add <b>-s</b>: <b>drinks</b>."},
+ {type:"Fact", q:"The sun ____ in the east.", choices:["rise","rises","rising","risen"], answer:1, exp:"<b>The sun</b> = it. Facts use <b>-s</b>: <b>rises</b>."},
+ {type:"Choose the verb", q:"We ____ in a big house.", choices:["lives","live","living","to live"], answer:1, exp:"With <b>we</b> use the base verb: <b>live</b>."},
+ {type:"Verb 'to be'", q:"I ____ a student.", choices:["am","is","are","be"], answer:0, exp:"With <b>I</b> use <b>am</b>: I am a student."},
+ {type:"Positive sentence", q:"Which is correct?", choices:["She read books.","She reads books.","She reading books.","She to read books."], answer:1, exp:"With <b>she</b> add <b>-s</b>: She <b>reads</b> books."},
+ {type:"He/She/It + es", q:"He ____ his teeth every morning.", choices:["brush","brushs","brushes","brushing"], answer:2, exp:"Verbs ending in <b>-sh</b> add <b>-es</b>: brush → <b>brushes</b>."}
+],
+medium:[
+ {type:"Spelling: -ies", q:"The baby ____ when she is hungry.", choices:["cry","crys","cries","cryes"], answer:2, exp:"Consonant + y → <b>-ies</b>: cry → <b>cries</b>."},
+ {type:"Spelling: -es", q:"He ____ the bus every morning.", choices:["catch","catchs","catches","catching"], answer:2, exp:"Verbs ending in <b>-ch</b> add <b>-es</b>: <b>catches</b>."},
+ {type:"Spelling: -es", q:"She ____ her hands before lunch.", choices:["wash","washs","washes","washing"], answer:2, exp:"Verbs ending in <b>-sh</b> add <b>-es</b>: <b>washes</b>."},
+ {type:"Spelling: -es", q:"He ____ to bed at nine o'clock.", choices:["go","gos","goes","goess"], answer:2, exp:"Verbs ending in <b>-o</b> add <b>-es</b>: go → <b>goes</b>."},
+ {type:"Spelling: -ies", q:"A bird ____ in the sky.", choices:["fly","flys","flies","flyes"], answer:2, exp:"Consonant + y → <b>-ies</b>: fly → <b>flies</b>."},
+ {type:"Negative sentence", q:"They ____ live in a big city.", choices:["doesn't","don't","isn't","aren't"], answer:1, exp:"With <b>they</b> use <b>don't</b>."},
+ {type:"Question with Do/Does", q:"____ your friends play chess?", choices:["Does","Do","Is","Has"], answer:1, exp:"<b>Friends</b> = they, so use <b>Do</b>."},
+ {type:"Negative sentence", q:"She ____ watch TV in the morning.", choices:["don't","doesn't","not","isn't"], answer:1, exp:"With <b>she</b> use <b>doesn't</b>."},
+ {type:"Adverb of frequency", q:"She eats candy every single day. She ____ eats candy.", choices:["never","sometimes","always","rarely"], answer:2, exp:"Every day = <b>always</b> (100% of the time)."},
+ {type:"Question with Do/Does", q:"How often ____ you exercise?", choices:["do","does","are","is"], answer:0, exp:"With <b>you</b> use <b>do</b>: How often do you exercise?"},
+ {type:"Error correction", q:"Choose the correct sentence.", choices:["My sister doesn't likes music.","My sister don't like music.","My sister doesn't like music.","My sister not like music."], answer:2, exp:"<b>doesn't</b> + base verb: doesn't <b>like</b>."},
+ {type:"Question with Do/Does", q:"____ he play football on Sundays?", choices:["Do","Does","Is","Are"], answer:1, exp:"With <b>he</b> use <b>Does</b>."},
+ {type:"Word order", q:"Put in order: usually / we / to the park / go.", choices:["We go usually to the park.","We usually go to the park.","Usually go we to the park.","We go to the park usually."], answer:1, exp:"Adverbs of frequency go <b>before</b> the main verb: We <b>usually go</b>."},
+ {type:"Short answer", q:"“Do you like tea?” — “Yes, I ____.”", choices:["do","does","am","like"], answer:0, exp:"Short answer with <b>I</b> uses <b>do</b>: Yes, I do."},
+ {type:"Short answer", q:"“Does she speak English?” — “Yes, she ____.”", choices:["do","does","is","speaks"], answer:1, exp:"Short answer with <b>she</b> uses <b>does</b>: Yes, she does."}
+],
+hard:[
+ {type:"Error correction", q:"Find the correct sentence.", choices:["She don't like tea.","She doesn't likes tea.","She doesn't like tea.","She not like tea."], answer:2, exp:"With <b>she</b>: doesn't + base verb → doesn't <b>like</b>."},
+ {type:"Error correction", q:"Find the correct question.", choices:["Do he play piano?","Does he plays piano?","Does he play piano?","He does play piano?"], answer:2, exp:"<b>Does</b> + he + base verb → Does he <b>play</b>?"},
+ {type:"Spelling: -ies", q:"My brother ____ hard every day.", choices:["study","studys","studies","studyes"], answer:2, exp:"Consonant + y → <b>-ies</b>: study → <b>studies</b>."},
+ {type:"Word order", q:"Put in order: always / she / late / is.", choices:["She always is late.","Always she is late.","She is always late.","She is late always."], answer:2, exp:"With <b>be</b>, the adverb goes <b>after</b>: She <b>is always</b> late."},
+ {type:"Error correction", q:"Fix this: “He go to work by car.”", choices:["He going to work by car.","He goes to work by car.","He gos to work by car.","He to go to work by car."], answer:1, exp:"With <b>he</b>: go → <b>goes</b>."},
+ {type:"Negative (verb)", q:"The children ____ vegetables.", choices:["doesn't like","don't likes","don't like","not like"], answer:2, exp:"<b>Children</b> = they → <b>don't like</b> (base verb)."},
+ {type:"Reading", read:"Anna is a nurse. She works at a hospital. She starts work at 8 a.m. and helps many people.", q:"Where does Anna work?", choices:["At a school","At a hospital","At a shop","At home"], answer:1, exp:"The text says she <b>works at a hospital</b>."},
+ {type:"Reading", read:"Anna is a nurse. She works at a hospital. She starts work at 8 a.m. and helps many people.", q:"What time does Anna start work?", choices:["At 7 a.m.","At 8 a.m.","At 9 a.m.","At 10 a.m."], answer:1, exp:"The text says she <b>starts work at 8 a.m.</b>"},
+ {type:"Reading", read:"Ben and Tom are twins. They play football after school. They don't watch much TV.", q:"What do the twins do after school?", choices:["Watch TV","Play football","Do homework","Sleep"], answer:1, exp:"The text says they <b>play football</b> after school."},
+ {type:"Reading", read:"Ben and Tom are twins. They play football after school. They don't watch much TV.", q:"Which sentence is TRUE?", choices:["They watch a lot of TV.","They don't watch much TV.","They play tennis.","They are sisters."], answer:1, exp:"The text says they <b>don't watch much TV</b>."},
+ {type:"Word order (be)", q:"Choose the correct sentence.", choices:["I never am late for school.","I am never late for school.","I am late never for school.","Never I am late for school."], answer:1, exp:"With <b>be</b>, put the adverb after: I <b>am never</b> late."},
+ {type:"Third person trap", q:"Does your mother ____ tea in the morning?", choices:["drinks","drink","drinking","drank"], answer:1, exp:"After <b>does</b>, use the base verb (no -s): <b>drink</b>."},
+ {type:"Negative (have)", q:"He ____ a car.", choices:["doesn't has","don't have","doesn't have","not have"], answer:2, exp:"<b>doesn't</b> + base verb: doesn't <b>have</b> (not 'has')."},
+ {type:"Error correction", q:"Choose the sentence with NO mistakes.", choices:["Do your sister likes music?","My sister listen music every day.","My sister listens to music every day.","My sister don't likes music."], answer:2, exp:"With <b>sister</b> (she): listen → <b>listens</b> to music."},
+ {type:"Fact + spelling", q:"Water ____ at 100°C. (a fact)", choices:["boil","boils","boiling","boiled"], answer:1, exp:"<b>Water</b> = it. Facts use <b>-s</b>: <b>boils</b>."}
+]
+};
+
+const BADGES={
+  star:{name:"Grammar Star", emoji:"🌟", desc:"Wow! You're a true Grammar Star!"},
+  super:{name:"Super Learner", emoji:"🚀", desc:"Super work! You really know your grammar."},
+  good:{name:"Good Effort", emoji:"🌈", desc:"Nice effort! A little more practice and you'll shine."},
+  keep:{name:"Keep Practicing", emoji:"🌱", desc:"Great start! Review the lesson and try again — you've got this!"}
+};
+function badgeFor(pct){ if(pct>=90)return BADGES.star; if(pct>=75)return BADGES.super; if(pct>=60)return BADGES.good; return BADGES.keep; }
+
+const REACT_OK=["Great job! 🎉","You nailed it! 💫","Amazing! 🌟","Fantastic! 🏆","Superstar! ⭐","Brilliant! ✨"];
+const REACT_NO=["Try again next time! 💪","Almost there! 🌱","Let's review this! 📚","Good try! 🌈","Keep going! 🐣","Nearly! ✏️"];
+const LEVELNAME={easy:"Easy",medium:"Medium",hard:"Hard"};
+const LEVELCHIPBG={easy:"linear-gradient(135deg,#d3ffe4,#8fe6b6)",medium:"linear-gradient(135deg,#cfe8ff,#93c4ff)",hard:"linear-gradient(135deg,#ffd9ec,#ffb0cd)"};
+const NEXTLEVEL={easy:"medium",medium:"hard",hard:"easy"};
+
+/* ---- cute topic sticker based on keywords ---- */
+function pickSticker(q){
+  const t=(q.q+' '+(q.read||'')+' '+q.type).toLowerCase();
+  const h=(...k)=>k.some(x=>t.includes(x));
+  if(h('football')) return '⚽';
+  if(h('tennis')) return '🎾';
+  if(h('piano')) return '🎹';
+  if(h('chess')) return '♟️';
+  if(h('pizza')) return '🍕';
+  if(h('tea')) return '🍵';
+  if(h('milk')) return '🥛';
+  if(h('candy')) return '🍬';
+  if(h('carrot','vegetable')) return '🥕';
+  if(h('water','boil')) return '💧';
+  if(h('cat')) return '🐱';
+  if(h('bird','fly','sky')) return '🐦';
+  if(h('baby','cry')) return '👶';
+  if(h('teeth','brush')) return '🪥';
+  if(h('bus')) return '🚌';
+  if(h('car')) return '🚗';
+  if(h('sun','rise')) return '☀️';
+  if(h('nurse','hospital')) return '🏥';
+  if(h('music','listen')) return '🎵';
+  if(h('exercise')) return '🏃';
+  if(h('twins','brother','children')) return '👦';
+  if(h('mother')) return '👩';
+  if(h('school','study','library','class')) return '🏫';
+  if(h('read','book')) return '📚';
+  if(h('tv','watch')) return '📺';
+  if(h('house','live')) return '🏠';
+  if(h('sister')) return '👧';
+  if(h('love','like')) return '❤️';
+  return '📝';
+}
+
+/* ---- pastel-underline key words ---- */
+const HLMAP=[
+ ["he","p"],["she","p"],["it","p"],["they","p"],["we","p"],["you","p"],["i","p"],
+ ["do","g"],["does","g"],["don't","g"],["doesn't","g"],["always","y"],["usually","y"],["never","y"],["every day","y"],["how often","y"],
+ ["base verb","p"],["fact","y"],["twins","p"],["children","p"],["sister","p"],["brother","p"],["mother","p"]
+];
+const HLCLS={}; HLMAP.forEach(p=>HLCLS[p[0]]=(p[1]==='b'?'':p[1]));
+const HLRE=new RegExp('\\b('+HLMAP.map(p=>p[0].replace(/[-/\\^$*+?.()|[\]{}']/g,'\\$&')).join('|')+')\\b','gi');
+function highlight(text){ return String(text).replace(HLRE,m=>`<span class="hl ${HLCLS[m.toLowerCase()]||''}">${m}</span>`); }
+
+/* ---- mascot ---- */
+const MASCOTS=['🐱','🐻','🐰','⭐','☁️'];
+const MASCOT_MSGS=["Let's think!","You can do it!","Read carefully!","Great thinking!","You've got this!","Ready? Let's go!","Believe in you!","Nice and easy!"];
+function setMascot(faceSel,msgSel){
+  $(faceSel).textContent=MASCOTS[Math.floor(Math.random()*MASCOTS.length)];
+  $(msgSel).textContent=MASCOT_MSGS[Math.floor(Math.random()*MASCOT_MSGS.length)];
+}
+
+/* ============================================================
+   STATE + ENGINE
+   ============================================================ */
+const state={level:null,list:[],i:0,score:0,answered:[],finished:false,lastResult:null};
+const $=s=>document.querySelector(s);
+const KEYS=['A','B','C','D'];
+const pages={home:$('#home'),review:$('#review'),levels:$('#levels'),quiz:$('#quiz'),results:$('#results'),certificate:$('#certificate')};
+
+function go(name){
+  Object.values(pages).forEach(p=>p.classList.remove('show'));
+  (pages[name]||pages.home).classList.add('show');
+  document.querySelectorAll('.nav-links button').forEach(b=>{const t=b.dataset.go;b.classList.toggle('active',t===name||(name==='quiz'&&t==='levels'));});
+  if(name==='results') renderResults();
+  if(name==='certificate') renderCertificate();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+document.querySelectorAll('.level-card').forEach(c=>c.addEventListener('click',()=>startQuiz(c.dataset.level)));
+
+function startQuiz(level){
+  state.level=level; state.list=QUIZ[level]; state.i=0; state.score=0; state.answered=[]; state.finished=false;
+  $('#qLevelTitle').textContent=LEVELNAME[level]+' Level Quiz';
+  $('#qTotal').textContent=state.list.length;
+  const chip=$('#qLvlChip'); chip.textContent=LEVELNAME[level]; chip.style.background=LEVELCHIPBG[level];
+  renderQuestion(); go('quiz');
+}
+function renderQuestion(){
+  const q=state.list[state.i];
+  $('#qNow').textContent=state.i+1;
+  $('#qScore').textContent=state.score;
+  $('#bar').style.width=(state.i/state.list.length*100)+'%';
+  $('#qType').textContent=q.type;
+  $('#qSticker').innerHTML='<span>'+pickSticker(q)+'</span>';
+  const hint=$('#qHint');
+  if(q.read){ hint.style.display='block'; hint.innerHTML='📖 '+q.read; } else hint.style.display='none';
+  const qt=$('#qText'); qt.innerHTML=highlight(q.q);
+  qt.style.animation='none'; void qt.offsetWidth; qt.style.animation='';
+  const diff=$('#qDiff'); diff.className='qdiff '+state.level;
+  diff.textContent=({easy:'🟢 Easy',medium:'🟡 Medium',hard:'🔴 Hard'})[state.level];
+  setMascot('#qMascot','#qMascotMsg');
+  const box=$('#qChoices'); box.innerHTML='';
+  q.choices.forEach((c,idx)=>{
+    const btn=document.createElement('button'); btn.className='choice';
+    btn.innerHTML=`<span class="key">${KEYS[idx]}</span><span>${c}</span>`;
+    btn.addEventListener('click',()=>select(idx));
+    box.appendChild(btn);
+  });
+  $('#qFeedback').className='feedback';
+  $('#qNext').style.display='none';
+  $('#qNext').textContent=state.i===state.list.length-1?'See Results 🏆':'Next ➡️';
+}
+function select(idx){
+  const q=state.list[state.i];
+  if(state.answered[state.i]!=null)return;
+  const ok=idx===q.answer; state.answered[state.i]=idx; if(ok)state.score++;
+  document.querySelectorAll('#qChoices .choice').forEach((b,i)=>{b.disabled=true;
+    if(i===q.answer)b.classList.add('correct'); else if(i===idx)b.classList.add('wrong'); else b.classList.add('dim');});
+  const fb=$('#qFeedback'); fb.className='feedback show '+(ok?'ok':'no');
+  $('#qReact').textContent=(ok?REACT_OK:REACT_NO)[Math.floor(Math.random()*6)];
+  $('#qExp').innerHTML=(ok?'':'<b>Correct answer:</b> '+KEYS[q.answer]+'. ')+q.exp;
+  $('#qScore').textContent=state.score;
+  $('#bar').style.width=((state.i+1)/state.list.length*100)+'%';
+  $('#qNext').style.display='inline-flex';
+  playBeep(ok); if(ok)miniConfetti();
+}
+$('#qNext').addEventListener('click',()=>{
+  if(state.i<state.list.length-1){ state.i++; renderQuestion(); window.scrollTo({top:0,behavior:'smooth'}); }
+  else finishQuiz();
+});
+function finishQuiz(){
+  state.finished=true;
+  const pct=Math.round(state.score/state.list.length*100);
+  state.lastResult={level:state.level,score:state.score,total:state.list.length,pct,answered:[...state.answered],list:state.list};
+  go('results'); bigConfetti();
+}
+
+/* RESULTS */
+let reviewFilter='all';
+function renderResults(){
+  const r=state.lastResult;
+  $('#noResult').style.display=r?'none':'block';
+  $('#hasResult').style.display=r?'block':'none';
+  if(!r)return;
+  const b=badgeFor(r.pct);
+  $('#rPct').textContent=r.pct+'%';
+  $('#rFrac').textContent=r.score+' / '+r.total;
+  $('#rBadge').textContent=b.name;
+  $('#rBadgeEmoji').textContent=b.emoji;
+  $('#rDesc').textContent=b.desc;
+  $('#rLevel').textContent='Level completed: '+LEVELNAME[r.level];
+  $('#rCircle').style.setProperty('--deg',(r.pct*3.6)+'deg');
+  renderReviewList();
+}
+function renderReviewList(){
+  const r=state.lastResult; const wrap=$('#rReview'); wrap.innerHTML='';
+  r.list.forEach((q,i)=>{
+    const chosen=r.answered[i]; const ok=chosen===q.answer;
+    if(reviewFilter==='wrong'&&ok)return;
+    const div=document.createElement('div'); div.className='ra '+(ok?'correct':'wrong');
+    div.innerHTML=`<div class="rq">${ok?'✅':'❌'} Q${i+1}. ${q.q}</div>`+
+      (q.read?`<div class="line" style="font-style:italic;color:var(--ink-soft)">📖 ${q.read}</div>`:'')+
+      `<div class="line noo">Your answer: ${chosen!=null?KEYS[chosen]+'. '+q.choices[chosen]:'— (skipped)'}</div>`+
+      `<div class="line yes">Correct answer: ${KEYS[q.answer]}. ${q.choices[q.answer]}</div>`+
+      `<div class="exp">💡 ${q.exp}</div>`;
+    wrap.appendChild(div);
+  });
+  if(!wrap.children.length) wrap.innerHTML='<p class="lead" style="text-align:center">🎉 No mistakes — perfect score!</p>';
+}
+$('#fAll').addEventListener('click',()=>{reviewFilter='all';$('#fAll').classList.add('on');$('#fWrong').classList.remove('on');renderReviewList();});
+$('#fWrong').addEventListener('click',()=>{reviewFilter='wrong';$('#fWrong').classList.add('on');$('#fAll').classList.remove('on');renderReviewList();});
+$('#rRetry').addEventListener('click',()=>startQuiz(state.lastResult.level));
+$('#rNext').addEventListener('click',()=>startQuiz(NEXTLEVEL[state.lastResult.level]));
+
+/* CERTIFICATE */
+function renderCertificate(){
+  const r=state.lastResult;
+  $('#certLocked').style.display=r?'none':'block';
+  $('#certUnlocked').style.display=r?'block':'none';
+  if(!r)return;
+  const b=badgeFor(r.pct);
+  $('#certLevel').textContent=LEVELNAME[r.level];
+  $('#certScore').textContent=r.pct+'%';
+  $('#certBadge').textContent=b.emoji+' '+b.name;
+  $('#certDate').textContent=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+}
+$('#certName').addEventListener('input',e=>{$('#certNameOut').textContent=e.target.value.trim()||'Star Student';});
+$('#printBtn').addEventListener('click',()=>window.print());
+
+/* SOUND PLACEHOLDER */
+let AC;
+function playBeep(good){
+  try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const o=AC.createOscillator(),g=AC.createGain(); o.connect(g);g.connect(AC.destination); o.type='sine';
+    const now=AC.currentTime;
+    if(good){o.frequency.setValueAtTime(660,now);o.frequency.setValueAtTime(880,now+.1);}
+    else{o.frequency.setValueAtTime(300,now);o.frequency.setValueAtTime(220,now+.12);}
+    g.gain.setValueAtTime(.001,now);g.gain.exponentialRampToValueAtTime(.15,now+.03);g.gain.exponentialRampToValueAtTime(.001,now+.25);
+    o.start(now);o.stop(now+.26);
+  }catch(e){}
+}
+
+/* CONFETTI */
+const cv=$('#confetti'),cx=cv.getContext('2d'); let parts=[];
+function resize(){cv.width=innerWidth;cv.height=innerHeight;} resize(); addEventListener('resize',resize);
+const COLORS=['#ff9aa2','#a0c4ff','#ffd766','#8fe6b6','#bdb2ff','#ffc6ff'];
+function spawn(n){for(let i=0;i<n;i++)parts.push({x:Math.random()*cv.width,y:-20-Math.random()*40,r:6+Math.random()*8,c:COLORS[Math.floor(Math.random()*COLORS.length)],vy:2+Math.random()*3,vx:-1.5+Math.random()*3,rot:Math.random()*6,vr:-.2+Math.random()*.4});}
+function miniConfetti(){spawn(22);runConfetti();}
+function bigConfetti(){spawn(160);runConfetti();}
+let running=false;
+function runConfetti(){ if(running)return; running=true;
+  (function loop(){ cx.clearRect(0,0,cv.width,cv.height);
+    parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.vy+=.03;
+      cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;cx.fillRect(-p.r/2,-p.r/2,p.r,p.r*.6);cx.restore();});
+    parts=parts.filter(p=>p.y<cv.height+30);
+    if(parts.length)requestAnimationFrame(loop); else{cx.clearRect(0,0,cv.width,cv.height);running=false;}
+  })();
+}
+
+/* SKY DECOR */
+(function sky(){
+  const s=$('#sky');
+  const balloons=['🎈','🍭','🌸','🦋','☁️'];
+  for(let i=0;i<6;i++){const c=document.createElement('div');c.className='float';c.textContent=balloons[i%balloons.length];
+    c.style.top=(6+Math.random()*80)+'%';c.style.left=(Math.random()*96)+'%';c.style.fontSize=(1.4+Math.random()*2)+'rem';
+    c.style.animationDuration=(3+Math.random()*3)+'s';c.style.animationDirection='alternate';c.style.animationDelay=(-Math.random()*3)+'s';s.appendChild(c);}
+  const stars=['⭐','✨','🌟','💫','🌈'];
+  for(let i=0;i<16;i++){const st=document.createElement('div');st.className='twk';st.textContent=stars[i%stars.length];
+    st.style.top=(Math.random()*95)+'%';st.style.left=(Math.random()*98)+'%';st.style.fontSize=(.7+Math.random()*1.1)+'rem';
+    st.style.animationDuration=(2+Math.random()*3)+'s';st.style.animationDelay=(-Math.random()*4)+'s';s.appendChild(st);}
+})();
+</script>
+</body>
+</html>

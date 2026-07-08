@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Geometry Quiz Adventure • Grade 4 Math</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+
+:root{
+  --pink:#ffd1e3; --pink-deep:#ff8fbf;
+  --blue:#cfe6ff; --blue-deep:#7bb8ff;
+  --yellow:#fff3c4; --yellow-deep:#ffd766;
+  --mint:#d3f6e6; --mint-deep:#7fe0b6;
+  --lav:#e6dcff; --lav-deep:#b199ff;
+  --peach:#ffe3d1; --peach-deep:#ffb38a;
+  --ink:#54476a; --ink-soft:#8a7aa8;
+  --card:#ffffff;
+  --shadow:0 12px 34px rgba(150,130,190,.20);
+  --shadow-sm:0 6px 16px rgba(150,130,190,.16);
+  --radius:26px;
+  --good:#3ec98a; --bad:#ff7a97;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Nunito',system-ui,sans-serif;color:var(--ink);
+  background:
+    radial-gradient(1100px 560px at 8% -6%, #fff5fb 0%, transparent 60%),
+    radial-gradient(1000px 560px at 100% 0%, #eef6ff 0%, transparent 55%),
+    linear-gradient(180deg,#fbf6ff 0%, #f2f9ff 45%, #f4fffb 100%);
+  min-height:100vh;overflow-x:hidden;
+}
+.sky{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.cloud,.star{position:absolute;opacity:.55}
+.cloud{animation:drift linear infinite}
+@keyframes drift{from{transform:translateX(-16vw)}to{transform:translateX(116vw)}}
+@keyframes twinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:.9;transform:scale(1.2)}}
+.star{animation:twinkle ease-in-out infinite}
+h1,h2,h3,.brand,.btn,.badge-title{font-family:'Baloo 2',cursive}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
+  background:rgba(255,255,255,.74);border-bottom:2px solid #f0e7ff;box-shadow:0 4px 20px rgba(170,150,200,.10)}
+.nav-inner{max-width:1040px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.2rem;color:var(--ink)}
+.brand .logo{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:1.15rem;
+  background:linear-gradient(135deg,var(--blue),var(--lav));box-shadow:var(--shadow-sm)}
+.nav-links{display:flex;gap:5px;flex-wrap:wrap}
+.nav-links button{font-family:'Baloo 2';font-weight:600;font-size:.95rem;color:var(--ink-soft);
+  background:transparent;border:none;padding:8px 13px;border-radius:14px;cursor:pointer;transition:.2s}
+.nav-links button:hover{background:#f3ecff;color:var(--ink)}
+.nav-links button.active{background:linear-gradient(135deg,var(--mint),var(--blue));color:var(--ink)}
+
+main{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:26px 18px 60px}
+.page{display:none;animation:pop .45s cubic-bezier(.2,.9,.3,1.3)}
+.page.show{display:block}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;border:2px solid #fff}
+.soft{border:2px solid #f2ecff}
+
+/* BUTTONS */
+.btn{font-family:'Baloo 2';font-weight:700;font-size:1.05rem;color:var(--ink);border:none;border-radius:18px;
+  padding:14px 22px;cursor:pointer;box-shadow:var(--shadow-sm);transition:transform .15s;display:inline-flex;align-items:center;gap:9px}
+.btn:hover{transform:translateY(-3px)}.btn:active{transform:translateY(0)}
+.btn-pink{background:linear-gradient(135deg,#ffc2dc,#ff9fc4)}
+.btn-blue{background:linear-gradient(135deg,#cbe6ff,#93c4ff)}
+.btn-mint{background:linear-gradient(135deg,#d6f7e8,#8fe6c2)}
+.btn-yellow{background:linear-gradient(135deg,#fff0bd,#ffd766)}
+.btn-lav{background:linear-gradient(135deg,#e6dcff,#bfa8ff)}
+.btn-peach{background:linear-gradient(135deg,#ffe0cb,#ffb38a)}
+.btn-ghost{background:#fff;border:2px solid #eadcff;box-shadow:none}
+.btn-lg{font-size:1.15rem;padding:16px 30px}
+
+/* HOME */
+.hero{text-align:center;padding:34px 20px 6px}
+.hero .mascot{font-size:4.2rem;display:inline-block;animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+.hero h1{font-size:clamp(2.1rem,6vw,3.5rem);line-height:1.05;
+  background:linear-gradient(90deg,#ff8fbf,#b199ff,#7bb8ff,#7fe0b6);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 3px 0 rgba(255,255,255,.6))}
+.hero .sub{font-size:clamp(1.05rem,2.6vw,1.35rem);color:var(--ink-soft);font-weight:700;margin-top:10px}
+.welcome{max-width:640px;margin:20px auto 0;background:linear-gradient(135deg,#fff8fc,#f3fbff);
+  border:2px dashed #bfe0ff;border-radius:24px;padding:18px 22px;font-weight:600;line-height:1.6}
+.home-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:24px}
+.feature-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:32px}
+.feature{background:#fff;border-radius:22px;padding:18px;text-align:center;box-shadow:var(--shadow-sm);border:2px solid #f3ecff}
+.feature .ico{font-size:2rem}.feature h4{font-family:'Baloo 2';margin:8px 0 4px}.feature p{font-size:.9rem;color:var(--ink-soft)}
+
+/* REVIEW */
+.section-title{display:flex;align-items:center;gap:12px;font-size:1.7rem;margin-bottom:6px}
+.section-title .chip{font-size:1.8rem}
+.lead{color:var(--ink-soft);font-weight:700;margin-bottom:20px}
+.rev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.rev-card{background:#fff;border-radius:22px;padding:18px 20px;box-shadow:var(--shadow-sm);border:2px solid #f3ecff}
+.rev-card h3{font-size:1.15rem;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.rev-card p{font-weight:600;line-height:1.5;color:var(--ink)}
+.rev-card p b{color:var(--pink-deep)}
+.rev-card .dia{background:#faf7ff;border-radius:14px;margin-top:12px;padding:10px;display:grid;place-items:center}
+.rev-card svg{max-width:100%;height:auto}
+.sym-tab{width:100%;border-collapse:separate;border-spacing:0 6px}
+.sym-tab td{padding:8px 10px;font-weight:700}
+.sym-tab td:first-child{font-family:'Baloo 2';font-size:1.15rem;color:var(--blue-deep);text-align:center;width:64px;background:#f0f7ff;border-radius:12px}
+.sym-tab td:last-child{color:var(--ink)}
+.angle-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.angle-legend span{background:#faf6ff;border:2px solid #eee3ff;border-radius:12px;padding:6px 12px;font-weight:700;font-size:.9rem}
+
+/* LEVEL SELECT */
+.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:8px}
+.level-card{border-radius:26px;padding:26px 22px;text-align:center;cursor:pointer;border:3px solid #fff;
+  box-shadow:var(--shadow);transition:transform .18s;position:relative;overflow:hidden}
+.level-card:hover{transform:translateY(-6px) scale(1.02)}
+.level-card .lem{font-size:3rem}
+.level-card h3{font-size:1.5rem;margin:6px 0 2px}
+.level-card p{font-weight:700;color:var(--ink-soft)}
+.level-card .go{margin-top:14px;display:inline-block;background:#fff;border-radius:14px;padding:9px 18px;font-family:'Baloo 2';font-weight:800;box-shadow:var(--shadow-sm)}
+.lc-easy{background:linear-gradient(150deg,#d6f7e8,#b6f0d6)}
+.lc-med{background:linear-gradient(150deg,#cbe6ff,#bcd8ff)}
+.lc-hard{background:linear-gradient(150deg,#ffd6e6,#ffc7dd)}
+.level-card .stars{position:absolute;top:10px;right:14px;font-size:1rem;opacity:.7}
+
+/* QUIZ */
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.counter{font-family:'Baloo 2';font-weight:800;background:#fff;border-radius:14px;padding:8px 14px;box-shadow:var(--shadow-sm)}
+.counter b{color:var(--pink-deep)}
+.lvl-chip{font-family:'Baloo 2';font-weight:800;border-radius:14px;padding:8px 14px;box-shadow:var(--shadow-sm)}
+.score-chip{font-family:'Baloo 2';font-weight:800;background:linear-gradient(135deg,var(--yellow),#ffd766);border-radius:14px;padding:8px 14px;box-shadow:var(--shadow-sm)}
+.progress{height:16px;background:#efe8ff;border-radius:999px;overflow:hidden;box-shadow:inset 0 2px 5px rgba(150,120,190,.15);margin-bottom:20px}
+.progress .bar{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--pink-deep),var(--lav-deep),var(--blue-deep));transition:width .5s cubic-bezier(.2,.9,.3,1)}
+.qtype{display:inline-block;font-family:'Fredoka';font-weight:600;font-size:.82rem;color:#6a5a80;background:#f1ecff;border-radius:999px;padding:4px 12px;margin-bottom:10px}
+
+/* ===== PREMIUM QUESTION BANNER (answer cards untouched) ===== */
+.qbanner{position:relative;border-radius:26px;padding:22px 20px 26px;margin-bottom:18px;overflow:hidden;
+  background:
+    radial-gradient(120px 80px at 12% 8%, #fff2f8 0%, transparent 70%),
+    radial-gradient(140px 90px at 88% 6%, #eef6ff 0%, transparent 70%),
+    linear-gradient(160deg,#fbf5ff 0%, #f2f9ff 55%, #f3fffb 100%);
+  border:2px solid #efe7ff;box-shadow:inset 0 2px 10px rgba(150,130,190,.06)}
+.qbanner .inner-card{position:relative;z-index:2;background:#fff;border-radius:24px;
+  box-shadow:0 10px 26px rgba(150,130,190,.16);border:2px solid #fff;padding:20px 20px 22px;text-align:center}
+/* floating decorations */
+.qdeco{position:absolute;z-index:1;pointer-events:none;user-select:none;opacity:.85}
+.qdeco.f{animation:floaty 4s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-9px) rotate(4deg)}}
+.qdeco.d1{top:8px;left:14px;font-size:1.2rem;animation-delay:-.2s}
+.qdeco.d2{top:14px;right:18px;font-size:1.4rem;animation-delay:-1.1s}
+.qdeco.d3{bottom:10px;left:22px;font-size:1.1rem;animation-delay:-2s}
+.qdeco.d4{bottom:14px;right:24px;font-size:1.25rem;animation-delay:-1.6s}
+.qdeco.d5{top:44%;left:6px;font-size:1rem;animation-delay:-.7s}
+.qdeco.d6{top:50%;right:8px;font-size:1rem;animation-delay:-2.4s}
+/* meta row: type + difficulty */
+.qmeta{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.qdiff{font-family:'Fredoka';font-weight:600;font-size:.82rem;border-radius:999px;padding:4px 13px;box-shadow:var(--shadow-sm)}
+.qdiff.easy{background:#e2fbef;color:#1f9c66}
+.qdiff.medium{background:#fff6d6;color:#b8860b}
+.qdiff.hard{background:#ffe1ea;color:#d64b74}
+/* mascot */
+.qmascot{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 12px}
+.qmascot .face{font-size:2.4rem;display:inline-block;animation:mascotBob 2.4s ease-in-out infinite;filter:drop-shadow(0 4px 6px rgba(150,130,190,.25))}
+@keyframes mascotBob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(5deg)}}
+.qmascot .bubble{position:relative;background:linear-gradient(135deg,#fff6fb,#f3f9ff);border:2px solid #ffd6ea;
+  border-radius:16px;padding:8px 14px;font-family:'Fredoka';font-weight:600;color:var(--ink);font-size:.98rem;box-shadow:var(--shadow-sm)}
+.qmascot .bubble::before{content:"";position:absolute;left:-9px;top:50%;transform:translateY(-50%);
+  border:7px solid transparent;border-right-color:#ffd6ea}
+/* diagram */
+.qdia{background:linear-gradient(160deg,#faf7ff,#f2fbff);border-radius:18px;padding:14px;margin:4px auto 14px;
+  display:grid;place-items:center;max-width:340px;border:2px dashed #e6ddff}
+.qdia svg{max-width:100%;height:auto;display:block}
+/* THE QUESTION TEXT — clean modern premium children's font */
+.qtext{font-family:'Fredoka','Nunito',sans-serif;font-weight:700;
+  font-size:clamp(1.55rem,4.2vw,2.6rem);line-height:1.28;letter-spacing:.2px;
+  color:#3f3357;text-align:center;margin:2px auto 4px;max-width:640px;
+  animation:qfade .5s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes qfade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.qtext .hl{position:relative;white-space:nowrap;color:#2f2547;font-weight:700}
+.qtext .hl::after{content:"";position:absolute;left:-2px;right:-2px;bottom:2px;height:.42em;border-radius:8px;z-index:-1;
+  background:linear-gradient(90deg,#ffe0ef,#dcecff)}
+.qtext .hl.g::after{background:linear-gradient(90deg,#d6f7e8,#cdefff)}
+.qtext .hl.y::after{background:linear-gradient(90deg,#fff0bd,#ffe8d1)}
+.qtext .hl.p::after{background:linear-gradient(90deg,#efe4ff,#ffe0ef)}
+.choices{display:grid;gap:12px;margin-top:14px}
+.choice{display:flex;align-items:center;gap:14px;text-align:left;width:100%;background:#fff;border:2.5px solid #eee3ff;
+  border-radius:18px;padding:15px 18px;cursor:pointer;font-size:1.06rem;font-weight:700;color:var(--ink);transition:.15s}
+.choice:hover:not(:disabled){border-color:var(--lav-deep);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.choice .key{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;font-family:'Baloo 2';font-weight:800;background:linear-gradient(135deg,var(--blue),var(--mint));color:#4a5a63}
+.choice:disabled{cursor:default}
+.choice.correct{border-color:var(--good);background:#eafff5}
+.choice.correct .key{background:var(--good);color:#fff}
+.choice.wrong{border-color:var(--bad);background:#fff0f3}
+.choice.wrong .key{background:var(--bad);color:#fff}
+.choice.dim{opacity:.55}
+.feedback{margin-top:16px;border-radius:18px;padding:16px 18px;display:none;animation:pop .35s;font-weight:600;line-height:1.5}
+.feedback.show{display:block}
+.feedback.ok{background:linear-gradient(135deg,#eafff5,#f6fff9);border:2px solid #a7ecca}
+.feedback.no{background:linear-gradient(135deg,#fff0f3,#fff7f9);border:2px solid #ffc2d0}
+.feedback .react{font-family:'Baloo 2';font-size:1.15rem;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.feedback.ok .react{color:#22a06a}.feedback.no .react{color:#e0688a}
+.feedback .exp b{color:var(--lav-deep)}
+.quiz-nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+
+/* RESULTS */
+.result-hero{text-align:center;padding:14px 10px}
+.badge-big{font-size:5rem;animation:bob 2.6s ease-in-out infinite;display:inline-block}
+.scorecircle{width:180px;height:180px;margin:12px auto;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--pink-deep) var(--deg,0deg), #efe8ff 0deg);box-shadow:var(--shadow)}
+.scorecircle .inner{width:142px;height:142px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center}
+.scorecircle .pct{font-family:'Baloo 2';font-size:2.6rem;font-weight:800;line-height:1}
+.scorecircle .frac{color:var(--ink-soft);font-weight:700}
+.badge-title{font-size:2rem;margin-top:6px;background:linear-gradient(90deg,#ff8fbf,#b199ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.badge-desc{color:var(--ink-soft);font-weight:700;margin-top:4px}
+.lvl-done{font-weight:800;color:var(--ink);margin-top:8px}
+.result-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:22px 0}
+.ra{border-radius:16px;padding:14px 16px;margin-bottom:12px;border:2px solid #eee3ff;background:#fff}
+.ra.correct{border-color:#bdeecf;background:#f6fff9}
+.ra.wrong{border-color:#ffc9d6;background:#fff6f8}
+.ra .rq{font-weight:800;font-family:'Baloo 2';margin-bottom:6px}
+.ra .line{font-weight:600;margin:2px 0}.ra .yes{color:#22a06a}.ra .noo{color:#e0688a}
+.ra .exp{color:var(--ink-soft);font-size:.95rem;margin-top:6px}
+.filter-btns{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.filter-btns button{font-family:'Baloo 2';font-weight:700;border:2px solid #eadcff;background:#fff;border-radius:12px;padding:7px 14px;cursor:pointer}
+.filter-btns button.on{background:linear-gradient(135deg,var(--lav),var(--blue))}
+
+/* CERTIFICATE */
+.certificate{position:relative;background:repeating-linear-gradient(45deg,#fff,#fff 12px,#fffdf5 12px,#fffdf5 24px);
+  border:8px double var(--lav-deep);border-radius:20px;padding:34px 26px;text-align:center;box-shadow:var(--shadow);overflow:hidden}
+.certificate::before,.certificate::after{content:"★";position:absolute;font-size:1.6rem;color:var(--yellow-deep)}
+.certificate::before{top:12px;left:16px}.certificate::after{bottom:12px;right:16px}
+.cert-seal{position:absolute;top:18px;right:22px;width:72px;height:72px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#ffe7a0,#ffce4d);display:grid;place-items:center;
+  font-family:'Baloo 2';font-weight:800;font-size:.66rem;color:#8a6a10;text-align:center;line-height:1.05;transform:rotate(-8deg);box-shadow:var(--shadow-sm)}
+.cert-k{font-family:'Baloo 2';letter-spacing:3px;color:var(--lav-deep);font-weight:700;font-size:.9rem}
+.cert-h{font-family:'Baloo 2';font-size:2rem;margin:4px 0 2px}
+.cert-name{font-family:'Baloo 2';font-size:1.8rem;color:var(--pink-deep);border-bottom:3px dashed #ffc9e2;display:inline-block;padding:6px 24px;margin:12px 0}
+.cert-line{color:var(--ink-soft);font-weight:700;max-width:470px;margin:6px auto}
+.cert-badge{font-family:'Baloo 2';font-size:1.3rem;color:var(--lav-deep);margin-top:8px}
+.cert-foot{display:flex;justify-content:space-between;max-width:430px;margin:22px auto 0;font-weight:700}
+.cert-foot span{border-top:2px solid #e0d3ff;padding-top:6px;font-size:.9rem}
+.name-input{font-family:'Nunito';font-weight:700;border:2px solid #eadcff;border-radius:14px;padding:10px 14px;font-size:1rem;color:var(--ink);text-align:center;min-width:220px}
+.name-input:focus{outline:none;border-color:var(--lav-deep)}
+
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:100}
+footer{position:relative;z-index:1;text-align:center;padding:24px 18px 40px;color:var(--ink-soft);font-weight:700}
+.footer-badge{display:inline-block;background:#fff;border:2px solid #f0e4ff;border-radius:999px;padding:7px 18px;box-shadow:var(--shadow-sm);margin-bottom:10px;font-family:'Baloo 2';color:var(--ink)}
+footer .made{font-size:.85rem;opacity:.85}
+.sound-note{font-size:.78rem;opacity:.7;margin-top:6px}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(120px);z-index:120;background:#fff;border:2px solid #eadcff;border-radius:16px;padding:12px 20px;box-shadow:var(--shadow);font-family:'Baloo 2';font-weight:700;transition:transform .35s}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media print{
+  nav,footer,.result-btns,#rReview,.section-title,.print-hide,#confetti,.sky,.filter-btns{display:none!important}
+  body{background:#fff}.certificate{box-shadow:none;border-color:#b199ff}main{padding:0}
+}
+@media(max-width:560px){.card{padding:18px}.qtext{font-size:1.12rem}.nav-links button{padding:7px 9px;font-size:.85rem}.brand span.t{display:none}}
+</style>
+</head>
+<body>
+<div class="sky" id="sky"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand"><span class="logo">📐</span><span class="t">Geometry Quiz Adventure</span></div>
+    <div class="nav-links">
+      <button data-go="home" class="active">🏠 Home</button>
+      <button data-go="review">📚 Review</button>
+      <button data-go="practice">✏️ Practice</button>
+      <button data-go="levels">🎯 Quiz</button>
+      <button data-go="results">🏆 Results</button>
+      <button data-go="certificate">🎓 Certificate</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- HOME -->
+<section id="home" class="page show">
+  <div class="hero">
+    <div class="mascot">🐻</div>
+    <h1>Geometry Quiz Adventure</h1>
+    <p class="sub">Practice points, lines, angles, turns, and more!</p>
+    <div class="welcome">🌟 <b>Hello, Grade 4 explorers!</b> Bibi the Bear is ready for a math adventure!
+      First <b>review</b> the lesson, then try <b>Practice</b>, and finally pick a <b>quiz level</b> to earn your badge and certificate. Let's go! 🚀</div>
+    <div class="home-btns">
+      <button class="btn btn-mint btn-lg" data-go="review">📚 Start Review</button>
+      <button class="btn btn-pink btn-lg" data-go="levels">🎯 Choose Quiz Level</button>
+      <button class="btn btn-yellow btn-lg" data-go="results">🏆 My Results</button>
+    </div>
+  </div>
+  <div class="feature-row">
+    <div class="feature"><div class="ico">📍</div><h4>Points &amp; Lines</h4><p>Learn the building blocks</p></div>
+    <div class="feature"><div class="ico">📐</div><h4>Angles</h4><p>Name, measure &amp; draw</p></div>
+    <div class="feature"><div class="ico">🔄</div><h4>Turns</h4><p>Quarter, half &amp; full</p></div>
+    <div class="feature"><div class="ico">🎓</div><h4>Certificate</h4><p>Print your reward!</p></div>
+  </div>
+</section>
+
+<!-- QUICK REVIEW -->
+<section id="review" class="page">
+  <h2 class="section-title"><span class="chip">📚</span> Quick Review</h2>
+  <p class="lead">Read these cute cards with Bibi the Bear 🐻 before your quiz!</p>
+  <div class="rev-grid" id="revGrid"></div>
+  <div style="text-align:center;margin-top:24px">
+    <button class="btn btn-blue btn-lg" data-go="practice">✏️ Try Practice First</button>
+    <button class="btn btn-pink btn-lg" data-go="levels">🎯 Go to Quiz</button>
+  </div>
+</section>
+
+<!-- PRACTICE -->
+<section id="practice" class="page">
+  <h2 class="section-title"><span class="chip">✏️</span> Practice Zone</h2>
+  <p class="lead">Warm up with friendly questions — no score, no pressure! 🌈</p>
+  <div class="card soft">
+    <div class="qtype" id="pType">Practice</div>
+    <div class="qdia" id="pDia" style="display:none"></div>
+    <div class="qtext" id="pText">…</div>
+    <div class="choices" id="pChoices"></div>
+    <div class="feedback" id="pFeedback"><div class="react" id="pReact"></div><div class="exp" id="pExp"></div></div>
+    <div class="quiz-nav">
+      <div class="counter">Practice <b id="pNow">1</b> / <span id="pTotal">8</span></div>
+      <button class="btn btn-mint" id="pNext" style="display:none">Next ➡️</button>
+    </div>
+  </div>
+</section>
+
+<!-- LEVEL SELECT -->
+<section id="levels" class="page">
+  <h2 class="section-title"><span class="chip">🎯</span> Choose Your Quiz Level</h2>
+  <p class="lead">Pick a challenge! Each level has 25 fun questions. 💫</p>
+  <div class="levels">
+    <div class="level-card lc-easy" data-level="easy">
+      <div class="stars">⭐</div><div class="lem">🐣</div><h3>Easy</h3>
+      <p>Recognize points, lines &amp; basic angles</p><div class="go">Start Easy →</div>
+    </div>
+    <div class="level-card lc-med" data-level="medium">
+      <div class="stars">⭐⭐</div><div class="lem">🦊</div><h3>Medium</h3>
+      <p>Name angles, estimate &amp; match symbols</p><div class="go">Start Medium →</div>
+    </div>
+    <div class="level-card lc-hard" data-level="hard">
+      <div class="stars">⭐⭐⭐</div><div class="lem">🦉</div><h3>Hard</h3>
+      <p>Missing angles, compare &amp; analyze</p><div class="go">Start Hard →</div>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" class="page">
+  <h2 class="section-title"><span class="chip">🧠</span> <span id="qLevelTitle">Quiz</span></h2>
+  <div class="quiz-top">
+    <div class="counter">Question <b id="qNow">1</b> / <span id="qTotal">25</span></div>
+    <div class="lvl-chip" id="qLvlChip">Easy</div>
+    <div class="score-chip">⭐ Score: <span id="qScore">0</span></div>
+  </div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <div class="card soft" id="qCard">
+    <div class="qbanner">
+      <span class="qdeco f d1">⭐</span><span class="qdeco f d2">🌈</span>
+      <span class="qdeco f d3">☁️</span><span class="qdeco f d4">✨</span>
+      <span class="qdeco f d5">📐</span><span class="qdeco f d6">📏</span>
+      <div class="inner-card">
+        <div class="qmeta">
+          <span class="qtype" id="qType">…</span>
+          <span class="qdiff easy" id="qDiff">🟢 Easy</span>
+        </div>
+        <div class="qmascot">
+          <span class="face" id="qMascot">🐻</span>
+          <span class="bubble" id="qMascotMsg">Let's think!</span>
+        </div>
+        <div class="qdia" id="qDia"></div>
+        <div class="qtext" id="qText">…</div>
+      </div>
+    </div>
+    <div class="choices" id="qChoices"></div>
+    <div class="feedback" id="qFeedback"><div class="react" id="qReact"></div><div class="exp" id="qExp"></div></div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost print-hide" data-go="levels">🔙 Levels</button>
+      <button class="btn btn-blue" id="qNext" style="display:none">Next ➡️</button>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results" class="page">
+  <div id="noResult" class="card" style="text-align:center">
+    <div style="font-size:3rem">🧭</div>
+    <h2 class="section-title" style="justify-content:center">No results yet!</h2>
+    <p class="lead">Finish a quiz level first, then come back for your score and badge.</p>
+    <button class="btn btn-pink btn-lg" data-go="levels">🎯 Choose a Level</button>
+  </div>
+  <div id="hasResult" style="display:none">
+    <div class="card result-hero">
+      <div class="badge-big" id="rBadgeEmoji">🌟</div>
+      <div class="scorecircle" id="rCircle"><div class="inner">
+        <div class="pct" id="rPct">0%</div><div class="frac" id="rFrac">0 / 25</div>
+      </div></div>
+      <div class="badge-title" id="rBadge">Geometry Master</div>
+      <div class="badge-desc" id="rDesc">Amazing work!</div>
+      <div class="lvl-done" id="rLevel">Level: Easy</div>
+      <div class="result-btns">
+        <button class="btn btn-mint btn-lg" id="rRetry">🔄 Retry Quiz</button>
+        <button class="btn btn-blue btn-lg" id="rNext">⏭️ Next Level</button>
+        <button class="btn btn-yellow btn-lg" data-go="certificate">🎓 Certificate</button>
+        <button class="btn btn-ghost btn-lg" data-go="home">🏠 Home</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3 class="section-title" style="font-size:1.35rem"><span class="chip">🔍</span> Review Mistakes</h3>
+      <p class="lead">See every question, or focus only on the ones to fix. ✨</p>
+      <div class="filter-btns">
+        <button id="fAll" class="on">Show All</button>
+        <button id="fWrong">❌ Only Mistakes</button>
+      </div>
+      <div id="rReview"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATE -->
+<section id="certificate" class="page">
+  <h2 class="section-title print-hide"><span class="chip">🎓</span> Your Certificate</h2>
+  <div id="certLocked" class="card" style="text-align:center">
+    <div style="font-size:3rem">🔒</div>
+    <p class="lead" style="margin-top:10px">Finish a quiz level to unlock your certificate!</p>
+    <button class="btn btn-pink btn-lg" data-go="levels">🎯 Take a Quiz</button>
+  </div>
+  <div id="certUnlocked" style="display:none">
+    <div class="card">
+      <div class="print-hide" style="margin:2px 0 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <label style="font-weight:700">Your name:</label>
+        <input class="name-input" id="certName" placeholder="Type your name ✏️" maxlength="26">
+        <button class="btn btn-lav" id="printBtn">🖨️ Print Certificate</button>
+      </div>
+      <div class="certificate" id="certificate">
+        <div class="cert-seal">OFFICIAL<br>★<br>GRADE 4</div>
+        <div class="cert-k">CERTIFICATE OF ACHIEVEMENT</div>
+        <div class="cert-h">Geometry Quiz Adventure 📐</div>
+        <div class="cert-line">This certificate is proudly awarded to</div>
+        <div class="cert-name" id="certNameOut">Star Student</div>
+        <div class="cert-line">for completing the <b>Grade 4 Geometry Quiz Adventure</b>
+          (<span id="certLevel">Easy</span> level) with a score of <b id="certScore">0%</b> and wonderful math thinking!</div>
+        <div class="cert-badge" id="certBadge">🏆 Geometry Master</div>
+        <div class="cert-foot">
+          <span>🐻 Bibi the Bear<br>Math Guide</span>
+          <span id="certDate">Date</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-badge">🍎 Made for Grade 4 Math Learners</div>
+  <div class="made">Geometry Quiz Adventure • Unit 6: Points, Lines, Angles &amp; Turns 📐</div>
+  <div class="made">© 2026 Bright EngMath. All rights reserved.</div>
+  <div class="sound-note">🔊 Sound effects ready (placeholder — no audio files needed)</div>
+</footer>
+
+<canvas id="confetti"></canvas>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   REVIEW CARDS — edit here to change the lesson content
+   ============================================================ */
+const REVIEW = [
+  {t:"📍 What is a Point?", h:"A <b>point</b> is an exact spot. It has no size — just a location. We name it with a capital letter.",
+   svg:`<svg viewBox="0 0 160 70"><circle cx="80" cy="38" r="5" fill="#ff8fbf"/><text x="90" y="34" font-family="Baloo 2" font-size="16" fill="#54476a">A</text></svg>`},
+  {t:"➖ What is a Line Segment?", h:"A <b>line segment</b> is a straight path with <b>two endpoints</b>. It has a beginning and an end. Written as <b>AB</b> (with a bar).",
+   svg:`<svg viewBox="0 0 200 60"><line x1="30" y1="30" x2="170" y2="30" stroke="#7bb8ff" stroke-width="4"/><circle cx="30" cy="30" r="5" fill="#ff8fbf"/><circle cx="170" cy="30" r="5" fill="#ff8fbf"/><text x="20" y="20" font-size="14" fill="#54476a">A</text><text x="166" y="20" font-size="14" fill="#54476a">B</text></svg>`},
+  {t:"➡️ What is a Ray?", h:"A <b>ray</b> starts at <b>one endpoint</b> and goes on forever in one direction (it has an arrow). Written as <b>AB</b> (arrow on top).",
+   svg:`<svg viewBox="0 0 200 60"><line x1="30" y1="30" x2="185" y2="30" stroke="#7fe0b6" stroke-width="4"/><polygon points="185,30 172,23 172,37" fill="#7fe0b6"/><circle cx="30" cy="30" r="5" fill="#ff8fbf"/><text x="22" y="20" font-size="14" fill="#54476a">A</text></svg>`},
+  {t:"↔️ What is a Line?", h:"A <b>line</b> is straight and goes on <b>forever in both directions</b> (arrows on both ends). It has no endpoints.",
+   svg:`<svg viewBox="0 0 200 60"><line x1="15" y1="30" x2="185" y2="30" stroke="#b199ff" stroke-width="4"/><polygon points="185,30 172,23 172,37" fill="#b199ff"/><polygon points="15,30 28,23 28,37" fill="#b199ff"/></svg>`},
+  {t:"✖️ What is an Intersection?", h:"An <b>intersection</b> is the <b>point where two lines cross</b>. They meet at exactly one point.",
+   svg:`<svg viewBox="0 0 160 90"><line x1="20" y1="20" x2="140" y2="70" stroke="#7bb8ff" stroke-width="4"/><line x1="20" y1="70" x2="140" y2="20" stroke="#ff8fbf" stroke-width="4"/><circle cx="80" cy="45" r="6" fill="#ffd766" stroke="#54476a" stroke-width="1.5"/></svg>`},
+  {t:"▱ What is a Plane?", h:"A <b>plane</b> is a <b>flat surface</b> that goes on forever in all directions — like a giant, endless piece of paper.",
+   svg:`<svg viewBox="0 0 180 100"><polygon points="20,70 120,30 165,50 65,90" fill="#d3f6e6" stroke="#7fe0b6" stroke-width="3"/><circle cx="80" cy="58" r="4" fill="#ff8fbf"/></svg>`},
+  {t:"🔤 Geometry Symbols", h:"", table:[["·","point"],["—","line segment"],["→","ray"],["↔","line"],["∠","angle"],["°","degrees"],["⟂","perpendicular"],["∥","parallel"]]},
+  {t:"📐 Naming Angles", h:"An <b>angle</b> is made of two rays meeting at a <b>vertex</b>. Name it with 3 letters — the <b>vertex letter in the middle</b>: ∠ABC. The middle letter <b>B</b> is the corner!",
+   svg:`<svg viewBox="0 0 180 100"><line x1="30" y1="80" x2="150" y2="80" stroke="#7bb8ff" stroke-width="4"/><line x1="30" y1="80" x2="120" y2="20" stroke="#7bb8ff" stroke-width="4"/><path d="M60,80 A30,30 0 0,0 52,60" fill="none" stroke="#ff8fbf" stroke-width="3"/><text x="18" y="90" font-size="14" fill="#54476a">B</text><text x="150" y="90" font-size="14" fill="#54476a">C</text><text x="122" y="18" font-size="14" fill="#54476a">A</text></svg>`},
+  {t:"🌈 Types of Angles", h:"Angles are named by their size in degrees:",
+   legend:["Acute &lt; 90°","Right = 90°","Obtuse 90–180°","Straight = 180°","Reflex 180–360°","Full = 360°"],
+   svg:`<svg viewBox="0 0 320 90"><g stroke-width="4" fill="none"><line x1="20" y1="70" x2="70" y2="70" stroke="#7fe0b6"/><line x1="20" y1="70" x2="55" y2="35" stroke="#7fe0b6"/><line x1="110" y1="70" x2="160" y2="70" stroke="#7bb8ff"/><line x1="110" y1="70" x2="110" y2="25" stroke="#7bb8ff"/><line x1="200" y1="70" x2="250" y2="70" stroke="#ff8fbf"/><line x1="200" y1="70" x2="168" y2="40" stroke="#ff8fbf"/></g><text x="26" y="86" font-size="11" fill="#54476a">acute</text><text x="118" y="86" font-size="11" fill="#54476a">right</text><text x="205" y="86" font-size="11" fill="#54476a">obtuse</text></svg>`},
+  {t:"📏 Measuring Angles", h:"We measure angles in <b>degrees (°)</b> using a <b>protractor</b>. Line up the center on the vertex and 0° on one ray, then read where the other ray points. A right angle = <b>90°</b>.",
+   svg:`<svg viewBox="0 0 180 100"><path d="M20,80 A70,70 0 0,1 160,80 Z" fill="#e6dcff" stroke="#b199ff" stroke-width="2"/><line x1="90" y1="80" x2="90" y2="12" stroke="#ff8fbf" stroke-width="3"/><line x1="90" y1="80" x2="150" y2="80" stroke="#7bb8ff" stroke-width="3"/><text x="94" y="30" font-size="13" fill="#54476a">90°</text></svg>`},
+  {t:"✏️ Drawing Angles", h:"To draw an angle: 1) Draw a ray. 2) Put the protractor's center on the endpoint. 3) Mark the degree you want. 4) Draw a ray to your mark. Practice makes perfect!",
+   svg:`<svg viewBox="0 0 180 90"><line x1="30" y1="70" x2="150" y2="70" stroke="#7bb8ff" stroke-width="4"/><line x1="30" y1="70" x2="120" y2="25" stroke="#ff8fbf" stroke-width="4" stroke-dasharray="6 5"/><circle cx="30" cy="70" r="5" fill="#54476a"/></svg>`},
+  {t:"🔄 Turns &amp; Rotations", h:"A full circle is <b>360°</b>. <b>Quarter turn</b> = 90°. <b>Half turn</b> = 180°. <b>Three-quarter turn</b> = 270°. <b>Complete turn</b> = 360° (all the way around).",
+   svg:`<svg viewBox="0 0 300 90"><g><circle cx="40" cy="45" r="26" fill="none" stroke="#eee3ff" stroke-width="6"/><path d="M40,19 A26,26 0 0,1 66,45" fill="none" stroke="#7fe0b6" stroke-width="6"/><text x="24" y="82" font-size="10" fill="#54476a">90°</text></g><g><circle cx="115" cy="45" r="26" fill="none" stroke="#eee3ff" stroke-width="6"/><path d="M115,19 A26,26 0 0,1 115,71" fill="none" stroke="#7bb8ff" stroke-width="6"/><text x="96" y="82" font-size="10" fill="#54476a">180°</text></g><g><circle cx="190" cy="45" r="26" fill="none" stroke="#eee3ff" stroke-width="6"/><path d="M190,19 A26,26 0 1,1 164,45" fill="none" stroke="#ff8fbf" stroke-width="6"/><text x="169" y="82" font-size="10" fill="#54476a">270°</text></g><g><circle cx="265" cy="45" r="26" fill="none" stroke="#ffd766" stroke-width="6"/><text x="244" y="82" font-size="10" fill="#54476a">360°</text></g></svg>`}
+];
+
+/* ============================================================
+   PRACTICE QUESTIONS (no score)
+   ============================================================ */
+const PRACTICE = [
+  {type:"Points & Lines", q:"Which one has TWO endpoints?", choices:["A ray","A line segment","A line","A point"], answer:1, exp:"A <b>line segment</b> has two endpoints — a start and an end."},
+  {type:"Points & Lines", q:"Which one goes on forever in BOTH directions?", choices:["A line","A ray","A segment","A point"], answer:0, exp:"A <b>line</b> has arrows on both ends and never stops."},
+  {type:"Angles", q:"A right angle measures…", choices:["45°","90°","180°","360°"], answer:1, exp:"A <b>right angle</b> is exactly 90° — like the corner of a book."},
+  {type:"Angles", q:"An angle smaller than 90° is called…", choices:["Obtuse","Straight","Acute","Reflex"], answer:2, exp:"<b>Acute</b> angles are small — less than 90°."},
+  {type:"Naming", q:"In the angle ∠ABC, which letter is the vertex (corner)?", choices:["A","B","C","None"], answer:1, exp:"The <b>middle letter</b> is always the vertex. Here it's B."},
+  {type:"Turns", q:"A quarter turn is the same as…", choices:["90°","180°","270°","360°"], answer:0, exp:"A <b>quarter turn</b> = 90°."},
+  {type:"Turns", q:"A half turn is the same as…", choices:["90°","180°","270°","360°"], answer:1, exp:"A <b>half turn</b> = 180°."},
+  {type:"Symbols", q:"What does the symbol ° mean?", choices:["Angle","Degrees","Point","Line"], answer:1, exp:"The little circle <b>°</b> means <b>degrees</b>."}
+];
+
+/* ============================================================
+   QUIZ BANK — 3 levels × 25 questions. Fully editable.
+   Each: {type, q, choices[A,B,C,D], answer(0-3), exp}
+   ============================================================ */
+const QUIZ = {
+easy:[
+ {type:"Points & Lines", q:"What do we call an exact spot with no size?", choices:["A line","A point","A ray","A plane"], answer:1, exp:"A <b>point</b> marks one exact location and has no size."},
+ {type:"Points & Lines", q:"A line segment has how many endpoints?", choices:["0","1","2","3"], answer:2, exp:"A <b>line segment</b> has exactly <b>2</b> endpoints."},
+ {type:"Points & Lines", q:"Which one has only ONE endpoint and an arrow?", choices:["A ray","A line","A segment","A point"], answer:0, exp:"A <b>ray</b> starts at one point and goes on forever one way."},
+ {type:"Points & Lines", q:"A line has how many endpoints?", choices:["2","1","0","4"], answer:2, exp:"A <b>line</b> has <b>no</b> endpoints — it goes on forever both ways."},
+ {type:"Angle Names", q:"An angle that is exactly 90° is a…", choices:["Acute angle","Right angle","Obtuse angle","Straight angle"], answer:1, exp:"90° is a <b>right angle</b> — a perfect square corner."},
+ {type:"Angle Names", q:"An angle smaller than 90° is…", choices:["Acute","Right","Obtuse","Straight"], answer:0, exp:"<b>Acute</b> = less than 90° (small and sharp)."},
+ {type:"Angle Names", q:"An angle bigger than 90° but less than 180° is…", choices:["Acute","Right","Obtuse","Straight"], answer:2, exp:"<b>Obtuse</b> angles are wide — between 90° and 180°."},
+ {type:"Angle Names", q:"A straight angle measures…", choices:["90°","180°","270°","360°"], answer:1, exp:"A <b>straight angle</b> is a straight line = 180°."},
+ {type:"Turns", q:"A quarter turn equals how many degrees?", choices:["45°","90°","180°","360°"], answer:1, exp:"A <b>quarter turn</b> = 90° (one corner of a circle)."},
+ {type:"Turns", q:"A half turn equals how many degrees?", choices:["90°","180°","270°","360°"], answer:1, exp:"A <b>half turn</b> = 180° (halfway around)."},
+ {type:"Turns", q:"A complete (full) turn equals…", choices:["180°","270°","360°","90°"], answer:2, exp:"A <b>complete turn</b> goes all the way around = 360°."},
+ {type:"Turns", q:"A three-quarter turn equals…", choices:["90°","180°","270°","360°"], answer:2, exp:"Three quarters of 360° = <b>270°</b>."},
+ {type:"Symbols", q:"What does the symbol ∠ mean?", choices:["Line","Point","Angle","Degree"], answer:2, exp:"The symbol <b>∠</b> means <b>angle</b>."},
+ {type:"Symbols", q:"What does ° stand for?", choices:["Degrees","Angle","Ray","Point"], answer:0, exp:"<b>°</b> is the symbol for <b>degrees</b>."},
+ {type:"Naming", q:"We usually name a point with a…", choices:["Number","Small letter","Capital letter","Shape"], answer:2, exp:"Points are named with a <b>capital letter</b>, like point A."},
+ {type:"Naming", q:"To name an angle with 3 letters, the vertex letter goes…", choices:["First","In the middle","Last","Anywhere"], answer:1, exp:"The <b>vertex</b> (corner) letter always goes in the <b>middle</b>."},
+ {type:"Intersections", q:"When two lines cross, the crossing spot is called an…", choices:["Endpoint","Intersection","Angle","Arrow"], answer:1, exp:"Two lines meet at an <b>intersection</b> point."},
+ {type:"Plane", q:"A flat surface that goes on forever is a…", choices:["Point","Line","Plane","Ray"], answer:2, exp:"A <b>plane</b> is a flat surface with no edges."},
+ {type:"Measuring", q:"We measure angles using a…", choices:["Ruler","Protractor","Calculator","Compass only"], answer:1, exp:"A <b>protractor</b> measures angles in degrees."},
+ {type:"Angle Names", q:"The corner of a square is what kind of angle?", choices:["Acute","Right","Obtuse","Straight"], answer:1, exp:"Every corner of a square is a <b>right angle</b> (90°)."},
+ {type:"Real Life", q:"The hands of a clock at 3:00 make a…", choices:["Straight angle","Right angle","Full turn","Acute angle"], answer:1, exp:"At 3:00 the hands form a <b>right angle</b> (90°)."},
+ {type:"Angle Names", q:"An angle greater than 180° (but less than 360°) is a…", choices:["Reflex angle","Right angle","Acute angle","Straight angle"], answer:0, exp:"A <b>reflex angle</b> is bigger than 180°."},
+ {type:"Points & Lines", q:"Which symbol shows a ray from A to B?", choices:["AB with a bar","AB with one arrow →","AB with two arrows ↔","just AB"], answer:1, exp:"A <b>ray</b> is written with one arrow: →."},
+ {type:"Turns", q:"If you spin all the way around and face the same way, that's a…", choices:["Quarter turn","Half turn","Complete turn","No turn"], answer:2, exp:"Facing the same way again = a <b>complete turn</b> (360°)."},
+ {type:"Angle Names", q:"Which angle is the SMALLEST?", choices:["Right (90°)","Acute (40°)","Obtuse (120°)","Straight (180°)"], answer:1, exp:"<b>40°</b> is the smallest — an acute angle."}
+],
+medium:[
+ {type:"Naming Angles", q:"An angle has vertex Q with rays to P and R. How can we name it?", choices:["∠PQR","∠QPR","∠RPQ","∠PRQ"], answer:0, exp:"The vertex <b>Q</b> must be in the middle: <b>∠PQR</b>."},
+ {type:"Naming Angles", q:"Which name is WRONG for an angle whose vertex is B?", choices:["∠ABC","∠CBA","∠BAC","∠ABD"], answer:2, exp:"<b>∠BAC</b> puts the vertex first — wrong. Vertex B must be in the middle."},
+ {type:"Estimate", q:"Which angle is closest to 90°?", choices:["An angle like an open book barely open","A square corner","A nearly straight line","A tiny sliver"], answer:1, exp:"A <b>square corner</b> is exactly 90°."},
+ {type:"Estimate", q:"About how big is an angle that looks like half of a right angle?", choices:["45°","90°","135°","180°"], answer:0, exp:"Half of 90° is <b>45°</b>."},
+ {type:"Measuring", q:"A protractor reads 120°. What type of angle is it?", choices:["Acute","Right","Obtuse","Reflex"], answer:2, exp:"120° is between 90° and 180°, so it is <b>obtuse</b>."},
+ {type:"Measuring", q:"An angle measures 90°. Which is TRUE?", choices:["It is acute","It is a right angle","It is obtuse","It is straight"], answer:1, exp:"Exactly 90° is a <b>right angle</b>."},
+ {type:"Intersections", q:"Two straight roads cross. How many intersection points do they make?", choices:["0","1","2","4"], answer:1, exp:"Two straight lines cross at exactly <b>1</b> point."},
+ {type:"Intersections", q:"Lines that cross and make right angles (90°) are called…", choices:["Parallel","Perpendicular","Curved","Rays"], answer:1, exp:"Lines that meet at 90° are <b>perpendicular</b> (⟂)."},
+ {type:"Symbols", q:"Match the symbol: ∥ means…", choices:["Perpendicular","Parallel","Angle","Degree"], answer:1, exp:"<b>∥</b> means the lines are <b>parallel</b> (never cross)."},
+ {type:"Symbols", q:"Match the symbol: ⟂ means…", choices:["Parallel","Perpendicular","Point","Ray"], answer:1, exp:"<b>⟂</b> means <b>perpendicular</b> (meet at 90°)."},
+ {type:"Real-life Turns", q:"You face North, then make a quarter turn to your right. Now you face…", choices:["South","East","West","North"], answer:1, exp:"A quarter turn (90°) right from North points you <b>East</b>."},
+ {type:"Real-life Turns", q:"You face North and make a half turn. Now you face…", choices:["East","West","South","North"], answer:2, exp:"A half turn (180°) from North faces you <b>South</b>."},
+ {type:"Real-life Turns", q:"A door opens with a quarter turn of its handle. That is…", choices:["45°","90°","180°","360°"], answer:1, exp:"A quarter turn = <b>90°</b>."},
+ {type:"Estimate", q:"Which is the best estimate for the angle of an open pair of scissors, opened wide?", choices:["10°","30°","100°","180°"], answer:2, exp:"Wide-open scissors form an <b>obtuse</b> angle, about 100°."},
+ {type:"Naming Angles", q:"In ∠XYZ, which point is the vertex?", choices:["X","Y","Z","All"], answer:1, exp:"Middle letter = vertex, so <b>Y</b>."},
+ {type:"Measuring", q:"An angle measures 30°. Which is TRUE?", choices:["Acute","Right","Obtuse","Reflex"], answer:0, exp:"30° is less than 90°, so it is <b>acute</b>."},
+ {type:"Measuring", q:"On a protractor, where do you place the center hole?", choices:["On one ray's end","On the vertex","On the arrow","Anywhere"], answer:1, exp:"The center goes on the <b>vertex</b> of the angle."},
+ {type:"Turns", q:"A skater spins 270°. That is a…", choices:["Quarter turn","Half turn","Three-quarter turn","Full turn"], answer:2, exp:"270° = <b>three-quarter turn</b>."},
+ {type:"Estimate", q:"An angle looks a little bigger than a right angle. Best estimate?", choices:["45°","70°","100°","170°"], answer:2, exp:"Just past 90° → about <b>100°</b> (obtuse)."},
+ {type:"Real Life", q:"The clock hands at 6:00 make what angle?", choices:["Right angle","Straight angle","Acute angle","Full turn"], answer:1, exp:"At 6:00 the hands point opposite ways = <b>straight angle</b> (180°)."},
+ {type:"Symbols", q:"Which shows a line through points A and B?", choices:["AB with a bar over it","AB with one arrow","AB with two arrows over it","·AB"], answer:2, exp:"A <b>line</b> uses two arrows (↔) over the letters."},
+ {type:"Intersections", q:"How many angles are formed when two lines intersect?", choices:["1","2","4","8"], answer:2, exp:"Two crossing lines create <b>4</b> angles."},
+ {type:"Naming Angles", q:"An angle can also be named by just its vertex when…", choices:["Never","Only one angle is at that vertex","There are many angles","It is a right angle"], answer:1, exp:"You can use one letter <b>only when</b> there's a single angle at that vertex."},
+ {type:"Real-life Turns", q:"Facing East, you turn to face West. What turn did you make?", choices:["Quarter","Half","Three-quarter","Full"], answer:1, exp:"East to West is opposite = <b>half turn</b> (180°)."},
+ {type:"Measuring", q:"Which angle would need the protractor read on the OUTER scale past 90?", choices:["An acute 40° angle","A 150° obtuse angle","A 10° angle","A 0° angle"], answer:1, exp:"A <b>150°</b> obtuse angle is read past 90° on the scale."}
+],
+hard:[
+ {type:"Missing Angle", q:"Two angles sit on a straight line. One is 120°. The other is…", choices:["30°","60°","90°","120°"], answer:1, exp:"Angles on a straight line add to 180°. 180 − 120 = <b>60°</b>."},
+ {type:"Missing Angle", q:"A right angle is split into 25° and one more angle. The other is…", choices:["25°","55°","65°","75°"], answer:2, exp:"A right angle is 90°. 90 − 25 = <b>65°</b>."},
+ {type:"Missing Angle", q:"Angles around a point add to 360°. Three angles are 100°, 130°, and ?", choices:["100°","120°","130°","150°"], answer:2, exp:"360 − 100 − 130 = <b>130°</b>."},
+ {type:"Compare", q:"Which angle is the LARGEST?", choices:["A right angle","A straight angle","An acute angle","An obtuse angle"], answer:1, exp:"A <b>straight angle</b> (180°) is the largest here."},
+ {type:"Compare", q:"Order from smallest to largest: 45°, 90°, 120°. Which is in the MIDDLE?", choices:["45°","90°","120°","They are equal"], answer:1, exp:"Smallest 45° < <b>90°</b> < 120° largest. Middle is 90°."},
+ {type:"Turns & Degrees", q:"A wheel makes 2 complete turns. How many degrees is that?", choices:["360°","540°","720°","180°"], answer:2, exp:"Each full turn is 360°. 2 × 360 = <b>720°</b>."},
+ {type:"Turns & Degrees", q:"Half of a quarter turn is how many degrees?", choices:["22.5°","45°","90°","135°"], answer:1, exp:"A quarter turn is 90°. Half of 90° = <b>45°</b>."},
+ {type:"Turns & Degrees", q:"A dancer turns 90° four times in the same direction. Total turn?", choices:["180°","270°","360°","90°"], answer:2, exp:"4 × 90° = 360° = one <b>complete turn</b>."},
+ {type:"Drawing Steps", q:"To draw a 60° angle, the FIRST step is to…", choices:["Mark 60° on paper","Draw a base ray","Draw a full circle","Cut the paper"], answer:1, exp:"Always start by <b>drawing a base ray</b> for one side of the angle."},
+ {type:"Drawing Steps", q:"After placing the protractor's center on the vertex, you should…", choices:["Read any number","Line up 0° with the base ray","Draw the angle first","Remove it"], answer:1, exp:"Line up <b>0°</b> with your base ray, then find your degree mark."},
+ {type:"Diagram", q:"An angle opens just past straight but not fully around. It is a…", choices:["Acute angle","Right angle","Reflex angle","Straight angle"], answer:2, exp:"More than 180° but less than 360° = <b>reflex angle</b>."},
+ {type:"Missing Angle", q:"Two equal angles together form a right angle. Each angle is…", choices:["30°","45°","60°","90°"], answer:1, exp:"90° ÷ 2 = <b>45°</b> each."},
+ {type:"Compare", q:"Angle P = 85°, Angle Q = 95°. Which is TRUE?", choices:["P is obtuse","Q is acute","P is acute, Q is obtuse","Both are right"], answer:2, exp:"85° < 90° (acute); 95° > 90° (obtuse). So <b>P acute, Q obtuse</b>."},
+ {type:"Missing Angle", q:"A clock's minute hand moves from 12 to 3. How many degrees did it turn?", choices:["45°","90°","180°","360°"], answer:1, exp:"12 to 3 is a quarter of the clock = <b>90°</b>."},
+ {type:"Missing Angle", q:"A clock's minute hand goes from 12 all the way to 6. That is…", choices:["90°","120°","180°","270°"], answer:2, exp:"12 to 6 is half the clock = <b>180°</b>."},
+ {type:"Turns & Degrees", q:"Starting facing North, you turn 270° clockwise. You now face…", choices:["East","South","West","North"], answer:2, exp:"270° clockwise from North: N→E→S→<b>West</b>."},
+ {type:"Diagram", q:"Two angles are 'perpendicular' lines meeting. Each of the 4 angles is…", choices:["45°","60°","90°","120°"], answer:2, exp:"Perpendicular lines make four <b>90°</b> right angles."},
+ {type:"Multi-step", q:"An angle is 40°. A second angle is twice as big. Together they measure…", choices:["80°","100°","120°","160°"], answer:2, exp:"Second angle = 2 × 40 = 80°. Together 40 + 80 = <b>120°</b>."},
+ {type:"Multi-step", q:"Three equal angles make a straight line (180°). Each angle is…", choices:["30°","45°","60°","90°"], answer:2, exp:"180° ÷ 3 = <b>60°</b> each."},
+ {type:"Compare", q:"Which turn is the biggest: quarter, half, or three-quarter?", choices:["Quarter","Half","Three-quarter","All equal"], answer:2, exp:"Three-quarter (270°) > half (180°) > quarter (90°)."},
+ {type:"Missing Angle", q:"An angle of 150° and another angle make a straight line. The other is…", choices:["15°","30°","40°","50°"], answer:1, exp:"180 − 150 = <b>30°</b>."},
+ {type:"Drawing Steps", q:"You drew a ray and marked 110°. The angle you made is…", choices:["Acute","Right","Obtuse","Reflex"], answer:2, exp:"110° is between 90° and 180° → <b>obtuse</b>."},
+ {type:"Diagram", q:"Two rays point in exactly opposite directions from one point. The angle is…", choices:["90°","120°","180°","360°"], answer:2, exp:"Opposite rays form a <b>straight angle</b> = 180°."},
+ {type:"Multi-step", q:"A right angle is cut into three equal parts. Each part is…", choices:["20°","30°","45°","60°"], answer:1, exp:"90° ÷ 3 = <b>30°</b> each."},
+ {type:"Turns & Degrees", q:"A spinner lands after turning 450°. How many FULL turns plus extra?", choices:["1 turn + 90°","2 turns + 45°","1 turn + 45°","2 turns + 90°"], answer:0, exp:"450° = 360° (one full turn) + 90°. So <b>1 turn + 90°</b>."}
+]
+};
+
+const BADGES = {
+  master:{name:"Geometry Master", emoji:"🌟", desc:"Incredible! You're a true Geometry Master!"},
+  super:{name:"Super Thinker", emoji:"🚀", desc:"Super thinking! You really know your geometry."},
+  good:{name:"Good Effort", emoji:"🌈", desc:"Nice effort! A little more practice and you'll shine."},
+  keep:{name:"Keep Practicing", emoji:"🌱", desc:"Great start! Review the lesson and try again — you've got this!"}
+};
+function badgeFor(pct){ if(pct>=90)return BADGES.master; if(pct>=75)return BADGES.super; if(pct>=60)return BADGES.good; return BADGES.keep; }
+
+const REACT_OK=["Great job! 🎉","You nailed it! 💫","Amazing! 🌟","Fantastic! 🏆","Superstar! ⭐","Brilliant! ✨"];
+const REACT_NO=["Try again next time! 💪","Almost there! 🌱","Let's review this! 📚","Good try! 🌈","Keep going! 🐣","Nearly! ✏️"];
+const LEVELNAME={easy:"Easy",medium:"Medium",hard:"Hard"};
+const LEVELCHIPBG={easy:"linear-gradient(135deg,#d6f7e8,#8fe6c2)",medium:"linear-gradient(135deg,#cbe6ff,#93c4ff)",hard:"linear-gradient(135deg,#ffd6e6,#ffb0cd)"};
+const NEXTLEVEL={easy:"medium",medium:"hard",hard:"easy"};
+
+/* ============================================================
+   COLORFUL EDUCATIONAL SVG DIAGRAMS (no stock images)
+   Every geometry question shows a relevant illustration.
+   ============================================================ */
+const DIA = {
+ point:`<svg viewBox="0 0 240 120"><circle cx="120" cy="58" r="8" fill="#ff8fbf"/><text x="134" y="54" font-family="Fredoka" font-size="20" fill="#54476a">A</text><circle cx="58" cy="92" r="5" fill="#7bb8ff"/><text x="44" y="88" font-size="14" fill="#8a7aa8">B</text><circle cx="188" cy="94" r="5" fill="#7fe0b6"/><text x="196" y="90" font-size="14" fill="#8a7aa8">C</text></svg>`,
+ segment:`<svg viewBox="0 0 240 90"><line x1="42" y1="48" x2="198" y2="48" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><circle cx="42" cy="48" r="7" fill="#ff8fbf"/><circle cx="198" cy="48" r="7" fill="#ff8fbf"/><text x="34" y="30" font-family="Fredoka" font-size="18" fill="#54476a">A</text><text x="190" y="30" font-family="Fredoka" font-size="18" fill="#54476a">B</text></svg>`,
+ ray:`<svg viewBox="0 0 240 90"><line x1="46" y1="48" x2="200" y2="48" stroke="#7fe0b6" stroke-width="6" stroke-linecap="round"/><polygon points="224,48 200,35 200,61" fill="#7fe0b6"/><circle cx="46" cy="48" r="7" fill="#ff8fbf"/><text x="38" y="30" font-family="Fredoka" font-size="18" fill="#54476a">A</text></svg>`,
+ line:`<svg viewBox="0 0 240 90"><line x1="34" y1="48" x2="206" y2="48" stroke="#b199ff" stroke-width="6" stroke-linecap="round"/><polygon points="230,48 206,35 206,61" fill="#b199ff"/><polygon points="10,48 34,35 34,61" fill="#b199ff"/></svg>`,
+ plane:`<svg viewBox="0 0 240 130"><polygon points="42,92 150,42 208,72 100,122" fill="#d3f6e6" stroke="#7fe0b6" stroke-width="4" stroke-linejoin="round"/><circle cx="120" cy="82" r="5" fill="#ff8fbf"/><text x="128" y="78" font-family="Fredoka" font-size="15" fill="#54476a">P</text></svg>`,
+ acute:`<svg viewBox="0 0 240 130"><line x1="46" y1="105" x2="205" y2="105" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><line x1="46" y1="105" x2="178" y2="34" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><path d="M96,105 A50,50 0 0,0 82,72" fill="none" stroke="#ff8fbf" stroke-width="4"/><text x="100" y="92" font-family="Fredoka" font-size="15" fill="#54476a">40°</text><circle cx="46" cy="105" r="6" fill="#b199ff"/></svg>`,
+ right:`<svg viewBox="0 0 240 130"><line x1="55" y1="106" x2="205" y2="106" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><line x1="55" y1="106" x2="55" y2="24" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><rect x="55" y="84" width="22" height="22" fill="none" stroke="#ff8fbf" stroke-width="4"/><text x="84" y="70" font-family="Fredoka" font-size="15" fill="#54476a">90°</text><circle cx="55" cy="106" r="6" fill="#b199ff"/></svg>`,
+ obtuse:`<svg viewBox="0 0 240 130"><line x1="120" y1="102" x2="216" y2="102" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><line x1="120" y1="102" x2="34" y2="48" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><path d="M162,102 A42,42 0 0,0 92,70" fill="none" stroke="#ff8fbf" stroke-width="4"/><text x="120" y="80" font-family="Fredoka" font-size="15" fill="#54476a">120°</text><circle cx="120" cy="102" r="6" fill="#b199ff"/></svg>`,
+ straight:`<svg viewBox="0 0 240 100"><line x1="24" y1="62" x2="216" y2="62" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><path d="M84,62 A36,36 0 0,0 156,62" fill="none" stroke="#ff8fbf" stroke-width="4"/><text x="104" y="40" font-family="Fredoka" font-size="15" fill="#54476a">180°</text><circle cx="120" cy="62" r="6" fill="#b199ff"/></svg>`,
+ reflex:`<svg viewBox="0 0 240 130"><line x1="120" y1="70" x2="120" y2="12" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><line x1="120" y1="70" x2="206" y2="70" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><path d="M120,42 A28,28 0 1,0 148,70" fill="none" stroke="#ff8fbf" stroke-width="4"/><circle cx="120" cy="70" r="6" fill="#b199ff"/><text x="66" y="120" font-family="Fredoka" font-size="14" fill="#54476a">reflex &gt; 180°</text></svg>`,
+ named:`<svg viewBox="0 0 240 130"><line x1="46" y1="106" x2="206" y2="106" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><line x1="46" y1="106" x2="162" y2="30" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><path d="M88,106 A46,46 0 0,0 74,78" fill="none" stroke="#ff8fbf" stroke-width="4"/><circle cx="46" cy="106" r="7" fill="#b199ff"/><text x="30" y="122" font-family="Fredoka" font-size="17" fill="#54476a">B</text><text x="210" y="112" font-family="Fredoka" font-size="17" fill="#54476a">C</text><text x="166" y="26" font-family="Fredoka" font-size="17" fill="#54476a">A</text></svg>`,
+ turn90:`<svg viewBox="0 0 240 130"><circle cx="120" cy="62" r="44" fill="none" stroke="#eee3ff" stroke-width="8"/><path d="M120,18 A44,44 0 0,1 164,62" fill="none" stroke="#7fe0b6" stroke-width="8" stroke-linecap="round"/><polygon points="164,62 152,50 176,52" fill="#7fe0b6"/><circle cx="120" cy="62" r="5" fill="#54476a"/><text x="86" y="122" font-family="Fredoka" font-size="14" fill="#54476a">quarter · 90°</text></svg>`,
+ turn180:`<svg viewBox="0 0 240 130"><circle cx="120" cy="62" r="44" fill="none" stroke="#eee3ff" stroke-width="8"/><path d="M120,18 A44,44 0 0,1 120,106" fill="none" stroke="#7bb8ff" stroke-width="8" stroke-linecap="round"/><polygon points="120,106 108,96 132,96" fill="#7bb8ff"/><circle cx="120" cy="62" r="5" fill="#54476a"/><text x="94" y="122" font-family="Fredoka" font-size="14" fill="#54476a">half · 180°</text></svg>`,
+ turn270:`<svg viewBox="0 0 240 130"><circle cx="120" cy="62" r="44" fill="none" stroke="#eee3ff" stroke-width="8"/><path d="M120,18 A44,44 0 1,1 76,62" fill="none" stroke="#ff8fbf" stroke-width="8" stroke-linecap="round"/><polygon points="76,62 64,58 74,74" fill="#ff8fbf"/><circle cx="120" cy="62" r="5" fill="#54476a"/><text x="72" y="122" font-family="Fredoka" font-size="14" fill="#54476a">three-quarter · 270°</text></svg>`,
+ turn360:`<svg viewBox="0 0 240 130"><circle cx="120" cy="62" r="44" fill="none" stroke="#ffd766" stroke-width="8"/><polygon points="120,18 106,10 108,28" fill="#ffd766"/><circle cx="120" cy="62" r="5" fill="#54476a"/><text x="84" y="122" font-family="Fredoka" font-size="14" fill="#54476a">complete · 360°</text></svg>`,
+ intersecting:`<svg viewBox="0 0 240 130"><line x1="28" y1="30" x2="212" y2="100" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><line x1="28" y1="100" x2="212" y2="30" stroke="#ff8fbf" stroke-width="6" stroke-linecap="round"/><circle cx="120" cy="65" r="9" fill="#ffd766" stroke="#54476a" stroke-width="2"/></svg>`,
+ parallel:`<svg viewBox="0 0 240 110"><line x1="30" y1="40" x2="210" y2="40" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><line x1="30" y1="76" x2="210" y2="76" stroke="#7fe0b6" stroke-width="6" stroke-linecap="round"/><polygon points="118,32 130,40 118,48" fill="#7bb8ff"/><polygon points="118,68 130,76 118,84" fill="#7fe0b6"/></svg>`,
+ perpendicular:`<svg viewBox="0 0 240 120"><line x1="30" y1="92" x2="210" y2="92" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><line x1="120" y1="14" x2="120" y2="92" stroke="#ff8fbf" stroke-width="6" stroke-linecap="round"/><rect x="120" y="70" width="22" height="22" fill="none" stroke="#54476a" stroke-width="3"/></svg>`,
+ protractor:`<svg viewBox="0 0 240 130"><path d="M40,102 A80,80 0 0,1 200,102 Z" fill="#e6dcff" stroke="#b199ff" stroke-width="3"/><line x1="120" y1="102" x2="120" y2="26" stroke="#ff8fbf" stroke-width="4" stroke-linecap="round"/><line x1="120" y1="102" x2="192" y2="102" stroke="#7bb8ff" stroke-width="4" stroke-linecap="round"/><text x="126" y="54" font-family="Fredoka" font-size="14" fill="#54476a">90°</text><circle cx="120" cy="102" r="4" fill="#54476a"/></svg>`,
+ clock:`<svg viewBox="0 0 240 140"><circle cx="120" cy="70" r="52" fill="#fff6fb" stroke="#b199ff" stroke-width="5"/><line x1="120" y1="70" x2="120" y2="32" stroke="#ff8fbf" stroke-width="5" stroke-linecap="round"/><line x1="120" y1="70" x2="158" y2="70" stroke="#7bb8ff" stroke-width="5" stroke-linecap="round"/><circle cx="120" cy="70" r="4" fill="#54476a"/><text x="114" y="30" font-family="Fredoka" font-size="12" fill="#8a7aa8">12</text><text x="170" y="74" font-family="Fredoka" font-size="12" fill="#8a7aa8">3</text><text x="116" y="118" font-family="Fredoka" font-size="12" fill="#8a7aa8">6</text><text x="62" y="74" font-family="Fredoka" font-size="12" fill="#8a7aa8">9</text></svg>`,
+ compass:`<svg viewBox="0 0 240 140"><circle cx="120" cy="70" r="50" fill="#f3fbff" stroke="#7bb8ff" stroke-width="4"/><polygon points="120,28 132,70 120,60 108,70" fill="#ff8fbf"/><polygon points="120,112 108,70 120,80 132,70" fill="#cfe6ff" stroke="#7bb8ff" stroke-width="1"/><text x="114" y="22" font-family="Fredoka" font-size="13" fill="#54476a">N</text><text x="176" y="74" font-family="Fredoka" font-size="13" fill="#54476a">E</text><text x="116" y="134" font-family="Fredoka" font-size="13" fill="#54476a">S</text><text x="56" y="74" font-family="Fredoka" font-size="13" fill="#54476a">W</text></svg>`,
+ symbols:`<svg viewBox="0 0 240 110"><rect x="14" y="24" width="48" height="60" rx="12" fill="#fff0f6" stroke="#ff8fbf" stroke-width="2"/><text x="38" y="64" text-anchor="middle" font-family="Fredoka" font-size="30" fill="#ff8fbf">∠</text><rect x="70" y="24" width="48" height="60" rx="12" fill="#eef6ff" stroke="#7bb8ff" stroke-width="2"/><text x="94" y="60" text-anchor="middle" font-family="Fredoka" font-size="26" fill="#7bb8ff">°</text><rect x="126" y="24" width="48" height="60" rx="12" fill="#eafff5" stroke="#7fe0b6" stroke-width="2"/><text x="150" y="64" text-anchor="middle" font-family="Fredoka" font-size="28" fill="#3ec98a">⟂</text><rect x="182" y="24" width="48" height="60" rx="12" fill="#f3ecff" stroke="#b199ff" stroke-width="2"/><text x="206" y="64" text-anchor="middle" font-family="Fredoka" font-size="28" fill="#b199ff">∥</text></svg>`,
+ generic:`<svg viewBox="0 0 240 130"><line x1="50" y1="102" x2="205" y2="102" stroke="#7bb8ff" stroke-width="6" stroke-linecap="round"/><line x1="50" y1="102" x2="172" y2="40" stroke="#b199ff" stroke-width="6" stroke-linecap="round"/><path d="M92,102 A48,48 0 0,0 78,73" fill="none" stroke="#ff8fbf" stroke-width="4"/><text x="150" y="30" font-family="Fredoka" font-size="22" fill="#ffd766">✦</text><circle cx="50" cy="102" r="6" fill="#b199ff"/></svg>`
+};
+
+function pickDiagram(q){
+  const t=(q.q+' '+(q.type||'')).toLowerCase();
+  const h=(...k)=>k.some(x=>t.includes(x));
+  if(h('parallel')) return DIA.parallel;
+  if(h('perpendicular')) return DIA.perpendicular;
+  if(h('intersect','crossing','cross','roads cross','lines meet','two lines')) return DIA.intersecting;
+  if(h('plane','flat surface')) return DIA.plane;
+  if(h('protractor','measuring','measure angle','center hole','outer scale','place the')) return DIA.protractor;
+  if(h('clock','minute hand','hour hand',"o'clock",'12 to','3:00','6:00')) return DIA.clock;
+  if(h('north','south','east','west','facing','you face','compass')) return DIA.compass;
+  if(h('reflex')) return DIA.reflex;
+  if(h('three-quarter','three quarter','270')) return DIA.turn270;
+  if(h('quarter turn')||(h('quarter')&&h('turn'))) return DIA.turn90;
+  if(h('half turn')) return DIA.turn180;
+  if(h('complete','full turn','all the way around','same way again','360')) return DIA.turn360;
+  if(h('spin','rotate','rotation','dancer','wheel','spinner','skater')||(h('turn')&&h('°'))) return DIA.turn360;
+  if(h('straight angle','opposite direction','opposite way','straight line','180')) return DIA.straight;
+  if(h('right angle','square corner','perpendicular corner')||(h('90')&&h('angle'))||h('90°')) return DIA.right;
+  if(h('obtuse','120','150','110','130','100°')) return DIA.obtuse;
+  if(h('acute','less than 90','sharp','smallest')||h('40','30','45')) return DIA.acute;
+  if(h('name','vertex','∠','naming','middle letter')) return DIA.named;
+  if(h('symbol','∥','⟂','degrees')||h('°')) return DIA.symbols;
+  if(h('two endpoints','line segment','segment')) return DIA.segment;
+  if(h('one endpoint','arrow','ray')) return DIA.ray;
+  if(h('forever in both','both direction','no endpoints')) return DIA.line;
+  if(h('exact spot','no size','exact location','spot','point')) return DIA.point;
+  if(h('line')) return DIA.line;
+  return DIA.generic;
+}
+
+/* ---- auto pastel-underline for key geometry words ---- */
+const HLMAP=[
+ ["three-quarter turn","g"],["complete turn","g"],["quarter turn","g"],["half turn","g"],["full turn","g"],
+ ["line segment","p"],["right angle","b"],["straight angle","b"],["acute angle","b"],["obtuse angle","b"],["reflex angle","b"],
+ ["parallel lines","p"],["perpendicular lines","p"],["intersecting lines","p"],
+ ["protractor","y"],["degrees","y"],["degree","y"],
+ ["intersection","p"],["perpendicular","p"],["parallel","p"],["vertex","p"],
+ ["points","b"],["point","b"],["segment","p"],["rays","b"],["ray","b"],
+ ["angles","b"],["angle","b"],["acute","b"],["obtuse","b"],["reflex","b"],["straight","b"],
+ ["plane","g"],["lines","b"],["line","b"],
+ ["quarter","g"],["turns","g"],["turn","g"],["clock","y"]
+];
+const HLCLS={}; HLMAP.forEach(p=>HLCLS[p[0]]=(p[1]==='b'?'':p[1]));
+const HLRE=new RegExp('\\b('+HLMAP.map(p=>p[0].replace(/[-/\\^$*+?.()|[\]{}]/g,'\\$&')).join('|')+')\\b','gi');
+function highlight(text){
+  return String(text).replace(HLRE,m=>`<span class="hl ${HLCLS[m.toLowerCase()]||''}">${m}</span>`);
+}
+
+/* ---- cute mascot ---- */
+const MASCOTS=['🐻','🐱','🐰','⭐','☁️'];
+const MASCOT_MSGS=["Let's think!","You can do it!","Look carefully!","Great thinking!","You've got this!","Ready? Let's go!","Believe in you!","Nice and easy!"];
+function setMascot(faceSel,msgSel){
+  $(faceSel).textContent=MASCOTS[Math.floor(Math.random()*MASCOTS.length)];
+  $(msgSel).textContent=MASCOT_MSGS[Math.floor(Math.random()*MASCOT_MSGS.length)];
+}
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const state={level:null, list:[], i:0, score:0, answered:[], finished:false, lastResult:null};
+const $=s=>document.querySelector(s);
+const KEYS=['A','B','C','D'];
+const pages={home:$('#home'),review:$('#review'),practice:$('#practice'),levels:$('#levels'),quiz:$('#quiz'),results:$('#results'),certificate:$('#certificate')};
+
+function go(name){
+  Object.values(pages).forEach(p=>p.classList.remove('show'));
+  (pages[name]||pages.home).classList.add('show');
+  document.querySelectorAll('.nav-links button').forEach(b=>{
+    const t=b.dataset.go;
+    b.classList.toggle('active', t===name || (name==='quiz'&&t==='levels'));
+  });
+  if(name==='results') renderResults();
+  if(name==='certificate') renderCertificate();
+  if(name==='practice') startPractice();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+
+/* ---------- REVIEW RENDER ---------- */
+(function renderReview(){
+  const g=$('#revGrid');
+  REVIEW.forEach(c=>{
+    const d=document.createElement('div'); d.className='rev-card';
+    let inner=`<h3>${c.t}</h3>`;
+    if(c.h) inner+=`<p>${c.h}</p>`;
+    if(c.table){
+      inner+='<table class="sym-tab">'+c.table.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')+'</table>';
+    }
+    if(c.legend){ inner+='<div class="angle-legend">'+c.legend.map(x=>`<span>${x}</span>`).join('')+'</div>'; }
+    if(c.svg) inner+=`<div class="dia">${c.svg}</div>`;
+    d.innerHTML=inner; g.appendChild(d);
+  });
+})();
+
+/* ---------- PRACTICE ENGINE ---------- */
+let pIndex=0, pAnswered=false;
+$('#pTotal').textContent=PRACTICE.length;
+function startPractice(){ pIndex=0; renderPractice(); }
+function renderPractice(){
+  const q=PRACTICE[pIndex]; pAnswered=false;
+  $('#pNow').textContent=pIndex+1;
+  $('#pType').textContent=q.type;
+  $('#pText').innerHTML=highlight(q.q);
+  $('#pDia').style.display='grid';
+  $('#pDia').innerHTML=pickDiagram(q);
+  const box=$('#pChoices'); box.innerHTML='';
+  q.choices.forEach((c,idx)=>{
+    const btn=document.createElement('button'); btn.className='choice';
+    btn.innerHTML=`<span class="key">${KEYS[idx]}</span><span>${c}</span>`;
+    btn.addEventListener('click',()=>{
+      if(pAnswered)return; pAnswered=true;
+      const ok=idx===q.answer;
+      document.querySelectorAll('#pChoices .choice').forEach((b,i)=>{b.disabled=true;
+        if(i===q.answer)b.classList.add('correct'); else if(i===idx)b.classList.add('wrong'); else b.classList.add('dim');});
+      const fb=$('#pFeedback'); fb.className='feedback show '+(ok?'ok':'no');
+      $('#pReact').textContent=(ok?REACT_OK:REACT_NO)[Math.floor(Math.random()*6)];
+      $('#pExp').innerHTML=(ok?'':'<b>Correct answer:</b> '+KEYS[q.answer]+'. ')+q.exp;
+      $('#pNext').style.display='inline-flex'; playBeep(ok); if(ok)miniConfetti();
+    });
+    box.appendChild(btn);
+  });
+  $('#pFeedback').className='feedback';
+  $('#pNext').style.display='none';
+  $('#pNext').textContent = pIndex===PRACTICE.length-1?'Start Over 🔁':'Next ➡️';
+}
+$('#pNext').addEventListener('click',()=>{ pIndex=(pIndex+1)%PRACTICE.length; renderPractice(); window.scrollTo({top:120,behavior:'smooth'});});
+
+/* ---------- LEVEL SELECT ---------- */
+document.querySelectorAll('.level-card').forEach(c=>c.addEventListener('click',()=>startQuiz(c.dataset.level)));
+
+/* ---------- QUIZ ENGINE ---------- */
+function startQuiz(level){
+  state.level=level; state.list=QUIZ[level]; state.i=0; state.score=0; state.answered=[]; state.finished=false;
+  $('#qLevelTitle').textContent=LEVELNAME[level]+' Level Quiz';
+  $('#qTotal').textContent=state.list.length;
+  const chip=$('#qLvlChip'); chip.textContent=LEVELNAME[level]; chip.style.background=LEVELCHIPBG[level];
+  renderQuestion(); go('quiz');
+}
+function renderQuestion(){
+  const q=state.list[state.i];
+  $('#qNow').textContent=state.i+1;
+  $('#qScore').textContent=state.score;
+  $('#bar').style.width=(state.i/state.list.length*100)+'%';
+  $('#qType').textContent=q.type;
+  // premium banner: diagram + highlighted question + difficulty + mascot
+  $('#qDia').innerHTML=pickDiagram(q);
+  const qt=$('#qText'); qt.innerHTML=highlight(q.q);
+  qt.style.animation='none'; void qt.offsetWidth; qt.style.animation=''; // replay fade-in
+  const diff=$('#qDiff'); diff.className='qdiff '+state.level;
+  diff.textContent=({easy:'🟢 Easy',medium:'🟡 Medium',hard:'🔴 Hard'})[state.level];
+  setMascot('#qMascot','#qMascotMsg');
+  const box=$('#qChoices'); box.innerHTML='';
+  q.choices.forEach((c,idx)=>{
+    const btn=document.createElement('button'); btn.className='choice';
+    btn.innerHTML=`<span class="key">${KEYS[idx]}</span><span>${c}</span>`;
+    btn.addEventListener('click',()=>select(idx));
+    box.appendChild(btn);
+  });
+  $('#qFeedback').className='feedback';
+  $('#qNext').style.display='none';
+  $('#qNext').textContent=state.i===state.list.length-1?'See Results 🏆':'Next ➡️';
+}
+function select(idx){
+  const q=state.list[state.i];
+  if(state.answered[state.i]!=null)return;
+  const ok=idx===q.answer; state.answered[state.i]=idx; if(ok)state.score++;
+  document.querySelectorAll('#qChoices .choice').forEach((b,i)=>{b.disabled=true;
+    if(i===q.answer)b.classList.add('correct'); else if(i===idx)b.classList.add('wrong'); else b.classList.add('dim');});
+  const fb=$('#qFeedback'); fb.className='feedback show '+(ok?'ok':'no');
+  $('#qReact').textContent=(ok?REACT_OK:REACT_NO)[Math.floor(Math.random()*6)];
+  $('#qExp').innerHTML=(ok?'':'<b>Correct answer:</b> '+KEYS[q.answer]+'. ')+q.exp;
+  $('#qScore').textContent=state.score;
+  $('#bar').style.width=((state.i+1)/state.list.length*100)+'%';
+  $('#qNext').style.display='inline-flex';
+  playBeep(ok); if(ok)miniConfetti();
+}
+$('#qNext').addEventListener('click',()=>{
+  if(state.i<state.list.length-1){ state.i++; renderQuestion(); window.scrollTo({top:0,behavior:'smooth'}); }
+  else{ finishQuiz(); }
+});
+function finishQuiz(){
+  state.finished=true;
+  const pct=Math.round(state.score/state.list.length*100);
+  state.lastResult={level:state.level, score:state.score, total:state.list.length, pct,
+    answered:[...state.answered], list:state.list};
+  go('results'); bigConfetti();
+}
+
+/* ---------- RESULTS ---------- */
+let reviewFilter='all';
+function renderResults(){
+  const r=state.lastResult;
+  $('#noResult').style.display=r?'none':'block';
+  $('#hasResult').style.display=r?'block':'none';
+  if(!r)return;
+  const b=badgeFor(r.pct);
+  $('#rPct').textContent=r.pct+'%';
+  $('#rFrac').textContent=r.score+' / '+r.total;
+  $('#rBadge').textContent=b.name;
+  $('#rBadgeEmoji').textContent=b.emoji;
+  $('#rDesc').textContent=b.desc;
+  $('#rLevel').textContent='Level completed: '+LEVELNAME[r.level];
+  $('#rCircle').style.setProperty('--deg',(r.pct*3.6)+'deg');
+  renderReviewList();
+}
+function renderReviewList(){
+  const r=state.lastResult; const wrap=$('#rReview'); wrap.innerHTML='';
+  r.list.forEach((q,i)=>{
+    const chosen=r.answered[i]; const ok=chosen===q.answer;
+    if(reviewFilter==='wrong'&&ok)return;
+    const div=document.createElement('div'); div.className='ra '+(ok?'correct':'wrong');
+    div.innerHTML=`<div class="rq">${ok?'✅':'❌'} Q${i+1}. ${q.q}</div>`+
+      `<div class="line noo">Your answer: ${chosen!=null?KEYS[chosen]+'. '+q.choices[chosen]:'— (skipped)'}</div>`+
+      `<div class="line yes">Correct answer: ${KEYS[q.answer]}. ${q.choices[q.answer]}</div>`+
+      `<div class="exp">💡 ${q.exp}</div>`;
+    wrap.appendChild(div);
+  });
+  if(!wrap.children.length) wrap.innerHTML='<p class="lead" style="text-align:center">🎉 No mistakes to review — perfect score!</p>';
+}
+$('#fAll').addEventListener('click',()=>{reviewFilter='all';$('#fAll').classList.add('on');$('#fWrong').classList.remove('on');renderReviewList();});
+$('#fWrong').addEventListener('click',()=>{reviewFilter='wrong';$('#fWrong').classList.add('on');$('#fAll').classList.remove('on');renderReviewList();});
+$('#rRetry').addEventListener('click',()=>startQuiz(state.lastResult.level));
+$('#rNext').addEventListener('click',()=>startQuiz(NEXTLEVEL[state.lastResult.level]));
+
+/* ---------- CERTIFICATE ---------- */
+function renderCertificate(){
+  const r=state.lastResult;
+  $('#certLocked').style.display=r?'none':'block';
+  $('#certUnlocked').style.display=r?'block':'none';
+  if(!r)return;
+  const b=badgeFor(r.pct);
+  $('#certLevel').textContent=LEVELNAME[r.level];
+  $('#certScore').textContent=r.pct+'%';
+  $('#certBadge').textContent=b.emoji+' '+b.name;
+  $('#certDate').textContent=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+}
+$('#certName').addEventListener('input',e=>{$('#certNameOut').textContent=e.target.value.trim()||'Star Student';});
+$('#printBtn').addEventListener('click',()=>window.print());
+
+/* ---------- SOUND PLACEHOLDER ---------- */
+let AC;
+function playBeep(good){
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const o=AC.createOscillator(),g=AC.createGain(); o.connect(g);g.connect(AC.destination); o.type='sine';
+    const now=AC.currentTime;
+    if(good){o.frequency.setValueAtTime(660,now);o.frequency.setValueAtTime(880,now+.1);}
+    else{o.frequency.setValueAtTime(300,now);o.frequency.setValueAtTime(220,now+.12);}
+    g.gain.setValueAtTime(.001,now); g.gain.exponentialRampToValueAtTime(.15,now+.03); g.gain.exponentialRampToValueAtTime(.001,now+.25);
+    o.start(now);o.stop(now+.26);
+  }catch(e){}
+}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200);}
+
+/* ---------- CONFETTI ---------- */
+const cv=$('#confetti'),cx=cv.getContext('2d'); let parts=[];
+function resize(){cv.width=innerWidth;cv.height=innerHeight;} resize(); addEventListener('resize',resize);
+const COLORS=['#ff9fc4','#93c4ff','#ffd766','#8fe6c2','#bfa8ff'];
+function spawn(n){for(let i=0;i<n;i++)parts.push({x:Math.random()*cv.width,y:-20-Math.random()*40,r:6+Math.random()*8,
+  c:COLORS[Math.floor(Math.random()*COLORS.length)],vy:2+Math.random()*3,vx:-1.5+Math.random()*3,rot:Math.random()*6,vr:-.2+Math.random()*.4});}
+function miniConfetti(){spawn(22);runConfetti();}
+function bigConfetti(){spawn(160);runConfetti();}
+let running=false;
+function runConfetti(){ if(running)return; running=true;
+  (function loop(){ cx.clearRect(0,0,cv.width,cv.height);
+    parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.vy+=.03;
+      cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillStyle=p.c;cx.fillRect(-p.r/2,-p.r/2,p.r,p.r*.6);cx.restore();});
+    parts=parts.filter(p=>p.y<cv.height+30);
+    if(parts.length)requestAnimationFrame(loop); else{cx.clearRect(0,0,cv.width,cv.height);running=false;}
+  })();
+}
+
+/* ---------- SKY DECOR ---------- */
+(function sky(){
+  const s=$('#sky'); const clouds=['☁️','⛅','🌤️','☁️'];
+  for(let i=0;i<5;i++){const c=document.createElement('div');c.className='cloud';c.textContent=clouds[i%4];
+    c.style.top=(5+Math.random()*70)+'%';c.style.fontSize=(1.6+Math.random()*2.4)+'rem';
+    c.style.animationDuration=(28+Math.random()*32)+'s';c.style.animationDelay=(-Math.random()*30)+'s';s.appendChild(c);}
+  const cuties=['⭐','✨','🌟','💫','🌈','📐','📏'];
+  for(let i=0;i<16;i++){const st=document.createElement('div');st.className='star';st.textContent=cuties[i%cuties.length];
+    st.style.top=(Math.random()*95)+'%';st.style.left=(Math.random()*98)+'%';st.style.fontSize=(.7+Math.random()*1.1)+'rem';
+    st.style.animationDuration=(2+Math.random()*3)+'s';st.style.animationDelay=(-Math.random()*4)+'s';s.appendChild(st);}
+})();
+</script>
+</body>
+</html>

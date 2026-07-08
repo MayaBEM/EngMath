@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<meta name="description" content="English Entrance Examination — Top Secondary School Preparation for Thai Grade 6 students. A Bright EngMath premium learning product." />
+<title>English Entrance Examination • Bright EngMath</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ============ SMOOTH LOADING SCREEN ============ -->
+<div id="loader" class="loader" aria-hidden="true">
+  <div class="loader-mark">
+    <svg viewBox="0 0 48 48" width="56" height="56" aria-hidden="true">
+      <path d="M24 4 6 12v10c0 10 7.6 17.6 18 22 10.4-4.4 18-12 18-22V12L24 4Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M16 23l6 6 12-13" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <div class="loader-title">Bright EngMath</div>
+  <div class="loader-bar"><span></span></div>
+  <div class="loader-sub">Preparing your examination…</div>
+</div>
+
+<!-- ============ APP HEADER ============ -->
+<header class="appbar" id="appbar">
+  <button class="brand" id="brandHome" aria-label="Go to home">
+    <span class="brand-logo" aria-hidden="true">
+      <svg viewBox="0 0 48 48" width="26" height="26"><path d="M24 4 6 12v10c0 10 7.6 17.6 18 22 10.4-4.4 18-12 18-22V12L24 4Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M16 23l6 6 12-13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <span class="brand-text"><b>Bright EngMath</b><small>Entrance Exam Prep</small></span>
+  </button>
+
+  <div class="appbar-actions">
+    <button class="icon-btn" id="soundToggle" title="Sound on/off" aria-label="Toggle sound">
+      <svg class="ic-sound-on" viewBox="0 0 24 24" width="20" height="20"><path d="M4 9v6h4l5 4V5L8 9H4Z" fill="currentColor"/><path d="M16 8.5a4 4 0 0 1 0 7M18.5 6a7 7 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <svg class="ic-sound-off" viewBox="0 0 24 24" width="20" height="20"><path d="M4 9v6h4l5 4V5L8 9H4Z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <button class="icon-btn" id="themeToggle" title="Light / Dark mode" aria-label="Toggle dark mode">
+      <svg class="ic-sun" viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></g></svg>
+      <svg class="ic-moon" viewBox="0 0 24 24" width="20" height="20"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z" fill="currentColor"/></svg>
+    </button>
+    <button class="icon-btn" id="helpBtn" title="Keyboard shortcuts" aria-label="Keyboard shortcuts">
+      <svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.4 2.3c-.8.4-1.4 1-1.4 2M12 17h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="view" class="view">
+
+  <!-- ============ HOME / LANDING ============ -->
+  <section id="home" class="screen show">
+    <div class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">Grade 6 → Mathayom 1 · Top Secondary Schools</span>
+        <h1 class="hero-title">English Entrance<br/>Examination</h1>
+        <p class="hero-sub">Professional exam preparation for Thailand's leading secondary schools. Five full papers, thirty questions each, with detailed Thai explanations for every answer.</p>
+        <div class="hero-cta">
+          <button class="btn btn-primary btn-lg" id="startLearning">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7L8 5Z" fill="currentColor"/></svg>
+            Start Learning
+          </button>
+          <a class="btn btn-ghost btn-lg" href="#sets">Choose an Exam Set</a>
+        </div>
+        <div class="hero-stats">
+          <div><b>5</b><span>Full Papers</span></div>
+          <div><b>150</b><span>Unique Questions</span></div>
+          <div><b>TH</b><span>Explanations</span></div>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <!-- decorative SVG scene -->
+        <svg viewBox="0 0 420 360" width="100%">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--navy)"/>
+            </linearGradient>
+            <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef4ff"/>
+            </linearGradient>
+          </defs>
+          <circle cx="330" cy="70" r="120" fill="var(--accent-soft)"/>
+          <rect x="60" y="70" width="230" height="250" rx="22" fill="url(#g2)" stroke="var(--line)" stroke-width="2"/>
+          <rect x="88" y="104" width="120" height="14" rx="7" fill="var(--navy)" opacity=".85"/>
+          <rect x="88" y="134" width="174" height="10" rx="5" fill="var(--line-strong)"/>
+          <rect x="88" y="156" width="150" height="10" rx="5" fill="var(--line-strong)"/>
+          <rect x="88" y="186" width="60" height="24" rx="12" fill="var(--accent)"/>
+          <g transform="translate(212 210)">
+            <circle r="52" fill="url(#g1)"/>
+            <path d="M-22 2l14 14 30-32" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <g opacity=".9">
+            <path d="M300 300 l10 0 0 -34 a20 20 0 0 0 -20 0 l0 34 z" fill="var(--navy)"/>
+            <rect x="292" y="300" width="26" height="8" rx="3" fill="var(--accent)"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="sets-head" id="sets">
+      <h2 class="section-h">Choose Your Exam Set</h2>
+      <p class="section-p">Progress is saved automatically on this device. Pick up where you left off any time.</p>
+    </div>
+    <div class="set-grid" id="setGrid"><!-- set cards injected --></div>
+
+    <div class="features">
+      <div class="feature-card"><span class="fi">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M9 11l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+        <h3>Instant Feedback</h3><p>See correct or incorrect right away, with a clear Thai explanation of the rule.</p></div>
+      <div class="feature-card"><span class="fi">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 3l2.4 5 5.6.6-4.2 3.8 1.2 5.6L12 21l-5 2.9 1.2-5.6L4 14.6 9.6 14 12 3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>
+        <h3>Vocabulary Hints</h3><p>Three strategic hints per paper reveal key word meanings in Thai. Choose wisely.</p></div>
+      <div class="feature-card"><span class="fi">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 19V5M4 19h16M8 16v-5M12 16V8M16 16v-8" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span>
+        <h3>Section Analysis</h3><p>A full performance breakdown by skill, with personalised revision recommendations.</p></div>
+      <div class="feature-card"><span class="fi">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v4h4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <h3>Retry Incorrect Only</h3><p>Focus revision on the questions you missed and master them faster.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ EXAM ============ -->
+  <section id="exam" class="screen">
+    <div class="exam-layout">
+      <!-- Sidebar navigator -->
+      <aside class="navigator" id="navigator" aria-label="Question navigator">
+        <div class="nav-head">
+          <div>
+            <div class="nav-set" id="navSetTitle">Exam Set</div>
+            <div class="nav-progress" id="navProgress">0 answered · 30 total</div>
+          </div>
+          <button class="icon-btn nav-close" id="navClose" aria-label="Close navigator">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="nav-legend">
+          <span><i class="dot answered"></i>Answered</span>
+          <span><i class="dot current"></i>Current</span>
+          <span><i class="dot skipped"></i>Skipped</span>
+        </div>
+        <div class="nav-grid" id="navGrid"><!-- number chips --></div>
+        <div class="nav-actions">
+          <button class="btn btn-soft w-full" id="submitExam">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12l4 4L19 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Submit Examination
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main question panel -->
+      <div class="exam-main">
+        <div class="exam-topbar">
+          <button class="icon-btn ghost" id="navOpen" aria-label="Open navigator">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+          </button>
+          <div class="exam-meta">
+            <span class="pill pill-section" id="qSection">Grammar</span>
+            <span class="pill pill-type" id="qType">Sentence Completion</span>
+          </div>
+          <div class="exam-count" id="qCounter">Question 1 / 30</div>
+        </div>
+
+        <div class="progress-track"><div class="progress-fill" id="examProgress"></div></div>
+
+        <article class="q-card" id="qCard">
+          <div class="q-passage" id="qPassage" hidden></div>
+          <h2 class="q-instruction" id="qInstruction">Choose the best answer.</h2>
+          <p class="q-text" id="qText"></p>
+          <div class="choices" id="qChoices" role="radiogroup" aria-label="Answer choices"></div>
+
+          <div class="q-tools">
+            <button class="btn btn-hint" id="hintBtn">
+              <svg viewBox="0 0 24 24" width="18" height="18"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.3 1 2.5h6c0-1.2.3-1.8 1-2.5A6 6 0 0 0 12 3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+              <span>Vocabulary Hint</span>
+              <em class="hint-count" id="hintCount">3 left</em>
+            </button>
+          </div>
+
+          <div class="q-hint" id="qHint" hidden></div>
+
+          <div class="q-feedback" id="qFeedback" hidden>
+            <div class="fb-head" id="fbHead"></div>
+            <div class="fb-explain" id="fbExplain"></div>
+            <div class="fb-vocab" id="fbVocab"></div>
+          </div>
+        </article>
+
+        <div class="exam-nav">
+          <button class="btn btn-ghost" id="prevBtn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Previous
+          </button>
+          <button class="btn btn-ghost" id="skipBtn">Skip</button>
+          <button class="btn btn-primary" id="nextBtn">
+            Next
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-scrim" id="navScrim"></div>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section id="results" class="screen">
+    <div class="result-wrap">
+      <div class="result-hero card">
+        <div class="result-ring" id="resultRing">
+          <svg viewBox="0 0 120 120" width="150" height="150">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--line)" stroke-width="12"/>
+            <circle id="ringFill" cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="12" stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327" transform="rotate(-90 60 60)"/>
+          </svg>
+          <div class="ring-center"><b id="resultPct">0%</b><span id="resultLevel">—</span></div>
+        </div>
+        <div class="result-copy">
+          <h2 id="resultTitle">Your Results</h2>
+          <p id="resultSub" class="section-p"></p>
+          <div class="result-tallies">
+            <div class="tally tally-ok"><b id="resultCorrect">0</b><span>Correct</span></div>
+            <div class="tally tally-no"><b id="resultIncorrect">0</b><span>Incorrect</span></div>
+            <div class="tally"><b id="resultTotal">30</b><span>Total</span></div>
+          </div>
+          <div class="result-actions">
+            <button class="btn btn-primary" id="reviewBtn">Review Answers</button>
+            <button class="btn btn-ghost" id="retryWrongBtn">Retry Incorrect Only</button>
+            <button class="btn btn-ghost" id="restartBtn">Restart Exam</button>
+            <button class="btn btn-soft" id="homeBtn">Home</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-grid">
+        <div class="card">
+          <h3 class="card-h">Section Analysis</h3>
+          <div id="sectionAnalysis" class="analysis"></div>
+        </div>
+        <div class="card">
+          <h3 class="card-h">Recommended Revision</h3>
+          <ul id="recommendations" class="reco"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REVIEW ============ -->
+  <section id="review" class="screen">
+    <div class="review-head">
+      <h2 class="section-h">Answer Review</h2>
+      <div class="review-actions">
+        <button class="btn btn-ghost" id="reviewBackBtn">Back to Results</button>
+        <button class="btn btn-soft" id="reviewHomeBtn">Home</button>
+      </div>
+    </div>
+    <div class="review-filter" id="reviewFilter">
+      <button data-f="all" class="on">All</button>
+      <button data-f="wrong">Incorrect Only</button>
+    </div>
+    <div id="reviewList" class="review-list"></div>
+  </section>
+
+  <!-- ============ EMPTY STATE (retry with nothing wrong) ============ -->
+  <section id="empty" class="screen">
+    <div class="empty card">
+      <svg viewBox="0 0 64 64" width="84" height="84" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="none" stroke="var(--accent)" stroke-width="3"/><path d="M20 33l8 8 16-18" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h2>Nothing to retry — perfect!</h2>
+      <p class="section-p">You answered every question correctly. There are no incorrect questions to practise.</p>
+      <button class="btn btn-primary" id="emptyHome">Back to Home</button>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>© Bright EngMath 2026 · For educational purposes.</p>
+</footer>
+
+<!-- Keyboard shortcuts modal -->
+<div class="modal" id="helpModal" hidden>
+  <div class="modal-card">
+    <div class="modal-head"><h3>Keyboard Shortcuts</h3>
+      <button class="icon-btn" id="helpClose" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+    <ul class="shortcuts">
+      <li><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> or <kbd>A</kbd>–<kbd>D</kbd><span>Select an answer</span></li>
+      <li><kbd>←</kbd> / <kbd>→</kbd><span>Previous / Next question</span></li>
+      <li><kbd>H</kbd><span>Use a vocabulary hint</span></li>
+      <li><kbd>N</kbd><span>Toggle the question navigator</span></li>
+      <li><kbd>Enter</kbd><span>Next question</span></li>
+      <li><kbd>D</kbd> <span>(with Shift) Toggle dark mode</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- Confetti canvas for high scores -->
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<!-- ============ SCRIPTS ============ -->
+<script src="questions.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
