@@ -1,0 +1,90 @@
+/* =====================================================================
+   Bright EngMath Sound Quest 5 — Design Tokens
+   Original visual identity. Do not imitate any existing phonics book.
+   ===================================================================== */
+
+:root {
+  /* ---- Core brand palette ---- */
+  --c-navy: #23305e;          /* soft navy   */
+  --c-navy-soft: #3a4a82;
+  --c-sky: #4aa8ff;           /* sky blue    */
+  --c-teal: #17b3a3;          /* teal        */
+  --c-yellow: #ffce3d;        /* warm yellow */
+  --c-coral: #ff7a66;         /* coral       */
+  --c-lavender: #a68bff;      /* lavender    */
+  --c-mint: #6fe0b0;          /* mint        */
+  --c-white: #ffffff;
+
+  /* ---- Neutrals ---- */
+  --c-ink: #23305e;
+  --c-ink-soft: #5b658c;
+  --c-line: #e4e8f5;
+  --c-bg: #f4f7ff;
+  --c-bg-card: #ffffff;
+  --c-bg-soft: #eef2fe;
+
+  /* ---- Semantic states ---- */
+  --c-correct: #17b3a3;
+  --c-correct-bg: #e2f8f3;
+  --c-wrong: #ff7a66;
+  --c-wrong-bg: #ffeee9;
+  --c-focus: #2b7cff;
+
+  /* ---- Unit theme colours (each unit uses one consistently) ---- */
+  --u1: #f2a03d; /* Star Farm     — warm amber   */
+  --u2: #ff7a66; /* Toy Town      — coral        */
+  --u3: #4aa8ff; /* Sunny Shore   — sky blue     */
+  --u4: #17b3a3; /* Forest Fair   — teal         */
+  --u5: #a68bff; /* Music City    — lavender     */
+  --u6: #6fbf59; /* Jungle Camp   — leaf green   */
+  --u7: #6a5acd; /* Mystery Castle— deep violet  */
+  --u8: #e0a92e; /* Treasure Isle — gold         */
+
+  /* ---- Type ---- */
+  --font-body: "Trebuchet MS", "Segoe UI", "Nunito", system-ui, -apple-system, sans-serif;
+  --font-display: "Trebuchet MS", "Segoe UI", "Nunito", system-ui, sans-serif;
+
+  /* Fluid font sizes */
+  --fs-xs: 0.8rem;
+  --fs-sm: 0.92rem;
+  --fs-base: clamp(1rem, 0.95rem + 0.25vw, 1.12rem);
+  --fs-lg: clamp(1.15rem, 1rem + 0.6vw, 1.4rem);
+  --fs-xl: clamp(1.5rem, 1.2rem + 1.4vw, 2.1rem);
+  --fs-2xl: clamp(2rem, 1.5rem + 2.4vw, 3rem);
+  --fs-pattern: clamp(2.4rem, 1.8rem + 3vw, 4rem);
+
+  /* ---- Shape & shadow ---- */
+  --radius-sm: 10px;
+  --radius: 18px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 2px 6px rgba(35, 48, 94, 0.08);
+  --shadow: 0 8px 24px rgba(35, 48, 94, 0.10);
+  --shadow-lg: 0 16px 40px rgba(35, 48, 94, 0.16);
+
+  /* ---- Spacing ---- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* ---- Touch target ---- */
+  --touch: 48px;
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur: 0.28s;
+}
+
+/* Presentation Mode enlarges everything for projection */
+:root.presentation {
+  --fs-base: 1.4rem;
+  --fs-lg: 1.8rem;
+  --fs-xl: 2.6rem;
+  --fs-2xl: 3.4rem;
+  --touch: 64px;
+}

@@ -1,0 +1,21 @@
+/* =====================================================================
+   Print styles — certificates and progress reports
+   ===================================================================== */
+@media print {
+  :root { --c-bg: #fff; }
+  body { background: #fff; }
+  .app-header, .app-footer, .skip-link, .no-print, .steps, .quiz-hud, .audio-bar,
+  .toast-wrap, .modal-backdrop { display: none !important; }
+  main.app-main { max-width: none; padding: 0; }
+  .card, .dash-card, .certificate { box-shadow: none; break-inside: avoid; }
+  .certificate { border-color: #23305e; }
+  .print-report { font-size: 12px; }
+  .print-report h1, .print-report h2 { color: #000; }
+  .teacher-table th, .teacher-table td { border-color: #999; }
+  a[href]::after { content: ""; }
+  @page { margin: 1.4cm; }
+}
+
+/* Print-only helper visible when printing report view */
+.print-only { display: none; }
+@media print { .print-only { display: block; } }

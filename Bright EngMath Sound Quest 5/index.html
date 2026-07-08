@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Bright EngMath Sound Quest 5 — an original interactive advanced phonics course with lessons, games, stories and assessments for children aged 7–10." />
+  <meta name="theme-color" content="#23305e" />
+  <title>Bright EngMath Sound Quest 5</title>
+
+  <!-- Design system -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/activities.css" />
+  <link rel="stylesheet" href="css/story.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/print.css" media="all" />
+
+  <!-- Inline SVG favicon (original mark) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%234aa8ff'/%3E%3Cpath d='M50 20 L58 42 L82 42 L62 56 L70 80 L50 66 L30 80 L38 56 L18 42 L42 42 Z' fill='%23ffce3d'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <!-- App shell is built by js/app.js -->
+    <noscript>
+      <div style="max-width:640px;margin:40px auto;padding:24px;font-family:sans-serif;">
+        <h1>Bright EngMath Sound Quest 5</h1>
+        <p>This interactive phonics course needs JavaScript to run. Please enable JavaScript in your browser, then reload the page.</p>
+      </div>
+    </noscript>
+  </div>
+
+  <!-- ============ DATA (kept separate from interface logic) ============ -->
+  <script src="data/course.js"></script>
+  <script src="data/unit-1.js"></script>
+
+  <!-- ============ CORE ============ -->
+  <!-- app.js defines BEM.util, which the feature modules rely on, so it
+       loads immediately after the core services and before the modules. -->
+  <script src="js/art.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/profiles.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- ============ FEATURE MODULES ============ -->
+  <script src="js/dictionary.js"></script>
+  <script src="js/activity-engine.js"></script>
+  <script src="js/quiz-engine.js"></script>
+  <script src="js/story-reader.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/teacher-mode.js"></script>
+  <script src="js/certificate.js"></script>
+
+  <!-- ============ ROUTER (boot runs on DOMContentLoaded) ============ -->
+  <script src="js/router.js"></script>
+</body>
+</html>
