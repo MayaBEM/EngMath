@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Square Roots &amp; Cube Roots — Bright EngMath</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" crossorigin="anonymous"/>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" crossorigin="anonymous" onload="renderKaTeX()"></script>
+<style>
+/* ═══════════════════════════════════════
+   VARIABLES — Adventure Palette
+═══════════════════════════════════════ */
+:root{
+  /* Primary adventure colours */
+  --sky:#4F90F0; --sky-d:#3478DC; --sky-l:#EBF3FF; --sky-ll:#F4F8FF;
+  --purple:#8B5CF6; --purple-d:#7C3AED; --purple-l:#F5F3FF;
+  --mint:#10B981; --mint-d:#059669; --mint-l:#ECFDF5;
+  --peach:#F97316; --peach-l:#FFF7ED;
+  --warm:#F59E0B; --warm-d:#D97706; --warm-l:#FFFBEB;
+  --coral:#EF4444; --coral-d:#DC2626; --coral-l:#FEF2F2;
+  --pink:#EC4899; --pink-l:#FDF2F8;
+  /* Semantic aliases kept for quiz compatibility */
+  --blue:var(--sky); --blue-d:var(--sky-d); --blue-l:var(--sky-l);
+  --green:var(--mint); --green-d:var(--mint-d); --green-l:var(--mint-l);
+  --amber:var(--warm); --amber-d:var(--warm-d); --amber-l:var(--warm-l);
+  --red:var(--coral); --red-d:var(--coral-d); --red-l:var(--coral-l);
+  /* Neutral */
+  --navy:#1E293B; --gray:#475569; --muted:#94A3B8;
+  --border:#E2E8F0; --bg:#F8FBFF; --card:#FFFFFF;
+  /* Set colours */
+  --s1c:#4F90F0; --s1l:#EBF3FF;
+  --s2c:#8B5CF6; --s2l:#F5F3FF;
+  --s3c:#10B981; --s3l:#ECFDF5;
+  --s4c:#F59E0B; --s4l:#FFFBEB;
+  --s5c:#EF4444; --s5l:#FEF2F2;
+  /* Shadow */
+  --sh0:0 1px 4px rgba(30,41,59,.06);
+  --sh1:0 4px 16px rgba(30,41,59,.09);
+  --sh2:0 8px 30px rgba(30,41,59,.12);
+  --sh3:0 16px 48px rgba(30,41,59,.18);
+  /* Radius */
+  --r:14px; --rs:8px; --rl:22px; --rxl:32px;
+}
+
+/* ─── Reset ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--bg);color:var(--navy);min-height:100vh;line-height:1.6}
+button{font-family:inherit;cursor:pointer;border:none;background:none;padding:0}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{font-family:'Baloo 2',system-ui,sans-serif}
+
+/* ─── Utility ─── */
+.hidden{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.container{width:100%;max-width:900px;margin:0 auto;padding:0 1.25rem}
+
+/* ─── Animations ─── */
+@keyframes float-slow{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-14px) rotate(2deg)}}
+@keyframes float-mid{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}
+@keyframes float-fast{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@keyframes blink{0%,90%,100%{scaleY:1}95%{transform:scaleY(.1)}}
+@keyframes pulse-soft{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes stepPop{0%{opacity:0;transform:translateY(12px) scale(.9)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes waveHand{0%,100%{transform:rotate(0deg) translateX(0)}25%{transform:rotate(20deg) translateX(2px)}75%{transform:rotate(-10deg) translateX(-2px)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── Screens ─── */
+.screen{display:none;flex-direction:column;min-height:calc(100vh - 62px)}
+.screen.active{display:flex}
+
+/* ═══════════════════════════════════════
+   TOP NAV
+═══════════════════════════════════════ */
+#top-nav{
+  position:sticky;top:0;z-index:200;
+  height:62px;background:rgba(255,255,255,.97);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:var(--sh0);
+}
+#top-nav .nav-inner{height:100%;display:flex;align-items:center;justify-content:space-between;gap:.65rem;padding:0 1.25rem;max-width:900px;margin:0 auto}
+.nav-brand{display:flex;align-items:center;gap:.6rem;cursor:pointer;flex-shrink:0}
+.nav-logo-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,#4F90F0,#8B5CF6);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:1.15rem;font-weight:900;font-family:'Baloo 2',sans-serif;
+  box-shadow:0 2px 8px rgba(79,144,240,.35)
+}
+.nav-brand-text{line-height:1.1}
+.nav-brand-name{font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:800;color:var(--sky-d)}
+.nav-brand-tagline{font-size:.62rem;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.nav-ctx{font-size:.82rem;font-weight:700;color:var(--navy);flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-right{display:flex;align-items:center;gap:.4rem;flex-shrink:0}
+.nav-icon-btn{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--border);
+  background:var(--bg);color:var(--gray);display:flex;align-items:center;justify-content:center;
+  font-size:.88rem;cursor:pointer;transition:all .2s
+}
+.nav-icon-btn:hover{background:var(--sky-l);border-color:var(--sky);color:var(--sky-d)}
+.nav-icon-btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.streak-chip{
+  display:flex;align-items:center;gap:.3rem;
+  background:var(--warm-l);border:1px solid #FCD34D;border-radius:20px;
+  padding:.18rem .6rem;font-size:.76rem;font-weight:800;color:var(--warm-d);white-space:nowrap
+}
+
+/* ═══════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  font-family:'Baloo 2',sans-serif;font-weight:700;border-radius:var(--r);
+  border:none;cursor:pointer;transition:all .2s;white-space:nowrap;
+  padding:.65rem 1.25rem;font-size:.92rem;text-decoration:none;line-height:1
+}
+.btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--sky);color:#fff;box-shadow:0 4px 14px rgba(79,144,240,.35)}
+.btn-primary:hover{background:var(--sky-d);box-shadow:0 6px 18px rgba(79,144,240,.45);transform:translateY(-1px)}
+.btn-secondary{background:var(--card);color:var(--navy);border:1.5px solid var(--border)}
+.btn-secondary:hover{border-color:var(--sky);color:var(--sky-d);background:var(--sky-l)}
+.btn-success{background:var(--mint);color:#fff}
+.btn-success:hover{background:var(--mint-d)}
+.btn-danger{background:var(--coral);color:#fff}
+.btn-danger:hover{background:var(--coral-d)}
+.btn-ghost{background:transparent;color:var(--gray)}
+.btn-ghost:hover{background:var(--bg);color:var(--navy)}
+.btn-sm{padding:.38rem .85rem;font-size:.8rem}
+.btn-lg{padding:.9rem 1.85rem;font-size:1.05rem}
+.btn-xl{padding:1.1rem 2.25rem;font-size:1.15rem}
+.btn-block{width:100%}
+
+/* ADVENTURE BUTTON (special hero CTA) */
+.btn-adventure{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:linear-gradient(135deg,#4F90F0,#8B5CF6);
+  color:#fff;border:none;border-radius:var(--rl);
+  padding:1rem 2rem;font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:800;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 6px 24px rgba(79,144,240,.4)
+}
+.btn-adventure:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(79,144,240,.5)}
+.btn-adventure:active{transform:translateY(0)}
+.btn-outline-adv{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:rgba(255,255,255,.9);color:var(--navy);
+  border:2px solid rgba(79,144,240,.3);border-radius:var(--rl);
+  padding:.9rem 1.75rem;font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:700;
+  cursor:pointer;transition:all .2s;backdrop-filter:blur(4px)
+}
+.btn-outline-adv:hover{border-color:var(--sky);color:var(--sky-d);transform:translateY(-1px)}
+
+/* ═══════════════════════════════════════
+   HOME — HERO SECTION
+═══════════════════════════════════════ */
+#screen-home{background:var(--bg)}
+
+.hero-adv{
+  position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#EBF5FF 0%,#F5F0FF 45%,#FFF5ED 100%);
+  padding:3rem 1.25rem 3.5rem;min-height:min(90vh,680px);
+  display:flex;align-items:center
+}
+/* Soft background blobs */
+.bg-blob{position:absolute;border-radius:50%;pointer-events:none}
+.bb1{width:500px;height:500px;top:-150px;right:-100px;background:radial-gradient(circle,rgba(139,92,246,.09) 0%,transparent 65%)}
+.bb2{width:400px;height:400px;bottom:-100px;left:-80px;background:radial-gradient(circle,rgba(79,144,240,.1) 0%,transparent 65%)}
+.bb3{width:300px;height:300px;top:30%;right:20%;background:radial-gradient(circle,rgba(236,72,153,.06) 0%,transparent 70%)}
+
+.hero-inner{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr;gap:2rem;
+  width:100%;max-width:900px;margin:0 auto;
+  align-items:center
+}
+@media(min-width:720px){.hero-inner{grid-template-columns:1fr 1fr}}
+
+.hero-text{display:flex;flex-direction:column;gap:1rem;animation:fadeInUp .8s ease both}
+.hero-badge-pill{
+  display:inline-flex;align-items:center;gap:.45rem;
+  background:rgba(79,144,240,.12);border:1px solid rgba(79,144,240,.25);
+  border-radius:20px;padding:.32rem .9rem;font-size:.78rem;font-weight:800;
+  color:var(--sky-d);letter-spacing:.04em;width:fit-content
+}
+
+/* Rooty mascot area */
+.rooty-row{display:flex;align-items:flex-end;gap:.75rem;margin-bottom:.25rem}
+.rooty-bubble{
+  background:white;border:1.5px solid var(--sky-l);border-radius:var(--rl) var(--rl) var(--rl) 4px;
+  padding:.55rem .9rem;font-size:.82rem;font-weight:700;color:var(--navy);
+  box-shadow:var(--sh1);position:relative;max-width:240px;line-height:1.4;
+  animation:fadeIn .6s ease .4s both
+}
+.rooty-bubble::before{
+  content:'';position:absolute;bottom:-8px;left:16px;
+  width:14px;height:14px;background:white;
+  border-right:1.5px solid var(--sky-l);border-bottom:1.5px solid var(--sky-l);
+  transform:rotate(45deg);clip-path:polygon(0 0,100% 0,100% 100%)
+}
+
+.hero-h1{
+  font-family:'Baloo 2',sans-serif;font-size:clamp(2rem,5.5vw,2.9rem);
+  font-weight:800;line-height:1.15;color:var(--navy);
+  animation:fadeInUp .8s ease .1s both
+}
+.hero-h1 .hi-word{color:var(--purple);position:relative}
+.hero-h1 .hi-word::after{
+  content:'';position:absolute;bottom:-2px;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--purple),var(--sky));border-radius:2px
+}
+.hero-tagline{
+  font-family:'Baloo 2',sans-serif;font-size:clamp(1rem,2.5vw,1.2rem);
+  font-weight:700;color:var(--sky-d);
+  animation:fadeInUp .8s ease .2s both
+}
+.hero-sub{
+  font-size:.95rem;color:var(--gray);line-height:1.65;max-width:440px;
+  animation:fadeInUp .8s ease .3s both
+}
+.hero-cta{
+  display:flex;flex-wrap:wrap;gap:.75rem;margin-top:.5rem;
+  animation:fadeInUp .8s ease .45s both
+}
+
+/* Floating math cards grid */
+.hero-cards{
+  display:grid;grid-template-columns:1fr 1fr;gap:.85rem;
+  animation:fadeIn .9s ease .25s both
+}
+.math-float{
+  background:white;border-radius:var(--r);
+  box-shadow:0 6px 24px rgba(79,144,240,.14),0 1px 4px rgba(79,144,240,.08);
+  padding:1rem .85rem;text-align:center;border:1px solid rgba(79,144,240,.1);
+  transition:transform .2s,box-shadow .2s;cursor:default
+}
+.math-float:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(79,144,240,.2)}
+.mf1{animation:float-slow 3.8s ease-in-out infinite;animation-delay:0s}
+.mf2{animation:float-mid 4.2s ease-in-out infinite;animation-delay:-.8s}
+.mf3{animation:float-fast 3.5s ease-in-out infinite;animation-delay:-.4s}
+.mf4{animation:float-slow 4.5s ease-in-out infinite;animation-delay:-1.2s}
+.mf-expr{font-family:'Baloo 2',sans-serif;font-size:1.35rem;font-weight:800;color:var(--navy);margin-bottom:.2rem}
+.mf-lbl{
+  font-size:.65rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  border-radius:20px;padding:.2rem .55rem;display:inline-block
+}
+
+/* Floating bg symbols */
+.hero-symbols{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.hs{position:absolute;font-family:'Baloo 2',sans-serif;font-weight:800;opacity:.045;color:var(--navy);user-select:none}
+.hs1{font-size:7rem;top:5%;left:5%;animation:float-slow 6s ease-in-out infinite}
+.hs2{font-size:5rem;top:60%;left:2%;animation:float-mid 7s ease-in-out infinite;animation-delay:-.5s}
+.hs3{font-size:6rem;top:10%;right:3%;animation:float-fast 5.5s ease-in-out infinite;animation-delay:-.3s}
+.hs4{font-size:8rem;bottom:10%;right:5%;animation:float-slow 8s ease-in-out infinite;animation-delay:-1s}
+.hs5{font-size:4rem;top:50%;left:45%;animation:sway 5s ease-in-out infinite}
+.hs6{font-size:3.5rem;top:80%;right:30%;animation:float-mid 6.5s ease-in-out infinite;animation-delay:-.7s}
+@media(max-width:719px){.hs3,.hs4{display:none}}
+
+/* ═══════════════════════════════════════
+   HOME BODY SECTIONS
+═══════════════════════════════════════ */
+.home-section{padding:3rem 0}
+.home-section-alt{padding:3rem 0;background:linear-gradient(135deg,var(--sky-l) 0%,var(--purple-l) 100%)}
+.home-section-dark{padding:3rem 0;background:linear-gradient(135deg,#1E293B 0%,#2D3A55 100%)}
+.sec-eyebrow{font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--sky);margin-bottom:.45rem}
+.sec-h2{font-family:'Baloo 2',sans-serif;font-size:clamp(1.4rem,3.5vw,1.9rem);font-weight:800;color:var(--navy);margin-bottom:.6rem}
+.sec-h2-white{color:#fff}
+.sec-sub{font-size:.92rem;color:var(--gray);max-width:520px;line-height:1.65;margin-bottom:1.75rem}
+.sec-sub-light{color:rgba(255,255,255,.75)}
+
+/* ─── HOW TO LEARN ─── */
+.learn-path-grid{display:grid;grid-template-columns:1fr;gap:1.25rem}
+@media(min-width:560px){.learn-path-grid{grid-template-columns:1fr 1fr}}
+.lp-card{
+  background:var(--card);border-radius:var(--rl);border:2px solid var(--border);
+  overflow:hidden;transition:all .25s;cursor:default;
+  box-shadow:var(--sh1)
+}
+.lp-card:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.lp-card-banner{height:100px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden}
+.lp-card-banner::before{content:'';position:absolute;inset:0;opacity:.15}
+.lp-banner-teach{background:linear-gradient(135deg,#1E293B,#2D3A55)}
+.lp-banner-learn{background:linear-gradient(135deg,#4F90F0,#8B5CF6)}
+.lp-card-body{padding:1.4rem}
+.lp-best-tag{
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  padding:.22rem .65rem;border-radius:20px;margin-bottom:.65rem
+}
+.lp-teach .lp-best-tag{background:#FFF7ED;color:#9A3412}
+.lp-learn .lp-best-tag{background:var(--sky-l);color:var(--sky-d)}
+.lp-card h3{font-family:'Baloo 2',sans-serif;font-size:1.25rem;font-weight:800;color:var(--navy);margin-bottom:.4rem}
+.lp-card p{font-size:.86rem;color:var(--gray);line-height:1.55;margin-bottom:1.1rem}
+.lp-mode-note{font-size:.74rem;color:var(--muted);margin-top:.5rem}
+
+/* ─── JOURNEY ─── */
+.journey-adv{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:.5rem 0;scrollbar-width:none}
+.journey-adv::-webkit-scrollbar{display:none}
+.journey-step-adv{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  flex:1;min-width:90px;padding:0 .5rem;position:relative;
+  animation:stepPop .5s ease both
+}
+.journey-step-adv:nth-child(1){animation-delay:.05s}
+.journey-step-adv:nth-child(2){animation-delay:.15s}
+.journey-step-adv:nth-child(3){animation-delay:.25s}
+.journey-step-adv:nth-child(4){animation-delay:.35s}
+.journey-step-adv:nth-child(5){animation-delay:.45s}
+.journey-step-adv:not(:last-child)::after{
+  content:'→';position:absolute;right:-8px;top:18px;
+  font-size:1.1rem;color:var(--border);z-index:1
+}
+.js-icon{
+  width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;margin-bottom:.55rem;box-shadow:var(--sh1);
+  transition:transform .2s
+}
+.js-icon:hover{transform:scale(1.12)}
+.js-num{
+  width:20px;height:20px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;font-weight:900;position:absolute;top:0;right:20%;
+  box-shadow:0 1px 4px rgba(0,0,0,.15)
+}
+.js-label{font-family:'Baloo 2',sans-serif;font-size:.88rem;font-weight:800;color:var(--navy);margin-bottom:.2rem}
+.js-desc{font-size:.72rem;color:var(--muted);font-weight:600}
+@media(max-width:500px){.journey-adv{flex-direction:column;gap:1rem}.journey-step-adv::after{display:none}}
+
+/* ─── FEATURES GRID ─── */
+.features-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+@media(min-width:560px){.features-grid{grid-template-columns:repeat(3,1fr)}}
+.feat-card{
+  background:rgba(255,255,255,.85);border-radius:var(--r);border:1px solid rgba(255,255,255,.8);
+  padding:1rem;backdrop-filter:blur(8px);transition:all .2s
+}
+.feat-card:hover{transform:translateY(-2px);background:rgba(255,255,255,.95)}
+.feat-icon{font-size:1.5rem;margin-bottom:.45rem}
+.feat-title{font-family:'Baloo 2',sans-serif;font-size:.92rem;font-weight:800;color:var(--navy);margin-bottom:.2rem}
+.feat-desc{font-size:.78rem;color:var(--gray);line-height:1.45}
+
+/* ─── LEVEL CARDS ─── */
+.levels-grid-adv{display:grid;grid-template-columns:1fr;gap:1rem}
+@media(min-width:500px){.levels-grid-adv{grid-template-columns:1fr 1fr}}
+@media(min-width:760px){.levels-grid-adv{grid-template-columns:repeat(3,1fr)}}
+.level-card{
+  background:var(--card);border-radius:var(--rl);
+  border:1.5px solid var(--border);overflow:hidden;
+  box-shadow:var(--sh0);transition:all .25s;cursor:pointer;
+  display:flex;flex-direction:column
+}
+.level-card:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.level-card:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.lc-top{height:8px}
+.lc-body{padding:1.25rem;flex:1;display:flex;flex-direction:column;gap:.45rem}
+.lc-level-row{display:flex;align-items:center;justify-content:space-between}
+.lc-level-num{
+  font-size:.68rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;
+  padding:.2rem .65rem;border-radius:20px
+}
+.lc-status-icon{font-size:1.1rem}
+.lc-fun-name{font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:800;color:var(--navy)}
+.lc-subtitle{font-size:.78rem;font-weight:700;color:var(--muted)}
+.lc-desc{font-size:.8rem;color:var(--gray);line-height:1.45;flex:1}
+.lc-meta{display:flex;gap:.65rem;font-size:.72rem;color:var(--muted);font-weight:700;flex-wrap:wrap}
+.lc-prog-bar{background:var(--border);border-radius:4px;height:5px;overflow:hidden;margin:.2rem 0}
+.lc-prog-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.lc-score-row{font-size:.76rem;color:var(--muted);font-weight:600}
+.lc-footer{padding:.9rem 1.25rem;border-top:1px solid var(--border);display:flex;gap:.5rem}
+
+/* ─── CTA SECTION ─── */
+.cta-section{padding:3.5rem 1.25rem;background:linear-gradient(135deg,#1E293B 0%,#2D3A55 100%);text-align:center}
+.cta-quote{font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:700;color:rgba(255,255,255,.65);margin-bottom:.75rem;font-style:italic}
+.cta-h2{font-family:'Baloo 2',sans-serif;font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;color:#fff;margin-bottom:.65rem}
+.cta-p{font-size:.9rem;color:rgba(255,255,255,.7);margin-bottom:1.75rem;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.site-footer{background:#fff;border-top:1px solid var(--border);padding:1.25rem 0;text-align:center}
+.site-footer p{font-size:.75rem;color:var(--muted);line-height:1.7}
+
+/* ═══════════════════════════════════════
+   LEARN SCREEN
+═══════════════════════════════════════ */
+#screen-learn{background:var(--bg)}
+.learn-hdr{background:var(--card);border-bottom:1px solid var(--border);padding:.85rem 0;position:sticky;top:62px;z-index:50}
+.learn-tabs{display:flex;gap:.3rem;overflow-x:auto;scrollbar-width:none;padding:.05rem}
+.learn-tabs::-webkit-scrollbar{display:none}
+.learn-tab{
+  padding:.4rem 1rem;border-radius:20px;font-size:.8rem;font-weight:700;white-space:nowrap;
+  border:1.5px solid var(--border);background:var(--card);color:var(--gray);cursor:pointer;transition:all .18s;flex-shrink:0
+}
+.learn-tab.active{background:var(--sky);color:#fff;border-color:var(--sky)}
+.learn-body{padding:1.25rem 0 3rem;flex:1}
+.lesson-card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:1.4rem;margin-bottom:1.1rem}
+.lc-h{font-family:'Baloo 2',sans-serif;font-size:1.05rem;font-weight:800;color:var(--sky-d);display:flex;align-items:center;gap:.5rem;margin-bottom:.85rem}
+.lc-icon{width:34px;height:34px;border-radius:50%;background:var(--sky-l);color:var(--sky-d);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.lc-p{font-size:.88rem;color:var(--gray);line-height:1.7;margin:.35rem 0}
+.math-box{background:var(--sky-l);border-left:3px solid var(--sky);border-radius:0 var(--rs) var(--rs) 0;padding:.7rem 1rem;margin:.65rem 0;font-size:.95rem;font-weight:600;color:var(--navy)}
+.math-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0}
+.math-chip{background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:.28rem .65rem;font-size:.84rem;font-weight:700;color:var(--navy)}
+.tip-box{background:var(--warm-l);border:1px solid #FCD34D;border-radius:var(--rs);padding:.65rem .9rem;margin:.65rem 0;font-size:.84rem;color:#78350F;line-height:1.5}
+.warn-box{background:var(--coral-l);border:1px solid #FCA5A5;border-radius:var(--rs);padding:.65rem .9rem;margin:.65rem 0;font-size:.84rem;color:#7F1D1D;line-height:1.5}
+.ok-box{background:var(--mint-l);border:1px solid #6EE7B7;border-radius:var(--rs);padding:.65rem .9rem;margin:.65rem 0;font-size:.84rem;color:#064E3B;line-height:1.5}
+.math-tbl{width:100%;border-collapse:collapse;font-size:.83rem;margin:.65rem 0}
+.math-tbl th,.math-tbl td{padding:.35rem .6rem;border:1px solid var(--border);text-align:center}
+.math-tbl th{background:var(--sky-l);color:var(--navy);font-weight:800}
+.math-tbl tr:nth-child(even) td{background:var(--bg)}
+.check-section{background:var(--sky-ll);border:1.5px solid var(--sky-l);border-radius:var(--r);padding:1rem;margin-top:1rem}
+.check-title{font-family:'Baloo 2',sans-serif;font-size:.88rem;font-weight:800;color:var(--sky-d);margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem}
+.check-q{margin-bottom:.85rem}
+.check-q-text{font-size:.87rem;font-weight:700;color:var(--navy);margin-bottom:.45rem}
+.check-opts{display:flex;flex-wrap:wrap;gap:.4rem}
+.check-opt{padding:.32rem .75rem;border-radius:var(--rs);font-size:.82rem;font-weight:700;border:1.5px solid var(--border);background:var(--card);color:var(--navy);cursor:pointer;transition:all .18s}
+.check-opt:hover:not([disabled]){border-color:var(--sky);background:var(--sky-l);color:var(--sky-d)}
+.check-opt[disabled]{cursor:default}
+.check-opt.ck-correct{background:var(--mint-l)!important;border-color:var(--mint)!important;color:var(--mint-d)!important}
+.check-opt.ck-wrong{background:var(--coral-l)!important;border-color:var(--coral)!important;color:var(--coral-d)!important}
+.check-fb{font-size:.8rem;margin-top:.4rem;font-weight:600;display:none}
+.check-fb.show{display:block}
+
+/* ═══════════════════════════════════════
+   SET INFO
+═══════════════════════════════════════ */
+#screen-set-info{background:var(--bg);padding:1.25rem 0 3rem}
+.si-banner{color:#fff;padding:1.4rem;border-radius:var(--r) var(--r) 0 0}
+.si-banner h2{font-family:'Baloo 2',sans-serif;font-size:1.25rem;font-weight:900}
+.si-banner p{font-size:.85rem;opacity:.9;margin-top:.2rem}
+.si-body{background:var(--card);border:1px solid var(--border);border-radius:0 0 var(--r) var(--r);padding:1.25rem;margin-bottom:1rem}
+.stat-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem}
+.stat-box{flex:1;min-width:70px;background:var(--bg);border-radius:var(--rs);padding:.7rem .5rem;text-align:center}
+.stat-val{font-family:'Baloo 2',sans-serif;font-size:1.3rem;font-weight:900;color:var(--navy)}
+.stat-lbl{font-size:.72rem;color:var(--muted);font-weight:700}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:1rem}
+@media(max-width:400px){.mode-grid{grid-template-columns:1fr}}
+.mode-card{border:2px solid var(--border);border-radius:var(--rs);padding:.9rem;cursor:pointer;transition:all .2s}
+.mode-card.active{border-color:var(--sky);background:var(--sky-l)}
+.mode-card h4{font-family:'Baloo 2',sans-serif;font-size:.87rem;font-weight:800;margin-bottom:.2rem}
+.mode-card p{font-size:.76rem;color:var(--gray);line-height:1.4}
+.mode-card.active h4{color:var(--sky-d)}
+.mode-radio{width:16px;height:16px;border-radius:50%;border:2px solid var(--border);margin-bottom:.45rem;transition:all .2s}
+.mode-card.active .mode-radio{background:var(--sky);border-color:var(--sky)}
+
+/* ═══════════════════════════════════════
+   QUIZ
+═══════════════════════════════════════ */
+#screen-quiz{background:var(--bg);padding:.85rem 0 3rem}
+.q-wrap{display:grid;grid-template-columns:1fr;gap:.75rem}
+@media(min-width:640px){.q-wrap{grid-template-columns:180px 1fr}}
+.q-nav{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:.85rem;align-self:start}
+@media(min-width:640px){.q-nav{position:sticky;top:120px}}
+.q-nav-lbl{font-size:.74rem;font-weight:800;color:var(--muted);margin-bottom:.5rem;display:flex;justify-content:space-between}
+.q-nav-grid{display:flex;flex-wrap:wrap;gap:.28rem}
+.q-nav-btn{width:28px;height:28px;border-radius:6px;font-size:.74rem;font-weight:700;background:var(--bg);border:1.5px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.q-nav-btn.qn-cur{background:var(--sky);border-color:var(--sky);color:#fff}
+.q-nav-btn.qn-ok{background:var(--mint-l);border-color:var(--mint);color:var(--mint-d)}
+.q-nav-btn.qn-bad{background:var(--coral-l);border-color:var(--coral);color:var(--coral-d)}
+.q-nav-btn.qn-done{background:var(--sky-l);border-color:var(--sky);color:var(--sky-d)}
+.q-nav-btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.nav-toggle{display:none}
+@media(max-width:639px){.q-nav{display:none;order:-1}.q-nav.open{display:block}.nav-toggle{display:flex}}
+.q-nav-timer{margin-top:.75rem;padding:.55rem;background:var(--bg);border-radius:var(--rs);text-align:center;font-family:'Baloo 2',sans-serif;font-size:.85rem;font-weight:800;color:var(--navy)}
+.q-prog-bar{background:var(--border);height:6px;border-radius:4px;overflow:hidden;margin-bottom:.75rem}
+.q-prog-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--purple));transition:width .4s ease;border-radius:4px}
+.q-card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:1.4rem}
+.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem;flex-wrap:wrap;gap:.4rem}
+.q-num{font-size:.78rem;font-weight:700;color:var(--muted)}
+.q-badge{font-size:.7rem;font-weight:800;letter-spacing:.05em;padding:.18rem .6rem;border-radius:20px;text-transform:uppercase}
+.q-disp{font-family:'Baloo 2',sans-serif;font-size:clamp(1rem,2.8vw,1.35rem);font-weight:800;color:var(--navy);text-align:center;padding:.65rem 0;line-height:1.5;min-height:60px;display:flex;align-items:center;justify-content:center}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-top:.75rem}
+@media(max-width:440px){.choices{grid-template-columns:1fr}}
+.ch-btn{background:var(--bg);border:2px solid var(--border);border-radius:var(--rs);padding:.75rem .9rem;font-size:.87rem;font-weight:600;color:var(--navy);cursor:pointer;transition:all .18s;text-align:left;line-height:1.4;display:flex;align-items:flex-start;gap:.55rem;min-height:50px}
+.ch-btn:hover:not([disabled]){border-color:var(--sky);background:var(--sky-l);color:var(--sky-d)}
+.ch-btn:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.ch-btn[disabled]{cursor:default}
+.ch-btn.correct{border-color:var(--mint);background:var(--mint-l);color:var(--mint-d)}
+.ch-btn.wrong{border-color:var(--coral);background:var(--coral-l);color:var(--coral-d)}
+.ch-ltr{width:22px;height:22px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0;margin-top:.05rem}
+.hint-wrap{margin-top:.65rem}
+.hint-toggle{background:none;border:none;color:var(--warm-d);font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:.3rem;padding:.2rem 0}
+.hint-body{background:var(--warm-l);border:1px solid #FCD34D;border-radius:var(--rs);padding:.6rem .85rem;font-size:.83rem;color:#78350F;margin-top:.35rem;display:none;line-height:1.5}
+.hint-body.open{display:block}
+.fb-box{border-radius:var(--rs);padding:.7rem .9rem;font-size:.84rem;line-height:1.55;margin-top:.65rem;display:none}
+.fb-box.show{display:block}
+.fb-correct{background:var(--mint-l);border:1px solid #A7F3D0;color:#065F46}
+.fb-wrong{background:var(--coral-l);border:1px solid #FCA5A5;color:#7F1D1D}
+.q-footer{display:flex;justify-content:space-between;align-items:center;gap:.65rem;flex-wrap:wrap;margin-top:.65rem}
+.q-score-chip{font-size:.8rem;font-weight:700;color:var(--muted);background:var(--bg);padding:.3rem .7rem;border-radius:20px;border:1px solid var(--border)}
+
+/* ═══════════════════════════════════════
+   RESULT
+═══════════════════════════════════════ */
+#screen-result{background:var(--bg);padding:1.25rem 0 3rem}
+.res-card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:1.75rem;text-align:center;margin-bottom:1.1rem}
+.ring-wrap{position:relative;width:140px;height:140px;margin:0 auto 1rem}
+.ring-ring{transform:rotate(-90deg)}
+.ring-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-family:'Baloo 2',sans-serif;font-size:1.75rem;font-weight:900;color:var(--navy)}
+.ring-frac{font-size:.78rem;font-weight:700;color:var(--muted)}
+.mastery-pill{display:inline-flex;align-items:center;gap:.35rem;border-radius:20px;padding:.38rem 1rem;font-family:'Baloo 2',sans-serif;font-size:.87rem;font-weight:800;margin-bottom:.6rem}
+.mastery-msg{font-size:.85rem;color:var(--gray);max-width:380px;margin:0 auto .75rem}
+.res-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin:.75rem 0}
+@media(max-width:440px){.res-stats{grid-template-columns:repeat(2,1fr)}}
+.rs-box{background:var(--bg);border-radius:var(--rs);padding:.65rem .5rem;text-align:center}
+.rs-val{font-family:'Baloo 2',sans-serif;font-size:1.2rem;font-weight:900}
+.rs-lbl{font-size:.7rem;color:var(--muted);font-weight:700}
+.res-actions{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-top:.85rem}
+@media(max-width:400px){.res-actions{grid-template-columns:1fr}}
+.topic-section,.badges-section,.next-action-section{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.15rem;margin-bottom:1rem}
+.section-h{font-family:'Baloo 2',sans-serif;font-size:.92rem;font-weight:800;margin-bottom:.75rem}
+.topic-row{display:flex;align-items:center;gap:.65rem;margin-bottom:.55rem}
+.topic-lbl{font-size:.8rem;font-weight:600;color:var(--navy);min-width:120px;flex-shrink:0}
+.topic-bar{flex:1;background:var(--border);border-radius:4px;height:10px;overflow:hidden}
+.topic-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.topic-pct{font-size:.78rem;font-weight:700;color:var(--muted);min-width:34px;text-align:right}
+.badges-grid{display:flex;flex-wrap:wrap;gap:.55rem}
+.badge-item{display:flex;align-items:center;gap:.45rem;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--rs);padding:.45rem .8rem;font-size:.79rem;font-weight:700}
+.badge-item.earned{background:var(--warm-l);border-color:#FCD34D;color:#78350F}
+.next-action-card{display:flex;align-items:center;gap:.75rem;background:var(--bg);border-radius:var(--rs);padding:.9rem;cursor:pointer;border:1.5px solid var(--border);transition:all .18s}
+.next-action-card:hover{border-color:var(--sky);background:var(--sky-l)}
+.na-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.na-body h4{font-family:'Baloo 2',sans-serif;font-size:.87rem;font-weight:800;margin-bottom:.1rem}
+.na-body p{font-size:.78rem;color:var(--gray)}
+
+/* ═══════════════════════════════════════
+   REVIEW
+═══════════════════════════════════════ */
+#screen-review{background:var(--bg);padding:1.25rem 0 3rem}
+.rev-hdr{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;margin-bottom:.85rem}
+.rev-filters{display:flex;gap:.4rem;flex-wrap:wrap;margin:.65rem 0}
+.filter-btn{padding:.32rem .85rem;border-radius:20px;font-size:.78rem;font-weight:700;border:1.5px solid var(--border);background:var(--card);color:var(--gray);cursor:pointer;transition:all .18s}
+.filter-btn.active{background:var(--sky);border-color:var(--sky);color:#fff}
+.rev-card{background:var(--card);border-radius:var(--rs);border:1px solid var(--border);padding:.95rem;margin-bottom:.65rem}
+.rev-card.rev-ok{border-left:4px solid var(--mint)}
+.rev-card.rev-bad{border-left:4px solid var(--coral)}
+.rev-top{display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.45rem}
+.rev-dot{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.73rem;font-weight:800;margin-top:.1rem}
+.rev-ok .rev-dot{background:var(--mint-l);color:var(--mint-d)}
+.rev-bad .rev-dot{background:var(--coral-l);color:var(--coral-d)}
+.rev-q-text{font-size:.87rem;font-weight:700;color:var(--navy)}
+.rev-choices{margin:.4rem 0 .4rem 1.75rem;font-size:.8rem;color:var(--gray)}
+.rv-opt{margin:.12rem 0}
+.rv-selected{font-weight:700;color:var(--coral-d)}
+.rv-answer{font-weight:700;color:var(--mint-d)}
+.rev-exp{font-size:.79rem;color:var(--gray);padding:.5rem .7rem;background:var(--bg);border-radius:var(--rs);margin-top:.35rem;line-height:1.55}
+.rev-rule{font-size:.76rem;color:var(--sky-d);font-weight:700;margin-top:.3rem;display:flex;align-items:center;gap:.3rem}
+
+/* ═══════════════════════════════════════
+   MODALS
+═══════════════════════════════════════ */
+.modal-bg{position:fixed;inset:0;background:rgba(30,41,59,.5);backdrop-filter:blur(6px);z-index:300;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-bg.open{display:flex}
+.modal-box{background:var(--card);border-radius:var(--rl);padding:1.65rem;max-width:400px;width:100%;box-shadow:var(--sh3);animation:slideUp .2s ease}
+.modal-box h3{font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:.45rem}
+.modal-box p{font-size:.85rem;color:var(--gray);margin-bottom:1.15rem;line-height:1.5}
+.modal-btns{display:flex;gap:.65rem;justify-content:flex-end}
+
+/* ═══════════════════════════════════════
+   TOAST / CONFETTI
+═══════════════════════════════════════ */
+#toast{position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;border-radius:var(--r);padding:.6rem 1.15rem;font-size:.83rem;font-weight:600;z-index:400;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap}
+#toast.show{opacity:1}
+#confetti-canvas{position:fixed;inset:0;z-index:500;pointer-events:none;display:none}
+
+/* ═══════════════════════════════════════
+   ACCESSIBILITY
+═══════════════════════════════════════ */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .math-float,.hs{animation:none!important}
+}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.katex{font-size:1em!important}
+@media(max-width:520px){
+  .q-card{padding:1.1rem}.res-card{padding:1.25rem}.lesson-card{padding:1.1rem}
+  .hero-adv{padding:2.5rem 1.25rem 3rem;min-height:auto}
+}
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas" aria-hidden="true"></canvas>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- ══════════════════════════════════
+     MODALS
+══════════════════════════════════ -->
+<div id="modal-exit" class="modal-bg" role="dialog" aria-modal="true" aria-labelledby="modal-exit-h">
+  <div class="modal-box">
+    <h3 id="modal-exit-h">⚠️ Leave this quiz?</h3>
+    <p>Your progress for this attempt won't be saved. Are you sure you want to go back?</p>
+    <div class="modal-btns">
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('modal-exit').classList.remove('open')">Keep going!</button>
+      <button class="btn btn-danger btn-sm" id="modal-exit-confirm">Yes, leave</button>
+    </div>
+  </div>
+</div>
+<div id="modal-reset" class="modal-bg" role="dialog" aria-modal="true" aria-labelledby="modal-reset-h">
+  <div class="modal-box">
+    <h3 id="modal-reset-h">🗑️ Reset all progress?</h3>
+    <p>This will erase all scores, badges, and streaks. This cannot be undone.</p>
+    <div class="modal-btns">
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('modal-reset').classList.remove('open')">Cancel</button>
+      <button class="btn btn-danger btn-sm" id="modal-reset-confirm">Yes, reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TOP NAV
+══════════════════════════════════ -->
+<nav id="top-nav" aria-label="Site navigation">
+  <div class="nav-inner">
+    <div class="nav-brand" onclick="askExit()" role="button" tabindex="0" aria-label="Go to home" onkeydown="if(event.key==='Enter')askExit()">
+      <div class="nav-logo-icon" aria-hidden="true">√</div>
+      <div class="nav-brand-text">
+        <div class="nav-brand-name">Bright EngMath</div>
+        <div class="nav-brand-tagline">Learn Bright. Think Strong.</div>
+      </div>
+    </div>
+    <div id="nav-ctx" class="nav-ctx hidden"></div>
+    <div class="nav-right">
+      <div id="streak-chip" class="streak-chip hidden" aria-label="Study streak" title="Your study streak">🔥 <span id="streak-cnt">0</span></div>
+      <button id="sound-btn" class="nav-icon-btn" onclick="toggleSound()" aria-label="Toggle sound" title="Toggle sounds">🔇</button>
+      <button class="nav-icon-btn" onclick="document.getElementById('modal-reset').classList.add('open')" aria-label="Reset progress" title="Reset progress">🗑️</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════
+     HOME SCREEN
+══════════════════════════════════ -->
+<main id="screen-home" class="screen active" aria-label="Home">
+
+  <!-- HERO -->
+  <section class="hero-adv" aria-labelledby="hero-h1">
+    <!-- Blobs -->
+    <div class="bg-blob bb1" aria-hidden="true"></div>
+    <div class="bg-blob bb2" aria-hidden="true"></div>
+    <div class="bg-blob bb3" aria-hidden="true"></div>
+    <!-- Background symbols -->
+    <div class="hero-symbols" aria-hidden="true">
+      <span class="hs hs1">√</span>
+      <span class="hs hs2">³√</span>
+      <span class="hs hs3">n²</span>
+      <span class="hs hs4">n³</span>
+      <span class="hs hs5">±</span>
+      <span class="hs hs6">∛</span>
+    </div>
+
+    <div class="hero-inner container">
+      <!-- Left: Text -->
+      <div class="hero-text">
+        <div class="hero-badge-pill">
+          <span>🚀</span><span>Maths Adventure · Bright EngMath</span>
+        </div>
+
+        <!-- Rooty mascot speech bubble -->
+        <div class="rooty-row" aria-label="Mascot greeting">
+          <div style="font-size:2.8rem;animation:waveHand 2s ease-in-out infinite" aria-hidden="true">🦸</div>
+          <div class="rooty-bubble">
+            Hi, I'm <strong>Rooty</strong>! Ready to explore roots and powers? 🌟
+          </div>
+        </div>
+
+        <h1 class="hero-h1" id="hero-h1">
+          Master <span class="hi-word">Roots &amp; Powers</span><br>One Step at a Time!
+        </h1>
+        <p class="hero-tagline">Learn Bright. Think Strong. 💡</p>
+        <p class="hero-sub">From square numbers to cube roots — build real maths confidence with lessons, hints, and fun practice. No stress, just progress!</p>
+
+        <div class="hero-cta">
+          <button class="btn-adventure" onclick="scrollToLevels()" aria-label="Start your adventure">
+            🎯 Start Your Adventure
+          </button>
+          <button class="btn-outline-adv" onclick="goLearn()" aria-label="Open lessons">
+            📖 Explore Lessons
+          </button>
+        </div>
+      </div>
+
+      <!-- Right: Floating math cards -->
+      <div class="hero-cards" aria-hidden="true">
+        <div class="math-float mf1" style="border-top:3px solid #4F90F0">
+          <div class="mf-expr">4² = 16</div>
+          <div class="mf-lbl" style="background:#EBF3FF;color:#3478DC">Square</div>
+        </div>
+        <div class="math-float mf2" style="border-top:3px solid #8B5CF6">
+          <div class="mf-expr">∛27 = 3</div>
+          <div class="mf-lbl" style="background:#F5F3FF;color:#7C3AED">Cube Root</div>
+        </div>
+        <div class="math-float mf3" style="border-top:3px solid #10B981">
+          <div class="mf-expr">√64 = 8</div>
+          <div class="mf-lbl" style="background:#ECFDF5;color:#047857">Sq. Root</div>
+        </div>
+        <div class="math-float mf4" style="border-top:3px solid #F59E0B">
+          <div class="mf-expr">5³ = 125</div>
+          <div class="mf-lbl" style="background:#FFFBEB;color:#B45309">Cube</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW TO LEARN TODAY -->
+  <section class="home-section" aria-labelledby="learn-path-h">
+    <div class="container">
+      <p class="sec-eyebrow">Your Learning Path</p>
+      <h2 class="sec-h2" id="learn-path-h">How would you like to learn today? 🤔</h2>
+      <p class="sec-sub">Choose the mode that works best for you right now — you can always switch!</p>
+      <div class="learn-path-grid">
+        <div class="lp-card lp-teach">
+          <div class="lp-card-banner lp-banner-teach">👨‍🏫</div>
+          <div class="lp-card-body">
+            <div class="lp-best-tag">🏫 Best for: Classrooms &amp; Teachers</div>
+            <h3>Teach Together</h3>
+            <p>Use the Lessons section to walk through each topic step by step — great for classroom teaching or guided study with a friend or parent.</p>
+            <button class="btn btn-secondary btn-sm btn-block" onclick="goLearn()">📖 Open Lessons</button>
+            <p class="lp-mode-note">💡 Try the "Check Your Understanding" questions as you go!</p>
+          </div>
+        </div>
+        <div class="lp-card lp-learn">
+          <div class="lp-card-banner lp-banner-learn">🎮</div>
+          <div class="lp-card-body">
+            <div class="lp-best-tag">🎯 Best for: Independent Students</div>
+            <h3>Learn by Yourself</h3>
+            <p>Pick a level, read any hints you need, and answer questions at your own pace. Perfect for self-study, revision, or homework practice!</p>
+            <button class="btn btn-primary btn-sm btn-block" onclick="scrollToLevels()">🚀 Pick a Level</button>
+            <p class="lp-mode-note">💡 Try <strong>Test Mode</strong> when you feel confident!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEARNING JOURNEY -->
+  <section class="home-section-alt" aria-labelledby="journey-h">
+    <div class="container">
+      <p class="sec-eyebrow">Your Journey</p>
+      <h2 class="sec-h2" id="journey-h">5 Steps to Root Mastery 🗺️</h2>
+      <p class="sec-sub">Every expert started as a beginner — follow the path and level up!</p>
+      <div class="journey-adv" role="list">
+        <div class="journey-step-adv" role="listitem">
+          <div style="position:relative">
+            <div class="js-icon" style="background:linear-gradient(135deg,#EBF3FF,#C7E0FF)">🔭</div>
+            <div class="js-num" style="background:#4F90F0;color:#fff">1</div>
+          </div>
+          <div class="js-label">Discover</div>
+          <div class="js-desc">Read the lesson</div>
+        </div>
+        <div class="journey-step-adv" role="listitem">
+          <div style="position:relative">
+            <div class="js-icon" style="background:linear-gradient(135deg,#F5F3FF,#DDD6FE)">📚</div>
+            <div class="js-num" style="background:#8B5CF6;color:#fff">2</div>
+          </div>
+          <div class="js-label">Learn</div>
+          <div class="js-desc">Check questions</div>
+        </div>
+        <div class="journey-step-adv" role="listitem">
+          <div style="position:relative">
+            <div class="js-icon" style="background:linear-gradient(135deg,#ECFDF5,#A7F3D0)">✏️</div>
+            <div class="js-num" style="background:#10B981;color:#fff">3</div>
+          </div>
+          <div class="js-label">Practise</div>
+          <div class="js-desc">Learn Mode quiz</div>
+        </div>
+        <div class="journey-step-adv" role="listitem">
+          <div style="position:relative">
+            <div class="js-icon" style="background:linear-gradient(135deg,#FFFBEB,#FDE68A)">⚡</div>
+            <div class="js-num" style="background:#F59E0B;color:#fff">4</div>
+          </div>
+          <div class="js-label">Challenge</div>
+          <div class="js-desc">Test Mode quiz</div>
+        </div>
+        <div class="journey-step-adv" role="listitem">
+          <div style="position:relative">
+            <div class="js-icon" style="background:linear-gradient(135deg,#FFF7ED,#FED7AA)">🏆</div>
+            <div class="js-num" style="background:#EF4444;color:#fff">5</div>
+          </div>
+          <div class="js-label">Master</div>
+          <div class="js-desc">Score 90%+ 🎉</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="home-section-alt" aria-labelledby="features-h" style="background:linear-gradient(135deg,#F5F3FF 0%,#EBF3FF 100%);padding-top:0">
+    <div class="container">
+      <p class="sec-eyebrow">What's Inside</p>
+      <h2 class="sec-h2" id="features-h">Everything you need to succeed ✨</h2>
+      <div class="features-grid">
+        <div class="feat-card">
+          <div class="feat-icon">📖</div>
+          <div class="feat-title">6 Clear Lessons</div>
+          <div class="feat-desc">From square numbers to tricky estimation — each lesson builds on the last.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">💡</div>
+          <div class="feat-title">Hints on Demand</div>
+          <div class="feat-desc">Stuck? Peek at a hint without being told the answer. You still work it out!</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">⏱️</div>
+          <div class="feat-title">Test Mode Timer</div>
+          <div class="feat-desc">Challenge yourself with a timed test — see how fast you can go!</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🔄</div>
+          <div class="feat-title">Retry Wrong Ones</div>
+          <div class="feat-desc">After a quiz, instantly retry only the questions you got wrong.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">📊</div>
+          <div class="feat-title">Progress Tracking</div>
+          <div class="feat-desc">Your scores, badges, and streaks are saved automatically.</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🏅</div>
+          <div class="feat-title">Earn Badges</div>
+          <div class="feat-desc">Complete levels and hit 90%+ to unlock special achievement badges!</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEVELS SECTION -->
+  <section class="home-section" id="levels-section" aria-labelledby="levels-h">
+    <div class="container">
+      <p class="sec-eyebrow">Choose Your Challenge</p>
+      <h2 class="sec-h2" id="levels-h">Pick Your Level &amp; Begin! 🎮</h2>
+      <p class="sec-sub">Work through all 5 levels to become a true Root Master. Each level gets a little tougher — but you've got this!</p>
+      <div id="levels-grid" class="levels-grid-adv" role="list">
+        <!-- Filled by renderHome() -->
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section" aria-labelledby="cta-h">
+    <p class="cta-quote">"The secret of getting ahead is getting started."</p>
+    <h2 class="cta-h2" id="cta-h">Ready to become a Root Master? 🏆</h2>
+    <p class="cta-p">75 questions, 5 levels, and a whole lot of "aha!" moments waiting for you.</p>
+    <div style="display:flex;gap:.85rem;justify-content:center;flex-wrap:wrap">
+      <button class="btn-adventure" onclick="scrollToLevels()">🚀 Let's Go!</button>
+      <button class="btn-outline-adv" onclick="goLearn()" style="color:#fff;border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.1)">📖 Read Lessons First</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <p>Made with ❤️ by <strong>Bright EngMath</strong> &nbsp;·&nbsp; Learn Bright. Think Strong. 💡</p>
+    <p>© 2025 Bright EngMath. All rights reserved.</p>
+  </footer>
+
+</main>
+
+<!-- ══════════════════════════════════
+     LEARN SCREEN
+══════════════════════════════════ -->
+<section id="screen-learn" class="screen" aria-label="Lessons">
+  <div class="learn-hdr">
+    <div class="container">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:.65rem;margin-bottom:.55rem">
+        <button class="btn btn-secondary btn-sm" onclick="askExit()">← Back</button>
+        <span style="font-family:'Baloo 2',sans-serif;font-size:.9rem;font-weight:800;color:var(--navy)">📖 Lessons</span>
+        <span></span>
+      </div>
+      <div class="learn-tabs" role="tablist" aria-label="Lesson tabs">
+        <button class="learn-tab active" role="tab" aria-selected="true" data-li="0" onclick="showLesson(0)">1. Squares</button>
+        <button class="learn-tab" role="tab" aria-selected="false" data-li="1" onclick="showLesson(1)">2. Cubes</button>
+        <button class="learn-tab" role="tab" aria-selected="false" data-li="2" onclick="showLesson(2)">3. Sq. Roots</button>
+        <button class="learn-tab" role="tab" aria-selected="false" data-li="3" onclick="showLesson(3)">4. Cube Roots</button>
+        <button class="learn-tab" role="tab" aria-selected="false" data-li="4" onclick="showLesson(4)">5. Estimating</button>
+        <button class="learn-tab" role="tab" aria-selected="false" data-li="5" onclick="showLesson(5)">6. Mistakes</button>
+      </div>
+    </div>
+  </div>
+  <div class="learn-body">
+    <div class="container">
+      <div id="lesson-content" role="tabpanel"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     SET INFO SCREEN
+══════════════════════════════════ -->
+<section id="screen-set-info" class="screen" aria-label="Quiz setup">
+  <div class="container">
+    <button class="btn btn-secondary btn-sm" onclick="showHome()" style="margin-bottom:.75rem">← Back</button>
+    <div id="si-content"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     QUIZ SCREEN
+══════════════════════════════════ -->
+<section id="screen-quiz" class="screen" aria-label="Quiz">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.65rem;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm nav-toggle" id="nav-toggle-btn" onclick="toggleNav()" aria-expanded="false" aria-controls="q-nav-panel">☰ Questions</button>
+      <div id="q-timer-inline" style="font-family:'Baloo 2',sans-serif;font-size:.85rem;font-weight:800;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:20px;padding:.25rem .75rem;display:none">⏱ <span id="q-timer-txt">0:00</span></div>
+      <button class="btn btn-secondary btn-sm" onclick="askExit()" style="margin-left:auto">✕ Exit Quiz</button>
+    </div>
+    <div class="q-prog-bar" role="progressbar" aria-label="Quiz progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+      <div class="q-prog-fill" id="q-prog-fill" style="width:0%"></div>
+    </div>
+    <div class="q-wrap">
+      <div id="q-nav-panel" class="q-nav" role="navigation" aria-label="Question navigator">
+        <div class="q-nav-lbl">
+          <span>Questions</span>
+          <span id="nav-score-txt">0/0</span>
+        </div>
+        <div id="q-nav-grid" class="q-nav-grid"></div>
+        <div id="q-nav-timer" class="q-nav-timer hidden">⏱ <span id="q-nav-timer-txt">0:00</span></div>
+        <div style="margin-top:.6rem;display:flex;gap:.3rem;flex-wrap:wrap;font-size:.7rem">
+          <span style="display:flex;align-items:center;gap:.2rem"><span style="width:10px;height:10px;border-radius:3px;background:var(--mint-l);border:1px solid var(--mint);display:inline-block"></span>Correct</span>
+          <span style="display:flex;align-items:center;gap:.2rem"><span style="width:10px;height:10px;border-radius:3px;background:var(--coral-l);border:1px solid var(--coral);display:inline-block"></span>Wrong</span>
+          <span style="display:flex;align-items:center;gap:.2rem"><span style="width:10px;height:10px;border-radius:3px;background:var(--sky-l);border:1px solid var(--sky);display:inline-block"></span>Done</span>
+        </div>
+      </div>
+      <div id="q-card" class="q-card" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     RESULT SCREEN
+══════════════════════════════════ -->
+<section id="screen-result" class="screen" aria-label="Results">
+  <div class="container">
+    <div id="result-content"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     REVIEW SCREEN
+══════════════════════════════════ -->
+<section id="screen-review" class="screen" aria-label="Review answers">
+  <div class="container">
+    <div class="rev-hdr">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem">
+        <button class="btn btn-secondary btn-sm" id="rev-back-btn">← Back to Results</button>
+        <h2 style="font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:800">📋 Answer Review</h2>
+        <button id="rev-retry-btn" class="btn btn-primary btn-sm hidden">🔄 Retry Wrong</button>
+      </div>
+      <div class="rev-filters" role="group" aria-label="Filter answers">
+        <button class="filter-btn active" data-f="all" onclick="filterRev('all')">All</button>
+        <button class="filter-btn" data-f="ok" onclick="filterRev('ok')">✓ Correct</button>
+        <button class="filter-btn" data-f="bad" onclick="filterRev('bad')">✗ Wrong</button>
+      </div>
+    </div>
+    <div id="rev-list"></div>
+  </div>
+</section>
+
+<script>
+/* ═══════════════════════════════════════
+   DATA
+═══════════════════════════════════════ */
+const SET_META = [
+  {id:1, label:"Number Explorer", icon:"🔵", fun:"Level 1", color:"#4F90F0", colorL:"#EBF3FF",
+   desc:"Master square numbers and cube numbers — the building blocks of everything!"},
+  {id:2, label:"Root Finder",     icon:"🟣", fun:"Level 2", color:"#8B5CF6", colorL:"#F5F3FF",
+   desc:"Learn to find square roots and cube roots of perfect numbers."},
+  {id:3, label:"Pattern Solver",  icon:"🟢", fun:"Level 3", color:"#10B981", colorL:"#ECFDF5",
+   desc:"Mix it up! Combine roots and powers in the same question."},
+  {id:4, label:"Estimation Expert",icon:"🟡", fun:"Level 4", color:"#F59E0B", colorL:"#FFFBEB",
+   desc:"Estimate non-perfect square roots and find the nearest integer."},
+  {id:5, label:"Root Master",     icon:"🔴", fun:"Level 5", color:"#EF4444", colorL:"#FEF2F2",
+   desc:"The ultimate challenge — proofs, patterns, and tricky reasoning!"},
+];
+
+const BADGE_DEFS = [
+  {id:"s1",      icon:"🔵", name:"Number Explorer",      desc:"Finish Level 1"},
+  {id:"s2",      icon:"🟣", name:"Root Finder",          desc:"Finish Level 2"},
+  {id:"s3",      icon:"🟢", name:"Pattern Solver",       desc:"Finish Level 3"},
+  {id:"s4",      icon:"🟡", name:"Estimation Expert",    desc:"Finish Level 4"},
+  {id:"s5",      icon:"🔴", name:"Root Master",          desc:"Finish Level 5"},
+  {id:"perfect", icon:"⭐", name:"Perfect Score",        desc:"Score 15/15 on any set"},
+  {id:"rootmaster",icon:"🏆",name:"Grand Root Master",   desc:"Complete all 5 levels"},
+];
+
+const TOPIC_LABELS = {
+  "sq-cube":"Squares & Cubes", "roots":"Finding Roots",
+  "calc":"Mixed Calculations", "estimation":"Estimation", "reasoning":"Reasoning & Proof"
+};
+const TOPIC_RULES = {
+  "sq-cube":   "\\(n^2 = n\\times n\\) and \\(n^3 = n\\times n\\times n\\).",
+  "roots":     "Square root undoes squaring; cube root undoes cubing.",
+  "calc":      "Evaluate roots and powers before combining.",
+  "estimation":"Find bounding squares: \\(a^2 < x < (a+1)^2\\).",
+  "reasoning": "Look for patterns and apply algebraic properties."
+};
+
+/* ─── LESSON CHECKS ─── */
+const LESSON_CHECKS = {
+  0:[
+    {q:"What is \\(9^2\\)?", ch:["18","27","81","91"], ans:2, exp:"\\(9^2 = 9\\times9 = 81\\). Remember: squaring means multiplying by itself, not by 2!"},
+    {q:"Which of these is a square number?", ch:["20","28","49","54"], ans:2, exp:"\\(49 = 7^2\\). The others are not perfect squares."}
+  ],
+  1:[
+    {q:"Calculate \\(2^3\\).", ch:["6","8","16","12"], ans:1, exp:"\\(2^3 = 2\\times2\\times2 = 8\\). Cube means three factors, not multiply by 3!"},
+    {q:"Which of these is a cube number?", ch:["9","16","36","64"], ans:3, exp:"\\(64 = 4^3 = 4\\times4\\times4\\). The others are squares but not cubes."}
+  ],
+  2:[
+    {q:"\\(\\sqrt{81} = \\text{?}\\)", ch:["8","9","7","10"], ans:1, exp:"\\(9^2 = 81\\), so \\(\\sqrt{81}=9\\). We always take the positive (principal) root."},
+    {q:"If \\(n^2 = 169\\) and \\(n > 0\\), find \\(n\\).", ch:["12","14","13","15"], ans:2, exp:"\\(13^2=169\\), so \\(n=13\\)."}
+  ],
+  3:[
+    {q:"\\(\\sqrt[3]{8} = \\text{?}\\)", ch:["2","3","4","6"], ans:0, exp:"\\(2^3=8\\), so \\(\\sqrt[3]{8}=2\\)."},
+    {q:"\\(\\sqrt[3]{-64} = \\text{?}\\)", ch:["4","−4","8","−8"], ans:1, exp:"\\((-4)^3=-64\\), so \\(\\sqrt[3]{-64}=-4\\). Cube roots of negatives are negative!"}
+  ],
+  4:[
+    {q:"Between which two consecutive integers does \\(\\sqrt{30}\\) lie?", ch:["4 and 5","5 and 6","3 and 4","6 and 7"], ans:1, exp:"\\(5^2=25\\) and \\(6^2=36\\), so \\(5<\\sqrt{30}<6\\)."},
+    {q:"What is the closest integer to \\(\\sqrt{30}\\)?", ch:["4","5","6","7"], ans:1, exp:"\\(\\sqrt{30}\\approx5.48\\). The midpoint is 5.5, and 5.48 < 5.5, so the nearest integer is 5."}
+  ],
+  5:[
+    {q:"Is \\(\\sqrt{9+16} = \\sqrt{9}+\\sqrt{16}\\)?", ch:["Yes","No — left side = 5, right = 7","No — left side = 6","Yes, always"], ans:1, exp:"\\(\\sqrt{25}=5\\) but \\(3+4=7\\). Roots do NOT distribute over addition!"},
+    {q:"What is \\(\\left(\\sqrt{4}\\right)^2\\)?", ch:["8","2","4","16"], ans:2, exp:"\\(\\sqrt{4}=2\\), then \\(2^2=4\\). Square and square root are inverse operations — they cancel!"}
+  ]
+};
+
+/* ─── LESSONS ─── */
+const LESSONS = [
+  {
+    title:"1 — Square Numbers",
+    render(){return `
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">🔢</div>What is a Square Number?</div>
+  <p class="lc-p">A <strong>square number</strong> is the result of multiplying a whole number by itself.</p>
+  <div class="math-box">\\(n^2 = n \\times n\\)</div>
+  <p class="lc-p">For example: \\(5^2 = 5\\times5 = 25\\). We say "five squared equals twenty-five."</p>
+  <div class="tip-box">💡 We call them "square" numbers because they can be arranged as a perfect square of dots!</div>
+</div>
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">📋</div>Square Numbers 1²–15²</div>
+  <p class="lc-p">These are the most important ones to memorise:</p>
+  <table class="math-tbl"><thead><tr><th>n</th><th>n²</th><th>n</th><th>n²</th><th>n</th><th>n²</th></tr></thead>
+  <tbody>
+  <tr><td>1</td><td>1</td><td>6</td><td>36</td><td>11</td><td>121</td></tr>
+  <tr><td>2</td><td>4</td><td>7</td><td>49</td><td>12</td><td>144</td></tr>
+  <tr><td>3</td><td>9</td><td>8</td><td>64</td><td>13</td><td>169</td></tr>
+  <tr><td>4</td><td>16</td><td>9</td><td>81</td><td>14</td><td>196</td></tr>
+  <tr><td>5</td><td>25</td><td>10</td><td>100</td><td>15</td><td>225</td></tr>
+  </tbody></table>
+</div>
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">⚠️</div>Common Mistake</div>
+  <div class="warn-box">✗ <strong>Wrong:</strong> \\(7^2 = 7\\times2 = 14\\) — this is multiplying by 2, not squaring!</div>
+  <div class="ok-box">✓ <strong>Right:</strong> \\(7^2 = 7\\times7 = 49\\)</div>
+  <p class="lc-p">The exponent tells you <em>how many times to use the number as a factor</em>, not what to multiply by.</p>
+</div>
+<div class="check-section">
+  <div class="check-title">✅ Check Your Understanding</div>
+  <div id="ck-0-0" class="check-q"></div>
+  <div id="ck-0-1" class="check-q"></div>
+</div>`}
+  },
+  {
+    title:"2 — Cube Numbers",
+    render(){return `
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">🎲</div>What is a Cube Number?</div>
+  <p class="lc-p">A <strong>cube number</strong> is the result of multiplying a whole number by itself <em>three times</em>.</p>
+  <div class="math-box">\\(n^3 = n \\times n \\times n\\)</div>
+  <p class="lc-p">For example: \\(4^3 = 4\\times4\\times4 = 64\\). We say "four cubed equals sixty-four."</p>
+  <div class="tip-box">💡 Cube numbers can be arranged as a perfect 3D cube of blocks — like a Rubik's cube!</div>
+</div>
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">📋</div>Cube Numbers 1³–10³</div>
+  <table class="math-tbl"><thead><tr><th>n</th><th>n³</th><th>n</th><th>n³</th></tr></thead>
+  <tbody>
+  <tr><td>1</td><td>1</td><td>6</td><td>216</td></tr>
+  <tr><td>2</td><td>8</td><td>7</td><td>343</td></tr>
+  <tr><td>3</td><td>27</td><td>8</td><td>512</td></tr>
+  <tr><td>4</td><td>64</td><td>9</td><td>729</td></tr>
+  <tr><td>5</td><td>125</td><td>10</td><td>1000</td></tr>
+  </tbody></table>
+  <div class="tip-box">💡 1 and 64 are <strong>both</strong> square AND cube numbers. Can you spot another? (Answer: 729 = 27² = 9³)</div>
+</div>
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">⚠️</div>Common Mistake</div>
+  <div class="warn-box">✗ <strong>Wrong:</strong> \\(3^3 = 3\\times3 = 9\\) — only multiplied twice!</div>
+  <div class="ok-box">✓ <strong>Right:</strong> \\(3^3 = 3\\times3\\times3 = 27\\)</div>
+</div>
+<div class="check-section">
+  <div class="check-title">✅ Check Your Understanding</div>
+  <div id="ck-1-0" class="check-q"></div>
+  <div id="ck-1-1" class="check-q"></div>
+</div>`}
+  },
+  {
+    title:"3 — Square Roots",
+    render(){return `
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">√</div>What is a Square Root?</div>
+  <p class="lc-p">The <strong>square root</strong> of a number is the value that, when squared, gives that number.</p>
+  <div class="math-box">\\(\\sqrt{x} = n \\quad \\Leftrightarrow \\quad n^2 = x \\quad (n \\geq 0)\\)</div>
+  <p class="lc-p">Example: \\(\\sqrt{49} = 7\\) because \\(7^2 = 49\\).</p>
+  <div class="tip-box">💡 We always take the <strong>principal (positive)</strong> square root unless told otherwise.</div>
+</div>
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">🔄</div>Inverse Relationship</div>
+  <p class="lc-p">Squaring and square-rooting are <strong>inverse operations</strong> — they undo each other:</p>
+  <div class="math-box">\\(\\left(\\sqrt{n}\\right)^2 = n \\qquad \\text{and} \\qquad \\sqrt{n^2} = n \\;\\; (n\\geq 0)\\)</div>
+  <p class="lc-p">Example: \\(\\sqrt{36}=6\\) and \\(6^2=36\\) — they are reverse journeys!</p>
+</div>
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">📋</div>Key Square Roots to Know</div>
+  <div class="math-chips">
+    <span class="math-chip">√1=1</span><span class="math-chip">√4=2</span><span class="math-chip">√9=3</span>
+    <span class="math-chip">√16=4</span><span class="math-chip">√25=5</span><span class="math-chip">√36=6</span>
+    <span class="math-chip">√49=7</span><span class="math-chip">√64=8</span><span class="math-chip">√81=9</span>
+    <span class="math-chip">√100=10</span><span class="math-chip">√121=11</span><span class="math-chip">√144=12</span>
+    <span class="math-chip">√169=13</span><span class="math-chip">√196=14</span><span class="math-chip">√225=15</span>
+  </div>
+</div>
+<div class="check-section">
+  <div class="check-title">✅ Check Your Understanding</div>
+  <div id="ck-2-0" class="check-q"></div>
+  <div id="ck-2-1" class="check-q"></div>
+</div>`}
+  },
+  {
+    title:"4 — Cube Roots",
+    render(){return `
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">∛</div>What is a Cube Root?</div>
+  <p class="lc-p">The <strong>cube root</strong> of a number is the value that, when cubed, gives that number.</p>
+  <div class="math-box">\\(\\sqrt[3]{x} = n \\quad \\Leftrightarrow \\quad n^3 = x\\)</div>
+  <p class="lc-p">Example: \\(\\sqrt[3]{27} = 3\\) because \\(3^3 = 27\\).</p>
+</div>
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">➖</div>Negative Cube Roots</div>
+  <p class="lc-p">Unlike square roots, cube roots <strong>can be negative</strong>!</p>
+  <div class="math-box">\\(\\sqrt[3]{-8} = -2 \\quad \\text{because} \\quad (-2)^3 = -8\\)</div>
+  <div class="tip-box">💡 This is the key difference from square roots — you CAN cube-root a negative number.</div>
+</div>
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">📋</div>Key Cube Roots to Know</div>
+  <div class="math-chips">
+    <span class="math-chip">∛1=1</span><span class="math-chip">∛8=2</span><span class="math-chip">∛27=3</span>
+    <span class="math-chip">∛64=4</span><span class="math-chip">∛125=5</span><span class="math-chip">∛216=6</span>
+    <span class="math-chip">∛343=7</span><span class="math-chip">∛512=8</span><span class="math-chip">∛729=9</span>
+    <span class="math-chip">∛1000=10</span>
+  </div>
+</div>
+<div class="check-section">
+  <div class="check-title">✅ Check Your Understanding</div>
+  <div id="ck-3-0" class="check-q"></div>
+  <div id="ck-3-1" class="check-q"></div>
+</div>`}
+  },
+  {
+    title:"5 — Estimating Roots",
+    render(){return `
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">🎯</div>Why Estimate?</div>
+  <p class="lc-p">Most square roots are <strong>not whole numbers</strong>. For example, \\(\\sqrt{50}\\) is not a whole number — but we can estimate which two integers it falls between.</p>
+  <div class="tip-box">💡 Strategy: find the two perfect squares that bracket your number.</div>
+</div>
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">🔢</div>Method 1 — Between Which Integers?</div>
+  <p class="lc-p"><strong>Example:</strong> Find which integers \\(\\sqrt{50}\\) lies between.</p>
+  <div class="math-box">\\(7^2=49 \\quad \\text{and} \\quad 8^2=64\\) <br>\\(49 < 50 < 64 \\implies 7 < \\sqrt{50} < 8\\)</div>
+  <p class="lc-p">So \\(\\sqrt{50}\\) lies between <strong>7 and 8</strong>.</p>
+</div>
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">📍</div>Method 2 — Nearest Integer</div>
+  <p class="lc-p">Once you know the two integers, compare to the midpoint to find which is closer.</p>
+  <div class="math-box">Midpoint = \\(7.5\\), so \\(7.5^2 = 56.25\\)<br>\\(50 < 56.25 \\implies \\sqrt{50}\\) is closer to <strong>7</strong></div>
+  <div class="tip-box">💡 If \\(x < \\text{midpoint}^2\\), the nearest integer is the smaller one. If \\(x > \\text{midpoint}^2\\), it is the larger one.</div>
+</div>
+<div class="check-section">
+  <div class="check-title">✅ Check Your Understanding</div>
+  <div id="ck-4-0" class="check-q"></div>
+  <div id="ck-4-1" class="check-q"></div>
+</div>`}
+  },
+  {
+    title:"6 — Common Mistakes",
+    render(){return `
+<div class="lesson-card">
+  <div class="lc-h"><div class="lc-icon">⚠️</div>6 Mistakes to Avoid</div>
+  <p class="lc-p">These are the most common errors students make — learn to spot them!</p>
+
+  <div class="warn-box"><strong>Mistake 1:</strong> \\(n^2 = n\\times2\\)<br><span style="color:var(--mint-d)">✓ Fix: \\(n^2 = n\\times n\\). e.g. \\(8^2=64\\), not 16.</span></div>
+  <div class="warn-box"><strong>Mistake 2:</strong> \\(n^3 = n\\times3\\)<br><span style="color:var(--mint-d)">✓ Fix: \\(n^3=n\\times n\\times n\\). e.g. \\(3^3=27\\), not 9.</span></div>
+  <div class="warn-box"><strong>Mistake 3:</strong> \\(\\sqrt{a+b}=\\sqrt{a}+\\sqrt{b}\\)<br><span style="color:var(--mint-d)">✓ Fix: \\(\\sqrt{9+16}=\\sqrt{25}=5 \\neq 3+4=7\\)</span></div>
+  <div class="warn-box"><strong>Mistake 4:</strong> Giving a negative square root when not asked<br><span style="color:var(--mint-d)">✓ Fix: \\(\\sqrt{36}=6\\) (positive). \\(-6\\) is a square root too, but not the <em>principal</em> one.</span></div>
+  <div class="warn-box"><strong>Mistake 5:</strong> Confusing which integer \\(\\sqrt{x}\\) rounds to<br><span style="color:var(--mint-d)">✓ Fix: Compare \\(x\\) to the midpoint squared — don't just guess!</span></div>
+  <div class="warn-box"><strong>Mistake 6:</strong> Saying cube roots of negatives don't exist<br><span style="color:var(--mint-d)">✓ Fix: \\(\\sqrt[3]{-27}=-3\\). Cube roots of negatives ARE real numbers.</span></div>
+</div>
+<div class="check-section">
+  <div class="check-title">✅ Check Your Understanding</div>
+  <div id="ck-5-0" class="check-q"></div>
+  <div id="ck-5-1" class="check-q"></div>
+</div>`}
+  }
+];
+</script>
+
+<script>
+/* ═══════════════════════════════════════
+   QUESTION BANK — 75 questions, 5 sets × 15
+═══════════════════════════════════════ */
+const SETS = {
+  1:[
+    {q:"\\(6^2 = \\text{?}\\)",plain:"6² = ?",hint:"6×6 = ?",ch:["32","36","30","42"],ans:1,exp:"\\(6^2=6\\times6=36\\).",rule:"\\(n^2=n\\times n\\), not \\(n\\times2\\).",topic:"sq-cube"},
+    {q:"\\(9^2 = \\text{?}\\)",plain:"9² = ?",hint:"9×9 = ?",ch:["18","72","81","91"],ans:2,exp:"\\(9^2=9\\times9=81\\).",rule:"\\(n^2=n\\times n\\).",topic:"sq-cube"},
+    {q:"\\(7^2 = \\text{?}\\)",plain:"7² = ?",hint:"7×7 = ?",ch:["42","49","45","56"],ans:1,exp:"\\(7^2=49\\).",rule:"\\(n^2=n\\times n\\).",topic:"sq-cube"},
+    {q:"\\(11^2 = \\text{?}\\)",plain:"11² = ?",hint:"11×11 = ?",ch:["22","111","121","112"],ans:2,exp:"\\(11^2=121\\).",rule:"\\(n^2=n\\times n\\).",topic:"sq-cube"},
+    {q:"\\(2^3 = \\text{?}\\)",plain:"2³ = ?",hint:"2×2×2 = ?",ch:["6","8","4","12"],ans:1,exp:"\\(2^3=2\\times2\\times2=8\\).",rule:"\\(n^3=n\\times n\\times n\\).",topic:"sq-cube"},
+    {q:"\\(3^3 = \\text{?}\\)",plain:"3³ = ?",hint:"3×3×3 = ?",ch:["9","27","18","81"],ans:1,exp:"\\(3^3=27\\).",rule:"\\(n^3=n\\times n\\times n\\).",topic:"sq-cube"},
+    {q:"Which of the following is a square number?",plain:"Which is a square number?",hint:"Which one equals n×n for some whole n?",ch:["18","20","25","30"],ans:2,exp:"\\(25=5^2\\). The others are not perfect squares.",rule:"Square numbers: 1,4,9,16,25,36,49,…",topic:"sq-cube"},
+    {q:"Which of the following is a cube number?",plain:"Which is a cube number?",hint:"Which one equals n×n×n for some whole n?",ch:["9","16","27","36"],ans:2,exp:"\\(27=3^3\\). The others are square but not cube numbers.",rule:"Cube numbers: 1,8,27,64,125,216,…",topic:"sq-cube"},
+    {q:"\\(4^2 = \\text{?}\\)",plain:"4² = ?",hint:"4×4 = ?",ch:["8","12","16","20"],ans:2,exp:"\\(4^2=4\\times4=16\\).",rule:"\\(n^2=n\\times n\\).",topic:"sq-cube"},
+    {q:"\\(1^3 = \\text{?}\\)",plain:"1³ = ?",hint:"1×1×1 = ?",ch:["3","1","0","2"],ans:1,exp:"\\(1^3=1\\times1\\times1=1\\). One raised to any power is always 1.",rule:"\\(1^n=1\\) for any positive integer \\(n\\).",topic:"sq-cube"},
+    {q:"\\(5^3 = \\text{?}\\)",plain:"5³ = ?",hint:"5×5×5 = ?",ch:["15","100","125","115"],ans:2,exp:"\\(5^3=5\\times5\\times5=125\\).",rule:"\\(n^3=n\\times n\\times n\\).",topic:"sq-cube"},
+    {q:"\\(13^2 = \\text{?}\\)",plain:"13² = ?",hint:"13×13 = ?",ch:["26","130","169","144"],ans:2,exp:"\\(13^2=169\\).",rule:"\\(n^2=n\\times n\\).",topic:"sq-cube"},
+    {q:"How many square numbers are there between 1 and 50 (inclusive)?",plain:"Square numbers between 1 and 50 (inclusive)?",hint:"List: 1,4,9,16,25,36,49 — count them!",ch:["5","6","7","8"],ans:2,exp:"1,4,9,16,25,36,49 — that's 7 square numbers.",rule:"Square numbers: 1²=1,2²=4,…,7²=49.",topic:"sq-cube"},
+    {q:"\\(10^2 = \\text{?}\\)",plain:"10² = ?",hint:"10×10 = ?",ch:["20","100","1000","200"],ans:1,exp:"\\(10^2=100\\).",rule:"\\(n^2=n\\times n\\).",topic:"sq-cube"},
+    {q:"What is \\(4^3\\)?",plain:"4³ = ?",hint:"4×4×4 = ?",ch:["12","48","64","81"],ans:2,exp:"\\(4^3=4\\times4\\times4=64\\).",rule:"\\(n^3=n\\times n\\times n\\).",topic:"sq-cube"}
+  ],
+  2:[
+    {q:"\\(\\sqrt{25} = \\text{?}\\)",plain:"√25 = ?",hint:"Which number squared gives 25?",ch:["4","5","6","7"],ans:1,exp:"\\(5^2=25\\), so \\(\\sqrt{25}=5\\).",rule:"\\(\\sqrt{n^2}=n\\) for \\(n\\geq0\\).",topic:"roots"},
+    {q:"\\(\\sqrt{36} = \\text{?}\\)",plain:"√36 = ?",hint:"Which number squared gives 36?",ch:["5","6","7","8"],ans:1,exp:"\\(6^2=36\\), so \\(\\sqrt{36}=6\\).",rule:"\\(\\sqrt{n^2}=n\\).",topic:"roots"},
+    {q:"\\(\\sqrt{64} = \\text{?}\\)",plain:"√64 = ?",hint:"Which number squared gives 64?",ch:["6","7","8","9"],ans:2,exp:"\\(8^2=64\\), so \\(\\sqrt{64}=8\\).",rule:"\\(\\sqrt{n^2}=n\\).",topic:"roots"},
+    {q:"\\(\\sqrt{144} = \\text{?}\\)",plain:"√144 = ?",hint:"Which number squared gives 144?",ch:["11","12","13","14"],ans:1,exp:"\\(12^2=144\\), so \\(\\sqrt{144}=12\\).",rule:"\\(\\sqrt{n^2}=n\\).",topic:"roots"},
+    {q:"\\(\\sqrt[3]{8} = \\text{?}\\)",plain:"∛8 = ?",hint:"Which number cubed gives 8?",ch:["2","3","4","8"],ans:0,exp:"\\(2^3=8\\), so \\(\\sqrt[3]{8}=2\\).",rule:"\\(\\sqrt[3]{n^3}=n\\).",topic:"roots"},
+    {q:"\\(\\sqrt[3]{27} = \\text{?}\\)",plain:"∛27 = ?",hint:"Which number cubed gives 27?",ch:["2","3","4","9"],ans:1,exp:"\\(3^3=27\\), so \\(\\sqrt[3]{27}=3\\).",rule:"\\(\\sqrt[3]{n^3}=n\\).",topic:"roots"},
+    {q:"\\(\\sqrt[3]{125} = \\text{?}\\)",plain:"∛125 = ?",hint:"Which number cubed gives 125?",ch:["4","5","6","7"],ans:1,exp:"\\(5^3=125\\), so \\(\\sqrt[3]{125}=5\\).",rule:"\\(\\sqrt[3]{n^3}=n\\).",topic:"roots"},
+    {q:"\\(\\sqrt{169} = \\text{?}\\)",plain:"√169 = ?",hint:"Which number squared gives 169?",ch:["12","13","14","15"],ans:1,exp:"\\(13^2=169\\), so \\(\\sqrt{169}=13\\).",rule:"\\(\\sqrt{n^2}=n\\).",topic:"roots"},
+    {q:"\\(\\sqrt{1} = \\text{?}\\)",plain:"√1 = ?",hint:"1 × 1 = ?",ch:["0","1","2","10"],ans:1,exp:"\\(1^2=1\\), so \\(\\sqrt{1}=1\\).",rule:"\\(\\sqrt{1}=1\\).",topic:"roots"},
+    {q:"\\(\\sqrt[3]{64} = \\text{?}\\)",plain:"∛64 = ?",hint:"Which number cubed gives 64?",ch:["3","4","6","8"],ans:1,exp:"\\(4^3=64\\), so \\(\\sqrt[3]{64}=4\\).",rule:"\\(\\sqrt[3]{n^3}=n\\).",topic:"roots"},
+    {q:"\\(\\sqrt[3]{-8} = \\text{?}\\)",plain:"∛(−8) = ?",hint:"Which number cubed gives −8?",ch:["−2","2","−4","4"],ans:0,exp:"\\((-2)^3=-8\\), so \\(\\sqrt[3]{-8}=-2\\). Cube roots of negatives are negative.",rule:"Cube roots can be negative; square roots cannot.",topic:"roots"},
+    {q:"\\(\\sqrt{225} = \\text{?}\\)",plain:"√225 = ?",hint:"Which number squared gives 225?",ch:["13","14","15","16"],ans:2,exp:"\\(15^2=225\\), so \\(\\sqrt{225}=15\\).",rule:"\\(\\sqrt{n^2}=n\\).",topic:"roots"},
+    {q:"\\(\\sqrt[3]{1000} = \\text{?}\\)",plain:"∛1000 = ?",hint:"Which number cubed gives 1000?",ch:["5","8","10","12"],ans:2,exp:"\\(10^3=1000\\), so \\(\\sqrt[3]{1000}=10\\).",rule:"\\(\\sqrt[3]{n^3}=n\\).",topic:"roots"},
+    {q:"If \\(n^2 = 196\\) and \\(n > 0\\), find \\(n\\).",plain:"n² = 196, n > 0 → n = ?",hint:"Which square number equals 196?",ch:["12","13","14","15"],ans:2,exp:"\\(14^2=196\\), so \\(n=14\\).",rule:"\\(\\sqrt{n^2}=n\\) for \\(n\\geq0\\).",topic:"roots"},
+    {q:"\\(\\sqrt[3]{216} = \\text{?}\\)",plain:"∛216 = ?",hint:"Which number cubed gives 216?",ch:["4","5","6","7"],ans:2,exp:"\\(6^3=216\\), so \\(\\sqrt[3]{216}=6\\).",rule:"\\(\\sqrt[3]{n^3}=n\\).",topic:"roots"}
+  ],
+  3:[
+    {q:"\\(\\sqrt{49} + 3^2 = \\text{?}\\)",plain:"√49 + 3² = ?",hint:"Find √49 first, then 3².",ch:["14","16","18","20"],ans:1,exp:"\\(\\sqrt{49}=7\\) and \\(3^2=9\\). \\(7+9=16\\).",rule:"Evaluate roots and powers before adding.",topic:"calc"},
+    {q:"\\(2^3 + \\sqrt{16} = \\text{?}\\)",plain:"2³ + √16 = ?",hint:"2³ = 8, √16 = ?",ch:["10","12","14","18"],ans:1,exp:"\\(2^3=8\\) and \\(\\sqrt{16}=4\\). \\(8+4=12\\).",rule:"Evaluate roots and powers before adding.",topic:"calc"},
+    {q:"\\(\\sqrt{100} - \\sqrt[3]{8} = \\text{?}\\)",plain:"√100 − ∛8 = ?",hint:"√100 = 10, ∛8 = ?",ch:["6","8","10","12"],ans:1,exp:"\\(\\sqrt{100}=10\\) and \\(\\sqrt[3]{8}=2\\). \\(10-2=8\\).",rule:"Evaluate roots before subtracting.",topic:"calc"},
+    {q:"\\(4^2 \\times \\sqrt{9} = \\text{?}\\)",plain:"4² × √9 = ?",hint:"4² = 16, √9 = 3",ch:["36","48","64","72"],ans:1,exp:"\\(4^2=16\\) and \\(\\sqrt{9}=3\\). \\(16\\times3=48\\).",rule:"Evaluate powers and roots before multiplying.",topic:"calc"},
+    {q:"\\(\\sqrt[3]{27} \\times 5^2 = \\text{?}\\)",plain:"∛27 × 5² = ?",hint:"∛27 = 3, 5² = 25",ch:["50","75","100","125"],ans:1,exp:"\\(\\sqrt[3]{27}=3\\) and \\(5^2=25\\). \\(3\\times25=75\\).",rule:"Evaluate roots and powers before multiplying.",topic:"calc"},
+    {q:"\\(\\sqrt{81} + \\sqrt[3]{64} = \\text{?}\\)",plain:"√81 + ∛64 = ?",hint:"√81 = 9, ∛64 = ?",ch:["11","13","15","17"],ans:1,exp:"\\(\\sqrt{81}=9\\) and \\(\\sqrt[3]{64}=4\\). \\(9+4=13\\).",rule:"Evaluate roots before adding.",topic:"calc"},
+    {q:"\\((\\sqrt{9})^2 = \\text{?}\\)",plain:"(√9)² = ?",hint:"√9 = 3, then square it.",ch:["3","6","9","18"],ans:2,exp:"\\(\\sqrt{9}=3\\) and \\(3^2=9\\). Square and square root are inverse operations.",rule:"\\((\\sqrt{n})^2=n\\).",topic:"calc"},
+    {q:"\\(3^3 - 2^2 = \\text{?}\\)",plain:"3³ − 2² = ?",hint:"3³ = 27, 2² = 4",ch:["19","23","25","27"],ans:1,exp:"\\(3^3=27\\) and \\(2^2=4\\). \\(27-4=23\\).",rule:"Evaluate powers before subtracting.",topic:"calc"},
+    {q:"\\(\\sqrt{121} \\div \\sqrt[3]{8} = \\text{?}\\)",plain:"√121 ÷ ∛8 = ?",hint:"√121 = 11, ∛8 = 2",ch:["5","5.5","11","22"],ans:1,exp:"\\(\\sqrt{121}=11\\) and \\(\\sqrt[3]{8}=2\\). \\(11\\div2=5.5\\).",rule:"Evaluate roots before dividing.",topic:"calc"},
+    {q:"\\(2^2 + 3^2 + 4^2 = \\text{?}\\)",plain:"2² + 3² + 4² = ?",hint:"4 + 9 + 16 = ?",ch:["24","29","30","32"],ans:1,exp:"\\(4+9+16=29\\).",rule:"Evaluate each power separately, then add.",topic:"calc"},
+    {q:"\\(\\sqrt{4} \\times \\sqrt[3]{27} = \\text{?}\\)",plain:"√4 × ∛27 = ?",hint:"√4 = 2, ∛27 = 3",ch:["5","6","8","9"],ans:1,exp:"\\(\\sqrt{4}=2\\) and \\(\\sqrt[3]{27}=3\\). \\(2\\times3=6\\).",rule:"Evaluate roots before multiplying.",topic:"calc"},
+    {q:"\\(10^2 - 3^3 = \\text{?}\\)",plain:"10² − 3³ = ?",hint:"100 − 27 = ?",ch:["63","70","73","77"],ans:2,exp:"\\(10^2=100\\) and \\(3^3=27\\). \\(100-27=73\\).",rule:"Evaluate powers before subtracting.",topic:"calc"},
+    {q:"\\(\\sqrt{25} \\times \\sqrt{4} = \\text{?}\\)",plain:"√25 × √4 = ?",hint:"√25 = 5, √4 = 2",ch:["5","10","25","50"],ans:1,exp:"\\(\\sqrt{25}=5\\) and \\(\\sqrt{4}=2\\). \\(5\\times2=10\\). Note: \\(\\sqrt{25\\times4}=\\sqrt{100}=10\\) confirms this!",rule:"\\(\\sqrt{a}\\times\\sqrt{b}=\\sqrt{ab}\\).",topic:"calc"},
+    {q:"What is \\(\\sqrt[3]{125}+\\sqrt{36}\\)?",plain:"∛125 + √36 = ?",hint:"∛125 = 5, √36 = ?",ch:["10","11","12","13"],ans:1,exp:"\\(\\sqrt[3]{125}=5\\) and \\(\\sqrt{36}=6\\). \\(5+6=11\\).",rule:"Evaluate roots before adding.",topic:"calc"},
+    {q:"\\((3^2)^2 = \\text{?}\\)",plain:"(3²)² = ?",hint:"3² = 9, then 9² = ?",ch:["12","36","81","36"],ans:2,exp:"\\(3^2=9\\) and \\(9^2=81\\). Also: \\((3^2)^2=3^{2\\times2}=3^4=81\\).",rule:"\\((a^m)^n = a^{mn}\\).",topic:"calc"}
+  ],
+  4:[
+    {q:"Between which two consecutive integers does \\(\\sqrt{10}\\) lie?",plain:"√10 lies between which integers?",hint:"3²=9, 4²=16 — where is 10?",ch:["2 and 3","3 and 4","4 and 5","1 and 2"],ans:1,exp:"\\(3^2=9\\) and \\(4^2=16\\). Since \\(9<10<16\\), we have \\(3<\\sqrt{10}<4\\).",rule:"Find \\(a^2<x<(a+1)^2\\).",topic:"estimation"},
+    {q:"Between which two consecutive integers does \\(\\sqrt{20}\\) lie?",plain:"√20 lies between which integers?",hint:"4²=16, 5²=25",ch:["3 and 4","4 and 5","5 and 6","6 and 7"],ans:1,exp:"\\(4^2=16\\) and \\(5^2=25\\). Since \\(16<20<25\\), we have \\(4<\\sqrt{20}<5\\).",rule:"Find \\(a^2<x<(a+1)^2\\).",topic:"estimation"},
+    {q:"Between which two consecutive integers does \\(\\sqrt{50}\\) lie?",plain:"√50 lies between which integers?",hint:"7²=49, 8²=64",ch:["6 and 7","7 and 8","8 and 9","5 and 6"],ans:1,exp:"\\(7^2=49\\) and \\(8^2=64\\). Since \\(49<50<64\\), we have \\(7<\\sqrt{50}<8\\).",rule:"Find \\(a^2<x<(a+1)^2\\).",topic:"estimation"},
+    {q:"Between which two consecutive integers does \\(\\sqrt{90}\\) lie?",plain:"√90 lies between which integers?",hint:"9²=81, 10²=100",ch:["8 and 9","9 and 10","10 and 11","7 and 8"],ans:1,exp:"\\(9^2=81\\) and \\(10^2=100\\). Since \\(81<90<100\\), we have \\(9<\\sqrt{90}<10\\).",rule:"Find \\(a^2<x<(a+1)^2\\).",topic:"estimation"},
+    {q:"Between which two consecutive integers does \\(\\sqrt{130}\\) lie?",plain:"√130 lies between which integers?",hint:"11²=121, 12²=144",ch:["10 and 11","11 and 12","12 and 13","13 and 14"],ans:1,exp:"\\(11^2=121\\) and \\(12^2=144\\). Since \\(121<130<144\\), we have \\(11<\\sqrt{130}<12\\).",rule:"Find \\(a^2<x<(a+1)^2\\).",topic:"estimation"},
+    {q:"What is the closest integer to \\(\\sqrt{75}\\)?",plain:"Closest integer to √75?",hint:"8²=64, 9²=81. Midpoint is 8.5 — so 8.5²=72.25. Is 75>72.25?",ch:["7","8","9","10"],ans:2,exp:"\\(8^2=64\\), \\(9^2=81\\). Midpoint \\(8.5^2=72.25\\). Since \\(75>72.25\\), \\(\\sqrt{75}\\) is closer to 9.",rule:"Compare \\(x\\) to the midpoint squared.",topic:"estimation"},
+    {q:"What is the closest integer to \\(\\sqrt{26}\\)?",plain:"Closest integer to √26?",hint:"5²=25, 6²=36. Midpoint 5.5² = 30.25. Is 26 < 30.25?",ch:["4","5","6","7"],ans:1,exp:"\\(5^2=25\\), \\(6^2=36\\). Midpoint \\(5.5^2=30.25\\). Since \\(26<30.25\\), \\(\\sqrt{26}\\) is closer to 5.",rule:"Compare \\(x\\) to the midpoint squared.",topic:"estimation"},
+    {q:"Which of the following is closest in value to \\(\\sqrt{40}\\)?",plain:"Which is closest to √40?",hint:"√36=6, √49=7. 40 is between 36 and 49.",ch:["5","6","7","8"],ans:1,exp:"\\(6^2=36\\) and \\(7^2=49\\). Midpoint \\(6.5^2=42.25>40\\), so \\(\\sqrt{40}\\) is closer to 6.",rule:"Compare \\(x\\) to the midpoint squared.",topic:"estimation"},
+    {q:"Estimate \\(\\sqrt{2}\\) to the nearest integer.",plain:"√2 to nearest integer?",hint:"1²=1, 2²=4. Midpoint 1.5²=2.25 — is 2 < 2.25?",ch:["1","2","3","4"],ans:0,exp:"\\(1^2=1\\) and \\(2^2=4\\). Midpoint \\(1.5^2=2.25\\). Since \\(2<2.25\\), \\(\\sqrt{2}\\) is closer to 1.",rule:"Compare \\(x\\) to the midpoint squared.",topic:"estimation"},
+    {q:"\\(\\sqrt{3}\\) is closest to which integer?",plain:"√3 closest to?",hint:"1²=1, 2²=4. Midpoint 1.5²=2.25 — is 3 > 2.25?",ch:["1","2","3","4"],ans:1,exp:"\\(1^2=1\\), \\(2^2=4\\). Midpoint \\(1.5^2=2.25\\). Since \\(3>2.25\\), \\(\\sqrt{3}\\) is closer to 2.",rule:"Compare \\(x\\) to the midpoint squared.",topic:"estimation"},
+    {q:"Between which two consecutive integers does \\(\\sqrt{200}\\) lie?",plain:"√200 between which integers?",hint:"14²=196, 15²=225",ch:["13 and 14","14 and 15","15 and 16","12 and 13"],ans:1,exp:"\\(14^2=196\\) and \\(15^2=225\\). Since \\(196<200<225\\), we have \\(14<\\sqrt{200}<15\\).",rule:"Find \\(a^2<x<(a+1)^2\\).",topic:"estimation"},
+    {q:"What is the closest integer to \\(\\sqrt{110}\\)?",plain:"Closest integer to √110?",hint:"10²=100, 11²=121. Midpoint 10.5²=110.25 — compare!",ch:["9","10","11","12"],ans:1,exp:"\\(10^2=100\\), \\(11^2=121\\). Midpoint \\(10.5^2=110.25\\). Since \\(110<110.25\\), \\(\\sqrt{110}\\) is just closer to 10.",rule:"Compare \\(x\\) to the midpoint squared.",topic:"estimation"},
+    {q:"Between which two consecutive integers does \\(\\sqrt{60}\\) lie?",plain:"√60 between which integers?",hint:"7²=49, 8²=64",ch:["6 and 7","7 and 8","8 and 9","5 and 6"],ans:1,exp:"\\(7^2=49\\) and \\(8^2=64\\). Since \\(49<60<64\\), we have \\(7<\\sqrt{60}<8\\).",rule:"Find \\(a^2<x<(a+1)^2\\).",topic:"estimation"},
+    {q:"What is the closest integer to \\(\\sqrt{85}\\)?",plain:"Closest integer to √85?",hint:"9²=81, 10²=100. Midpoint 9.5²=90.25 — is 85<90.25?",ch:["8","9","10","11"],ans:1,exp:"\\(9^2=81\\), \\(10^2=100\\). Midpoint \\(9.5^2=90.25\\). Since \\(85<90.25\\), \\(\\sqrt{85}\\) is closer to 9.",rule:"Compare \\(x\\) to the midpoint squared.",topic:"estimation"}
+  ],
+  5:[
+    {q:"Is \\(\\sqrt{16+9} = \\sqrt{16}+\\sqrt{9}\\)?",plain:"√(16+9) = √16 + √9?",hint:"Evaluate each side separately.",ch:["Yes","No — left side = 5, right = 7","No — both equal 7","Yes, for perfect squares"],ans:1,exp:"\\(\\sqrt{25}=5\\) but \\(\\sqrt{16}+\\sqrt{9}=4+3=7\\). So NO — square roots do NOT distribute over addition.",rule:"\\(\\sqrt{a+b}\\neq\\sqrt{a}+\\sqrt{b}\\) in general.",topic:"reasoning"},
+    {q:"If \\(\\sqrt{x}=7\\), what is \\(x\\)?",plain:"√x = 7, so x = ?",hint:"Square both sides to find x.",ch:["14","28","49","7"],ans:2,exp:"\\(\\sqrt{x}=7 \\Rightarrow x=7^2=49\\).",rule:"If \\(\\sqrt{x}=n\\), then \\(x=n^2\\).",topic:"reasoning"},
+    {q:"What is \\(\\sqrt{4}\\times\\sqrt{9}\\)?",plain:"√4 × √9 = ?",hint:"Evaluate each, OR use √(4×9).",ch:["4","6","13","36"],ans:1,exp:"\\(\\sqrt{4}=2\\) and \\(\\sqrt{9}=3\\). \\(2\\times3=6\\). Also \\(\\sqrt{4\\times9}=\\sqrt{36}=6\\).",rule:"\\(\\sqrt{a}\\times\\sqrt{b}=\\sqrt{ab}\\).",topic:"reasoning"},
+    {q:"Which is greater: \\(\\sqrt{50}\\) or \\(\\sqrt[3]{100}\\)?",plain:"Which is greater: √50 or ∛100?",hint:"√50≈7.07, ∛100≈4.64",ch:["\\(\\sqrt{50}\\)","\\(\\sqrt[3]{100}\\)","They are equal","Cannot tell"],ans:0,exp:"\\(\\sqrt{50}\\approx7.07\\) and \\(\\sqrt[3]{100}\\approx4.64\\). So \\(\\sqrt{50}\\) is greater.",rule:"Approximate each root to compare.",topic:"reasoning"},
+    {q:"If \\(n^2=81\\) and \\(n<0\\), what is \\(n\\)?",plain:"n² = 81, n < 0 → n = ?",hint:"√81 = 9, but n is negative here.",ch:["−81","−9","−3","−1"],ans:1,exp:"\\((-9)^2=81\\). Since \\(n<0\\), we take \\(n=-9\\). (The principal root is 9, but here n < 0.)",rule:"If \\(n^2=x\\) and \\(n<0\\), then \\(n=-\\sqrt{x}\\).",topic:"reasoning"},
+    {q:"Which of the following is both a square number and a cube number?",plain:"Which is both square AND cube?",hint:"1=1²=1³. Check: is there another ≤ 100?",ch:["4","8","16","64"],ans:3,exp:"\\(64=8^2=4^3\\). So 64 is both a perfect square and a perfect cube.",rule:"Numbers that are both: 1, 64, 729, …",topic:"reasoning"},
+    {q:"What is \\(\\sqrt{0.25}\\)?",plain:"√0.25 = ?",hint:"0.25 = 1/4. What is √(1/4)?",ch:["0.025","0.5","0.125","5"],ans:1,exp:"\\(\\sqrt{0.25}=\\sqrt{\\frac{1}{4}}=\\frac{1}{2}=0.5\\), since \\(0.5^2=0.25\\).",rule:"\\(\\sqrt{\\frac{a}{b}}=\\frac{\\sqrt{a}}{\\sqrt{b}}\\).",topic:"reasoning"},
+    {q:"Simplify: \\(\\sqrt{12^2}\\).",plain:"√(12²) = ?",hint:"√(n²) = n for n ≥ 0.",ch:["6","12","24","144"],ans:1,exp:"\\(\\sqrt{12^2}=12\\). Square root and squaring are inverse operations.",rule:"\\(\\sqrt{n^2}=n\\) for \\(n\\geq0\\).",topic:"reasoning"},
+    {q:"True or False: \\(\\sqrt[3]{-27}=-3\\).",plain:"∛(−27) = −3?",hint:"(−3)³ = ?",ch:["True","False","Cannot evaluate","Not a real number"],ans:0,exp:"\\((-3)^3=-27\\), so \\(\\sqrt[3]{-27}=-3\\). TRUE — cube roots of negatives are real.",rule:"\\(\\sqrt[3]{-n^3}=-n\\).",topic:"reasoning"},
+    {q:"If \\(p=\\sqrt{36}\\) and \\(q=\\sqrt[3]{27}\\), find \\(p+q\\).",plain:"p = √36, q = ∛27 → p + q = ?",hint:"Find p and q first.",ch:["7","9","11","13"],ans:1,exp:"\\(p=\\sqrt{36}=6\\) and \\(q=\\sqrt[3]{27}=3\\). \\(p+q=9\\).",rule:"Evaluate each root first.",topic:"reasoning"},
+    {q:"What is \\((-5)^2\\)?",plain:"(−5)² = ?",hint:"Negative times negative = ?",ch:["−25","10","25","−10"],ans:2,exp:"\\((-5)^2=(-5)\\times(-5)=25\\). Squaring any number gives a positive result.",rule:"\\((-n)^2=n^2\\).",topic:"reasoning"},
+    {q:"\\(\\sqrt{16}\\times\\sqrt{25} = \\sqrt{?}\\)",plain:"√16 × √25 = √?",hint:"Use: √a × √b = √(ab)",ch:["41","100","200","400"],ans:1,exp:"\\(\\sqrt{16}\\times\\sqrt{25}=4\\times5=20=\\sqrt{400}\\). So \\(\\sqrt{400}\\). But wait — \\(\\sqrt{16\\times25}=\\sqrt{400}=20\\). ✓",rule:"\\(\\sqrt{a}\\times\\sqrt{b}=\\sqrt{ab}\\).",topic:"reasoning"},
+    {q:"Which value of \\(n\\) satisfies \\(n^3=-64\\)?",plain:"n³ = −64 → n = ?",hint:"Which number cubed gives −64?",ch:["−4","4","−8","8"],ans:0,exp:"\\((-4)^3=-64\\), so \\(n=-4\\).",rule:"\\(\\sqrt[3]{-n^3}=-n\\).",topic:"reasoning"},
+    {q:"Estimate \\(\\sqrt{50}+\\sqrt[3]{27}\\) to the nearest integer.",plain:"√50 + ∛27 ≈ ? (nearest integer)",hint:"√50 ≈ 7.07, ∛27 = 3",ch:["9","10","11","12"],ans:1,exp:"\\(\\sqrt{50}\\approx7.07\\) and \\(\\sqrt[3]{27}=3\\). Total \\(\\approx10.07\\approx10\\).",rule:"Estimate \\(\\sqrt{50}\\) by finding bounding squares (49 and 64).",topic:"reasoning"},
+    {q:"Which statement is always true?",plain:"Which is always true?",hint:"Test each option with numbers.",ch:["\\(\\sqrt{a+b}=\\sqrt{a}+\\sqrt{b}\\)","\\(\\sqrt{a\\times b}=\\sqrt{a}\\times\\sqrt{b}\\)","\\((\\sqrt{a})^3=a\\)","\\(\\sqrt{a}-\\sqrt{b}=\\sqrt{a-b}\\)"],ans:1,exp:"\\(\\sqrt{ab}=\\sqrt{a}\\cdot\\sqrt{b}\\) is always true for \\(a,b\\geq0\\). The others fail for simple counterexamples.",rule:"\\(\\sqrt{ab}=\\sqrt{a}\\cdot\\sqrt{b}\\) for \\(a,b\\geq0\\).",topic:"reasoning"}
+  ]
+};
+</script>
+
+<script>
+/* ═══════════════════════════════════════
+   STATE & LOCALSTORAGE
+═══════════════════════════════════════ */
+const LS = 'bem-sqr-v3';
+let katexReady = false;
+let soundOn = false;
+let AC = null; // AudioContext
+
+let ST = {
+  setId:null, mode:'learn', qs:[], qi:0,
+  results:[], answered:false, clickReady:true,
+  isRetry:false, retryIdx:[],
+  timerSec:0, timerRef:null, quizStart:null,
+  revResults:null, revSetId:null
+};
+
+function lsGet(){
+  try{
+    const d = JSON.parse(localStorage.getItem(LS)||'{}');
+    return {sets:{},streak:{count:0,last:''},badges:[],...d};
+  }catch(e){return {sets:{},streak:{count:0,last:''},badges:[]};}
+}
+function lsSave(d){ try{localStorage.setItem(LS,JSON.stringify(d));}catch(e){} }
+
+function recordResult(setId, score, total, results, timeSec){
+  const d = lsGet();
+  if(!d.sets[setId]) d.sets[setId]={bestScore:0,attempts:0,incorrectIdx:[],timeSec:null};
+  const s = d.sets[setId];
+  s.attempts++;
+  s.timeSec = (s.timeSec===null||timeSec<s.timeSec) ? timeSec : s.timeSec;
+  if(score > s.bestScore) s.bestScore = score;
+  s.incorrectIdx = results.reduce((a,r,i)=>(!r.ok?[...a,i]:a),[]);
+  s.lastResults = results.map(r=>({ok:r.ok,chosen:r.chosen,ans:r.ans,exp:r.exp,rule:r.rule,topic:r.topic,qText:r.qText,ch:r.ch}));
+  // Streak
+  const today = new Date().toISOString().slice(0,10);
+  const yd = new Date(Date.now()-86400000).toISOString().slice(0,10);
+  if(d.streak.last===today){ /* already recorded today */ }
+  else if(d.streak.last===yd){ d.streak.count++; d.streak.last=today; }
+  else{ d.streak.count=1; d.streak.last=today; }
+  // Badges
+  const prev = [...(d.badges||[])];
+  if(!d.badges.includes('s'+setId)) d.badges.push('s'+setId);
+  if(score===total && !d.badges.includes('perfect')) d.badges.push('perfect');
+  const allDone = [1,2,3,4,5].every(id=>d.sets[id]&&d.sets[id].attempts>0);
+  if(allDone && !d.badges.includes('rootmaster')) d.badges.push('rootmaster');
+  const nb = d.badges.filter(b=>!prev.includes(b));
+  lsSave(d);
+  return {d, nb};
+}
+
+/* ═══════════════════════════════════════
+   SCREEN HELPERS
+═══════════════════════════════════════ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function showHome(){
+  renderHome();
+  showScreen('home');
+  document.getElementById('nav-ctx').classList.add('hidden');
+}
+function goLearn(){
+  showLesson(0);
+  showScreen('learn');
+  document.getElementById('nav-ctx').classList.remove('hidden');
+  document.getElementById('nav-ctx').textContent='📖 Lessons';
+}
+function scrollToLevels(){
+  showScreen('home');
+  document.getElementById('nav-ctx').classList.add('hidden');
+  setTimeout(()=>{
+    const el = document.getElementById('levels-section');
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  },80);
+}
+
+/* ═══════════════════════════════════════
+   RENDER HOME — LEVEL CARDS
+═══════════════════════════════════════ */
+function renderHome(){
+  const d = lsGet();
+  // streak chip
+  const sc = d.streak.count||0;
+  const chip = document.getElementById('streak-chip');
+  const cnt = document.getElementById('streak-cnt');
+  if(sc>0){ chip.classList.remove('hidden'); cnt.textContent=sc+'d'; }
+  else chip.classList.add('hidden');
+
+  const grid = document.getElementById('levels-grid');
+  grid.innerHTML = '';
+
+  SET_META.forEach(m=>{
+    const sd = d.sets[m.id]||{bestScore:0,attempts:0,incorrectIdx:[],timeSec:null};
+    const pct = sd.attempts>0 ? Math.round(sd.bestScore/15*100) : null;
+    const done = sd.attempts>0;
+    const mas = done ? mastery(pct) : null;
+    const wrongCount = (sd.incorrectIdx||[]).length;
+    const badgeEarned = d.badges.includes('s'+m.id);
+
+    // Progress bar fill
+    const progW = done ? pct : 0;
+
+    const card = document.createElement('article');
+    card.className = 'level-card';
+    card.setAttribute('role','listitem');
+    card.setAttribute('tabindex','0');
+    card.setAttribute('aria-label', `${m.fun}: ${m.label} — ${done?'Best: '+sd.bestScore+'/15':'Not started'}`);
+    card.addEventListener('click',()=>openSetInfo(m.id));
+    card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openSetInfo(m.id);}});
+
+    card.innerHTML = `
+      <div class="lc-top" style="background:${m.color}"></div>
+      <div class="lc-body">
+        <div class="lc-level-row">
+          <div class="lc-level-num" style="background:${m.colorL};color:${m.color}">${m.fun}</div>
+          <div class="lc-status-icon">${badgeEarned?'🏅':done?'▶️':'🔒'}</div>
+        </div>
+        <div style="font-size:1.6rem;margin:.2rem 0">${m.icon}</div>
+        <div class="lc-fun-name">${m.label}</div>
+        <div class="lc-subtitle">15 Questions</div>
+        <div class="lc-desc">${m.desc}</div>
+        ${done?`
+        <div class="lc-prog-bar"><div class="lc-prog-fill" style="width:${progW}%;background:${m.color}"></div></div>
+        <div class="lc-score-row">Best: <strong>${sd.bestScore}/15</strong> (${pct}%) — ${mas.label}${sd.timeSec?` · ⏱ ${fmtTime(sd.timeSec)}`:''}</div>
+        `:`<div style="font-size:.8rem;color:var(--muted);margin-top:.2rem">Ready when you are! 🚀</div>`}
+      </div>
+      <div class="lc-footer" style="gap:.5rem">
+        <button class="btn btn-primary btn-sm" style="flex:1;background:${m.color}" onclick="event.stopPropagation();openSetInfo(${m.id})">
+          ${done?'▶ Play Again':'🚀 Start'}
+        </button>
+        ${done&&wrongCount>0?`<button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();retryFromHome(${m.id})">🔄 Retry ${wrongCount}</button>`:''}
+        ${done?`<button class="btn btn-ghost btn-sm" style="padding:.38rem .6rem" onclick="event.stopPropagation();openLastReview(${m.id})" title="Review">📋</button>`:''}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function retryFromHome(setId){
+  const d = lsGet();
+  const sd = d.sets[setId]||{};
+  const idxs = sd.incorrectIdx||[];
+  if(idxs.length===0){ showToast('No wrong answers to retry! 🎉'); return; }
+  ST.setId = setId;
+  ST.mode = 'learn';
+  startQuiz(idxs);
+}
+
+function openLastReview(setId){
+  const d = lsGet();
+  const sd = d.sets[setId];
+  if(!sd||!sd.lastResults){ showToast('Play this level first to review!'); return; }
+  ST.revSetId = setId;
+  ST.revResults = sd.lastResults.map((r,i)=>({...r, qi:i}));
+  showScreen('review');
+  document.getElementById('nav-ctx').textContent = `📋 Review — Level ${setId}`;
+  document.getElementById('nav-ctx').classList.remove('hidden');
+  const backBtn = document.getElementById('rev-back-btn');
+  backBtn.onclick = ()=>{ showHome(); };
+  const retryBtn = document.getElementById('rev-retry-btn');
+  const wrongs = sd.incorrectIdx||[];
+  if(wrongs.length>0){
+    retryBtn.classList.remove('hidden');
+    retryBtn.onclick=()=>{ ST.setId=setId; ST.mode='learn'; startQuiz(wrongs); };
+  } else retryBtn.classList.add('hidden');
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.filter-btn[data-f="all"]').classList.add('active');
+  renderRevList('all');
+}
+</script>
+
+<script>
+/* ═══════════════════════════════════════
+   SET INFO SCREEN
+═══════════════════════════════════════ */
+function openSetInfo(id){
+  ST.setId = id;
+  const m = SET_META.find(x=>x.id===id);
+  const d = lsGet();
+  const sd = d.sets[id]||{bestScore:0,attempts:0,timeSec:null};
+  const pct = sd.attempts>0 ? Math.round(sd.bestScore/15*100) : null;
+
+  document.getElementById('si-content').innerHTML = `
+    <div class="si-banner" style="background:linear-gradient(135deg,${m.color},${m.color}cc)">
+      <div style="font-size:2rem;margin-bottom:.3rem">${m.icon}</div>
+      <h2>${m.fun}: ${m.label}</h2>
+      <p>${m.desc}</p>
+    </div>
+    <div class="si-body">
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-val">${sd.attempts||0}</div><div class="stat-lbl">Attempts</div></div>
+        <div class="stat-box"><div class="stat-val">${sd.bestScore||0}/15</div><div class="stat-lbl">Best Score</div></div>
+        <div class="stat-box"><div class="stat-val">${pct!==null?pct+'%':'—'}</div><div class="stat-lbl">Best %</div></div>
+        <div class="stat-box"><div class="stat-val">${sd.timeSec?fmtTime(sd.timeSec):'—'}</div><div class="stat-lbl">Best Time</div></div>
+      </div>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:.75rem;font-weight:600">Choose how you'd like to practise:</p>
+      <div class="mode-grid">
+        <div class="mode-card active" onclick="selMode('learn',this)" id="mode-learn">
+          <div class="mode-radio"></div>
+          <h4>📖 Learn Mode</h4>
+          <p>Hints available. See feedback after each question. Great for first attempts!</p>
+        </div>
+        <div class="mode-card" onclick="selMode('test',this)" id="mode-test">
+          <div class="mode-radio"></div>
+          <h4>⏱ Test Mode</h4>
+          <p>No hints. Timer runs. See all results at the end. When you feel confident!</p>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-lg btn-block" style="background:${m.color}" onclick="startQuiz(null)">🚀 Start Quiz</button>
+    </div>
+  `;
+  showScreen('set-info');
+  document.getElementById('nav-ctx').textContent = `${m.fun}: ${m.label}`;
+  document.getElementById('nav-ctx').classList.remove('hidden');
+}
+
+function selMode(m, el){
+  ST.mode = m;
+  document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ═══════════════════════════════════════
+   QUIZ ENGINE
+═══════════════════════════════════════ */
+function startQuiz(retryList){
+  const allQs = SETS[ST.setId];
+  if(retryList && retryList.length>0){
+    ST.qs = retryList.map(i=>allQs[i]);
+    ST.retryIdx = [...retryList];
+    ST.isRetry = true;
+  } else {
+    ST.qs = [...allQs];
+    ST.retryIdx = [];
+    ST.isRetry = false;
+  }
+  ST.qi = 0;
+  ST.results = [];
+  ST.answered = false;
+  ST.clickReady = true;
+  ST.timerSec = 0;
+  if(ST.timerRef){ clearInterval(ST.timerRef); ST.timerRef=null; }
+  if(ST.mode==='test'){
+    ST.quizStart = Date.now();
+    ST.timerRef = setInterval(()=>{
+      ST.timerSec++;
+      const txt = fmtTime(ST.timerSec);
+      const el1 = document.getElementById('q-timer-txt');
+      const el2 = document.getElementById('q-nav-timer-txt');
+      if(el1) el1.textContent=txt;
+      if(el2) el2.textContent=txt;
+    },1000);
+    document.getElementById('q-timer-inline').style.display='flex';
+    document.getElementById('q-nav-timer').classList.remove('hidden');
+  } else {
+    document.getElementById('q-timer-inline').style.display='none';
+    document.getElementById('q-nav-timer').classList.add('hidden');
+  }
+  buildNav();
+  loadQ(false);
+  showScreen('quiz');
+  const m = SET_META.find(x=>x.id===ST.setId);
+  document.getElementById('nav-ctx').textContent = `${m.fun}: ${m.label}${ST.isRetry?' (Retry)':''}`;
+  document.getElementById('nav-ctx').classList.remove('hidden');
+}
+
+function fmtTime(sec){
+  const m = Math.floor(sec/60);
+  const s = sec%60;
+  return m+':'+(s<10?'0':'')+s;
+}
+
+function buildNav(){
+  const g = document.getElementById('q-nav-grid');
+  g.innerHTML='';
+  ST.qs.forEach((_,i)=>{
+    const b = document.createElement('button');
+    b.className='q-nav-btn';
+    b.textContent=i+1;
+    b.setAttribute('aria-label',`Question ${i+1}`);
+    b.onclick=()=>{ if(!ST.clickReady) return; jumpToQ(i); };
+    g.appendChild(b);
+  });
+  updateNav();
+}
+
+function updateNav(){
+  const btns = document.querySelectorAll('.q-nav-btn');
+  btns.forEach((b,i)=>{
+    b.className='q-nav-btn';
+    if(i===ST.qi) b.classList.add('qn-cur');
+    else if(i<ST.results.length){
+      const r = ST.results[i];
+      if(ST.mode==='test') b.classList.add('qn-done');
+      else b.classList.add(r&&r.ok?'qn-ok':'qn-bad');
+    }
+  });
+  const scoreEl = document.getElementById('nav-score-txt');
+  const cor = ST.results.filter(r=>r.ok).length;
+  if(scoreEl) scoreEl.textContent = `${cor}/${ST.results.length}`;
+}
+
+function jumpToQ(i){
+  if(i>=ST.results.length && i!==ST.qi) return;
+  ST.qi=i; loadQ(false);
+}
+
+function toggleNav(){
+  const panel = document.getElementById('q-nav-panel');
+  const btn = document.getElementById('nav-toggle-btn');
+  const open = panel.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open?'true':'false');
+}
+
+function loadQ(reviewing){
+  const q = ST.qs[ST.qi];
+  const total = ST.qs.length;
+  ST.answered = reviewing || ST.qi < ST.results.length;
+
+  // Progress bar
+  const pct = Math.round((ST.qi/(total||1))*100);
+  const pf = document.getElementById('q-prog-fill');
+  if(pf){ pf.style.width=pct+'%'; pf.parentElement.setAttribute('aria-valuenow',pct); }
+
+  const m = SET_META.find(x=>x.id===ST.setId);
+  const letters = ['A','B','C','D'];
+
+  let choicesHTML = q.ch.map((c,ci)=>{
+    let cls = 'ch-btn';
+    if(ST.answered && ST.mode==='learn'){
+      const r = ST.results[ST.qi];
+      if(ci===q.ans) cls+=' correct';
+      else if(r && ci===r.chosen) cls+=' wrong';
+    }
+    const dis = ST.answered ? 'disabled' : '';
+    return `<button class="ch-btn ${ST.answered&&ci===q.ans?'correct':ST.answered&&ST.results[ST.qi]&&ci===ST.results[ST.qi].chosen?'wrong':''}" 
+      ${dis} onclick="pickAns(${ci})" aria-label="Choice ${letters[ci]}: ${c}">
+      <span class="ch-ltr">${letters[ci]}</span>
+      <span>${c}</span>
+    </button>`;
+  }).join('');
+
+  let fbHTML = '';
+  if(ST.answered && ST.mode==='learn' && ST.results[ST.qi]!==undefined){
+    const r = ST.results[ST.qi];
+    if(r.ok){
+      fbHTML=`<div class="fb-box fb-correct show">✅ <strong>Excellent!</strong> ${q.exp}</div>`;
+    } else {
+      fbHTML=`<div class="fb-box fb-wrong show">💡 Not quite — good attempt. The correct answer is <strong>${q.ch[q.ans]}</strong>.<br><strong>Working:</strong> ${q.exp}</div>`;
+    }
+  }
+
+  let hintHTML='';
+  if(ST.mode==='learn' && !ST.answered && q.hint){
+    hintHTML=`<div class="hint-wrap"><button class="hint-toggle" onclick="toggleHint()">💡 Show hint</button><div class="hint-body" id="hint-body">${q.hint}</div></div>`;
+  }
+
+  let navHTML='';
+  if(ST.answered || (ST.mode==='test' && ST.qi<ST.results.length)){
+    const isLast = ST.qi === total-1;
+    const allDone = ST.results.length >= total;
+    navHTML=`<div class="q-footer">
+      <span class="q-score-chip">✓ ${ST.results.filter(r=>r.ok).length} correct</span>
+      ${isLast&&allDone ? `<button class="btn btn-success" onclick="finishQuiz()">🏁 See Results</button>`
+      : `<button class="btn btn-primary" onclick="nextQ()">Next →</button>`}
+    </div>`;
+  } else if(ST.mode==='test' && ST.qi===ST.results.length){
+    // not yet answered in test mode — no footer until answered
+    navHTML='';
+  }
+
+  document.getElementById('q-card').innerHTML=`
+    <div class="q-meta">
+      <span class="q-num">Question ${ST.qi+1} of ${total}${ST.isRetry?' · Retry':''}</span>
+      <span class="q-badge" style="background:${m.colorL};color:${m.color}">${m.fun}</span>
+    </div>
+    <div class="q-disp" id="q-disp">${q.plain||q.q}</div>
+    <div class="choices">${choicesHTML}</div>
+    ${hintHTML}
+    ${fbHTML}
+    ${navHTML}
+  `;
+
+  renderIn(document.getElementById('q-card'));
+  updateNav();
+}
+
+function toggleHint(){
+  const h = document.getElementById('hint-body');
+  if(h) h.classList.toggle('open');
+}
+
+function pickAns(chosen){
+  if(!ST.clickReady || ST.answered) return;
+  ST.clickReady = false;
+  ST.answered = true;
+  const q = ST.qs[ST.qi];
+  const ok = chosen === q.ans;
+  ST.results[ST.qi] = {ok, chosen, ans:q.ans, exp:q.exp, rule:q.rule||'', topic:q.topic||'', qText:q.plain||q.q, ch:[...q.ch]};
+  playSound(ok);
+  if(ST.mode==='test'){
+    // In test mode, just advance automatically after a short delay
+    loadQ(false);
+    setTimeout(()=>{
+      ST.clickReady=true;
+      if(ST.qi===ST.qs.length-1 && ST.results.length>=ST.qs.length){
+        // show finish button — reload
+        loadQ(false);
+      } else nextQ();
+    }, 600);
+  } else {
+    loadQ(false);
+    setTimeout(()=>{ ST.clickReady=true; }, 400);
+  }
+}
+
+function nextQ(){
+  if(ST.qi < ST.qs.length-1){
+    ST.qi++;
+    ST.answered = ST.qi < ST.results.length;
+    loadQ(false);
+  } else if(ST.results.length >= ST.qs.length){
+    finishQuiz();
+  }
+}
+
+/* ═══════════════════════════════════════
+   FINISH / RESULT
+═══════════════════════════════════════ */
+function finishQuiz(){
+  if(ST.timerRef){ clearInterval(ST.timerRef); ST.timerRef=null; }
+  const timeSec = ST.timerSec;
+  const score = ST.results.filter(r=>r.ok).length;
+  const total = ST.qs.length;
+  const pct = Math.round(score/total*100);
+
+  let {d, nb} = {d:lsGet(), nb:[]};
+  if(!ST.isRetry){
+    const res = recordResult(ST.setId, score, total, ST.results, timeSec);
+    d = res.d; nb = res.nb;
+  }
+
+  const m = mastery(pct);
+  renderResult(score, total, pct, m, timeSec, d, nb);
+  showScreen('result');
+  document.getElementById('nav-ctx').textContent = `Results — Level ${ST.setId}`;
+  if(pct>=90) launchConfetti();
+}
+
+function mastery(pct){
+  if(pct>=90) return {label:'Mastered 🌟',bg:'#ECFDF5',col:'#065F46',msg:'Outstanding! You have truly mastered this topic. Amazing work!'};
+  if(pct>=75) return {label:'Almost Mastered 🔵',bg:'#EFF6FF',col:'#1E3A8A',msg:'Excellent effort! You are very close to mastery — keep it up!'};
+  if(pct>=60) return {label:'Developing ✏️',bg:'#FFFBEB',col:'#78350F',msg:'Good progress! A bit more practice and you will have this topic nailed!'};
+  return {label:'Needs More Practice 💪',bg:'#FEF2F2',col:'#7F1D1D',msg:'Keep going! Every expert started right where you are. Try again soon!'};
+}
+
+function renderResult(score, total, pct, m, timeSec, d, nb){
+  const sd = d.sets[ST.setId]||{};
+  const attempts = sd.attempts||1;
+  const topicMap = {};
+  ST.results.forEach(r=>{
+    if(!r.topic) return;
+    if(!topicMap[r.topic]) topicMap[r.topic]={ok:0,tot:0};
+    topicMap[r.topic].tot++;
+    if(r.ok) topicMap[r.topic].ok++;
+  });
+  const topicRows = Object.entries(topicMap).map(([t,v])=>{
+    const tp = Math.round(v.ok/v.tot*100);
+    const col = tp>=80?'var(--mint)':tp>=60?'var(--warm)':'var(--coral)';
+    return `<div class="topic-row">
+      <span class="topic-lbl">${TOPIC_LABELS[t]||t}</span>
+      <div class="topic-bar"><div class="topic-fill" style="width:${tp}%;background:${col}"></div></div>
+      <span class="topic-pct">${tp}%</span>
+    </div>`;
+  }).join('');
+
+  const badgesHTML = BADGE_DEFS.map(b=>{
+    const earned = (d.badges||[]).includes(b.id);
+    return `<div class="badge-item${earned?' earned':''}">
+      <span>${b.icon}</span>
+      <span>${b.name}${earned?'':' 🔒'}</span>
+    </div>`;
+  }).join('');
+
+  const wrongCount = ST.results.filter(r=>!r.ok).length;
+
+  // Next set recommendation
+  const nextId = ST.setId < 5 ? ST.setId+1 : null;
+  const nextMeta = nextId ? SET_META.find(x=>x.id===nextId) : null;
+  let nextHTML = '';
+  if(nextMeta && pct>=75){
+    nextHTML=`<div class="next-action-section">
+      <div class="section-h">🗺️ What's Next?</div>
+      <div class="next-action-card" onclick="openSetInfo(${nextMeta.id})">
+        <div class="na-icon" style="background:${nextMeta.colorL}">${nextMeta.icon}</div>
+        <div class="na-body">
+          <h4>Try ${nextMeta.fun}: ${nextMeta.label} →</h4>
+          <p>You're ready! Take on the next challenge.</p>
+        </div>
+      </div>
+    </div>`;
+  } else if(pct<75){
+    nextHTML=`<div class="next-action-section">
+      <div class="section-h">💡 Suggestion</div>
+      <div class="next-action-card" onclick="openSetInfo(${ST.setId})">
+        <div class="na-icon" style="background:var(--sky-l)">🔄</div>
+        <div class="na-body">
+          <h4>Try this level again</h4>
+          <p>Review your answers first, then have another go — you'll do better!</p>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // SVG ring
+  const r=54, circ=2*Math.PI*r, dash=circ*(pct/100), gap=circ-dash;
+
+  const newBadgeHTML = nb.length>0 ? `<div style="background:var(--warm-l);border:1.5px solid #FCD34D;border-radius:var(--rs);padding:.7rem .9rem;text-align:center;margin-bottom:.75rem;font-weight:700;font-size:.88rem;color:#78350F">
+    🎉 New Badge${nb.length>1?'s':''} Unlocked! ${nb.map(id=>{const b=BADGE_DEFS.find(x=>x.id===id);return b?b.icon+' '+b.name:'';}).join(' · ')}
+  </div>` : '';
+
+  document.getElementById('result-content').innerHTML=`
+    ${newBadgeHTML}
+    <div class="res-card">
+      <div class="ring-wrap" role="img" aria-label="${pct}% score">
+        <svg viewBox="0 0 120 120" class="ring-ring" aria-hidden="true">
+          <circle cx="60" cy="60" r="${r}" fill="none" stroke="var(--border)" stroke-width="10"/>
+          <circle cx="60" cy="60" r="${r}" fill="none" stroke="${m.col}" stroke-width="10"
+            stroke-dasharray="${dash} ${gap}" stroke-linecap="round"/>
+        </svg>
+        <div class="ring-text">
+          <div class="ring-pct" style="color:${m.col}">${pct}%</div>
+          <div class="ring-frac">${score}/${total}</div>
+        </div>
+      </div>
+      <div class="mastery-pill" style="background:${m.bg};color:${m.col}">${m.label}</div>
+      <p class="mastery-msg">${m.msg}</p>
+      <div class="res-stats">
+        <div class="rs-box"><div class="rs-val" style="color:var(--mint-d)">${score}</div><div class="rs-lbl">Correct</div></div>
+        <div class="rs-box"><div class="rs-val" style="color:var(--coral)">${total-score}</div><div class="rs-lbl">Wrong</div></div>
+        <div class="rs-box"><div class="rs-val">${attempts}</div><div class="rs-lbl">Attempt${attempts!==1?'s':''}</div></div>
+        <div class="rs-box"><div class="rs-val">${timeSec?fmtTime(timeSec):'—'}</div><div class="rs-lbl">Time</div></div>
+      </div>
+      <div class="res-actions">
+        <button class="btn btn-primary" onclick="openReview()">📋 Review Answers</button>
+        <button class="btn btn-secondary" onclick="showHome()">🏠 Home</button>
+        ${wrongCount>0?`<button class="btn btn-success" onclick="doRetry()">🔄 Retry Wrong (${wrongCount})</button>`:''}
+        <button class="btn btn-secondary" onclick="openSetInfo(${ST.setId})">▶ Play Again</button>
+      </div>
+    </div>
+    ${topicRows?`<div class="topic-section"><div class="section-h">📊 Topic Breakdown</div>${topicRows}</div>`:''}
+    <div class="badges-section"><div class="section-h">🏅 Your Badges</div><div class="badges-grid">${badgesHTML}</div></div>
+    ${nextHTML}
+  `;
+  renderIn(document.getElementById('result-content'));
+}
+</script>
+
+<script>
+/* ═══════════════════════════════════════
+   REVIEW SCREEN
+═══════════════════════════════════════ */
+function openReview(){
+  // called after finishing quiz
+  ST.revResults = ST.results.map((r,i)=>({...r,qi:i}));
+  ST.revSetId = ST.setId;
+  showScreen('review');
+  document.getElementById('nav-ctx').textContent = `📋 Review — Level ${ST.setId}`;
+  document.getElementById('nav-ctx').classList.remove('hidden');
+
+  const backBtn = document.getElementById('rev-back-btn');
+  backBtn.onclick = ()=>{
+    // if we came from result, go back to result
+    finishQuiz();
+  };
+  const retryBtn = document.getElementById('rev-retry-btn');
+  const wrongs = ST.results.reduce((a,r,i)=>(!r.ok?[...a,i]:a),[]);
+  if(wrongs.length>0){
+    retryBtn.classList.remove('hidden');
+    retryBtn.onclick=()=>doRetry();
+  } else retryBtn.classList.add('hidden');
+
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.filter-btn[data-f="all"]').classList.add('active');
+  renderRevList('all');
+}
+
+function filterRev(f){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active',b.dataset.f===f));
+  renderRevList(f);
+}
+
+function renderRevList(f){
+  const items = ST.revResults||[];
+  const filtered = items.filter(r=> f==='all'||( f==='ok'&&r.ok)||(f==='bad'&&!r.ok));
+  const list = document.getElementById('rev-list');
+  if(filtered.length===0){ list.innerHTML='<p style="color:var(--muted);font-size:.85rem;text-align:center;padding:1.5rem">No questions to show.</p>'; return; }
+  const letters=['A','B','C','D'];
+  list.innerHTML = filtered.map((r,i)=>{
+    const topicRule = TOPIC_RULES[r.topic]||'';
+    return `<div class="rev-card ${r.ok?'rev-ok':'rev-bad'}">
+      <div class="rev-top">
+        <div class="rev-dot">${r.ok?'✓':'✗'}</div>
+        <div class="rev-q-text">Q${(r.qi||i)+1}. ${r.qText||'—'}</div>
+      </div>
+      <div class="rev-choices">
+        ${(r.ch||[]).map((c,ci)=>{
+          let cls='rv-opt';
+          if(ci===r.ans) cls+=' rv-answer';
+          if(!r.ok && ci===r.chosen) cls+=' rv-selected';
+          const pre = ci===r.ans?'✓ ':(!r.ok&&ci===r.chosen?'✗ ':'  ');
+          return `<div class="${cls}">${pre}${letters[ci]}. ${c}</div>`;
+        }).join('')}
+      </div>
+      ${!r.ok?`<div class="rev-exp">${r.exp||''}</div>`:''}
+      ${r.rule?`<div class="rev-rule">📌 Rule: ${r.rule}</div>`:''}
+      ${topicRule?`<div class="rev-rule" style="color:var(--purple)">📐 Topic: ${topicRule}</div>`:''}
+    </div>`;
+  }).join('');
+  renderIn(list);
+}
+
+function doRetry(){
+  const wrongs = ST.results.reduce((a,r,i)=>(!r.ok?[...a,i]:a),[]);
+  if(wrongs.length===0){ showToast('Nothing to retry! 🎉'); return; }
+  startQuiz(wrongs);
+}
+
+/* ═══════════════════════════════════════
+   LESSONS
+═══════════════════════════════════════ */
+function showLesson(idx){
+  document.querySelectorAll('.learn-tab').forEach((t,i)=>{
+    t.classList.toggle('active',i===idx);
+    t.setAttribute('aria-selected',i===idx?'true':'false');
+  });
+  const content = document.getElementById('lesson-content');
+  content.innerHTML = LESSONS[idx].render();
+  renderIn(content);
+  // Render check questions
+  const checks = LESSON_CHECKS[idx]||[];
+  checks.forEach((ck,qi)=>{
+    const container = document.getElementById(`ck-${idx}-${qi}`);
+    if(!container) return;
+    const letters=['A','B','C','D'];
+    container.innerHTML=`
+      <div class="check-q-text">${qi+1}. ${ck.q}</div>
+      <div class="check-opts">
+        ${ck.ch.map((c,ci)=>`<button class="check-opt" onclick="pickCheck(${idx},${qi},${ci})">${letters[ci]}. ${c}</button>`).join('')}
+      </div>
+      <div class="check-fb" id="ckfb-${idx}-${qi}"></div>
+    `;
+    renderIn(container);
+  });
+}
+
+function pickCheck(li, qi, ci){
+  const checks = LESSON_CHECKS[li];
+  if(!checks||!checks[qi]) return;
+  const ck = checks[qi];
+  const opts = document.querySelectorAll(`#ck-${li}-${qi} .check-opt`);
+  opts.forEach(o=>o.setAttribute('disabled','true'));
+  opts.forEach((o,oi)=>{
+    if(oi===ck.ans) o.classList.add('ck-correct');
+    else if(oi===ci) o.classList.add('ck-wrong');
+  });
+  const fb = document.getElementById(`ckfb-${li}-${qi}`);
+  if(fb){
+    const ok = ci===ck.ans;
+    fb.className='check-fb show';
+    fb.style.color = ok?'var(--mint-d)':'var(--coral-d)';
+    fb.innerHTML = ok ? `✅ Correct! ${ck.exp}` : `💡 Not quite. ${ck.exp}`;
+    renderIn(fb);
+  }
+}
+
+/* ═══════════════════════════════════════
+   EXIT MODAL
+═══════════════════════════════════════ */
+function askExit(){
+  const s = document.querySelector('.screen.active');
+  if(!s) return;
+  const id = s.id;
+  if(id==='screen-home' || id==='screen-learn'){
+    showHome(); return;
+  }
+  if(id==='screen-set-info' || id==='screen-result' || id==='screen-review'){
+    showHome(); return;
+  }
+  // In quiz — confirm exit
+  document.getElementById('modal-exit').classList.add('open');
+}
+
+function doGoHome(){
+  if(ST.timerRef){ clearInterval(ST.timerRef); ST.timerRef=null; }
+  document.getElementById('modal-exit').classList.remove('open');
+  showHome();
+}
+
+/* ═══════════════════════════════════════
+   KATEX
+═══════════════════════════════════════ */
+function renderKaTeX(){
+  katexReady = true;
+  renderIn(document.body);
+}
+function renderIn(el){
+  if(!katexReady || typeof renderMathInElement==='undefined') return;
+  try{
+    renderMathInElement(el,{
+      delimiters:[
+        {left:'\\(',right:'\\)',display:false},
+        {left:'\\[',right:'\\]',display:true}
+      ],
+      throwOnError:false
+    });
+  }catch(e){}
+}
+
+/* ═══════════════════════════════════════
+   SOUND
+═══════════════════════════════════════ */
+function toggleSound(){
+  soundOn = !soundOn;
+  document.getElementById('sound-btn').textContent = soundOn ? '🔊' : '🔇';
+  if(soundOn && !AC){ try{ AC=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+}
+function playSound(ok){
+  if(!soundOn || !AC) return;
+  try{
+    const o=AC.createOscillator(), g=AC.createGain();
+    o.connect(g); g.connect(AC.destination);
+    o.frequency.value = ok?880:280;
+    o.type = ok?'sine':'sawtooth';
+    g.gain.setValueAtTime(.18,AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.35);
+    o.start(); o.stop(AC.currentTime+.35);
+  }catch(e){}
+}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+let toastTimer=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ═══════════════════════════════════════
+   CONFETTI
+═══════════════════════════════════════ */
+function launchConfetti(){
+  const cv = document.getElementById('confetti-canvas');
+  cv.style.display='block';
+  cv.width=window.innerWidth; cv.height=window.innerHeight;
+  const ctx=cv.getContext('2d');
+  const colors=['#4F90F0','#8B5CF6','#10B981','#F59E0B','#EF4444','#EC4899'];
+  const particles=Array.from({length:120},()=>({
+    x:Math.random()*cv.width, y:Math.random()*cv.height-cv.height,
+    r:Math.random()*7+3, d:Math.random()*3+1,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    tilt:Math.random()*10-10, tiltA:Math.random()*.1
+  }));
+  let f=0;
+  function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    particles.forEach(p=>{
+      ctx.beginPath();
+      ctx.lineWidth=p.r/2;
+      ctx.strokeStyle=p.color;
+      ctx.moveTo(p.x+p.tilt+p.r/4,p.y);
+      ctx.lineTo(p.x+p.tilt,p.y+p.tilt+p.r/4);
+      ctx.stroke();
+      p.y+=p.d; p.tilt+=p.tiltA;
+      if(p.y>cv.height+10){ p.y=-10; p.x=Math.random()*cv.width; }
+    });
+    f++;
+    if(f<180) requestAnimationFrame(draw);
+    else{ ctx.clearRect(0,0,cv.width,cv.height); cv.style.display='none'; }
+  }
+  draw();
+}
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded',()=>{
+  // Modal: exit confirm
+  document.getElementById('modal-exit-confirm').onclick=doGoHome;
+  document.getElementById('modal-reset-confirm').onclick=()=>{
+    localStorage.removeItem(LS);
+    document.getElementById('modal-reset').classList.remove('open');
+    showHome();
+    showToast('Progress reset! Starting fresh 🚀');
+  };
+
+  // Close modals on backdrop click
+  document.querySelectorAll('.modal-bg').forEach(m=>{
+    m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('open'); });
+  });
+
+  // Keyboard escape closes modals
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){
+      document.querySelectorAll('.modal-bg.open').forEach(m=>m.classList.remove('open'));
+    }
+  });
+
+  renderHome();
+  showLesson(0); // pre-render lesson 0 content so KaTeX picks it up
+  showScreen('home');
+});
+</script>
+</body>
+</html>
