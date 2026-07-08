@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tic Tac Toe ✨ Math Edition</title>
+<!-- ══════════════════════════════════════════
+     Cute Pastel Tic Tac Toe — Normal + Math Mode
+     Created by Bright EngMath
+════════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+:root{
+  --pink:#FFB7C5; --pink-d:#E85D8A; --pink-l:#FFF0F3;
+  --lav:#C9B8F0;  --lav-d:#7C5CBF;  --lav-l:#F5F0FF;
+  --blue:#A8D8EA; --blue-d:#2980B9; --blue-l:#EAF6FD;
+  --mint:#B8E8D0; --mint-d:#1A7A52; --mint-l:#F0FBF5;
+  --yel:#FFE8A3;  --yel-d:#C8860A;  --yel-l:#FFFBEE;
+  --cre:#FFF9F0;
+  --bg:linear-gradient(135deg,#FFF0F9 0%,#F5F0FF 50%,#EAF6FD 100%);
+  --card:#FFFFFF;
+  --navy:#3D2C6B;
+  --text:#5A4A7A;
+  --gray:#9188AA;
+  --border:#E8E0F5;
+  --x-col:#E85D8A; --o-col:#2980B9;
+  --shadow:0 4px 20px rgba(150,100,200,.13);
+  --shadow-lg:0 8px 32px rgba(150,100,200,.18);
+  --r:18px; --r-lg:26px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  padding:20px 14px 40px;color:var(--text)}
+h1{font-size:clamp(1.55rem,5vw,2.2rem);font-weight:900;color:var(--navy);line-height:1.2;text-align:center}
+h2{font-size:clamp(1.1rem,4vw,1.45rem);font-weight:900;color:var(--navy);text-align:center}
+h3{font-size:1rem;font-weight:800;color:var(--navy)}
+p{line-height:1.7}
+
+/* ── SCREENS ── */
+.screen{display:none;width:100%;max-width:520px;animation:fadeUp .35s ease}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CARD ── */
+.card{background:var(--card);border-radius:var(--r-lg);padding:26px 22px;
+  box-shadow:var(--shadow);border:2px solid var(--border);margin-bottom:14px}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 26px;border-radius:50px;font-size:1rem;font-weight:800;
+  cursor:pointer;border:none;transition:.2s;font-family:'Nunito',sans-serif;
+  width:100%;margin-bottom:10px}
+.btn:hover{transform:translateY(-3px);filter:brightness(1.06)}
+.btn:active{transform:none}
+.btn-pink{background:linear-gradient(135deg,#FFB7C5,#F78FAA);color:#fff;
+  box-shadow:0 4px 16px rgba(232,93,138,.28)}
+.btn-lav{background:linear-gradient(135deg,#C9B8F0,#A084CC);color:#fff;
+  box-shadow:0 4px 16px rgba(124,92,191,.28)}
+.btn-blue{background:linear-gradient(135deg,#A8D8EA,#4CA8D4);color:#fff;
+  box-shadow:0 4px 16px rgba(41,128,185,.22)}
+.btn-mint{background:linear-gradient(135deg,#B8E8D0,#4DBD8A);color:#fff;
+  box-shadow:0 4px 16px rgba(26,122,82,.2)}
+.btn-yel{background:linear-gradient(135deg,#FFE8A3,#F5C842);color:#7A5800;
+  box-shadow:0 4px 16px rgba(200,134,10,.22)}
+.btn-white{background:#fff;color:var(--navy);border:2.5px solid var(--lav)}
+.btn-sm{padding:9px 20px;font-size:.9rem;width:auto;margin-bottom:0}
+
+/* ── TITLE AREA ── */
+.title-area{text-align:center;margin-bottom:22px}
+.title-ico{font-size:3rem;margin-bottom:8px}
+.title-sub{font-size:.95rem;color:var(--gray);margin-top:5px;font-weight:600}
+
+/* ── MODE CARDS ── */
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.mode-btn{background:var(--card);border-radius:var(--r);padding:22px 14px;
+  text-align:center;border:3px solid transparent;cursor:pointer;
+  transition:.25s;box-shadow:var(--shadow);font-family:'Nunito',sans-serif}
+.mode-btn:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.mode-btn .mico{font-size:2.4rem;margin-bottom:10px}
+.mode-btn .mlbl{font-size:1rem;font-weight:900;color:var(--navy)}
+.mode-btn .mdsc{font-size:.78rem;color:var(--gray);margin-top:5px}
+.mode-btn.m-normal{border-color:var(--pink)}
+.mode-btn.m-math{border-color:var(--lav)}
+
+/* ── TOPIC CARDS ── */
+.topic-grid{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+.topic-btn{background:var(--card);border-radius:var(--r);padding:18px 20px;
+  display:flex;align-items:center;gap:14px;border:3px solid transparent;
+  cursor:pointer;transition:.22s;box-shadow:var(--shadow);font-family:'Nunito',sans-serif}
+.topic-btn:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.topic-btn .tico{font-size:2rem;flex-shrink:0}
+.topic-btn .tlbl{font-size:1rem;font-weight:900;color:var(--navy)}
+.topic-btn .tdsc{font-size:.8rem;color:var(--gray);margin-top:3px}
+.topic-btn.t-bidmas{border-color:var(--lav)}
+.topic-btn.t-int{border-color:var(--blue)}
+.topic-btn.t-mix{border-color:var(--yel)}
+
+/* ── GAME HEADER ── */
+.game-header{text-align:center;margin-bottom:14px}
+.mode-tag{display:inline-block;padding:4px 14px;border-radius:20px;
+  font-size:.78rem;font-weight:900;margin-bottom:8px;letter-spacing:.3px}
+.mode-tag.normal{background:var(--pink-l);color:var(--pink-d)}
+.mode-tag.bidmas{background:var(--lav-l);color:var(--lav-d)}
+.mode-tag.integers{background:var(--blue-l);color:var(--blue-d)}
+.mode-tag.mixed{background:var(--yel-l);color:var(--yel-d)}
+.turn-box{background:var(--card);border-radius:var(--r);padding:12px 18px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:1.05rem;font-weight:800;color:var(--navy);
+  box-shadow:var(--shadow);border:2px solid var(--border);margin-bottom:14px}
+.turn-x{color:var(--x-col)} .turn-o{color:var(--o-col)}
+
+/* ── BOARD ── */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  max-width:320px;margin:0 auto 16px}
+.cell{aspect-ratio:1;background:var(--card);border-radius:16px;
+  border:3px solid var(--border);display:flex;align-items:center;
+  justify-content:center;font-size:clamp(2.2rem,9vw,3rem);font-weight:900;
+  cursor:pointer;transition:.2s;box-shadow:var(--shadow)}
+.cell:hover:not(.taken){transform:scale(1.05);border-color:var(--lav);
+  background:var(--lav-l);box-shadow:var(--shadow-lg)}
+.cell.taken{cursor:default;transform:none!important}
+.cell.x{color:var(--x-col);background:var(--pink-l);border-color:var(--pink)}
+.cell.o{color:var(--o-col);background:var(--blue-l);border-color:var(--blue)}
+.cell.win{animation:cellWin .5s ease forwards}
+@keyframes cellWin{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1.08)}}
+.cell.blocked{cursor:not-allowed;opacity:.6}
+
+/* ── MATH PANEL ── */
+.math-panel{background:linear-gradient(135deg,var(--lav-l),#EDE9FE);
+  border-radius:var(--r-lg);padding:20px;border:2.5px solid var(--lav);
+  margin-bottom:14px;box-shadow:var(--shadow)}
+.q-txt{font-size:1.12rem;font-weight:900;color:var(--navy);
+  text-align:center;margin:10px 0 14px;line-height:1.5}
+.ans-row{display:flex;gap:9px;align-items:center}
+.ans-inp{flex:1;padding:11px 16px;border-radius:14px;border:2.5px solid var(--lav);
+  font-size:1.05rem;font-weight:800;font-family:'Nunito',sans-serif;
+  color:var(--navy);outline:none;background:#fff;transition:.2s;text-align:center}
+.ans-inp:focus{border-color:var(--lav-d);box-shadow:0 0 0 3px rgba(160,132,204,.18)}
+.ans-inp.ok{border-color:var(--mint-d);background:var(--mint-l)}
+.ans-inp.ng{border-color:#E85D8A;background:var(--pink-l)}
+.submit-btn{padding:11px 20px;border-radius:14px;background:linear-gradient(135deg,var(--lav),var(--lav-d));
+  color:#fff;border:none;font-weight:900;font-size:.95rem;font-family:'Nunito',sans-serif;
+  cursor:pointer;transition:.2s;flex-shrink:0}
+.submit-btn:hover{filter:brightness(1.08);transform:translateY(-2px)}
+.hint-area{margin-top:11px}
+.hint-btn{background:var(--yel-l);color:var(--yel-d);border:2px solid var(--yel);
+  padding:7px 16px;border-radius:20px;font-weight:800;font-size:.84rem;
+  cursor:pointer;font-family:'Nunito',sans-serif}
+.hint-btn:hover{background:var(--yel)}
+.hint-txt{display:none;background:#fff;border-radius:12px;padding:10px 14px;
+  margin-top:8px;font-size:.87rem;font-weight:700;color:var(--lav-d);
+  border:1.5px solid var(--lav)}
+.hint-txt.show{display:block}
+.math-fb{border-radius:12px;padding:10px 15px;margin-top:10px;
+  font-weight:800;font-size:.9rem;display:none;text-align:center}
+.math-fb.show{display:block}
+.math-fb.ok{background:var(--mint-l);color:var(--mint-d);border:1.5px solid var(--mint-d)}
+.math-fb.ng{background:var(--pink-l);color:var(--pink-d);border:1.5px solid var(--pink-d)}
+
+/* ── STATUS ── */
+.status-box{background:var(--cre);border-radius:var(--r);padding:12px 18px;
+  text-align:center;font-size:.88rem;font-weight:700;color:var(--gray);
+  border:2px dashed var(--border);margin-bottom:14px}
+.status-box.waiting{border-color:var(--lav);background:var(--lav-l);color:var(--lav-d)}
+.status-box.pick{border-color:var(--mint-d);background:var(--mint-l);color:var(--mint-d)}
+
+/* ── RESULT OVERLAY ── */
+.result-overlay{display:none;position:fixed;inset:0;background:rgba(180,150,230,.22);
+  backdrop-filter:blur(6px);z-index:100;align-items:center;justify-content:center;padding:20px}
+.result-overlay.show{display:flex}
+.result-card{background:var(--card);border-radius:var(--r-lg);padding:36px 28px;
+  max-width:380px;width:100%;text-align:center;box-shadow:0 12px 48px rgba(100,60,180,.25);
+  border:3px solid var(--lav);animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.result-ico{font-size:4rem;margin-bottom:12px}
+.result-title{font-size:1.6rem;font-weight:900;color:var(--navy);margin-bottom:8px}
+.result-sub{font-size:.95rem;color:var(--gray);margin-bottom:22px}
+
+/* ── SCORES ── */
+.score-row{display:flex;gap:10px;margin-bottom:14px}
+.score-box{flex:1;background:var(--card);border-radius:var(--r);padding:12px 10px;
+  text-align:center;box-shadow:var(--shadow);border:2.5px solid var(--border)}
+.score-box.sx{border-color:var(--pink)}.score-box.so{border-color:var(--blue)}
+.score-box .slbl{font-size:.72rem;font-weight:900;color:var(--gray);text-transform:uppercase;letter-spacing:.4px}
+.score-box .sval{font-size:1.8rem;font-weight:900;margin-top:2px}
+.score-box.sx .sval{color:var(--x-col)} .score-box.so .sval{color:var(--o-col)}
+
+/* ── CONFETTI ── */
+@keyframes cfFall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(90px) rotate(500deg);opacity:0}}
+.cf{position:fixed;pointer-events:none;z-index:200;animation:cfFall 1.1s ease forwards}
+
+/* ── FOOTER ── */
+.footer{margin-top:10px;text-align:center;font-size:.75rem;color:var(--gray);font-weight:700}
+
+/* ── RESPONSIVE ── */
+@media(max-width:420px){
+  .board{gap:7px;max-width:270px}
+  .cell{border-radius:13px}
+  .ans-row{flex-direction:column}
+  .submit-btn{width:100%;padding:12px}
+  .mode-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SCREEN 1: MODE SELECT ═══════════ -->
+<div id="scr-mode" class="screen active">
+  <div class="title-area" style="margin-top:16px">
+    <div class="title-ico">🎀✨</div>
+    <h1>Tic Tac Toe</h1>
+    <p class="title-sub">Choose your game mode 🌈</p>
+  </div>
+  <div class="mode-grid">
+    <div class="mode-btn m-normal" onclick="selectMode('normal')">
+      <div class="mico">🎮</div>
+      <div class="mlbl">Normal Mode</div>
+      <div class="mdsc">Classic Tic Tac Toe</div>
+    </div>
+    <div class="mode-btn m-math" onclick="selectMode('math')">
+      <div class="mico">🧮</div>
+      <div class="mlbl">Math Mode</div>
+      <div class="mdsc">Answer to play!</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:12px">
+    <p style="font-size:.85rem;color:var(--gray)">💡 In <strong>Math Mode</strong>, answer a maths question before placing your mark!</p>
+  </div>
+  <div class="footer">✏️ Created by Bright EngMath</div>
+</div>
+
+<!-- ═══════════ SCREEN 2: TOPIC SELECT ═══════════ -->
+<div id="scr-topic" class="screen">
+  <div class="title-area" style="margin-top:8px">
+    <div class="title-ico">🧮</div>
+    <h2>Choose your Maths Topic</h2>
+    <p class="title-sub" style="margin-top:6px">Pick a challenge and let's go! ✨</p>
+  </div>
+  <div class="topic-grid">
+    <div class="topic-btn t-bidmas" onclick="selectTopic('bidmas')">
+      <span class="tico">🧮</span>
+      <div>
+        <div class="tlbl">BIDMAS Challenge</div>
+        <div class="tdsc">Order of Operations — Brackets, Indices, × ÷, + −</div>
+      </div>
+    </div>
+    <div class="topic-btn t-int" onclick="selectTopic('integers')">
+      <span class="tico">🔢</span>
+      <div>
+        <div class="tlbl">Integers Challenge</div>
+        <div class="tdsc">Positive, negative, zero — identify, compare, calculate</div>
+      </div>
+    </div>
+    <div class="topic-btn t-mix" onclick="selectTopic('mixed')">
+      <span class="tico">✨</span>
+      <div>
+        <div class="tlbl">Mixed Math Challenge</div>
+        <div class="tdsc">Random mix of BIDMAS and Integers questions</div>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-white" onclick="goBack()">← Back</button>
+</div>
+
+<!-- ═══════════ SCREEN 3: GAME ═══════════ -->
+<div id="scr-game" class="screen">
+  <!-- Header -->
+  <div class="game-header">
+    <div class="mode-tag" id="mode-tag">🎮 Normal Mode</div>
+    <h2 id="game-title">Tic Tac Toe ✨</h2>
+  </div>
+
+  <!-- Scores -->
+  <div class="score-row">
+    <div class="score-box sx">
+      <div class="slbl">Player X</div>
+      <div class="sval" id="score-x">0</div>
+    </div>
+    <div class="score-box" style="border-color:var(--lav);flex:.6">
+      <div class="slbl">Draw</div>
+      <div class="sval" id="score-d" style="color:var(--lav-d)">0</div>
+    </div>
+    <div class="score-box so">
+      <div class="slbl">Player O</div>
+      <div class="sval" id="score-o">0</div>
+    </div>
+  </div>
+
+  <!-- Turn indicator -->
+  <div class="turn-box" id="turn-box">
+    <span>🎯 Player</span>
+    <span id="turn-sym" class="turn-x">X</span>
+    <span>'s turn!</span>
+  </div>
+
+  <!-- Math Panel (hidden in Normal Mode) -->
+  <div class="math-panel" id="math-panel" style="display:none">
+    <div style="font-size:.78rem;font-weight:900;color:var(--lav-d);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">🧮 Answer to place your mark!</div>
+    <div class="q-txt" id="q-txt">Loading question…</div>
+    <div class="ans-row">
+      <input class="ans-inp" id="ans-inp" type="text" placeholder="Your answer…" autocomplete="off">
+      <button class="submit-btn" onclick="submitAnswer()">Check ✓</button>
+    </div>
+    <div class="hint-area">
+      <button class="hint-btn" onclick="toggleHint()">💡 Hint</button>
+      <div class="hint-txt" id="hint-txt"></div>
+    </div>
+    <div class="math-fb" id="math-fb"></div>
+  </div>
+
+  <!-- Status message -->
+  <div class="status-box" id="status-box">Click a square to begin! 🌈</div>
+
+  <!-- Board -->
+  <div class="board" id="board">
+    <div class="cell" id="c0" onclick="cellClick(0)"></div>
+    <div class="cell" id="c1" onclick="cellClick(1)"></div>
+    <div class="cell" id="c2" onclick="cellClick(2)"></div>
+    <div class="cell" id="c3" onclick="cellClick(3)"></div>
+    <div class="cell" id="c4" onclick="cellClick(4)"></div>
+    <div class="cell" id="c5" onclick="cellClick(5)"></div>
+    <div class="cell" id="c6" onclick="cellClick(6)"></div>
+    <div class="cell" id="c7" onclick="cellClick(7)"></div>
+    <div class="cell" id="c8" onclick="cellClick(8)"></div>
+  </div>
+
+  <!-- Buttons -->
+  <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:4px">
+    <button class="btn btn-mint btn-sm" style="flex:1;min-width:130px" onclick="restartGame()">🔄 Restart Game</button>
+    <button class="btn btn-white btn-sm" style="flex:1;min-width:130px" onclick="backToMenu()">🏠 Mode Select</button>
+  </div>
+</div>
+
+<!-- ═══════════ RESULT OVERLAY ═══════════ -->
+<div class="result-overlay" id="result-overlay">
+  <div class="result-card">
+    <div class="result-ico" id="res-ico">🏆</div>
+    <div class="result-title" id="res-title">Player X Wins!</div>
+    <div class="result-sub" id="res-sub">You're a math star! ⭐</div>
+    <button class="btn btn-mint" onclick="restartGame();closeResult()" style="margin-bottom:9px">🔄 Play Again</button>
+    <button class="btn btn-white" onclick="backToMenu();closeResult()">🏠 Mode Select</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   QUESTION BANKS
+   Each question: { q, ans (string, lowercased for compare), hint, type }
+   For multiple-choice: ans is the choice text
+══════════════════════════════════════════════ */
+
+// ── BIDMAS QUESTIONS
+const BIDMAS_QS = [
+  {q:'6 + 3 × 2 = ?',           ans:'12',  hint:'Remember: × before +  ✨  Do 3 × 2 first.'},
+  {q:'(8 + 4) ÷ 2 = ?',         ans:'6',   hint:'Brackets first! Add 8 + 4 inside the brackets.'},
+  {q:'5² − 10 = ?',             ans:'15',  hint:'5² means 5 × 5 = 25. Then subtract 10.'},
+  {q:'18 ÷ 3 + 4 = ?',          ans:'10',  hint:'Division before addition. Do 18 ÷ 3 first.'},
+  {q:'7 + (6 × 2) = ?',         ans:'19',  hint:'Brackets first. Work out 6 × 2.'},
+  {q:'3² + 4 × 2 = ?',          ans:'17',  hint:'Indices first: 3² = 9. Then × before +.'},
+  {q:'(15 − 5) × 2 = ?',        ans:'20',  hint:'Brackets first: 15 − 5 = 10. Then multiply.'},
+  {q:'24 ÷ (2 + 4) = ?',        ans:'4',   hint:'Brackets first: 2 + 4 = 6. Then divide.'},
+  {q:'2³ + 5 = ?',              ans:'13',  hint:'2³ means 2 × 2 × 2 = 8. Then add 5.'},
+  {q:'4² − 3 × 4 = ?',          ans:'4',   hint:'Indices first: 4² = 16. Then 3 × 4 = 12. Then subtract.'},
+  {q:'(3 + 7) × (10 − 8) = ?',  ans:'20',  hint:'Both brackets first: (10) × (2).'},
+  {q:'5 + 4² ÷ 2 = ?',          ans:'13',  hint:'Indices first: 4² = 16. Then 16 ÷ 2 = 8. Then + 5.'},
+  {q:'3 × (8 − 5) + 1 = ?',     ans:'10',  hint:'Brackets first: 8 − 5 = 3. Then 3 × 3 = 9. Then + 1.'},
+  {q:'20 − 2 × (3 + 4) = ?',    ans:'6',   hint:'Brackets first: 3 + 4 = 7. Then 2 × 7 = 14. Then 20 − 14.'},
+  {q:'2² × 3 = ?',              ans:'12',  hint:'Indices first: 2² = 4. Then 4 × 3.'},
+  {q:'(5 + 3)² = ?',            ans:'64',  hint:'Brackets first: 5 + 3 = 8. Then 8² = 64.'},
+  {q:'15 ÷ 3 + 2 × 4 = ?',      ans:'13',  hint:'Division and multiplication before addition: 5 + 8 = 13.'},
+  {q:'3 + 2 × 5 − 1 = ?',       ans:'12',  hint:'× before + and −. Do 2 × 5 = 10 first.'},
+  {q:'(4 + 2) × 3 − 8 = ?',     ans:'10',  hint:'Brackets first: 6 × 3 = 18. Then 18 − 8 = 10.'},
+  {q:'30 − (4² − 2) = ?',       ans:'14',  hint:'Brackets first: 4² = 16, then 16 − 2 = 14. Then 30 − 14.'},
+];
+
+// ── INTEGER QUESTIONS
+// Types: 'identify', 'compare', 'order', 'calc'
+const INT_QS = [
+  // Identify
+  {q:'Is −5 positive, negative, or zero?\n(type: positive / negative / zero)',     ans:'negative', hint:'Numbers less than 0 are negative. −5 is below zero! 🔢'},
+  {q:'Is 0 positive, negative, or zero?\n(type: positive / negative / zero)',       ans:'zero',     hint:'Zero is neither positive nor negative. It is neutral! 🔢'},
+  {q:'Is 12 positive, negative, or zero?\n(type: positive / negative / zero)',      ans:'positive', hint:'Numbers greater than 0 are positive! 🔢'},
+  {q:'Is −8 positive, negative, or zero?\n(type: positive / negative / zero)',      ans:'negative', hint:'Numbers below zero are always negative 🔢'},
+  {q:'Is 7 positive, negative, or zero?\n(type: positive / negative / zero)',       ans:'positive', hint:'7 is above zero — it is positive! 🔢'},
+  // Compare — answer "greater" or "lesser" or a number
+  {q:'Which is greater: −3 or 2?\n(type the greater number)',                        ans:'2',        hint:'On a number line, 2 is to the right of −3 ➡️'},
+  {q:'Which is smaller: −7 or −1?\n(type the smaller number)',                       ans:'-7',       hint:'On a number line, −7 is further to the left ⬅️'},
+  {q:'Which is greater: −10 or −2?\n(type the greater number)',                      ans:'-2',       hint:'Between two negatives, the one closer to 0 is greater ➡️'},
+  {q:'Which is smaller: 0 or −4?\n(type the smaller number)',                        ans:'-4',       hint:'Zero is greater than all negative numbers ➡️'},
+  {q:'Which is greater: −6 or 1?\n(type the greater number)',                        ans:'1',        hint:'Positive numbers are always greater than negative numbers ➡️'},
+  // Order — answer is numbers separated by commas
+  {q:'Order from smallest to greatest:\n−2, 5, 0\n(type with commas, e.g. −2, 0, 5)',ans:'-2, 0, 5', hint:'Think of a number line. The leftmost number is smallest ⬅️'},
+  {q:'Order from greatest to smallest:\n−6, 3, −1\n(type: 3, −1, −6)',              ans:'3, -1, -6', hint:'Greatest first means the number furthest right on the number line ➡️'},
+  {q:'Order from smallest to greatest:\n−5, 0, 3\n(type: −5, 0, 3)',                ans:'-5, 0, 3', hint:'Negatives come first (they are the smallest)! ⬅️'},
+  // Calculations
+  {q:'−3 + 5 = ?',          ans:'2',   hint:'Start at −3 and move 5 steps right on the number line ➡️'},
+  {q:'7 − 10 = ?',          ans:'-3',  hint:'7 − 10 means you go past zero into the negatives! 🔢'},
+  {q:'−4 + 4 = ?',          ans:'0',   hint:'Adding the same positive number to a negative gives zero! ⬅️➡️'},
+  {q:'0 − 6 = ?',           ans:'-6',  hint:'Start at 0 and move 6 steps left ⬅️'},
+  {q:'−2 − 3 = ?',          ans:'-5',  hint:'Both negatives add up! −2 − 3 goes further left ⬅️'},
+  {q:'−1 + 6 = ?',          ans:'5',   hint:'Start at −1 and jump 6 steps to the right ➡️'},
+  {q:'5 − 8 = ?',           ans:'-3',  hint:'5 − 8: after zero you go into the negatives ⬅️'},
+  {q:'−3 + 10 = ?',         ans:'7',   hint:'Move 10 steps right from −3 on the number line ➡️'},
+  {q:'−6 + 6 = ?',          ans:'0',   hint:'A number plus its opposite always equals zero! 🔢'},
+  {q:'4 − 9 = ?',           ans:'-5',  hint:'4 − 9: go past zero into negatives ⬅️'},
+  {q:'−5 + 3 = ?',          ans:'-2',  hint:'Move 3 steps right from −5. You land on −2 ➡️'},
+];
+
+/* ══════════════════════════════════════════════
+   GAME STATE
+══════════════════════════════════════════════ */
+let gameMode   = 'normal'; // 'normal' | 'math'
+let mathTopic  = '';       // 'bidmas' | 'integers' | 'mixed'
+let board      = Array(9).fill('');
+let current    = 'X';
+let gameOver   = false;
+let canPlace   = false;    // In Math Mode, true only after correct answer
+let scores     = {X:0, O:0, D:0};
+let currentQ   = null;
+
+const WIN_COMBOS = [
+  [0,1,2],[3,4,5],[6,7,8], // rows
+  [0,3,6],[1,4,7],[2,5,8], // cols
+  [0,4,8],[2,4,6]          // diagonals
+];
+
+const FB_OK  = ['Great job! ✨','You\'re a math star! ⭐','Amazing thinking! 🌈','Brilliant! 🎀','That\'s correct! 💖'];
+const FB_NG  = ['Oops! Try again next turn 💖','Check the rule and try again 🧸','Almost there! Keep going ✨','Not quite — next player\'s turn! 🌈'];
+const WIN_ICO  = {X:'🌸',O:'🌈',D:'🧸'};
+const WIN_MSG  = {
+  X: ["Player X wins! You're a math star! ⭐", "Amazing work, Player X! 🌈", "Player X is on fire! 🔥✨"],
+  O: ["Player O wins! Amazing work! 🌈",       "Player O, you're brilliant! ⭐", "Player O wins! Great thinking! 🎀"],
+  D: ["It's a draw! Good game! 🧸",             "What a match — it's a draw! 💖"]
+};
+
+/* ══════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function selectMode(mode){
+  gameMode = mode;
+  if(mode === 'normal'){
+    startGame();
+  } else {
+    showScreen('scr-topic');
+  }
+}
+function selectTopic(topic){
+  mathTopic = topic;
+  startGame();
+}
+function goBack(){ showScreen('scr-mode'); }
+function backToMenu(){
+  showScreen('scr-mode');
+  closeResult();
+}
+
+/* ══════════════════════════════════════════════
+   GAME SETUP
+══════════════════════════════════════════════ */
+function startGame(){
+  board = Array(9).fill('');
+  current = 'X';
+  gameOver = false;
+  canPlace = false;
+  currentQ = null;
+  renderBoard();
+  setStatus('', false);
+  // Mode tag
+  const tagEl = document.getElementById('mode-tag');
+  const mathPanel = document.getElementById('math-panel');
+  if(gameMode === 'normal'){
+    tagEl.className = 'mode-tag normal';
+    tagEl.textContent = '🎮 Normal Mode';
+    document.getElementById('game-title').textContent = 'Tic Tac Toe ✨';
+    mathPanel.style.display = 'none';
+    setStatus('Click any square to start! 🌈', false);
+    canPlace = true;
+  } else {
+    const labels = {bidmas:'🧮 BIDMAS Challenge', integers:'🔢 Integers Challenge', mixed:'✨ Mixed Math Challenge'};
+    const cls    = {bidmas:'bidmas', integers:'integers', mixed:'mixed'};
+    tagEl.className = 'mode-tag ' + cls[mathTopic];
+    tagEl.textContent = labels[mathTopic];
+    document.getElementById('game-title').textContent = 'Math Tic Tac Toe ✨';
+    mathPanel.style.display = 'block';
+    loadQuestion();
+  }
+  updateTurnBox();
+  showScreen('scr-game');
+}
+
+function restartGame(){
+  board = Array(9).fill('');
+  current = 'X';
+  gameOver = false;
+  canPlace = false;
+  currentQ = null;
+  clearMathFb();
+  renderBoard();
+  updateTurnBox();
+  if(gameMode === 'normal'){
+    canPlace = true;
+    setStatus('Click any square to start! 🌈', false);
+  } else {
+    loadQuestion();
+  }
+}
+
+/* ══════════════════════════════════════════════
+   BOARD RENDERING
+══════════════════════════════════════════════ */
+function renderBoard(){
+  for(let i=0;i<9;i++){
+    const c = document.getElementById('c'+i);
+    c.className = 'cell';
+    c.textContent = board[i];
+    if(board[i] === 'X') c.classList.add('taken','x');
+    if(board[i] === 'O') c.classList.add('taken','o');
+  }
+}
+
+function highlightWin(combo){
+  combo.forEach(i => {
+    const c = document.getElementById('c'+i);
+    c.classList.add('win');
+  });
+}
+
+/* ══════════════════════════════════════════════
+   CELL CLICK
+══════════════════════════════════════════════ */
+function cellClick(idx){
+  if(gameOver) return;
+  if(board[idx] !== '') return;
+  if(!canPlace){
+    if(gameMode === 'math') setStatus('⚠️ Answer the maths question first! 🧮', false);
+    return;
+  }
+  board[idx] = current;
+  const c = document.getElementById('c'+idx);
+  c.textContent = current;
+  c.classList.add('taken', current.toLowerCase());
+  // Animate pop
+  c.style.animation = 'none'; void c.offsetWidth;
+  c.style.animation = 'cellWin .4s cubic-bezier(.34,1.56,.64,1)';
+  canPlace = false;
+  const winCombo = checkWin();
+  if(winCombo){
+    gameOver = true;
+    highlightWin(winCombo);
+    scores[current]++;
+    updateScores();
+    const msgs = WIN_MSG[current];
+    const msg  = msgs[Math.floor(Math.random()*msgs.length)];
+    setTimeout(()=>showResult(WIN_ICO[current], 'Player '+current+' Wins! 🎉', msg), 500);
+    confetti();
+    document.getElementById('math-panel').style.display='none';
+    return;
+  }
+  if(board.every(v=>v!=='')){
+    gameOver = true;
+    scores.D++;
+    updateScores();
+    setTimeout(()=>showResult('🧸','It\'s a Draw!','Good game! Well played by both! 💖'),400);
+    document.getElementById('math-panel').style.display='none';
+    return;
+  }
+  // Switch player
+  current = current === 'X' ? 'O' : 'X';
+  updateTurnBox();
+  if(gameMode === 'normal'){
+    canPlace = true;
+    setStatus('', false);
+  } else {
+    document.getElementById('math-panel').style.display='block';
+    clearMathFb();
+    loadQuestion();
+  }
+}
+
+/* ══════════════════════════════════════════════
+   WIN CHECK
+══════════════════════════════════════════════ */
+function checkWin(){
+  for(const combo of WIN_COMBOS){
+    const [a,b,c] = combo;
+    if(board[a] && board[a]===board[b] && board[a]===board[c]) return combo;
+  }
+  return null;
+}
+
+/* ══════════════════════════════════════════════
+   MATH MODE
+══════════════════════════════════════════════ */
+function getQuestionBank(){
+  if(mathTopic==='bidmas') return BIDMAS_QS;
+  if(mathTopic==='integers') return INT_QS;
+  // mixed: combine both
+  return [...BIDMAS_QS, ...INT_QS];
+}
+
+function loadQuestion(){
+  const bank = getQuestionBank();
+  currentQ = bank[Math.floor(Math.random()*bank.length)];
+  document.getElementById('q-txt').textContent = currentQ.q;
+  const inp = document.getElementById('ans-inp');
+  inp.value = '';
+  inp.className = 'ans-inp';
+  inp.disabled = false;
+  document.getElementById('hint-txt').className = 'hint-txt';
+  document.getElementById('hint-txt').textContent = currentQ.hint;
+  clearMathFb();
+  setStatus('🧮 Answer the question, then click a square!', false);
+  // Focus input
+  setTimeout(()=>inp.focus(), 100);
+  // Enter key submits
+  inp.onkeydown = (e)=>{ if(e.key==='Enter') submitAnswer(); };
+}
+
+function toggleHint(){
+  const h = document.getElementById('hint-txt');
+  h.classList.toggle('show');
+}
+
+function normaliseAns(str){
+  return str.replace(/\s/g,'').replace(/,/g,',').toLowerCase()
+    .replace(/−/g,'-').replace(/–/g,'-');
+}
+
+function submitAnswer(){
+  if(!currentQ || gameOver) return;
+  const raw  = document.getElementById('ans-inp').value.trim();
+  const user = normaliseAns(raw);
+  const corr = normaliseAns(currentQ.ans.toString());
+  const inp  = document.getElementById('ans-inp');
+  const fb   = document.getElementById('math-fb');
+
+  if(user === '' ) return;
+
+  if(user === corr){
+    inp.className = 'ans-inp ok';
+    inp.disabled = true;
+    const msg = FB_OK[Math.floor(Math.random()*FB_OK.length)];
+    fb.className = 'math-fb show ok';
+    fb.textContent = msg;
+    canPlace = true;
+    setStatus('✅ Correct! Now click a square on the board 📍', true);
+  } else {
+    inp.className = 'ans-inp ng';
+    const msg = FB_NG[Math.floor(Math.random()*FB_NG.length)];
+    fb.className = 'math-fb show ng';
+    fb.textContent = msg + ' The answer was: ' + currentQ.ans;
+    inp.disabled = true;
+    // Switch player after wrong answer
+    setTimeout(()=>{
+      current = current === 'X' ? 'O' : 'X';
+      updateTurnBox();
+      clearMathFb();
+      loadQuestion();
+    }, 2000);
+  }
+}
+
+function clearMathFb(){
+  document.getElementById('math-fb').className = 'math-fb';
+  document.getElementById('math-fb').textContent = '';
+  const inp = document.getElementById('ans-inp');
+  inp.className = 'ans-inp';
+  inp.value = '';
+  inp.disabled = false;
+}
+
+/* ══════════════════════════════════════════════
+   UI HELPERS
+══════════════════════════════════════════════ */
+function updateTurnBox(){
+  const sym = document.getElementById('turn-sym');
+  sym.textContent = current;
+  sym.className = current === 'X' ? 'turn-x' : 'turn-o';
+}
+
+function setStatus(msg, isPick){
+  const el = document.getElementById('status-box');
+  el.textContent = msg || '';
+  el.style.display = msg ? 'block' : 'none';
+  el.className = 'status-box' + (isPick ? ' pick' : ' waiting');
+}
+
+function updateScores(){
+  document.getElementById('score-x').textContent = scores.X;
+  document.getElementById('score-o').textContent = scores.O;
+  document.getElementById('score-d').textContent = scores.D;
+}
+
+/* ══════════════════════════════════════════════
+   RESULT OVERLAY
+══════════════════════════════════════════════ */
+function showResult(ico, title, sub){
+  document.getElementById('res-ico').textContent = ico;
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-sub').textContent = sub;
+  document.getElementById('result-overlay').classList.add('show');
+}
+
+function closeResult(){
+  document.getElementById('result-overlay').classList.remove('show');
+}
+
+/* ══════════════════════════════════════════════
+   CONFETTI
+══════════════════════════════════════════════ */
+function confetti(n=28){
+  const c=['#FFB7C5','#C9B8F0','#A8D8EA','#B8E8D0','#FFE8A3','#F97316'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div');
+    el.className='cf';
+    el.style.cssText=`left:${5+Math.random()*90}%;top:8%;
+      background:${c[i%c.length]};
+      animation-delay:${Math.random()*.6}s;
+      width:${7+Math.random()*9}px;height:${7+Math.random()*9}px;
+      border-radius:${Math.random()>.5?'50%':'3px'}`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1700);
+  }
+}
+</script>
+</body>
+</html>

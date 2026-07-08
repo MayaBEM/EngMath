@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>XO Game ✨ — with AI</title>
+<!-- ════════════════════════════════════════════
+     XO Game — 2 Player · vs AI · Math Mode
+     Created by Bright EngMath
+     AI: Minimax (Hard) · Strategic (Medium) · Random (Easy)
+════════════════════════════════════════════ -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+:root{
+  --pink:#FFB7C5;  --pink-d:#D63070; --pink-l:#FFF0F5;
+  --lav:#C4B0F5;   --lav-d:#6D4FC4;  --lav-l:#F4F0FF;
+  --blue:#9FD5EE;  --blue-d:#2172A8; --blue-l:#EBF7FD;
+  --mint:#9FE0BE;  --mint-d:#1A7A52; --mint-l:#EDFBF4;
+  --yel:#FFE08A;   --yel-d:#B8780A;  --yel-l:#FFFBEC;
+  --ora:#FFCBA4;   --ora-d:#C05A0A;  --ora-l:#FFF6EF;
+  --red-l:#FFE8E8; --red-d:#C0392B;
+  --bg:#F8F3FF; --card:#FFFFFF;
+  --navy:#2C1E5E; --text:#4A3C72; --gray:#8878AA;
+  --border:#E4D9F5;
+  --x:#E8306A; --o:#1E7FC0;
+  --sh:0 4px 22px rgba(120,80,200,.12);
+  --sh-lg:0 8px 36px rgba(120,80,200,.2);
+  --r:18px; --rL:28px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}
+body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:18px 14px 48px;color:var(--text);
+  background-image:radial-gradient(circle at 20% 10%,rgba(196,176,245,.25) 0%,transparent 40%),
+    radial-gradient(circle at 80% 90%,rgba(159,213,238,.25) 0%,transparent 40%)}
+
+/* ═══ SCREENS ═══ */
+.screen{display:none;width:100%;max-width:480px}
+.screen.on{display:block;animation:fadeUp .32s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ TYPOGRAPHY ═══ */
+h1{font-size:clamp(1.8rem,6vw,2.5rem);font-weight:900;color:var(--navy);text-align:center;line-height:1.15}
+h2{font-size:clamp(1.1rem,4vw,1.4rem);font-weight:900;color:var(--navy);text-align:center}
+p{line-height:1.75}
+
+/* ═══ CARD ═══ */
+.card{background:var(--card);border-radius:var(--rL);padding:24px 20px;
+  box-shadow:var(--sh);border:2px solid var(--border);margin-bottom:12px}
+
+/* ═══ BUTTONS ═══ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 26px;border-radius:50px;font-size:.98rem;font-weight:800;
+  cursor:pointer;border:none;transition:.22s;font-family:'Nunito',sans-serif;width:100%;margin-bottom:9px}
+.btn:hover{transform:translateY(-3px);filter:brightness(1.06)}
+.btn:active{transform:none}
+.btn-pink{background:linear-gradient(135deg,#FF9AB8,#D63070);color:#fff;box-shadow:0 4px 18px rgba(214,48,112,.28)}
+.btn-lav{background:linear-gradient(135deg,#C4B0F5,#6D4FC4);color:#fff;box-shadow:0 4px 18px rgba(109,79,196,.28)}
+.btn-blue{background:linear-gradient(135deg,#9FD5EE,#2172A8);color:#fff;box-shadow:0 4px 18px rgba(33,114,168,.22)}
+.btn-mint{background:linear-gradient(135deg,#9FE0BE,#1A7A52);color:#fff;box-shadow:0 4px 18px rgba(26,122,82,.22)}
+.btn-yel{background:linear-gradient(135deg,#FFE08A,#C89010);color:#7A5000;box-shadow:0 4px 14px rgba(200,144,16,.22)}
+.btn-white{background:#fff;color:var(--navy);border:2.5px solid var(--lav)}
+.btn-sm{padding:9px 20px;font-size:.87rem;width:auto;margin-bottom:0}
+.btn-row{display:flex;gap:9px;flex-wrap:wrap}
+.btn-row .btn{flex:1;min-width:120px}
+
+/* ═══ HERO ═══ */
+.hero{text-align:center;padding:18px 0 10px}
+.hero-ico{font-size:3.5rem;line-height:1;margin-bottom:6px}
+.hero-sub{color:var(--gray);font-size:.93rem;font-weight:600;margin-top:6px}
+
+/* ═══ PICK CARDS (Mode / Difficulty / Symbol) ═══ */
+.pick-grid{display:grid;gap:11px;margin:16px 0}
+.pick-grid.cols2{grid-template-columns:1fr 1fr}
+.pick-grid.cols3{grid-template-columns:repeat(3,1fr)}
+.pick-card{background:var(--card);border-radius:var(--r);padding:20px 14px;text-align:center;
+  border:3px solid transparent;cursor:pointer;transition:.22s;box-shadow:var(--sh)}
+.pick-card:hover{transform:translateY(-4px);box-shadow:var(--sh-lg)}
+.pick-card .pc-ico{font-size:2.3rem;margin-bottom:8px}
+.pick-card .pc-lbl{font-size:.97rem;font-weight:900;color:var(--navy)}
+.pick-card .pc-sub{font-size:.76rem;color:var(--gray);margin-top:4px;line-height:1.4}
+.pick-card.sel{transform:translateY(-3px);box-shadow:var(--sh-lg)}
+/* border colors by variant */
+.v-2p{border-color:var(--pink)}   .v-ai{border-color:var(--lav)}
+.v-math{border-color:var(--blue)} .v-easy{border-color:var(--mint)}
+.v-med{border-color:var(--yel)}   .v-hard{border-color:var(--pink)}
+.v-x{border-color:var(--pink)}    .v-o{border-color:var(--blue)}
+.v-bidmas{border-color:var(--lav)} .v-int{border-color:var(--blue)} .v-mix{border-color:var(--yel)}
+
+/* ═══ SECTION LABEL ═══ */
+.sec-lbl{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.8px;
+  color:var(--gray);margin-bottom:10px;margin-top:4px}
+
+/* ═══ DIFFICULTY BADGES ═══ */
+.diff-badge{display:inline-block;padding:3px 12px;border-radius:20px;font-size:.75rem;font-weight:900}
+.diff-easy{background:var(--mint-l);color:var(--mint-d)}
+.diff-med{background:var(--yel-l);color:var(--yel-d)}
+.diff-hard{background:var(--pink-l);color:var(--pink-d)}
+
+/* ═══ GAME SCREEN ═══ */
+.game-top{text-align:center;margin-bottom:10px}
+.mode-chip{display:inline-block;padding:4px 14px;border-radius:20px;
+  font-size:.76rem;font-weight:900;margin-bottom:8px;letter-spacing:.2px}
+.chip-2p{background:var(--pink-l);color:var(--pink-d)}
+.chip-ai{background:var(--lav-l);color:var(--lav-d)}
+.chip-math{background:var(--blue-l);color:var(--blue-d)}
+
+/* ═══ SCOREBOARD ═══ */
+.scores{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;margin-bottom:12px;align-items:stretch}
+.score-p{background:var(--card);border-radius:var(--r);padding:10px 8px;text-align:center;
+  box-shadow:var(--sh);border:2.5px solid}
+.score-p.sx{border-color:var(--pink)}.score-p.so{border-color:var(--blue)}
+.score-p .sp-name{font-size:.7rem;font-weight:900;color:var(--gray);text-transform:uppercase;letter-spacing:.3px}
+.score-p .sp-val{font-size:1.9rem;font-weight:900;line-height:1.1;margin-top:2px}
+.score-p.sx .sp-val{color:var(--x)}.score-p.so .sp-val{color:var(--o)}
+.score-mid{background:var(--card);border-radius:var(--r);padding:10px 8px;text-align:center;
+  box-shadow:var(--sh);border:2.5px solid var(--lav-l);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-mid .sp-name{font-size:.68rem;font-weight:900;color:var(--gray);text-transform:uppercase;letter-spacing:.3px}
+.score-mid .sp-val{font-size:1.5rem;font-weight:900;color:var(--lav-d)}
+
+/* ═══ TURN BOX ═══ */
+.turn-box{background:var(--card);border-radius:14px;padding:10px 16px;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  font-size:1rem;font-weight:800;color:var(--navy);
+  box-shadow:var(--sh);border:2px solid var(--border);margin-bottom:12px;
+  transition:.25s}
+.turn-box.tx{border-color:var(--pink);background:var(--pink-l)}
+.turn-box.to{border-color:var(--blue);background:var(--blue-l)}
+.t-x{color:var(--x)} .t-o{color:var(--o)}
+.thinking-dot{display:inline-block;animation:blink .7s infinite alternate}
+@keyframes blink{from{opacity:.3}to{opacity:1}}
+
+/* ═══ BOARD ═══ */
+.board-wrap{max-width:310px;margin:0 auto 14px}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.cell{aspect-ratio:1;background:var(--card);border-radius:15px;
+  border:3px solid var(--border);display:flex;align-items:center;
+  justify-content:center;font-size:clamp(2.4rem,10vw,3.2rem);font-weight:900;
+  cursor:pointer;transition:.18s;box-shadow:var(--sh);user-select:none}
+.cell:hover:not(.taken):not(.blocked){transform:scale(1.07);
+  border-color:var(--lav);background:var(--lav-l);box-shadow:var(--sh-lg)}
+.cell.taken,.cell.blocked{cursor:default}
+.cell.cx{color:var(--x);background:var(--pink-l);border-color:var(--pink)}
+.cell.co{color:var(--o);background:var(--blue-l);border-color:var(--blue)}
+.cell.win-cell{animation:winPop .5s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes winPop{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1.1)}}
+.cell.blocked{opacity:.55}
+
+/* ═══ MATH PANEL ═══ */
+.math-panel{background:linear-gradient(135deg,#F4F0FF,#EDE9FE);
+  border-radius:var(--rL);padding:20px;border:2.5px solid var(--lav);
+  margin-bottom:12px;box-shadow:var(--sh)}
+.mp-label{font-size:.72rem;font-weight:900;color:var(--lav-d);
+  text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.mp-q{font-size:1.1rem;font-weight:900;color:var(--navy);
+  text-align:center;margin:8px 0 14px;line-height:1.55;white-space:pre-line}
+.mp-row{display:flex;gap:8px}
+.mp-inp{flex:1;padding:11px 15px;border-radius:13px;border:2.5px solid var(--lav);
+  font-size:1.02rem;font-weight:800;font-family:'Nunito',sans-serif;
+  color:var(--navy);outline:none;background:#fff;transition:.2s;text-align:center}
+.mp-inp:focus{border-color:var(--lav-d);box-shadow:0 0 0 3px rgba(109,79,196,.15)}
+.mp-inp.ok{border-color:var(--mint-d);background:var(--mint-l)}
+.mp-inp.ng{border-color:var(--pink-d);background:var(--pink-l)}
+.mp-sub{padding:11px 18px;border-radius:13px;
+  background:linear-gradient(135deg,var(--lav),var(--lav-d));
+  color:#fff;border:none;font-weight:900;font-size:.93rem;
+  font-family:'Nunito',sans-serif;cursor:pointer;flex-shrink:0;transition:.2s}
+.mp-sub:hover{filter:brightness(1.09);transform:translateY(-2px)}
+.hint-row{margin-top:9px;display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap}
+.hint-btn{background:var(--yel-l);color:var(--yel-d);border:2px solid var(--yel);
+  padding:6px 14px;border-radius:20px;font-weight:800;font-size:.82rem;
+  cursor:pointer;font-family:'Nunito',sans-serif;flex-shrink:0}
+.hint-btn:hover{background:var(--yel)}
+.hint-txt{display:none;flex:1;background:#fff;border-radius:10px;
+  padding:8px 12px;font-size:.84rem;font-weight:700;color:var(--lav-d);
+  border:1.5px solid var(--lav);line-height:1.5}
+.hint-txt.on{display:block}
+.mp-fb{border-radius:11px;padding:9px 14px;margin-top:9px;
+  font-weight:800;font-size:.88rem;display:none;text-align:center}
+.mp-fb.on{display:block}
+.mp-fb.ok{background:var(--mint-l);color:var(--mint-d);border:1.5px solid var(--mint-d)}
+.mp-fb.ng{background:var(--red-l);color:var(--red-d);border:1.5px solid #EFB0B0}
+
+/* ═══ STATUS ═══ */
+.status{text-align:center;padding:9px 16px;border-radius:12px;
+  font-size:.88rem;font-weight:700;margin-bottom:12px;
+  background:var(--lav-l);color:var(--lav-d);border:1.5px dashed var(--lav);
+  min-height:38px;display:flex;align-items:center;justify-content:center}
+
+/* ═══ RESULT OVERLAY ═══ */
+.overlay{display:none;position:fixed;inset:0;
+  background:rgba(60,30,120,.22);backdrop-filter:blur(7px);
+  z-index:200;align-items:center;justify-content:center;padding:20px}
+.overlay.on{display:flex}
+.res-card{background:var(--card);border-radius:var(--rL);padding:38px 28px;
+  max-width:360px;width:100%;text-align:center;box-shadow:var(--sh-lg);
+  border:3px solid var(--lav);animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(.55);opacity:0}to{transform:scale(1);opacity:1}}
+.res-ico{font-size:4.2rem;margin-bottom:10px;display:block}
+.res-title{font-size:1.65rem;font-weight:900;color:var(--navy);margin-bottom:7px}
+.res-sub{font-size:.93rem;color:var(--gray);margin-bottom:22px}
+
+/* ═══ CONFETTI ═══ */
+@keyframes cfFall{
+  0%{transform:translateY(-8px) rotate(0deg);opacity:1}
+  100%{transform:translateY(100px) rotate(540deg);opacity:0}
+}
+.cf{position:fixed;pointer-events:none;z-index:300;
+  animation:cfFall 1.2s ease-out forwards}
+
+/* ═══ FOOTER ═══ */
+.footer{text-align:center;font-size:.73rem;color:var(--gray);font-weight:700;margin-top:14px}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:400px){
+  .pick-grid.cols3{grid-template-columns:1fr}
+  .pick-grid.cols2{grid-template-columns:1fr}
+  .board-wrap{max-width:260px}
+  .mp-row{flex-direction:column}
+  .mp-sub{width:100%;padding:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ SCREEN 1: MODE ══════════════ -->
+<div id="s-mode" class="screen on">
+  <div class="hero">
+    <div class="hero-ico">❌⭕</div>
+    <h1>XO Game ✨</h1>
+    <p class="hero-sub">Choose how you want to play!</p>
+  </div>
+  <div class="pick-grid cols3" style="margin-bottom:6px">
+    <div class="pick-card v-2p" onclick="pickMode('2p')">
+      <div class="pc-ico">👫</div>
+      <div class="pc-lbl">2 Players</div>
+      <div class="pc-sub">Play with a friend</div>
+    </div>
+    <div class="pick-card v-ai" onclick="pickMode('ai')">
+      <div class="pc-ico">🤖</div>
+      <div class="pc-lbl">vs AI</div>
+      <div class="pc-sub">Challenge the computer!</div>
+    </div>
+    <div class="pick-card v-math" onclick="pickMode('math')">
+      <div class="pc-ico">🧮</div>
+      <div class="pc-lbl">Math Mode</div>
+      <div class="pc-sub">Answer to play!</div>
+    </div>
+  </div>
+  <div class="footer">✏️ Created by Bright EngMath</div>
+</div>
+
+<!-- ══════════════ SCREEN 2a: AI SETUP ══════════════ -->
+<div id="s-ai" class="screen">
+  <div class="hero" style="padding-top:10px">
+    <div class="hero-ico">🤖</div>
+    <h2>Set Up AI Challenge</h2>
+  </div>
+
+  <div class="sec-lbl">🎯 Choose Difficulty</div>
+  <div class="pick-grid cols3" id="diff-grid">
+    <div class="pick-card v-easy sel-diff" id="d-easy" onclick="pickDiff('easy')">
+      <div class="pc-ico">🐣</div>
+      <div class="pc-lbl">Easy</div>
+      <div class="pc-sub">AI plays randomly</div>
+    </div>
+    <div class="pick-card v-med sel-diff" id="d-med" onclick="pickDiff('medium')">
+      <div class="pc-ico">🦊</div>
+      <div class="pc-lbl">Medium</div>
+      <div class="pc-sub">AI blocks & attacks</div>
+    </div>
+    <div class="pick-card v-hard sel-diff" id="d-hard" onclick="pickDiff('hard')">
+      <div class="pc-ico">🤖</div>
+      <div class="pc-lbl">Hard</div>
+      <div class="pc-sub">Unbeatable AI!</div>
+    </div>
+  </div>
+
+  <div class="sec-lbl">🎮 You play as…</div>
+  <div class="pick-grid cols2">
+    <div class="pick-card v-x" id="sym-x" onclick="pickSym('X')">
+      <div class="pc-ico" style="color:var(--x);font-size:2.5rem;font-weight:900">✕</div>
+      <div class="pc-lbl">Play as X</div>
+      <div class="pc-sub">X always goes first</div>
+    </div>
+    <div class="pick-card v-o" id="sym-o" onclick="pickSym('O')">
+      <div class="pc-ico" style="color:var(--o);font-size:2.5rem;font-weight:900">○</div>
+      <div class="pc-lbl">Play as O</div>
+      <div class="pc-sub">AI goes first</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-white btn-sm" onclick="goBack()">← Back</button>
+    <button class="btn btn-lav btn-sm" style="flex:2" onclick="startGame()">Start Game 🎮</button>
+  </div>
+</div>
+
+<!-- ══════════════ SCREEN 2b: MATH TOPIC ══════════════ -->
+<div id="s-topic" class="screen">
+  <div class="hero" style="padding-top:10px">
+    <div class="hero-ico">🧮</div>
+    <h2>Choose Maths Topic</h2>
+    <p class="hero-sub" style="margin-top:6px">Answer correctly to place your mark! ✨</p>
+  </div>
+  <div class="pick-grid" style="margin:14px 0">
+    <div class="pick-card v-bidmas" onclick="pickTopic('bidmas')">
+      <div style="display:flex;align-items:center;gap:12px;text-align:left">
+        <span style="font-size:2rem">🧮</span>
+        <div>
+          <div class="pc-lbl">BIDMAS Challenge</div>
+          <div class="pc-sub">Brackets · Indices · × ÷ · + −</div>
+        </div>
+      </div>
+    </div>
+    <div class="pick-card v-int" onclick="pickTopic('integers')">
+      <div style="display:flex;align-items:center;gap:12px;text-align:left">
+        <span style="font-size:2rem">🔢</span>
+        <div>
+          <div class="pc-lbl">Integers Challenge</div>
+          <div class="pc-sub">Positive · Negative · Zero · Compare · Calculate</div>
+        </div>
+      </div>
+    </div>
+    <div class="pick-card v-mix" onclick="pickTopic('mixed')">
+      <div style="display:flex;align-items:center;gap:12px;text-align:left">
+        <span style="font-size:2rem">✨</span>
+        <div>
+          <div class="pc-lbl">Mixed Math Challenge</div>
+          <div class="pc-sub">Random mix of both topics</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-white" onclick="goBack()">← Back</button>
+</div>
+
+<!-- ══════════════ SCREEN 3: GAME ══════════════ -->
+<div id="s-game" class="screen">
+  <!-- Header -->
+  <div class="game-top">
+    <span class="mode-chip" id="mode-chip">🎮 Normal</span>
+    <div style="font-size:.78rem;color:var(--gray);font-weight:700" id="diff-chip"></div>
+  </div>
+
+  <!-- Scores -->
+  <div class="scores">
+    <div class="score-p sx">
+      <div class="sp-name" id="x-name">Player X</div>
+      <div class="sp-val" id="sc-x">0</div>
+    </div>
+    <div class="score-mid">
+      <div class="sp-name">Draw</div>
+      <div class="sp-val" id="sc-d">0</div>
+    </div>
+    <div class="score-p so">
+      <div class="sp-name" id="o-name">Player O</div>
+      <div class="sp-val" id="sc-o">0</div>
+    </div>
+  </div>
+
+  <!-- Turn box -->
+  <div class="turn-box tx" id="turn-box">
+    <span id="turn-txt">Player X's turn 🎮</span>
+  </div>
+
+  <!-- Math panel (Math Mode only) -->
+  <div class="math-panel" id="math-panel" style="display:none">
+    <div class="mp-label">🧮 Answer to place your mark!</div>
+    <div class="mp-q" id="mp-q">Loading…</div>
+    <div class="mp-row">
+      <input class="mp-inp" id="mp-inp" type="text" placeholder="Type your answer…" autocomplete="off" spellcheck="false">
+      <button class="mp-sub" onclick="submitAns()">Check ✓</button>
+    </div>
+    <div class="hint-row">
+      <button class="hint-btn" onclick="toggleHint()">💡 Hint</button>
+      <div class="hint-txt" id="hint-txt"></div>
+    </div>
+    <div class="mp-fb" id="mp-fb"></div>
+  </div>
+
+  <!-- Status -->
+  <div class="status" id="status">Click any square to start! 🌈</div>
+
+  <!-- Board -->
+  <div class="board-wrap">
+    <div class="board" id="board">
+      <div class="cell" id="c0" onclick="cellClick(0)"></div>
+      <div class="cell" id="c1" onclick="cellClick(1)"></div>
+      <div class="cell" id="c2" onclick="cellClick(2)"></div>
+      <div class="cell" id="c3" onclick="cellClick(3)"></div>
+      <div class="cell" id="c4" onclick="cellClick(4)"></div>
+      <div class="cell" id="c5" onclick="cellClick(5)"></div>
+      <div class="cell" id="c6" onclick="cellClick(6)"></div>
+      <div class="cell" id="c7" onclick="cellClick(7)"></div>
+      <div class="cell" id="c8" onclick="cellClick(8)"></div>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="btn-row" style="margin-top:6px">
+    <button class="btn btn-mint btn-sm" style="flex:1" onclick="restartGame()">🔄 Restart</button>
+    <button class="btn btn-white btn-sm" style="flex:1" onclick="backToMenu()">🏠 Menu</button>
+  </div>
+</div>
+
+<!-- ══════════════ RESULT OVERLAY ══════════════ -->
+<div class="overlay" id="overlay">
+  <div class="res-card">
+    <span class="res-ico" id="res-ico">🏆</span>
+    <div class="res-title" id="res-title">Player X Wins!</div>
+    <div class="res-sub" id="res-sub">Amazing game! ⭐</div>
+    <button class="btn btn-mint" onclick="restartGame();closeOverlay()" style="margin-bottom:9px">🔄 Play Again</button>
+    <button class="btn btn-white" onclick="backToMenu();closeOverlay()">🏠 Main Menu</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   QUESTION BANKS
+═══════════════════════════════════════════════════ */
+const BIDMAS_Q = [
+  {q:'6 + 3 × 2 = ?',              ans:'12',     hint:'× before +. Do 3×2 first ✨'},
+  {q:'(8 + 4) ÷ 2 = ?',            ans:'6',      hint:'Brackets first! 8+4 = 12, then ÷2 ✨'},
+  {q:'5² − 10 = ?',                ans:'15',     hint:'5² = 5×5 = 25. Then subtract 10 ✨'},
+  {q:'18 ÷ 3 + 4 = ?',             ans:'10',     hint:'Division before addition. 18÷3=6, then +4 ✨'},
+  {q:'7 + (6 × 2) = ?',            ans:'19',     hint:'Brackets first: 6×2=12, then +7 ✨'},
+  {q:'3² + 4 × 2 = ?',             ans:'17',     hint:'Indices first: 3²=9. Then ×: 4×2=8. Then + ✨'},
+  {q:'(15 − 5) × 2 = ?',           ans:'20',     hint:'Brackets first: 15−5=10. Then ×2 ✨'},
+  {q:'24 ÷ (2 + 4) = ?',           ans:'4',      hint:'Brackets first: 2+4=6. Then 24÷6 ✨'},
+  {q:'2³ + 5 = ?',                 ans:'13',     hint:'2³ = 2×2×2 = 8. Then +5 ✨'},
+  {q:'4² − 3 × 4 = ?',             ans:'4',      hint:'4²=16, then 3×4=12. Then 16−12 ✨'},
+  {q:'(3+7) × (10−8) = ?',         ans:'20',     hint:'Both brackets: 10 × 2 = 20 ✨'},
+  {q:'5 + 4² ÷ 2 = ?',             ans:'13',     hint:'4²=16, 16÷2=8, then 5+8 ✨'},
+  {q:'3 × (8−5) + 1 = ?',          ans:'10',     hint:'Brackets: 8−5=3. Then 3×3=9, +1 ✨'},
+  {q:'20 − 2 × (3+4) = ?',         ans:'6',      hint:'Brackets: 3+4=7. Then 2×7=14. Then 20−14 ✨'},
+  {q:'2² × 3 = ?',                 ans:'12',     hint:'2²=4. Then 4×3 ✨'},
+  {q:'15 ÷ 3 + 2 × 4 = ?',         ans:'13',     hint:'÷ and × first: 5 + 8 = 13 ✨'},
+  {q:'3 + 2 × 5 − 1 = ?',          ans:'12',     hint:'× first: 2×5=10. Then 3+10−1 ✨'},
+  {q:'(4+2) × 3 − 8 = ?',          ans:'10',     hint:'Brackets: 6×3=18. Then 18−8 ✨'},
+  {q:'30 − (4²−2) = ?',            ans:'14',     hint:'Inside brackets: 4²=16, 16−2=14. Then 30−14 ✨'},
+  {q:'2 × 3² − 4 = ?',             ans:'14',     hint:'Indices first: 3²=9. Then 2×9=18. Then −4 ✨'},
+];
+
+const INT_Q = [
+  {q:'Is −5 positive, negative, or zero?\n(type: positive / negative / zero)', ans:'negative', hint:'Numbers less than 0 are negative 🔢'},
+  {q:'Is 0 positive, negative, or zero?\n(type: positive / negative / zero)',   ans:'zero',     hint:'Zero is neutral — neither positive nor negative 🔢'},
+  {q:'Is 12 positive, negative, or zero?\n(type: positive / negative / zero)',  ans:'positive', hint:'Numbers greater than 0 are positive 🔢'},
+  {q:'Is −8 positive, negative, or zero?\n(type: positive / negative / zero)',  ans:'negative', hint:'All numbers below zero are negative 🔢'},
+  {q:'Which is greater: −3 or 2?\n(type the greater number)',                   ans:'2',        hint:'On a number line, 2 is to the right of −3 ➡️'},
+  {q:'Which is smaller: −7 or −1?\n(type the smaller number)',                  ans:'-7',       hint:'−7 is further left on the number line ⬅️'},
+  {q:'Which is greater: −10 or −2?\n(type the greater number)',                 ans:'-2',       hint:'Between two negatives, closer to 0 = greater ➡️'},
+  {q:'Which is smaller: 0 or −4?\n(type the smaller number)',                   ans:'-4',       hint:'Zero is greater than all negatives ➡️'},
+  {q:'Order from smallest to greatest:\n−2, 5, 0\n(type: −2, 0, 5)',            ans:'-2, 0, 5', hint:'Negatives come first on the number line ⬅️'},
+  {q:'Order from greatest to smallest:\n−6, 3, −1\n(type: 3, −1, −6)',          ans:'3, -1, -6',hint:'Greatest first = furthest right first ➡️'},
+  {q:'−3 + 5 = ?',         ans:'2',   hint:'Start at −3, move 5 right ➡️'},
+  {q:'7 − 10 = ?',         ans:'-3',  hint:'Go past zero into negatives ⬅️'},
+  {q:'−4 + 4 = ?',         ans:'0',   hint:'A number + its opposite = zero! ⬅️➡️'},
+  {q:'0 − 6 = ?',          ans:'-6',  hint:'Start at 0, move 6 steps left ⬅️'},
+  {q:'−2 − 3 = ?',         ans:'-5',  hint:'Both move left: go further negative ⬅️'},
+  {q:'−1 + 6 = ?',         ans:'5',   hint:'Start at −1, jump 6 right ➡️'},
+  {q:'5 − 8 = ?',          ans:'-3',  hint:'After zero, you go negative ⬅️'},
+  {q:'−3 + 10 = ?',        ans:'7',   hint:'Move 10 right from −3 ➡️'},
+  {q:'−6 + 6 = ?',         ans:'0',   hint:'Opposite integers sum to zero 🔢'},
+  {q:'4 − 9 = ?',          ans:'-5',  hint:'Go past zero: 4−9 = −5 ⬅️'},
+];
+
+/* ═══════════════════════════════════════════════════
+   GAME STATE
+═══════════════════════════════════════════════════ */
+let mode       = '2p';    // '2p' | 'ai' | 'math'
+let topic      = '';      // 'bidmas' | 'integers' | 'mixed'
+let difficulty = 'medium';// 'easy' | 'medium' | 'hard'
+let humanSym   = 'X';     // Player's symbol in AI mode
+let aiSym      = 'O';
+
+let board    = Array(9).fill('');
+let current  = 'X';       // Whose turn (X always first)
+let over     = false;
+let canPlace = false;      // Math Mode: true only after correct answer
+let aiThink  = false;      // Prevent input while AI is thinking
+let scores   = {X:0, O:0, D:0};
+let curQ     = null;
+
+const WINS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+/* ═══════════════════════════════════════════════════
+   SCREEN NAVIGATION
+═══════════════════════════════════════════════════ */
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+}
+
+function pickMode(m){
+  mode = m;
+  if(m === '2p')   startGame();
+  else if(m === 'ai')   show('s-ai');
+  else if(m === 'math') show('s-topic');
+}
+
+function pickDiff(d){
+  difficulty = d;
+  // Highlight selected
+  ['easy','medium','hard'].forEach(k=>{
+    const el = document.getElementById('d-'+k);
+    el.style.outline = '';
+    el.style.boxShadow = '';
+  });
+  const sel = document.getElementById('d-'+d);
+  sel.style.outline = '3px solid var(--lav-d)';
+  sel.style.boxShadow = 'var(--sh-lg)';
+}
+
+function pickSym(s){
+  humanSym = s;
+  aiSym    = s === 'X' ? 'O' : 'X';
+  // Highlight
+  document.getElementById('sym-x').style.outline = s==='X'?'3px solid var(--x)':'';
+  document.getElementById('sym-o').style.outline = s==='O'?'3px solid var(--o)':'';
+}
+
+function pickTopic(t){
+  topic = t;
+  startGame();
+}
+
+function goBack(){
+  if(mode==='ai')   show('s-mode');
+  else if(mode==='math') show('s-mode');
+  else show('s-mode');
+}
+
+function backToMenu(){
+  show('s-mode');
+  closeOverlay();
+}
+
+/* ═══════════════════════════════════════════════════
+   START / RESTART GAME
+═══════════════════════════════════════════════════ */
+function startGame(){
+  board    = Array(9).fill('');
+  current  = 'X';
+  over     = false;
+  canPlace = false;
+  aiThink  = false;
+  curQ     = null;
+  renderBoard();
+  clearMathUI();
+  setupUI();
+  show('s-game');
+  // If AI goes first (player chose O), trigger AI move
+  if(mode==='ai' && humanSym==='O'){
+    aiThink = true;
+    setStatus('🤖 AI is thinking…');
+    setTimeout(doAIMove, 700);
+  }
+}
+
+function restartGame(){ startGame(); }
+
+function setupUI(){
+  // Mode chip
+  const chip = document.getElementById('mode-chip');
+  const dc   = document.getElementById('diff-chip');
+  if(mode==='2p'){
+    chip.className='mode-chip chip-2p'; chip.textContent='👫 2 Players';
+    dc.textContent=''; setXONames('Player X','Player O');
+    document.getElementById('math-panel').style.display='none';
+    canPlace = true;
+    setStatus('Player X goes first! Click a square 🎮');
+  } else if(mode==='ai'){
+    chip.className='mode-chip chip-ai'; chip.textContent='🤖 vs AI';
+    const dLabels={easy:'🐣 Easy',medium:'🦊 Medium',hard:'🤖 Hard'};
+    dc.textContent=dLabels[difficulty];
+    const pName = 'You ('+humanSym+')';
+    const aName = 'AI ('+aiSym+')';
+    if(humanSym==='X') setXONames(pName, aName);
+    else               setXONames(aName, pName);
+    document.getElementById('math-panel').style.display='none';
+    canPlace = true;
+    if(humanSym==='X') setStatus('Your turn! Click a square 🎮');
+    else               setStatus('');
+  } else if(mode==='math'){
+    const tLabels={bidmas:'🧮 BIDMAS',integers:'🔢 Integers',mixed:'✨ Mixed Math'};
+    chip.className='mode-chip chip-math'; chip.textContent=tLabels[topic];
+    dc.textContent=''; setXONames('Player X','Player O');
+    document.getElementById('math-panel').style.display='block';
+    loadQ();
+  }
+  updateTurnBox();
+  updateScores();
+}
+
+function setXONames(xn, on){
+  document.getElementById('x-name').textContent = xn;
+  document.getElementById('o-name').textContent = on;
+}
+
+/* ═══════════════════════════════════════════════════
+   BOARD RENDERING
+═══════════════════════════════════════════════════ */
+function renderBoard(){
+  for(let i=0;i<9;i++){
+    const c = document.getElementById('c'+i);
+    c.className = 'cell';
+    c.textContent = board[i];
+    if(board[i]==='X') c.classList.add('cx','taken');
+    if(board[i]==='O') c.classList.add('co','taken');
+  }
+}
+
+function highlightWin(combo){
+  combo.forEach(i=>{
+    const c = document.getElementById('c'+i);
+    c.style.animation='none'; void c.offsetWidth;
+    c.style.animation='winPop .5s cubic-bezier(.34,1.56,.64,1) forwards';
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   CELL CLICK
+═══════════════════════════════════════════════════ */
+function cellClick(i){
+  if(over || aiThink) return;
+  if(board[i] !== '') return;
+  // Math Mode: need correct answer first
+  if(mode==='math' && !canPlace){
+    setStatus('⚠️ Answer the maths question first! 🧮');
+    document.getElementById('mp-inp').focus();
+    return;
+  }
+  // AI Mode: only human's turn
+  if(mode==='ai' && current !== humanSym) return;
+
+  placeAt(i);
+}
+
+function placeAt(i){
+  board[i] = current;
+  const c = document.getElementById('c'+i);
+  c.textContent = current;
+  c.classList.add(current==='X'?'cx':'co','taken');
+  animPop(c);
+
+  const winCombo = checkWin(board);
+  if(winCombo){
+    highlightWin(winCombo);
+    endGame(current, winCombo);
+    return;
+  }
+  if(board.every(v=>v!=='')){
+    endGame('D', null);
+    return;
+  }
+
+  // Switch turn
+  current = current==='X'?'O':'X';
+  updateTurnBox();
+  canPlace = false;
+
+  if(mode==='normal' || mode==='2p'){
+    canPlace = true;
+    setStatus('');
+  } else if(mode==='math'){
+    clearMathUI();
+    loadQ();
+  } else if(mode==='ai'){
+    if(current === aiSym){
+      // AI's turn
+      aiThink = true;
+      updateTurnBox(); // shows thinking
+      setStatus('🤖 AI is thinking…');
+      setTimeout(doAIMove, 600 + Math.random()*400);
+    } else {
+      canPlace = true;
+      setStatus('Your turn! Click a square 🎮');
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   AI ENGINE
+═══════════════════════════════════════════════════ */
+function doAIMove(){
+  if(over){ aiThink=false; return; }
+  const idx = getAIMove();
+  aiThink = false;
+  if(idx !== -1) placeAt(idx);
+}
+
+function getAIMove(){
+  const empty = board.map((v,i)=>v===''?i:-1).filter(i=>i!==-1);
+  if(empty.length===0) return -1;
+  if(difficulty==='easy')   return easyMove(empty);
+  if(difficulty==='medium') return mediumMove(empty);
+  return minimaxMove();          // hard
+}
+
+// Easy: random
+function easyMove(empty){ return empty[Math.floor(Math.random()*empty.length)]; }
+
+// Medium: win if can, block if must, else center/random
+function mediumMove(empty){
+  // Try to win
+  const win = findWinningMove(aiSym);
+  if(win !== -1) return win;
+  // Block human
+  const blk = findWinningMove(humanSym);
+  if(blk !== -1) return blk;
+  // Prefer center
+  if(board[4]==='') return 4;
+  // Prefer corners
+  const corners = [0,2,6,8].filter(i=>board[i]==='');
+  if(corners.length) return corners[Math.floor(Math.random()*corners.length)];
+  return easyMove(empty);
+}
+
+function findWinningMove(sym){
+  for(const i of board.map((v,j)=>v===''?j:-1).filter(i=>i!==-1)){
+    const test=[...board]; test[i]=sym;
+    if(checkWin(test)) return i;
+  }
+  return -1;
+}
+
+// Hard: Minimax — unbeatable
+function minimaxMove(){
+  let best=-Infinity, bestIdx=-1;
+  board.forEach((v,i)=>{
+    if(v===''){
+      board[i]=aiSym;
+      const s=minimax(board,0,false);
+      board[i]='';
+      if(s>best){ best=s; bestIdx=i; }
+    }
+  });
+  return bestIdx;
+}
+
+function minimax(bd, depth, isAI){
+  const winner=checkWin(bd);
+  if(winner){
+    const w=winnerOf(bd,winner);
+    if(w===aiSym) return 10-depth;
+    if(w===humanSym) return depth-10;
+  }
+  if(bd.every(v=>v!=='')) return 0;
+  const moves=bd.map((v,i)=>v===''?i:-1).filter(i=>i!==-1);
+  if(isAI){
+    let best=-Infinity;
+    for(const i of moves){
+      bd[i]=aiSym;
+      best=Math.max(best,minimax(bd,depth+1,false));
+      bd[i]='';
+    }
+    return best;
+  } else {
+    let best=Infinity;
+    for(const i of moves){
+      bd[i]=humanSym;
+      best=Math.min(best,minimax(bd,depth+1,true));
+      bd[i]='';
+    }
+    return best;
+  }
+}
+
+/* Returns the winning combo or null */
+function checkWin(bd){
+  for(const [a,b,c] of WINS){
+    if(bd[a] && bd[a]===bd[b] && bd[a]===bd[c]) return [a,b,c];
+  }
+  return null;
+}
+
+/* Returns the winning symbol given a combo */
+function winnerOf(bd, combo){ return bd[combo[0]]; }
+
+/* ═══════════════════════════════════════════════════
+   END GAME
+═══════════════════════════════════════════════════ */
+const EMOJIS = {X:['🌸','🎀','✨','⭐'],O:['🌈','🔵','💙','🎉'],D:['🧸','🤝','🌟','💫']};
+const WIN_MSGS = {
+  X_2p: ["Player X wins! 🌟","Amazing, Player X! ⭐","Player X is unbeatable! 🎀"],
+  O_2p: ["Player O wins! 🌈","Player O takes it! 💙","Brilliant, Player O! ⭐"],
+  X_ai: ["You won! 🎉 Great game!","You beat the AI! ⭐ Impressive!","Victory! You outsmarted the AI 🌟"],
+  O_ai_w: ["You won! 🎉 Well played!","You beat the AI! ⭐","Victory! Amazing thinking 🌟"],
+  ai:   ["AI wins this round! 🤖","The AI wins! 💙 Try again!","AI takes it! 🤖 Can you do better?"],
+  D:    ["It's a draw! Good game 🧸","What a match — it's a draw! 💫","Great effort — it's a tie! 🌟"],
+};
+
+function endGame(result, combo){
+  over = true;
+  document.getElementById('math-panel').style.display='none';
+  scores[result]++;
+  updateScores();
+  let ico, title, sub;
+  if(result==='D'){
+    ico='🧸'; title="It's a Draw!";
+    sub=WIN_MSGS.D[Math.floor(Math.random()*WIN_MSGS.D.length)];
+  } else {
+    // Pick emoji
+    ico = EMOJIS[result][Math.floor(Math.random()*EMOJIS[result].length)];
+    if(mode==='ai'){
+      if(result===humanSym){
+        const pool=WIN_MSGS[humanSym==='X'?'X_ai':'O_ai_w'];
+        title='🎉 You Win!'; sub=pool[Math.floor(Math.random()*pool.length)];
+      } else {
+        title='🤖 AI Wins!'; sub=WIN_MSGS.ai[Math.floor(Math.random()*WIN_MSGS.ai.length)];
+      }
+    } else {
+      const pool=WIN_MSGS[result+'_2p'];
+      title=`Player ${result} Wins!`;
+      sub=pool[Math.floor(Math.random()*pool.length)];
+    }
+  }
+  if(result!=='D'){ setStatus(''); confetti(); }
+  setTimeout(()=>showOverlay(ico,title,sub), result!=='D'?500:300);
+}
+
+/* ═══════════════════════════════════════════════════
+   MATH MODE
+═══════════════════════════════════════════════════ */
+function qBank(){
+  if(topic==='bidmas') return BIDMAS_Q;
+  if(topic==='integers') return INT_Q;
+  return [...BIDMAS_Q,...INT_Q];
+}
+
+function loadQ(){
+  const bank=qBank();
+  curQ=bank[Math.floor(Math.random()*bank.length)];
+  document.getElementById('mp-q').textContent=curQ.q;
+  document.getElementById('hint-txt').textContent=curQ.hint;
+  clearMathUI(false);
+  const inp=document.getElementById('mp-inp');
+  inp.value=''; inp.className='mp-inp'; inp.disabled=false;
+  inp.onkeydown=e=>{ if(e.key==='Enter') submitAns(); };
+  setStatus(`🧮 ${current==='X'?'Player X':'Player O'}: answer the question first!`);
+  setTimeout(()=>inp.focus(),80);
+}
+
+function toggleHint(){
+  const h=document.getElementById('hint-txt');
+  h.classList.toggle('on');
+}
+
+function normalise(s){
+  return s.toLowerCase().replace(/\s/g,'').replace(/−/g,'-').replace(/–/g,'-');
+}
+
+function submitAns(){
+  if(!curQ||over) return;
+  const raw=document.getElementById('mp-inp').value.trim();
+  if(!raw) return;
+  const user=normalise(raw);
+  const corr=normalise(curQ.ans.toString());
+  const inp=document.getElementById('mp-inp');
+  const fb=document.getElementById('mp-fb');
+  const okMsgs=['Great job! ✨',"You're a star! ⭐",'Amazing thinking! 🌈','Brilliant! 🎀','Correct! 💖'];
+  const ngMsgs=['Oops! Not quite 💖','Check the rule and try again 🧸','Almost! Better luck next turn ✨'];
+  if(user===corr){
+    inp.className='mp-inp ok'; inp.disabled=true;
+    fb.className='mp-fb on ok'; fb.textContent=okMsgs[Math.floor(Math.random()*okMsgs.length)];
+    canPlace=true;
+    setStatus('✅ Correct! Now click a square on the board 📍');
+  } else {
+    inp.className='mp-inp ng'; inp.disabled=true;
+    fb.className='mp-fb on ng'; fb.textContent=ngMsgs[Math.floor(Math.random()*ngMsgs.length)]+' Answer: '+curQ.ans;
+    // Switch player after wrong answer
+    setTimeout(()=>{
+      current=current==='X'?'O':'X';
+      updateTurnBox(); clearMathUI(); loadQ();
+    },1800);
+  }
+}
+
+function clearMathUI(resetFb=true){
+  if(resetFb){
+    document.getElementById('mp-fb').className='mp-fb';
+    document.getElementById('mp-fb').textContent='';
+    document.getElementById('mp-inp').className='mp-inp';
+    document.getElementById('mp-inp').value='';
+    document.getElementById('mp-inp').disabled=false;
+  }
+  document.getElementById('hint-txt').classList.remove('on');
+}
+
+/* ═══════════════════════════════════════════════════
+   UI HELPERS
+═══════════════════════════════════════════════════ */
+function updateTurnBox(){
+  const box=document.getElementById('turn-box');
+  const txt=document.getElementById('turn-txt');
+  box.className='turn-box '+(current==='X'?'tx':'to');
+  if(mode==='ai'){
+    if(current===humanSym){
+      txt.innerHTML=`Your turn <span class="t-${current.toLowerCase()}">${current}</span> 🎮`;
+    } else {
+      txt.innerHTML=`🤖 AI <span class="t-${current.toLowerCase()}">${current}</span> thinking<span class="thinking-dot">…</span>`;
+    }
+  } else {
+    txt.innerHTML=`Player <span class="t-${current.toLowerCase()}">${current}</span>'s turn 🎮`;
+  }
+}
+
+function setStatus(msg){
+  const s=document.getElementById('status');
+  s.textContent=msg||'';
+  s.style.display=msg?'flex':'none';
+}
+
+function updateScores(){
+  document.getElementById('sc-x').textContent=scores.X;
+  document.getElementById('sc-o').textContent=scores.O;
+  document.getElementById('sc-d').textContent=scores.D;
+}
+
+function animPop(el){
+  el.style.animation='none'; void el.offsetWidth;
+  el.style.animation='winPop .36s cubic-bezier(.34,1.56,.64,1) forwards';
+}
+
+/* ═══════════════════════════════════════════════════
+   OVERLAY
+═══════════════════════════════════════════════════ */
+function showOverlay(ico,title,sub){
+  document.getElementById('res-ico').textContent=ico;
+  document.getElementById('res-title').textContent=title;
+  document.getElementById('res-sub').textContent=sub;
+  document.getElementById('overlay').classList.add('on');
+}
+function closeOverlay(){ document.getElementById('overlay').classList.remove('on'); }
+
+/* ═══════════════════════════════════════════════════
+   CONFETTI
+═══════════════════════════════════════════════════ */
+function confetti(n=32){
+  const cols=['#FFB7C5','#C4B0F5','#9FD5EE','#9FE0BE','#FFE08A','#F97316','#EC4899'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div');
+    el.className='cf';
+    const size=7+Math.random()*9;
+    el.style.cssText=`
+      left:${4+Math.random()*92}%;top:5%;
+      width:${size}px;height:${size}px;
+      background:${cols[i%cols.length]};
+      border-radius:${Math.random()>.5?'50%':'3px'};
+      animation-delay:${Math.random()*.6}s;
+      animation-duration:${1+Math.random()*.5}s`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1800);
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   INIT: default selections for AI setup screen
+═══════════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded',()=>{
+  pickDiff('medium');  // default difficulty highlighted
+  pickSym('X');        // default symbol highlighted
+});
+</script>
+</body>
+</html>
