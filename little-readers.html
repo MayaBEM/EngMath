@@ -1,0 +1,2334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="description" content="Little Readers: Read, Tap & Play — interactive reading comprehension for young ESL learners. Created by Bright EngMath.">
+<meta name="author" content="Bright EngMath">
+<title>Little Readers: Read, Tap &amp; Play · Bright EngMath</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%236FA06C'/%3E%3Cpath d='M32 14l6 13 14 1-10 9 3 14-13-7-13 7 3-14-10-9 14-1z' fill='%23F4C95D'/%3E%3C/svg%3E">
+<style>
+/* ============================================================
+   Little Readers: Read, Tap & Play  —  Design System
+   A warm, premium storybook look created by Bright EngMath.
+   ============================================================ */
+
+:root{
+  --cream:#FBF6EC; --paper:#FFFDF7; --paper-2:#F6EEDD;
+  --sage:#9CC29A; --sage-d:#6FA06C; --sage-soft:#E7F0E2;
+  --forest:#2F5D50; --forest-l:#3C7365;
+  --coral:#F0A088; --coral-d:#E27E63; --coral-soft:#FBE3DA;
+  --sky:#9BC9E4; --sky-d:#5FA8D2; --sky-soft:#E1F0F8;
+  --yellow:#F4C95D; --yellow-d:#E4B23F; --yellow-soft:#FBEFCF;
+  --ink:#33463F; --muted:#6C7B74;
+  --ok:#4E9A6B; --ok-soft:#E4F2E7;
+  --gentle:#E9A23B;
+  --shadow-sm:0 2px 6px rgba(52,70,63,.10);
+  --shadow-md:0 8px 22px rgba(52,70,63,.14);
+  --shadow-lg:0 18px 44px rgba(52,70,63,.20);
+  --radius:22px; --radius-lg:30px; --radius-sm:14px;
+  --font-body:"Nunito","Baloo 2","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-head:"Baloo 2","Nunito",system-ui,sans-serif;
+  --text-scale:1;
+  --ease:cubic-bezier(.34,1.36,.5,1);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 600px at 12% -8%, var(--sky-soft), transparent 60%),
+    radial-gradient(1000px 560px at 100% 0%, var(--coral-soft), transparent 55%),
+    radial-gradient(900px 700px at 50% 120%, var(--sage-soft), transparent 60%),
+    var(--cream);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+  font-size:calc(17px * var(--text-scale));
+}
+h1,h2,h3,h4{font-family:var(--font-head);color:var(--forest);margin:0 0 .4em;line-height:1.15;}
+button{font-family:inherit;}
+:focus-visible{outline:3px solid var(--sky-d);outline-offset:3px;border-radius:8px;}
+img,svg{display:block;}
+
+/* paper texture overlay */
+.paper-grain{position:relative;}
+.paper-grain::after{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background-image:radial-gradient(rgba(120,100,60,.05) 1px,transparent 1px);
+  background-size:7px 7px;opacity:.7;mix-blend-mode:multiply;
+}
+
+/* ---------- layout ---------- */
+.app-shell{max-width:1180px;margin:0 auto;padding:0 20px 40px;}
+.topbar{
+  position:sticky;top:0;z-index:40;
+  display:flex;align-items:center;gap:14px;
+  padding:14px 22px;margin:0 -20px 22px;
+  background:rgba(255,253,247,.86);backdrop-filter:blur(8px);
+  border-bottom:2px solid var(--paper-2);
+}
+.brand{display:flex;align-items:center;gap:12px;cursor:pointer;background:none;border:none;padding:4px;}
+.brand .mark{width:44px;height:44px;flex:0 0 44px;border-radius:14px;
+  background:linear-gradient(145deg,var(--sage),var(--sage-d));
+  display:grid;place-items:center;box-shadow:var(--shadow-sm);}
+.brand .mark svg{width:30px;height:30px;}
+.brand .titles{text-align:left;line-height:1.05;}
+.brand .t1{font-family:var(--font-head);font-weight:800;color:var(--forest);font-size:1.06rem;}
+.brand .t2{font-size:.72rem;color:var(--muted);letter-spacing:.02em;}
+.topnav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+
+/* ---------- buttons ---------- */
+.btn{
+  border:none;border-radius:var(--radius-sm);cursor:pointer;
+  font-weight:800;font-size:1rem;padding:12px 20px;
+  display:inline-flex;align-items:center;gap:9px;justify-content:center;
+  background:var(--paper);color:var(--forest);box-shadow:var(--shadow-sm);
+  transition:transform .16s var(--ease),box-shadow .16s,background .16s;
+  min-height:48px;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.btn:active{transform:translateY(0) scale(.98);}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-primary{background:linear-gradient(145deg,var(--coral),var(--coral-d));color:#fff;}
+.btn-green{background:linear-gradient(145deg,var(--sage),var(--sage-d));color:#fff;}
+.btn-sky{background:linear-gradient(145deg,var(--sky),var(--sky-d));color:#fff;}
+.btn-yellow{background:linear-gradient(145deg,var(--yellow),var(--yellow-d));color:#5a4410;}
+.btn-ghost{background:rgba(255,255,255,.7);}
+.btn-lg{font-size:1.18rem;padding:16px 30px;min-height:60px;border-radius:var(--radius);}
+.btn-sm{font-size:.86rem;padding:8px 14px;min-height:40px;}
+.btn-icon{width:48px;height:48px;padding:0;border-radius:14px;}
+.btn-block{width:100%;}
+.icon-svg{width:22px;height:22px;}
+.btn .icon-svg{width:22px;height:22px;}
+
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--paper);border-radius:999px;
+  padding:6px 13px;font-weight:700;font-size:.82rem;color:var(--forest);box-shadow:var(--shadow-sm);}
+.pill-sage{background:var(--sage-soft);} .pill-coral{background:var(--coral-soft);}
+.pill-sky{background:var(--sky-soft);} .pill-yellow{background:var(--yellow-soft);}
+
+/* ---------- cards / panels ---------- */
+.card{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;}
+.panel{background:var(--paper);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:26px;}
+.section-title{display:flex;align-items:center;gap:12px;margin:6px 0 16px;}
+.section-title h2{margin:0;font-size:1.5rem;}
+
+/* fade / enter animations */
+.view{animation:fadeUp .4s var(--ease) both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+@keyframes pop{0%{transform:scale(.6);opacity:0;}70%{transform:scale(1.08);}100%{transform:scale(1);opacity:1;}}
+@keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
+/* ---------- welcome ---------- */
+.welcome{display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center;
+  background:var(--paper);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:40px;margin-top:6px;}
+.welcome h1{font-size:2.7rem;letter-spacing:-.5px;}
+.welcome .subtitle{font-size:1.18rem;color:var(--muted);max-width:34ch;margin-bottom:8px;}
+.welcome .kicker{color:var(--coral-d);font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;margin-bottom:6px;}
+.welcome-hero-svg{width:100%;height:auto;border-radius:var(--radius);box-shadow:var(--shadow-md);animation:floaty 6s ease-in-out infinite;}
+.welcome .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:20px;}
+.welcome .mini-features{display:flex;gap:18px;flex-wrap:wrap;margin-top:24px;color:var(--muted);font-weight:700;font-size:.92rem;}
+.welcome .mini-features span{display:inline-flex;align-items:center;gap:7px;}
+
+/* ---------- story library ---------- */
+.level-block{margin-bottom:34px;}
+.level-head{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.level-badge{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;color:#fff;
+  font-family:var(--font-head);font-weight:800;font-size:1.4rem;box-shadow:var(--shadow-sm);}
+.level-1 .level-badge{background:linear-gradient(145deg,var(--sky),var(--sky-d));}
+.level-2 .level-badge{background:linear-gradient(145deg,var(--sage),var(--sage-d));}
+.level-3 .level-badge{background:linear-gradient(145deg,var(--coral),var(--coral-d));}
+.level-head .meta h3{margin:0;font-size:1.3rem;} .level-head .meta p{margin:0;color:var(--muted);font-size:.9rem;}
+.story-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+.story-card{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;
+  cursor:pointer;border:none;text-align:left;padding:0;display:flex;flex-direction:column;
+  transition:transform .18s var(--ease),box-shadow .18s;}
+.story-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.story-card .thumb{width:100%;aspect-ratio:16/10;overflow:hidden;position:relative;}
+.story-card .thumb svg{width:100%;height:100%;}
+.story-card .body{padding:14px 15px 16px;display:flex;flex-direction:column;gap:8px;flex:1;}
+.story-card .body h4{margin:0;font-size:1.02rem;line-height:1.2;}
+.story-card .cardfoot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+.story-card .who{font-size:.8rem;color:var(--muted);font-weight:700;}
+.story-card.locked{opacity:.62;}
+.lock-tag{position:absolute;top:10px;right:10px;background:rgba(51,70,63,.72);color:#fff;border-radius:999px;
+  padding:5px 10px;font-size:.72rem;font-weight:800;display:flex;gap:5px;align-items:center;}
+.done-tag{position:absolute;top:10px;left:10px;background:var(--ok);color:#fff;border-radius:999px;
+  padding:5px 10px;font-size:.72rem;font-weight:800;}
+
+/* stars */
+.stars{display:inline-flex;gap:3px;}
+.stars svg{width:20px;height:20px;}
+.star-on path{fill:var(--yellow);stroke:var(--yellow-d);}
+.star-off path{fill:#E7E0D0;stroke:#D8CFBB;}
+.stars.big svg{width:34px;height:34px;}
+
+/* ---------- reading page ---------- */
+.reader-wrap{display:grid;grid-template-columns:1fr;gap:20px;}
+.step-track{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+.step-chip{display:flex;align-items:center;gap:7px;background:var(--paper);border-radius:999px;padding:7px 13px;
+  font-weight:800;font-size:.82rem;color:var(--muted);box-shadow:var(--shadow-sm);}
+.step-chip.active{background:var(--forest);color:#fff;}
+.step-chip.done{background:var(--sage-soft);color:var(--forest);}
+.step-chip .n{width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.08);display:grid;place-items:center;font-size:.78rem;}
+.step-chip.active .n{background:rgba(255,255,255,.25);}
+
+.reader-hero{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-md);}
+.reader-hero svg{width:100%;height:auto;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;}
+
+.passage{font-size:1.24rem;line-height:1.9;color:var(--ink);}
+.passage .sent{padding:2px 5px;border-radius:8px;transition:background .2s,box-shadow .2s;cursor:default;}
+.passage .sent.reading{background:var(--yellow-soft);box-shadow:0 0 0 2px var(--yellow);}
+.passage .sent.evidence{background:var(--ok-soft);box-shadow:0 0 0 2px var(--ok);}
+.passage.selectable .sent{cursor:pointer;}
+.passage.selectable .sent:hover{background:var(--sky-soft);}
+.passage .sent.picked{background:var(--sky-soft);box-shadow:0 0 0 2px var(--sky-d);}
+
+.audio-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--paper-2);
+  border-radius:var(--radius);padding:12px 14px;}
+.audio-bar .grow{flex:1;}
+.rate-ctl{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.85rem;color:var(--muted);}
+.textsize-ctl{display:flex;align-items:center;gap:6px;}
+
+/* vocabulary */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;}
+.vocab-card{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:18px;
+  display:flex;flex-direction:column;gap:8px;transition:transform .16s var(--ease),box-shadow .16s;}
+.vocab-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+.vocab-card .vpic{width:72px;height:72px;border-radius:18px;background:var(--sky-soft);display:grid;place-items:center;}
+.vocab-card .vpic svg{width:52px;height:52px;}
+.vocab-card .word{font-family:var(--font-head);font-weight:800;font-size:1.3rem;color:var(--forest);}
+.vocab-card .mean{color:var(--muted);font-size:.95rem;}
+.vocab-card .exa{font-style:italic;color:var(--sage-d);font-size:.9rem;}
+
+/* ---------- questions ---------- */
+.q-shell{background:var(--paper);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:26px;}
+.q-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+.q-progress{flex:1;height:12px;background:var(--paper-2);border-radius:999px;overflow:hidden;min-width:120px;}
+.q-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--sage),var(--sage-d));border-radius:999px;transition:width .4s var(--ease);}
+.q-count{font-weight:800;color:var(--muted);font-size:.9rem;white-space:nowrap;}
+.q-skill{font-size:.78rem;}
+.q-prompt{font-size:1.5rem;font-family:var(--font-head);color:var(--forest);margin:10px 0 20px;}
+
+.opt-grid{display:grid;gap:14px;}
+.opt-grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.opt-grid.stack{grid-template-columns:1fr;}
+.opt{border:3px solid transparent;background:var(--paper-2);border-radius:var(--radius);padding:18px;cursor:pointer;
+  font-weight:800;font-size:1.1rem;color:var(--forest);text-align:center;transition:transform .14s var(--ease),border-color .16s,background .16s;
+  display:flex;flex-direction:column;align-items:center;gap:10px;min-height:64px;justify-content:center;}
+.opt:hover:not(:disabled){transform:translateY(-3px);border-color:var(--sky);}
+.opt:disabled{cursor:default;}
+.opt.pic svg{width:92px;height:92px;}
+.opt.correct{background:var(--ok-soft);border-color:var(--ok);animation:pop .4s var(--ease);}
+.opt.wrong{background:var(--coral-soft);border-color:var(--coral-d);}
+.opt.dim{opacity:.45;}
+.opt.reveal{border-color:var(--ok);box-shadow:0 0 0 3px var(--ok-soft);}
+.tf-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.tf-btn{min-height:110px;font-size:1.5rem;border-radius:var(--radius-lg);}
+.tf-btn .tf-ic{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:1.6rem;}
+.tf-true .tf-ic{background:var(--sage-d);} .tf-false .tf-ic{background:var(--coral-d);}
+
+/* sequence / sort / match */
+.seq-list{display:flex;flex-direction:column;gap:12px;}
+.seq-item{display:flex;align-items:center;gap:12px;background:var(--paper-2);border-radius:var(--radius);padding:14px 16px;
+  border:3px solid transparent;font-weight:700;font-size:1.05rem;}
+.seq-item.sel{border-color:var(--sky-d);background:var(--sky-soft);}
+.seq-item .ord{width:34px;height:34px;flex:0 0 34px;border-radius:12px;background:var(--forest);color:#fff;
+  display:grid;place-items:center;font-weight:800;}
+.seq-item .txt{flex:1;}
+.seq-move{display:flex;flex-direction:column;gap:4px;}
+.seq-move button{width:34px;height:28px;border-radius:9px;border:none;background:#fff;box-shadow:var(--shadow-sm);cursor:pointer;font-weight:900;color:var(--forest);}
+.seq-item.correct{border-color:var(--ok);background:var(--ok-soft);}
+.seq-item.wrong{border-color:var(--coral-d);background:var(--coral-soft);}
+
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+.match-col{display:flex;flex-direction:column;gap:12px;}
+.match-col h4{margin:0 0 4px;font-size:.95rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+.chip-word{background:var(--paper-2);border:3px solid transparent;border-radius:var(--radius);padding:14px;font-weight:800;
+  font-size:1.15rem;cursor:pointer;color:var(--forest);text-align:center;transition:transform .14s var(--ease),border-color .16s;}
+.chip-word:hover:not(:disabled){transform:translateY(-2px);border-color:var(--sky);}
+.chip-word.sel{border-color:var(--sky-d);background:var(--sky-soft);}
+.chip-pic{background:var(--paper-2);border:3px solid transparent;border-radius:var(--radius);padding:10px;cursor:pointer;
+  display:grid;place-items:center;transition:transform .14s var(--ease),border-color .16s;min-height:96px;}
+.chip-pic svg{width:74px;height:74px;}
+.chip-pic:hover:not(:disabled){transform:translateY(-2px);border-color:var(--sky);}
+.chip-word.matched,.chip-pic.matched{border-color:var(--ok);background:var(--ok-soft);opacity:1;cursor:default;}
+.chip-word.matched::after{content:" ✓";color:var(--ok);}
+
+.sort-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px;}
+.sort-cat{background:var(--paper-2);border-radius:var(--radius);padding:12px;min-height:120px;border:3px dashed var(--sage);}
+.sort-cat h4{text-align:center;margin:0 0 8px;color:var(--forest);}
+.sort-cat.hi{border-color:var(--sky-d);background:var(--sky-soft);}
+.sort-pool{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+.sort-token{background:#fff;border:3px solid transparent;border-radius:14px;padding:10px 14px;font-weight:800;cursor:pointer;
+  box-shadow:var(--shadow-sm);color:var(--forest);}
+.sort-token.sel{border-color:var(--sky-d);}
+.sort-token.correct{background:var(--ok-soft);border-color:var(--ok);}
+.sort-token.small{font-size:.9rem;padding:7px 11px;}
+
+/* feedback panel */
+.feedback{margin-top:20px;border-radius:var(--radius);padding:16px 18px;display:flex;gap:12px;align-items:flex-start;
+  animation:fadeUp .3s var(--ease) both;}
+.feedback.good{background:var(--ok-soft);border:2px solid var(--ok);}
+.feedback.retry{background:var(--yellow-soft);border:2px solid var(--yellow-d);}
+.feedback.show{background:var(--sky-soft);border:2px solid var(--sky-d);}
+.feedback .fic{width:40px;height:40px;flex:0 0 40px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:1.3rem;font-weight:900;}
+.feedback.good .fic{background:var(--ok);} .feedback.retry .fic{background:var(--gentle);} .feedback.show .fic{background:var(--sky-d);}
+.feedback .ftext{flex:1;}
+.feedback .ftext b{color:var(--forest);}
+.q-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap;}
+
+/* ---------- completion ---------- */
+.complete{text-align:center;position:relative;overflow:hidden;}
+.complete .big-stars{margin:10px 0 6px;}
+.complete .score-num{font-size:3rem;font-family:var(--font-head);color:var(--forest);}
+.review-list{display:flex;flex-direction:column;gap:10px;text-align:left;margin-top:14px;}
+.review-item{display:flex;gap:12px;align-items:flex-start;background:var(--paper-2);border-radius:14px;padding:12px 14px;}
+.review-item .rq{flex:1;} .review-item small{color:var(--muted);}
+.rmark{width:28px;height:28px;flex:0 0 28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;}
+.rmark.ok{background:var(--ok);} .rmark.no{background:var(--coral-d);}
+
+/* confetti */
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.confetti i{position:absolute;top:-12px;width:10px;height:14px;border-radius:3px;opacity:.9;animation:fall linear forwards;}
+@keyframes fall{to{transform:translateY(560px) rotate(540deg);opacity:0;}}
+
+/* ---------- rewards ---------- */
+.reward-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:22px;}
+.stat{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:20px;text-align:center;}
+.stat .num{font-size:2.2rem;font-family:var(--font-head);color:var(--forest);}
+.stat .lbl{color:var(--muted);font-weight:700;}
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;}
+.badge-card{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:18px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:8px;transition:transform .16s var(--ease);}
+.badge-card:hover{transform:translateY(-3px);}
+.badge-svg{width:78px;height:78px;}
+.badge-card.locked .badge-svg{filter:grayscale(1);opacity:.4;}
+.badge-card .bname{font-weight:800;color:var(--forest);}
+.badge-card .bdesc{font-size:.82rem;color:var(--muted);}
+.badge-card .earned{font-size:.72rem;font-weight:800;color:var(--ok);}
+
+/* ---------- results / report ---------- */
+.report-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+.skill-row{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:16px 18px;}
+.skill-row .sr-top{display:flex;justify-content:space-between;font-weight:800;color:var(--forest);margin-bottom:8px;}
+.bar{height:12px;background:var(--paper-2);border-radius:999px;overflow:hidden;}
+.bar i{display:block;height:100%;border-radius:999px;transition:width .5s var(--ease);}
+.bar.g i{background:linear-gradient(90deg,var(--sage),var(--sage-d));}
+.bar.y i{background:linear-gradient(90deg,var(--yellow),var(--yellow-d));}
+.bar.c i{background:linear-gradient(90deg,var(--coral),var(--coral-d));}
+
+/* ---------- teacher ---------- */
+.teacher-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:22px;align-items:start;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--paper-2);}
+.toggle-row:last-child{border-bottom:none;}
+.switch{width:56px;height:32px;border-radius:999px;background:#D9D2C2;position:relative;border:none;cursor:pointer;flex:0 0 56px;transition:background .2s;}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:var(--shadow-sm);transition:left .2s var(--ease);}
+.switch.on{background:var(--sage-d);} .switch.on::after{left:27px;}
+.teacher-story-list{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto;padding-right:4px;}
+.tsl-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:var(--paper-2);cursor:pointer;border:2px solid transparent;}
+.tsl-item.sel{border-color:var(--sky-d);background:var(--sky-soft);}
+.tsl-item .lv{font-size:.7rem;font-weight:800;color:#fff;border-radius:6px;padding:2px 6px;}
+
+/* ---------- classroom mode ---------- */
+.classroom{position:fixed;inset:0;z-index:100;background:
+  radial-gradient(1200px 700px at 20% -10%,var(--sky-soft),transparent 60%),var(--cream);
+  display:flex;flex-direction:column;padding:26px clamp(20px,4vw,60px);overflow:auto;}
+.classroom .cr-top{display:flex;align-items:center;gap:14px;margin-bottom:10px;}
+.classroom .cr-title{font-family:var(--font-head);font-weight:800;color:var(--forest);font-size:clamp(1.2rem,2.4vw,2rem);}
+.classroom .cr-body{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:1100px;margin:0 auto;width:100%;}
+.classroom .q-prompt{font-size:clamp(1.6rem,3.6vw,3rem);text-align:center;}
+.classroom .opt{font-size:clamp(1.2rem,2.6vw,2rem);min-height:clamp(90px,14vh,150px);}
+.classroom .opt.pic svg{width:clamp(90px,12vw,150px);height:clamp(90px,12vw,150px);}
+.classroom .cr-controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px;}
+.classroom .passage{font-size:clamp(1.3rem,2.6vw,2rem);}
+
+/* ---------- certificate ---------- */
+.cert-page{max-width:900px;margin:0 auto;}
+.certificate{background:var(--paper);border-radius:24px;box-shadow:var(--shadow-lg);padding:44px;position:relative;
+  border:10px solid transparent;background-clip:padding-box;text-align:center;overflow:hidden;}
+.certificate::before{content:"";position:absolute;inset:10px;border:3px double var(--sage-d);border-radius:16px;pointer-events:none;}
+.cert-inner{position:relative;z-index:1;}
+.cert-kicker{letter-spacing:.28em;text-transform:uppercase;color:var(--coral-d);font-weight:800;font-size:.85rem;}
+.cert-title{font-size:2.6rem;color:var(--forest);margin:6px 0 4px;}
+.cert-name{font-family:var(--font-head);font-size:2.4rem;color:var(--coral-d);border-bottom:3px dashed var(--sage);display:inline-block;padding:4px 30px 8px;margin:16px 0;min-width:280px;}
+.cert-row{display:flex;justify-content:center;gap:44px;margin:18px 0;flex-wrap:wrap;}
+.cert-row .ci .n{font-size:2rem;font-family:var(--font-head);color:var(--forest);}
+.cert-row .ci .l{color:var(--muted);font-weight:700;font-size:.85rem;}
+.cert-sign{display:flex;justify-content:space-between;margin-top:28px;padding-top:10px;color:var(--muted);font-weight:700;}
+.cert-medal{width:96px;height:96px;margin:0 auto;}
+.name-input{border:none;border-bottom:3px dashed var(--sage);background:transparent;font-family:var(--font-head);
+  font-size:1.6rem;text-align:center;color:var(--coral-d);padding:6px 10px;width:min(360px,80%);}
+
+/* ---------- settings ---------- */
+.settings-grid{display:grid;grid-template-columns:1fr;gap:14px;max-width:640px;}
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--paper);border-radius:var(--radius);
+  box-shadow:var(--shadow-sm);padding:16px 20px;flex-wrap:wrap;}
+.set-row .lbl b{color:var(--forest);} .set-row .lbl small{display:block;color:var(--muted);}
+.seg{display:inline-flex;background:var(--paper-2);border-radius:12px;padding:4px;gap:4px;}
+.seg button{border:none;background:transparent;padding:8px 14px;border-radius:9px;font-weight:800;cursor:pointer;color:var(--muted);}
+.seg button.on{background:#fff;color:var(--forest);box-shadow:var(--shadow-sm);}
+
+/* modal */
+.modal-back{position:fixed;inset:0;background:rgba(40,54,49,.5);display:grid;place-items:center;z-index:120;padding:20px;
+  animation:fadeUp .2s ease both;}
+.modal{background:var(--paper);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:28px;max-width:440px;width:100%;text-align:center;}
+.modal h3{font-size:1.5rem;}
+.modal .m-actions{display:flex;gap:12px;justify-content:center;margin-top:20px;}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--forest);color:#fff;
+  padding:12px 20px;border-radius:999px;font-weight:800;box-shadow:var(--shadow-lg);z-index:200;
+  display:flex;align-items:center;gap:10px;animation:toastIn .3s var(--ease) both;}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,16px);}to{opacity:1;transform:translate(-50%,0);}}
+
+/* footer */
+.site-footer{margin-top:36px;padding:24px;text-align:center;color:var(--muted);border-top:2px solid var(--paper-2);}
+.site-footer b{color:var(--forest);}
+.site-footer .ver{display:inline-block;margin-top:6px;background:var(--sage-soft);color:var(--forest);border-radius:999px;padding:4px 12px;font-weight:800;font-size:.78rem;}
+
+/* empty state */
+.empty{text-align:center;color:var(--muted);padding:40px 20px;}
+.empty svg{width:90px;height:90px;margin:0 auto 12px;opacity:.7;}
+
+/* loading */
+#loader{position:fixed;inset:0;display:grid;place-items:center;background:var(--cream);z-index:500;transition:opacity .4s;}
+#loader .l-inner{text-align:center;}
+#loader .l-mark{width:88px;height:88px;margin:0 auto 14px;border-radius:26px;background:linear-gradient(145deg,var(--sage),var(--sage-d));
+  display:grid;place-items:center;box-shadow:var(--shadow-md);animation:floaty 2.4s ease-in-out infinite;}
+#loader .l-mark svg{width:56px;height:56px;}
+#loader .l-bar{width:180px;height:8px;background:var(--paper-2);border-radius:999px;overflow:hidden;margin:16px auto 0;}
+#loader .l-bar i{display:block;height:100%;width:40%;background:var(--sage-d);border-radius:999px;animation:load 1.1s ease-in-out infinite;}
+@keyframes load{0%{margin-left:-40%;}100%{margin-left:100%;}}
+
+/* ---------- responsive ---------- */
+@media(max-width:1000px){
+  .welcome{grid-template-columns:1fr;} .welcome-hero-svg{max-width:420px;margin:0 auto;}
+  .story-grid{grid-template-columns:repeat(2,1fr);}
+  .teacher-grid{grid-template-columns:1fr;}
+  .two-col{grid-template-columns:1fr;}
+}
+@media(max-width:640px){
+  body{font-size:calc(16px * var(--text-scale));}
+  .app-shell{padding:0 14px 30px;} .topbar{padding:12px 14px;margin:0 -14px 18px;}
+  .brand .titles{display:none;}
+  .welcome{padding:24px;} .welcome h1{font-size:2rem;}
+  .story-grid{grid-template-columns:1fr;}
+  .reward-stats{grid-template-columns:1fr;}
+  .opt-grid.cols-3{grid-template-columns:1fr;}
+  .match-wrap{grid-template-columns:1fr;}
+  .sort-cats{grid-template-columns:1fr;}
+  .q-prompt{font-size:1.25rem;} .q-shell{padding:18px;}
+  .tf-row{grid-template-columns:1fr;}
+  .cert-row{gap:24px;}
+  .q-actions{justify-content:stretch;} .q-actions .btn{flex:1;}
+}
+
+/* reduced motion */
+.reduce-motion *{animation:none !important;transition:none !important;}
+.reduce-motion .welcome-hero-svg,.reduce-motion #loader .l-mark{animation:none !important;}
+
+/* print (certificate + report) */
+@media print{
+  body{background:#fff;}
+  .topbar,.site-footer,.no-print,.btn{display:none !important;}
+  .app-shell{max-width:none;padding:0;}
+  .certificate,.panel{box-shadow:none;}
+  .print-area{page-break-inside:avoid;}
+}
+
+</style>
+</head>
+<body>
+<div id="loader"><div class="l-inner">
+  <div class="l-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" fill="#F4C95D"/><path d="M32 16 l5 11 12 1 -9 8 3 12 -11 -6 -11 6 3 -12 -9 -8 12 -1Z" fill="#fff"/></svg></div>
+  <div style="font-family:'Baloo 2',system-ui,sans-serif;font-weight:800;color:#2F5D50;font-size:1.2rem;">Little Readers</div>
+  <div style="color:#6C7B74;font-weight:700;font-size:.85rem;">Read, Tap &amp; Play · Bright EngMath</div>
+  <div class="l-bar"><i></i></div>
+</div></div>
+<div id="app"></div>
+<noscript><div style="max-width:640px;margin:60px auto;padding:24px;font-family:sans-serif;text-align:center;color:#33463F;">Little Readers needs JavaScript to be enabled to play.</div></noscript>
+<script>
+/* ============================================================
+   Little Readers: Read, Tap & Play  —  Content Data
+   Created by Bright EngMath.  Story Pack 1.
+   All passages, questions, vocabulary and explanations are
+   original and written for young ESL readers (Pre-A1 / A1).
+   Content is kept separate from the UI so new story packs
+   can be added easily later.
+   ============================================================ */
+
+const SKILLS = ["Vocabulary", "Details", "Sequencing", "Main idea", "Listening"];
+
+/* Map every question skill-tag to one of the 5 report categories */
+const SKILL_GROUP = {
+  "Vocabulary": "Vocabulary",
+  "Character": "Details",
+  "Setting": "Details",
+  "Detail": "Details",
+  "Action": "Details",
+  "Details": "Details",
+  "Sequencing": "Sequencing",
+  "Cause and effect": "Sequencing",
+  "Main idea": "Main idea",
+  "Inference": "Main idea",
+  "Listening": "Listening"
+};
+
+const BADGES = [
+  { id: "first_story",     name: "First Story",       desc: "Finish your very first story.",       icon: "badgeStar" },
+  { id: "careful_reader",  name: "Careful Reader",    desc: "Finish 3 stories.",                   icon: "badgeBook" },
+  { id: "word_explorer",   name: "Word Explorer",     desc: "Listen to 15 vocabulary words.",      icon: "badgeWord" },
+  { id: "listening_star",  name: "Listening Star",    desc: "Answer 5 listening questions right.", icon: "badgeEar" },
+  { id: "story_detective", name: "Story Detective",   desc: "Find the evidence 5 times.",          icon: "badgeGlass" },
+  { id: "perfect_reader",  name: "Perfect Reader",    desc: "Get 3 stars on any story.",           icon: "badgeCrown" },
+  { id: "reading_champion",name: "Reading Champion",  desc: "Finish all 12 stories.",              icon: "badgeTrophy" }
+];
+
+/* ---- The 12 original stories ------------------------------ */
+const STORIES = [
+  /* ===================== LEVEL 1 ===================== */
+  {
+    id: "s1", level: 1, order: 1,
+    title: "Ollie the Otter's Blue Ball",
+    character: "Ollie", accent: "sky", hero: "otter",
+    vocab: [
+      { word: "otter",  meaning: "a small animal that swims and lives near water", example: "The otter swims in the river.", icon: "otter" },
+      { word: "ball",   meaning: "a round toy you can throw and catch",             example: "I play with a blue ball.",     icon: "ball" },
+      { word: "river",  meaning: "a lot of water that moves across the land",       example: "Fish live in the river.",      icon: "river" },
+      { word: "float",  meaning: "to stay on top of the water",                     example: "The boat can float.",          icon: "wave" }
+    ],
+    sentences: [
+      "Ollie is a small otter.",
+      "Ollie has a big blue ball.",
+      "He plays with the ball by the river.",
+      "The blue ball floats on the water.",
+      "Ollie swims after his ball.",
+      "Ollie is very happy."
+    ],
+    questions: [
+      { type: "picture", skill: "Vocabulary", evidence: 1,
+        prompt: "Tap the ball that Ollie plays with.",
+        options: [{ icon: "ball", label: "ball" }, { icon: "fish", label: "fish" }, { icon: "star", label: "star" }],
+        answer: 0, explain: "The story says, \"Ollie has a big blue ball.\"" },
+      { type: "mc", skill: "Character", evidence: 0,
+        prompt: "What animal is Ollie?",
+        options: ["An otter", "A rabbit", "A duck"], answer: 0,
+        explain: "The first sentence says, \"Ollie is a small otter.\"" },
+      { type: "tf", skill: "Setting", evidence: 2,
+        prompt: "Ollie plays by the river.", answer: true,
+        explain: "The story says, \"He plays with the ball by the river.\"" },
+      { type: "mc", skill: "Detail", evidence: 3,
+        prompt: "What does the blue ball do on the water?",
+        options: ["It floats", "It sinks", "It flies"], answer: 0,
+        explain: "The story says, \"The blue ball floats on the water.\"" },
+      { type: "match", skill: "Vocabulary",
+        prompt: "Match each word to the correct picture.",
+        pairs: [{ word: "otter", icon: "otter" }, { word: "ball", icon: "ball" }, { word: "river", icon: "river" }],
+        explain: "Each word matches a picture from the story." },
+      { type: "mc", skill: "Inference", evidence: 5,
+        prompt: "How does Ollie feel at the end?",
+        options: ["Happy", "Sad", "Angry"], answer: 0,
+        explain: "The last sentence says, \"Ollie is very happy.\"" }
+    ]
+  },
+  {
+    id: "s2", level: 1, order: 2,
+    title: "Mia's New Backpack",
+    character: "Mia", accent: "coral", hero: "backpack",
+    vocab: [
+      { word: "backpack", meaning: "a bag you wear on your back to carry things", example: "My backpack is red.",       icon: "backpack" },
+      { word: "book",     meaning: "pages with words and pictures that you read",  example: "I read a book at school.", icon: "book" },
+      { word: "apple",    meaning: "a round fruit that is good to eat",            example: "I eat a red apple.",       icon: "apple" },
+      { word: "school",   meaning: "a place where children go to learn",          example: "We learn at school.",      icon: "school" }
+    ],
+    sentences: [
+      "Mia has a new backpack.",
+      "The backpack is red.",
+      "She puts a book in the backpack.",
+      "She puts an apple in the backpack.",
+      "Mia wears the backpack to school.",
+      "Mia loves her new backpack."
+    ],
+    questions: [
+      { type: "picture", skill: "Vocabulary", evidence: 0,
+        prompt: "Tap Mia's backpack.",
+        options: [{ icon: "backpack", label: "backpack" }, { icon: "hat", label: "hat" }, { icon: "shoe", label: "shoe" }],
+        answer: 0, explain: "The story is about Mia's new backpack." },
+      { type: "mc", skill: "Detail", evidence: 1,
+        prompt: "What color is the backpack?",
+        options: ["Red", "Blue", "Green"], answer: 0,
+        explain: "The story says, \"The backpack is red.\"" },
+      { type: "mc", skill: "Detail", evidence: 2,
+        prompt: "What does Mia put in her backpack?",
+        options: ["A book and an apple", "A ball and a cat", "A hat and a shoe"], answer: 0,
+        explain: "Mia puts a book and an apple in the backpack." },
+      { type: "tf", skill: "Action", evidence: 4,
+        prompt: "Mia wears the backpack to school.", answer: true,
+        explain: "The story says, \"Mia wears the backpack to school.\"" },
+      { type: "listen", skill: "Listening",
+        speak: "Mia puts an apple in the backpack.",
+        prompt: "Listen. What food does Mia put in her backpack?",
+        options: ["An apple", "A cake", "An egg"], answer: 0,
+        explain: "You heard, \"Mia puts an apple in the backpack.\"" },
+      { type: "mc", skill: "Inference", evidence: 5,
+        prompt: "How does Mia feel about her backpack?",
+        options: ["She loves it", "She is scared", "She is bored"], answer: 0,
+        explain: "The last sentence says, \"Mia loves her new backpack.\"" }
+    ]
+  },
+  {
+    id: "s3", level: 1, order: 3,
+    title: "Ben and the Little Turtle",
+    character: "Ben", accent: "sage", hero: "turtle",
+    vocab: [
+      { word: "park",   meaning: "a green place outside where you can play", example: "We play in the park.",  icon: "tree" },
+      { word: "turtle", meaning: "a slow animal with a hard shell",          example: "The turtle is slow.",   icon: "turtle" },
+      { word: "slow",   meaning: "not fast; moving a little at a time",      example: "A snail is slow.",      icon: "snail" },
+      { word: "leaf",   meaning: "a flat green part of a plant",             example: "The leaf is green.",    icon: "leaf" }
+    ],
+    sentences: [
+      "Ben walks in the park.",
+      "Ben sees a little turtle.",
+      "The turtle is very slow.",
+      "Ben gives the turtle a green leaf.",
+      "The turtle eats the leaf.",
+      "Ben smiles at the turtle."
+    ],
+    questions: [
+      { type: "picture", skill: "Vocabulary", evidence: 1,
+        prompt: "Tap the turtle that Ben sees.",
+        options: [{ icon: "turtle", label: "turtle" }, { icon: "frog", label: "frog" }, { icon: "fish", label: "fish" }],
+        answer: 0, explain: "The story says, \"Ben sees a little turtle.\"" },
+      { type: "mc", skill: "Setting", evidence: 0,
+        prompt: "Where does Ben walk?",
+        options: ["In the park", "In a shop", "At home"], answer: 0,
+        explain: "The first sentence says, \"Ben walks in the park.\"" },
+      { type: "tf", skill: "Detail", evidence: 2,
+        prompt: "The turtle is fast.", answer: false,
+        explain: "The story says, \"The turtle is very slow,\" not fast." },
+      { type: "mc", skill: "Action", evidence: 3,
+        prompt: "What does Ben give the turtle?",
+        options: ["A green leaf", "A blue ball", "A red hat"], answer: 0,
+        explain: "The story says, \"Ben gives the turtle a green leaf.\"" },
+      { type: "evidence", skill: "Details", answer: 4,
+        prompt: "Tap the sentence that tells you the turtle eats.",
+        explain: "The sentence \"The turtle eats the leaf\" shows the turtle eating." },
+      { type: "mc", skill: "Inference", evidence: 5,
+        prompt: "Ben smiles because he is ___.",
+        options: ["kind to the turtle", "angry", "tired"], answer: 0,
+        explain: "Ben helps and smiles at the turtle, so he is kind." }
+    ]
+  },
+  {
+    id: "s4", level: 1, order: 4,
+    title: "A Sunny Day at the Playground",
+    character: "Ben & Mia", accent: "yellow", hero: "playground",
+    vocab: [
+      { word: "sunny",      meaning: "bright with lots of sunshine",           example: "It is a sunny day.",       icon: "sun" },
+      { word: "playground", meaning: "a place with slides and swings to play", example: "We run at the playground.", icon: "slide" },
+      { word: "slide",      meaning: "a toy you go down at the playground",     example: "I go down the slide.",     icon: "slide" },
+      { word: "swing",      meaning: "a seat that moves back and forth",        example: "I swing up high.",         icon: "swing" }
+    ],
+    sentences: [
+      "It is a sunny day.",
+      "The children go to the playground.",
+      "Ben goes down the slide.",
+      "Mia swings up high.",
+      "They play with a big yellow ball.",
+      "Everyone has fun."
+    ],
+    questions: [
+      { type: "picture", skill: "Vocabulary", evidence: 2,
+        prompt: "Tap the slide.",
+        options: [{ icon: "slide", label: "slide" }, { icon: "swing", label: "swing" }, { icon: "seesaw", label: "seesaw" }],
+        answer: 0, explain: "Ben goes down the slide in the story." },
+      { type: "mc", skill: "Setting", evidence: 0,
+        prompt: "What is the weather like?",
+        options: ["Sunny", "Rainy", "Snowy"], answer: 0,
+        explain: "The first sentence says, \"It is a sunny day.\"" },
+      { type: "tf", skill: "Detail", evidence: 2,
+        prompt: "Ben goes down the slide.", answer: true,
+        explain: "The story says, \"Ben goes down the slide.\"" },
+      { type: "sort", skill: "Details",
+        prompt: "Sort each answer into Who, What or Where.",
+        categories: ["Who", "What", "Where"],
+        items: [{ text: "Ben", cat: "Who" }, { text: "Mia", cat: "Who" },
+                { text: "a yellow ball", cat: "What" }, { text: "the playground", cat: "Where" }],
+        explain: "Ben and Mia are people (Who), the ball is a thing (What), the playground is a place (Where)." },
+      { type: "mc", skill: "Detail", evidence: 4,
+        prompt: "What color is the ball?",
+        options: ["Yellow", "Purple", "Black"], answer: 0,
+        explain: "The story says, \"They play with a big yellow ball.\"" },
+      { type: "mc", skill: "Main idea", evidence: 5,
+        prompt: "What is this story mostly about?",
+        options: ["Children having fun at the playground", "A rainy day at home", "Cooking dinner"], answer: 0,
+        explain: "The children play together and \"Everyone has fun.\"" }
+    ]
+  },
+
+  /* ===================== LEVEL 2 ===================== */
+  {
+    id: "s5", level: 2, order: 1,
+    title: "The Missing Lunch Box",
+    character: "Sam", accent: "coral", hero: "lunchbox",
+    vocab: [
+      { word: "lunch box", meaning: "a box that holds your food for lunch",   example: "My lunch box is blue.",   icon: "lunchbox" },
+      { word: "desk",      meaning: "a table where you sit and work",         example: "My books are on my desk.", icon: "desk" },
+      { word: "find",      meaning: "to see something you were looking for",  example: "I find my pencil.",       icon: "glass" },
+      { word: "thank you", meaning: "kind words you say when someone helps",  example: "I say thank you to Mom.", icon: "heart" }
+    ],
+    sentences: [
+      "It is lunch time at school.",
+      "Sam is looking for his lunch box.",
+      "He looks under the desk.",
+      "He looks inside his bag.",
+      "The lunch box is not there.",
+      "Sam's friend Lily is helping him look.",
+      "They find the lunch box by the door.",
+      "Sam is happy and says thank you."
+    ],
+    questions: [
+      { type: "mc", skill: "Character", evidence: 1,
+        prompt: "What is Sam looking for?",
+        options: ["His lunch box", "His shoe", "His book"], answer: 0,
+        explain: "The story says, \"Sam is looking for his lunch box.\"" },
+      { type: "tf", skill: "Detail", evidence: 2,
+        prompt: "Sam looks under the desk.", answer: true,
+        explain: "The story says, \"He looks under the desk.\"" },
+      { type: "evidence", skill: "Details", answer: 6,
+        prompt: "Tap the sentence that tells you where they find the lunch box.",
+        explain: "\"They find the lunch box by the door\" tells you where it was." },
+      { type: "sequence", skill: "Sequencing",
+        prompt: "Put the story events in the correct order.",
+        items: ["Sam looks for his lunch box.", "Lily helps Sam look.", "They find the lunch box by the door."],
+        explain: "First Sam looks, then Lily helps, then they find the lunch box." },
+      { type: "mc", skill: "Detail", evidence: 6,
+        prompt: "Where do they find the lunch box?",
+        options: ["By the door", "Under the desk", "In the bag"], answer: 0,
+        explain: "The story says, \"They find the lunch box by the door.\"" },
+      { type: "mc", skill: "Cause and effect", evidence: 5,
+        prompt: "Why does Sam say thank you?",
+        options: ["Lily helps him find the lunch box", "He is hungry", "He is late"], answer: 0,
+        explain: "Sam says thank you because Lily helped him find the lunch box." }
+    ]
+  },
+  {
+    id: "s6", level: 2, order: 2,
+    title: "Lily Helps in the Garden",
+    character: "Lily", accent: "sage", hero: "garden",
+    vocab: [
+      { word: "garden", meaning: "a place where plants and flowers grow", example: "Flowers grow in the garden.", icon: "flower" },
+      { word: "seed",   meaning: "a tiny thing that grows into a plant",  example: "I plant a seed.",             icon: "seed" },
+      { word: "water",  meaning: "to give water to a plant",             example: "I water the flowers.",        icon: "wateringcan" },
+      { word: "grow",   meaning: "to get bigger",                        example: "The plant will grow.",        icon: "sprout" }
+    ],
+    sentences: [
+      "Lily is helping her mom in the garden.",
+      "The sun is shining brightly.",
+      "Lily is planting little seeds.",
+      "She is watering the seeds with a can.",
+      "A yellow flower is growing by the fence.",
+      "Lily pulls out the weeds.",
+      "Her hands are dirty, but she is smiling.",
+      "Lily loves the garden."
+    ],
+    questions: [
+      { type: "mc", skill: "Setting", evidence: 0,
+        prompt: "Where is Lily?",
+        options: ["In the garden", "At school", "In a shop"], answer: 0,
+        explain: "The story says, \"Lily is helping her mom in the garden.\"" },
+      { type: "mc", skill: "Action", evidence: 2,
+        prompt: "What is Lily doing with the seeds?",
+        options: ["Planting and watering them", "Eating them", "Throwing them away"], answer: 0,
+        explain: "Lily is planting the seeds and watering them with a can." },
+      { type: "picture", skill: "Vocabulary", evidence: 3,
+        prompt: "Tap the watering can.",
+        options: [{ icon: "wateringcan", label: "watering can" }, { icon: "cup", label: "cup" }, { icon: "umbrella", label: "umbrella" }],
+        answer: 0, explain: "Lily waters the seeds \"with a can.\"" },
+      { type: "tf", skill: "Detail", evidence: 4,
+        prompt: "A yellow flower is growing by the fence.", answer: true,
+        explain: "The story says, \"A yellow flower is growing by the fence.\"" },
+      { type: "match", skill: "Vocabulary",
+        prompt: "Match each word to the correct picture.",
+        pairs: [{ word: "seed", icon: "seed" }, { word: "flower", icon: "flower" }, { word: "can", icon: "wateringcan" }],
+        explain: "Each word matches a picture from the garden story." },
+      { type: "mc", skill: "Cause and effect", evidence: 6,
+        prompt: "Why are Lily's hands dirty?",
+        options: ["She works in the garden", "She paints a picture", "She plays in water"], answer: 0,
+        explain: "Lily's hands are dirty because she works in the garden." }
+    ]
+  },
+  {
+    id: "s7", level: 2, order: 3,
+    title: "A Rainy Morning at School",
+    character: "Ben", accent: "sky", hero: "rain",
+    vocab: [
+      { word: "rain",     meaning: "water that falls from the clouds",     example: "The rain is falling.",     icon: "rain" },
+      { word: "umbrella", meaning: "a thing you hold to stay dry in rain", example: "I open my umbrella.",       icon: "umbrella" },
+      { word: "boots",    meaning: "shoes that keep your feet dry",        example: "My boots are wet.",         icon: "boot" },
+      { word: "dry",      meaning: "not wet",                              example: "The class is warm and dry.", icon: "sun" }
+    ],
+    sentences: [
+      "It is raining this morning.",
+      "Ben is walking to school with his umbrella.",
+      "The rain is falling on the road.",
+      "Ben's boots are wet.",
+      "He shakes his umbrella by the door.",
+      "Inside, the class is warm and dry.",
+      "The teacher is reading a book to the class.",
+      "Ben is happy to be at school."
+    ],
+    questions: [
+      { type: "mc", skill: "Setting", evidence: 0,
+        prompt: "What is the weather like?",
+        options: ["Rainy", "Sunny", "Snowy"], answer: 0,
+        explain: "The first sentence says, \"It is raining this morning.\"" },
+      { type: "picture", skill: "Vocabulary", evidence: 1,
+        prompt: "Tap Ben's umbrella.",
+        options: [{ icon: "umbrella", label: "umbrella" }, { icon: "hat", label: "hat" }, { icon: "ball", label: "ball" }],
+        answer: 0, explain: "Ben walks to school \"with his umbrella.\"" },
+      { type: "tf", skill: "Detail", evidence: 3,
+        prompt: "Ben's boots are dry.", answer: false,
+        explain: "The story says, \"Ben's boots are wet,\" not dry." },
+      { type: "evidence", skill: "Details", answer: 6,
+        prompt: "Tap the sentence that tells you what the teacher is doing.",
+        explain: "\"The teacher is reading a book to the class\" tells you what the teacher does." },
+      { type: "listen", skill: "Listening",
+        speak: "Inside, the class is warm and dry.",
+        prompt: "Listen. How is the class inside?",
+        options: ["Warm and dry", "Cold and wet", "Dark and loud"], answer: 0,
+        explain: "You heard, \"Inside, the class is warm and dry.\"" },
+      { type: "sequence", skill: "Sequencing",
+        prompt: "Put the story events in the correct order.",
+        items: ["Ben walks to school in the rain.", "Ben shakes his umbrella by the door.", "The teacher reads a book to the class."],
+        explain: "First Ben walks in the rain, then he shakes his umbrella, then the teacher reads." }
+    ]
+  },
+  {
+    id: "s8", level: 2, order: 4,
+    title: "Max Builds a Blanket Fort",
+    character: "Max", accent: "yellow", hero: "fort",
+    vocab: [
+      { word: "fort",    meaning: "a small hideout you build to play in", example: "I build a fort.",      icon: "fort" },
+      { word: "blanket", meaning: "a soft cloth that keeps you warm",     example: "The blanket is soft.", icon: "blanket" },
+      { word: "pillow",  meaning: "a soft thing you rest your head on",   example: "My pillow is soft.",   icon: "pillow" },
+      { word: "cozy",    meaning: "warm, soft and comfortable",           example: "The fort is cozy.",    icon: "heart" }
+    ],
+    sentences: [
+      "Max is at home on a cold day.",
+      "He wants to build a blanket fort.",
+      "Max puts two chairs together.",
+      "He puts a big blanket on top.",
+      "He puts soft pillows inside.",
+      "Max reads his favorite book in the fort.",
+      "His cat sleeps next to him.",
+      "The fort is warm and cozy."
+    ],
+    questions: [
+      { type: "mc", skill: "Main idea", evidence: 1,
+        prompt: "What does Max want to build?",
+        options: ["A blanket fort", "A sandcastle", "A boat"], answer: 0,
+        explain: "The story says, \"He wants to build a blanket fort.\"" },
+      { type: "sequence", skill: "Sequencing",
+        prompt: "Put the steps in the correct order.",
+        items: ["Max puts two chairs together.", "He puts a big blanket on top.", "He puts soft pillows inside."],
+        explain: "First chairs, then the blanket on top, then the pillows inside." },
+      { type: "picture", skill: "Vocabulary", evidence: 4,
+        prompt: "Tap the pillow.",
+        options: [{ icon: "pillow", label: "pillow" }, { icon: "book", label: "book" }, { icon: "cup", label: "cup" }],
+        answer: 0, explain: "Max puts soft pillows inside the fort." },
+      { type: "tf", skill: "Detail", evidence: 6,
+        prompt: "Max's cat sleeps next to him.", answer: true,
+        explain: "The story says, \"His cat sleeps next to him.\"" },
+      { type: "mc", skill: "Action", evidence: 5,
+        prompt: "What does Max do in the fort?",
+        options: ["He reads a book", "He cooks food", "He rides a bike"], answer: 0,
+        explain: "The story says, \"Max reads his favorite book in the fort.\"" },
+      { type: "mc", skill: "Cause and effect", evidence: 7,
+        prompt: "Why is the fort warm and cozy?",
+        options: ["It has a blanket and pillows", "It is outside", "It is made of ice"], answer: 0,
+        explain: "The fort is cozy because it has a soft blanket and pillows." }
+    ]
+  },
+
+  /* ===================== LEVEL 3 ===================== */
+  {
+    id: "s9", level: 3, order: 1,
+    title: "The Picnic Surprise",
+    character: "Mia & Ben", accent: "sage", hero: "picnic",
+    vocab: [
+      { word: "picnic", meaning: "a meal you eat outside for fun",        example: "We have a picnic in the park.", icon: "basket" },
+      { word: "basket", meaning: "a bag with a handle for carrying food", example: "The food is in the basket.",   icon: "basket" },
+      { word: "shady",  meaning: "cool and out of the hot sun",           example: "We sit in a shady spot.",      icon: "tree" },
+      { word: "ants",   meaning: "tiny insects that live in the ground",  example: "The ants march in a line.",    icon: "ant" }
+    ],
+    sentences: [
+      "On Saturday, Mia and Ben go to the park for a picnic.",
+      "Mom packs sandwiches, fruit, and juice in a basket.",
+      "They find a shady spot under a big tree.",
+      "Mia puts a blanket on the grass.",
+      "Just as they start to eat, some ants come to the blanket.",
+      "The ants want the sweet fruit too.",
+      "Ben moves the basket to a new spot.",
+      "Mia shares one small piece of fruit with the ants.",
+      "Soon the ants march away in a line.",
+      "Everyone laughs and finishes the picnic."
+    ],
+    questions: [
+      { type: "mc", skill: "Setting", evidence: 0,
+        prompt: "Where do Mia and Ben go on Saturday?",
+        options: ["To the park for a picnic", "To school", "To the shop"], answer: 0,
+        explain: "The story says they \"go to the park for a picnic.\"" },
+      { type: "evidence", skill: "Details", answer: 1,
+        prompt: "Tap the sentence that tells you what Mom packs.",
+        explain: "\"Mom packs sandwiches, fruit, and juice in a basket\" lists the food." },
+      { type: "sequence", skill: "Sequencing",
+        prompt: "Put the story events in the correct order.",
+        items: ["The family sits under a big tree.", "Some ants come to the blanket.", "Ben moves the basket away."],
+        explain: "First they sit down, then ants come, then Ben moves the basket." },
+      { type: "mc", skill: "Cause and effect", evidence: 5,
+        prompt: "Why do the ants come to the blanket?",
+        options: ["They want the sweet fruit", "They want the blanket", "They want to play"], answer: 0,
+        explain: "The story says, \"The ants want the sweet fruit too.\"" },
+      { type: "tf", skill: "Inference", evidence: 9,
+        prompt: "The family runs home because of the ants.", answer: false,
+        explain: "The family stays and \"finishes the picnic,\" so they do not run home." },
+      { type: "mc", skill: "Inference", evidence: 7,
+        prompt: "What kind of girl is Mia?",
+        options: ["Kind and clever", "Rude", "Scared"], answer: 0,
+        explain: "Mia calmly shares fruit with the ants, so she is kind and clever." }
+    ]
+  },
+  {
+    id: "s10", level: 3, order: 2,
+    title: "Nora and the Lost Library Book",
+    character: "Nora", accent: "coral", hero: "library",
+    vocab: [
+      { word: "library", meaning: "a place where you borrow books",       example: "We read at the library.",       icon: "library" },
+      { word: "worried", meaning: "feeling upset that something is wrong", example: "She is worried about the test.", icon: "worried" },
+      { word: "return",  meaning: "to give something back",               example: "I return my book.",             icon: "return" },
+      { word: "brave",   meaning: "not afraid of hard things",            example: "The fox is brave.",             icon: "fox" }
+    ],
+    sentences: [
+      "Nora loves to read library books.",
+      "On Monday, she cannot find her library book.",
+      "The book is about a brave little fox.",
+      "Nora looks under her bed and in her bag.",
+      "She feels worried because the book is late.",
+      "Her little brother, Sam, remembers something.",
+      "He saw the book in the kitchen this morning.",
+      "Nora runs to the kitchen and finds the book.",
+      "She returns the book to the library that day.",
+      "The librarian smiles and gives Nora a new book."
+    ],
+    questions: [
+      { type: "mc", skill: "Detail", evidence: 2,
+        prompt: "What is Nora's book about?",
+        options: ["A brave little fox", "A big blue ball", "A rainy day"], answer: 0,
+        explain: "The story says, \"The book is about a brave little fox.\"" },
+      { type: "mc", skill: "Inference", evidence: 4,
+        prompt: "How does Nora feel when she cannot find the book?",
+        options: ["Worried", "Happy", "Sleepy"], answer: 0,
+        explain: "The story says, \"She feels worried because the book is late.\"" },
+      { type: "evidence", skill: "Details", answer: 5,
+        prompt: "Tap the sentence that tells you who remembers where the book is.",
+        explain: "\"Her little brother, Sam, remembers something\" tells you who remembers." },
+      { type: "sequence", skill: "Sequencing",
+        prompt: "Put the story events in the correct order.",
+        items: ["Nora cannot find her library book.", "Sam remembers he saw it in the kitchen.", "Nora returns the book to the library."],
+        explain: "First the book is lost, then Sam remembers, then Nora returns it." },
+      { type: "mc", skill: "Cause and effect", evidence: 4,
+        prompt: "Why is Nora worried?",
+        options: ["The library book is late", "She is hungry", "It is raining"], answer: 0,
+        explain: "Nora is worried \"because the book is late.\"" },
+      { type: "tf", skill: "Detail", evidence: 9,
+        prompt: "The librarian gives Nora a new book at the end.", answer: true,
+        explain: "The story says, \"The librarian smiles and gives Nora a new book.\"" }
+    ]
+  },
+  {
+    id: "s11", level: 3, order: 3,
+    title: "The Little Boat Race",
+    character: "Ben & Max", accent: "sky", hero: "boat",
+    vocab: [
+      { word: "boat",   meaning: "a small thing that floats on water", example: "The boat is on the water.",   icon: "boat" },
+      { word: "race",   meaning: "a game to see who is fastest",       example: "We have a boat race.",        icon: "flag" },
+      { word: "stream", meaning: "a small river of moving water",      example: "The stream runs past us.",    icon: "river" },
+      { word: "wave",   meaning: "water that moves up and down",       example: "A little wave lifts the boat.", icon: "wave" }
+    ],
+    sentences: [
+      "Ben and Max make small paper boats.",
+      "They want to race the boats on the stream.",
+      "Ben's boat is blue, and Max's boat is red.",
+      "The two boys put their boats in the water.",
+      "The water carries the boats down the stream.",
+      "Max's red boat goes fast at first.",
+      "Then Ben's blue boat catches a little wave.",
+      "The blue boat sails past the red boat.",
+      "Ben's boat wins the race.",
+      "The boys laugh and race again."
+    ],
+    questions: [
+      { type: "mc", skill: "Main idea", evidence: 0,
+        prompt: "What do Ben and Max make?",
+        options: ["Small paper boats", "Blanket forts", "Sandwiches"], answer: 0,
+        explain: "The story says, \"Ben and Max make small paper boats.\"" },
+      { type: "tf", skill: "Detail", evidence: 2,
+        prompt: "Ben's boat is red.", answer: false,
+        explain: "The story says, \"Ben's boat is blue,\" and Max's boat is red." },
+      { type: "evidence", skill: "Details", answer: 8,
+        prompt: "Tap the sentence that tells you whose boat wins.",
+        explain: "\"Ben's boat wins the race\" tells you the winner." },
+      { type: "sequence", skill: "Sequencing",
+        prompt: "Put the story events in the correct order.",
+        items: ["The boys put their boats in the water.", "Max's red boat goes fast at first.", "Ben's blue boat sails past and wins."],
+        explain: "First the boats go in, then the red boat leads, then the blue boat wins." },
+      { type: "mc", skill: "Cause and effect", evidence: 6,
+        prompt: "Why does Ben's boat go past the red boat?",
+        options: ["It catches a little wave", "It has a motor", "Max stops his boat"], answer: 0,
+        explain: "Ben's blue boat \"catches a little wave\" and sails past." },
+      { type: "mc", skill: "Inference", evidence: 9,
+        prompt: "What do the boys do after the race?",
+        options: ["They laugh and race again", "They go home sad", "They stop playing"], answer: 0,
+        explain: "The last sentence says, \"The boys laugh and race again.\"" }
+    ]
+  },
+  {
+    id: "s12", level: 3, order: 4,
+    title: "The Day the Class Saved a Butterfly",
+    character: "The Class", accent: "yellow", hero: "butterfly",
+    vocab: [
+      { word: "butterfly", meaning: "an insect with big, pretty wings",   example: "The butterfly flies away.", icon: "butterfly" },
+      { word: "wing",      meaning: "the part a bug or bird uses to fly", example: "Its wing is stuck.",         icon: "wing" },
+      { word: "gently",    meaning: "in a soft and careful way",          example: "She holds it gently.",       icon: "hand" },
+      { word: "cheer",     meaning: "to shout because you are happy",     example: "The class cheers.",          icon: "cheer" }
+    ],
+    sentences: [
+      "One morning, a butterfly flies into the classroom.",
+      "Its wing is stuck to the window.",
+      "The children want to help the butterfly.",
+      "Miss Lee opens the window very slowly.",
+      "Ben brings a small paper cup.",
+      "Mia gently guides the butterfly into the cup.",
+      "The class walks outside to the garden.",
+      "They open the cup near a pink flower.",
+      "The butterfly rests on the flower for a moment.",
+      "Then it flies up into the blue sky.",
+      "The whole class cheers with joy."
+    ],
+    questions: [
+      { type: "mc", skill: "Character", evidence: 0,
+        prompt: "What flies into the classroom?",
+        options: ["A butterfly", "A bird", "A bee"], answer: 0,
+        explain: "The story says, \"A butterfly flies into the classroom.\"" },
+      { type: "mc", skill: "Cause and effect", evidence: 1,
+        prompt: "What is wrong with the butterfly?",
+        options: ["Its wing is stuck to the window", "It is too big", "It is hungry"], answer: 0,
+        explain: "The story says, \"Its wing is stuck to the window.\"" },
+      { type: "sequence", skill: "Sequencing",
+        prompt: "Put the story events in the correct order.",
+        items: ["The butterfly's wing is stuck.", "Mia guides it into a paper cup.", "The class sets it free in the garden."],
+        explain: "First the wing is stuck, then Mia helps it into the cup, then they set it free." },
+      { type: "evidence", skill: "Details", answer: 7,
+        prompt: "Tap the sentence that tells you where the class sets the butterfly free.",
+        explain: "\"They open the cup near a pink flower\" tells you where the butterfly is set free." },
+      { type: "tf", skill: "Inference", evidence: 2,
+        prompt: "The children want to hurt the butterfly.", answer: false,
+        explain: "The story says, \"The children want to help the butterfly,\" not hurt it." },
+      { type: "mc", skill: "Main idea", evidence: 10,
+        prompt: "Why does the class cheer at the end?",
+        options: ["The butterfly is free and safe", "School is over", "They see a rainbow"], answer: 0,
+        explain: "The class cheers because the butterfly flies away, free and safe." }
+    ]
+  }
+];
+
+
+/* ============================================================
+   Little Readers  —  Original Illustration System
+   All artwork is original CSS/SVG created for Bright EngMath.
+   No external images or copyrighted characters are used.
+   ============================================================ */
+
+/* Palette (kept in JS so illustrations stay consistent) */
+const C = {
+  cream: "#FBF6EC", paper: "#FFFDF7",
+  sage: "#9CC29A", sageD: "#6FA06C",
+  forest: "#2F5D50", forestL: "#3C7365",
+  coral: "#F0A088", coralD: "#E27E63",
+  sky: "#9BC9E4", skyD: "#5FA8D2",
+  yellow: "#F4C95D", yellowD: "#E4B23F",
+  brown: "#B07E52", brownD: "#8A5E38",
+  white: "#FFFFFF", ink: "#3A4A44",
+  pink: "#F3B6C4", green: "#7FB069", greenD: "#5E8F4E",
+  red: "#E27E63", blue: "#5FA8D2"
+};
+
+/* wrap raw inner markup into a labelled, accessible svg */
+function svg(inner, vb, extra) {
+  return '<svg viewBox="' + vb + '" xmlns="http://www.w3.org/2000/svg" ' +
+         (extra || "") + ' focusable="false" aria-hidden="true">' + inner + "</svg>";
+}
+
+/* -------- small object icons (viewBox 0 0 64 64) ---------- */
+const ICON_PATHS = {
+  ball: '<circle cx="32" cy="34" r="20" fill="'+C.sky+'"/><path d="M14 30 Q32 22 50 30" stroke="'+C.white+'" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M16 40 Q32 48 48 40" stroke="'+C.white+'" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="26" cy="27" rx="5" ry="3" fill="#fff" opacity=".6"/>',
+  fish: '<path d="M12 32 C18 18 42 18 48 32 C42 46 18 46 12 32Z" fill="'+C.coral+'"/><path d="M48 32 l10 -8 v16Z" fill="'+C.coralD+'"/><circle cx="22" cy="30" r="3" fill="#fff"/><circle cx="22" cy="30" r="1.6" fill="'+C.ink+'"/>',
+  star: '<path d="M32 8 l7 15 16 2 -12 11 4 16 -15 -8 -15 8 4 -16 -12 -11 16 -2Z" fill="'+C.yellow+'" stroke="'+C.yellowD+'" stroke-width="2" stroke-linejoin="round"/>',
+  otter: '<ellipse cx="32" cy="40" rx="16" ry="18" fill="'+C.brown+'"/><ellipse cx="32" cy="44" rx="9" ry="10" fill="#E9D3BE"/><circle cx="22" cy="20" r="7" fill="'+C.brown+'"/><circle cx="42" cy="20" r="7" fill="'+C.brown+'"/><circle cx="32" cy="26" r="12" fill="'+C.brownD+'"/><circle cx="27" cy="24" r="2.2" fill="#2b2b2b"/><circle cx="37" cy="24" r="2.2" fill="#2b2b2b"/><ellipse cx="32" cy="29" rx="3" ry="2.2" fill="#2b2b2b"/>',
+  river: '<rect x="8" y="18" width="48" height="28" rx="10" fill="'+C.sky+'"/><path d="M12 26 Q20 22 28 26 T44 26" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".8"/><path d="M14 36 Q22 32 30 36 T46 36" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".8"/>',
+  wave: '<path d="M8 40 Q16 30 24 40 T40 40 T56 40 V52 H8Z" fill="'+C.sky+'"/><path d="M8 34 Q16 24 24 34 T40 34 T56 34" stroke="'+C.skyD+'" stroke-width="3" fill="none" stroke-linecap="round"/>',
+  backpack: '<rect x="16" y="18" width="32" height="34" rx="10" fill="'+C.coral+'"/><path d="M24 18 a8 8 0 0 1 16 0" fill="none" stroke="'+C.coralD+'" stroke-width="4"/><rect x="24" y="30" width="16" height="14" rx="4" fill="'+C.paper+'"/><rect x="29" y="18" width="6" height="14" rx="3" fill="'+C.coralD+'"/>',
+  book: '<path d="M12 16 h18 a4 4 0 0 1 4 4 v30 h-18 a4 4 0 0 0 -4 4Z" fill="'+C.sage+'"/><path d="M52 16 h-18 a4 4 0 0 0 -4 4 v30 h18 a4 4 0 0 1 4 4Z" fill="'+C.sageD+'"/><rect x="30" y="16" width="4" height="38" fill="'+C.forest+'"/>',
+  apple: '<path d="M32 22 C22 14 14 24 18 34 C21 44 28 50 32 50 C36 50 43 44 46 34 C50 24 42 14 32 22Z" fill="'+C.red+'"/><rect x="30.5" y="14" width="3" height="9" rx="1.5" fill="'+C.brownD+'"/><path d="M33 16 q7 -4 9 2 q-7 2 -9 -2Z" fill="'+C.green+'"/>',
+  school: '<rect x="12" y="28" width="40" height="24" rx="3" fill="'+C.coral+'"/><path d="M10 28 L32 12 L54 28Z" fill="'+C.coralD+'"/><rect x="28" y="38" width="8" height="14" fill="'+C.paper+'"/><rect x="18" y="34" width="7" height="7" fill="'+C.paper+'"/><rect x="39" y="34" width="7" height="7" fill="'+C.paper+'"/>',
+  hat: '<ellipse cx="32" cy="44" rx="24" ry="6" fill="'+C.forestL+'"/><path d="M18 44 C18 26 46 26 46 44Z" fill="'+C.forest+'"/><rect x="18" y="38" width="28" height="6" rx="3" fill="'+C.yellow+'"/>',
+  shoe: '<path d="M10 40 C10 32 20 30 26 34 L42 40 C50 42 54 44 54 48 H12 C10 48 10 44 10 40Z" fill="'+C.skyD+'"/><path d="M24 34 l3 6 M30 36 l3 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>',
+  turtle: '<ellipse cx="32" cy="36" rx="20" ry="14" fill="'+C.green+'"/><path d="M32 24 a12 12 0 0 1 12 12 h-24 a12 12 0 0 1 12 -12Z" fill="'+C.greenD+'"/><path d="M32 26 v18 M22 36 h20 M26 30 l12 12 M38 30 l-12 12" stroke="'+C.forest+'" stroke-width="1.6" opacity=".5"/><circle cx="50" cy="34" r="6" fill="'+C.green+'"/><circle cx="51" cy="33" r="1.6" fill="'+C.ink+'"/><ellipse cx="18" cy="50" rx="4" ry="3" fill="'+C.greenD+'"/><ellipse cx="46" cy="50" rx="4" ry="3" fill="'+C.greenD+'"/>',
+  frog: '<ellipse cx="32" cy="40" rx="18" ry="14" fill="'+C.sage+'"/><circle cx="22" cy="24" r="7" fill="'+C.sage+'"/><circle cx="42" cy="24" r="7" fill="'+C.sage+'"/><circle cx="22" cy="23" r="3" fill="#fff"/><circle cx="42" cy="23" r="3" fill="#fff"/><circle cx="22" cy="23" r="1.6" fill="'+C.ink+'"/><circle cx="42" cy="23" r="1.6" fill="'+C.ink+'"/><path d="M24 42 q8 6 16 0" stroke="'+C.forest+'" stroke-width="2.4" fill="none" stroke-linecap="round"/>',
+  tree: '<rect x="29" y="36" width="6" height="16" rx="2" fill="'+C.brownD+'"/><circle cx="32" cy="26" r="14" fill="'+C.green+'"/><circle cx="22" cy="30" r="9" fill="'+C.greenD+'"/><circle cx="42" cy="30" r="9" fill="'+C.sageD+'"/>',
+  snail: '<ellipse cx="40" cy="44" rx="18" ry="6" fill="'+C.sage+'"/><path d="M20 46 q-2 -14 12 -14 q10 0 10 9 q0 7 -7 7 q-5 0 -5 -4 q0 -3 3 -3" fill="none" stroke="'+C.coralD+'" stroke-width="4" stroke-linecap="round"/><path d="M20 46 q-4 0 -6 -6" stroke="'+C.sageD+'" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="13" cy="39" r="1.6" fill="'+C.ink+'"/>',
+  leaf: '<path d="M16 48 C16 24 40 16 50 16 C50 40 34 50 16 48Z" fill="'+C.green+'"/><path d="M20 46 Q34 34 48 18" stroke="'+C.greenD+'" stroke-width="2.4" fill="none" stroke-linecap="round"/>',
+  sun: '<circle cx="32" cy="32" r="13" fill="'+C.yellow+'"/><g stroke="'+C.yellowD+'" stroke-width="3" stroke-linecap="round"><path d="M32 6v7M32 51v7M6 32h7M51 32h7M13 13l5 5M46 46l5 5M51 13l-5 5M18 46l-5 5"/></g>',
+  slide: '<path d="M14 50 L14 20 C14 16 20 16 20 20 L20 34 L48 50" stroke="'+C.coralD+'" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M20 34 L48 50 L48 44 L26 30Z" fill="'+C.sky+'"/><rect x="10" y="48" width="44" height="4" rx="2" fill="'+C.sageD+'"/>',
+  swing: '<path d="M12 14 H52 L44 40 M12 14 L20 40" stroke="'+C.brownD+'" stroke-width="4" fill="none" stroke-linecap="round"/><line x1="28" y1="16" x2="26" y2="38" stroke="'+C.forest+'" stroke-width="2.4"/><line x1="38" y1="16" x2="40" y2="38" stroke="'+C.forest+'" stroke-width="2.4"/><rect x="24" y="38" width="18" height="5" rx="2.5" fill="'+C.yellow+'"/>',
+  seesaw: '<path d="M10 44 L54 30" stroke="'+C.coral+'" stroke-width="6" stroke-linecap="round"/><path d="M32 50 L26 36 L38 36Z" fill="'+C.sageD+'"/><circle cx="12" cy="44" r="4" fill="'+C.forest+'"/><circle cx="52" cy="30" r="4" fill="'+C.forest+'"/>',
+  lunchbox: '<rect x="14" y="24" width="36" height="26" rx="6" fill="'+C.coral+'"/><rect x="14" y="24" width="36" height="9" rx="4" fill="'+C.coralD+'"/><rect x="27" y="18" width="10" height="8" rx="3" fill="'+C.coralD+'"/><rect x="28" y="36" width="8" height="8" rx="2" fill="'+C.paper+'"/>',
+  desk: '<rect x="10" y="24" width="44" height="8" rx="3" fill="'+C.brown+'"/><rect x="14" y="32" width="5" height="20" rx="2" fill="'+C.brownD+'"/><rect x="45" y="32" width="5" height="20" rx="2" fill="'+C.brownD+'"/><rect x="30" y="32" width="20" height="12" rx="2" fill="'+C.brownD+'"/>',
+  glass: '<circle cx="28" cy="28" r="14" fill="none" stroke="'+C.forest+'" stroke-width="5"/><circle cx="28" cy="28" r="9" fill="'+C.sky+'" opacity=".5"/><rect x="38" y="38" width="16" height="6" rx="3" transform="rotate(45 40 40)" fill="'+C.forest+'"/>',
+  heart: '<path d="M32 50 C10 34 16 16 30 22 C31 22.6 32 24 32 24 C32 24 33 22.6 34 22 C48 16 54 34 32 50Z" fill="'+C.coralD+'"/>',
+  flower: '<circle cx="32" cy="28" r="7" fill="'+C.yellow+'"/><g fill="'+C.pink+'"><circle cx="32" cy="16" r="6"/><circle cx="32" cy="40" r="6"/><circle cx="20" cy="28" r="6"/><circle cx="44" cy="28" r="6"/></g><circle cx="32" cy="28" r="6" fill="'+C.yellowD+'"/><rect x="30" y="40" width="4" height="14" rx="2" fill="'+C.green+'"/>',
+  seed: '<ellipse cx="32" cy="34" rx="9" ry="13" fill="'+C.brown+'"/><path d="M32 22 q6 -6 10 -3 q-3 6 -10 3Z" fill="'+C.green+'"/><path d="M28 32 q4 4 8 0" stroke="'+C.brownD+'" stroke-width="2" fill="none"/>',
+  wateringcan: '<path d="M16 30 h22 v16 a6 6 0 0 1 -6 6 h-10 a6 6 0 0 1 -6 -6Z" fill="'+C.sky+'"/><path d="M38 34 l12 -8" stroke="'+C.skyD+'" stroke-width="4" stroke-linecap="round"/><path d="M48 24 l6 2 -2 4" fill="'+C.skyD+'"/><path d="M16 32 q-8 -2 -6 -10" stroke="'+C.skyD+'" stroke-width="4" fill="none" stroke-linecap="round"/>',
+  sprout: '<path d="M32 52 V30" stroke="'+C.greenD+'" stroke-width="4" stroke-linecap="round"/><path d="M32 34 q-14 -2 -14 -14 q14 -2 14 12Z" fill="'+C.green+'"/><path d="M32 30 q14 -4 15 -16 q-15 0 -15 14Z" fill="'+C.sage+'"/><rect x="18" y="50" width="28" height="6" rx="3" fill="'+C.brown+'"/>',
+  cup: '<path d="M18 24 h24 l-3 26 a4 4 0 0 1 -4 4 h-10 a4 4 0 0 1 -4 -4Z" fill="'+C.paper+'" stroke="'+C.sageD+'" stroke-width="3"/><ellipse cx="30" cy="24" rx="12" ry="3.5" fill="'+C.sky+'"/>',
+  rain: '<path d="M18 30 a10 10 0 0 1 20 -2 a8 8 0 0 1 2 16 H20 a9 9 0 0 1 -2 -14Z" fill="'+C.skyD+'"/><g stroke="'+C.sky+'" stroke-width="3.4" stroke-linecap="round"><path d="M22 50 l-2 5M32 50 l-2 5M42 50 l-2 5"/></g>',
+  umbrella: '<path d="M14 32 a18 18 0 0 1 36 0Z" fill="'+C.coral+'"/><path d="M14 32 q4 -6 9 0 q4 -6 9 0 q4 -6 9 0 q4 -6 9 0" fill="none" stroke="'+C.coralD+'" stroke-width="2"/><path d="M32 32 v18 a5 5 0 0 1 -10 0" stroke="'+C.forest+'" stroke-width="3.4" fill="none" stroke-linecap="round"/>',
+  boot: '<path d="M22 14 h10 v22 h10 a6 6 0 0 1 6 6 v6 h-26 a6 6 0 0 1 -6 -6Z" fill="'+C.yellowD+'"/><rect x="20" y="46" width="30" height="4" rx="2" fill="'+C.forest+'"/><rect x="22" y="18" width="10" height="4" fill="'+C.yellow+'"/>',
+  fort: '<path d="M10 50 V34 L32 20 L54 34 V50Z" fill="'+C.coral+'"/><path d="M10 34 L32 20 L54 34" fill="none" stroke="'+C.coralD+'" stroke-width="3"/><path d="M24 50 V40 a8 8 0 0 1 16 0 V50Z" fill="'+C.paper+'"/><path d="M14 34 v16 M22 30 v20 M32 26 v24 M42 30 v20 M50 34 v16" stroke="'+C.coralD+'" stroke-width="1.6" opacity=".4"/>',
+  blanket: '<path d="M10 26 q22 -8 44 0 v20 q-22 8 -44 0Z" fill="'+C.sky+'"/><path d="M10 34 q22 -8 44 0 M10 40 q22 -8 44 0" stroke="'+C.skyD+'" stroke-width="2.4" fill="none"/><path d="M22 28 v22 M34 27 v23 M46 28 v22" stroke="'+C.skyD+'" stroke-width="2" opacity=".5"/>',
+  pillow: '<rect x="12" y="22" width="40" height="26" rx="12" fill="'+C.yellow+'"/><circle cx="32" cy="35" r="4" fill="'+C.yellowD+'"/><path d="M18 26 q14 -4 28 0" stroke="'+C.yellowD+'" stroke-width="2" fill="none" opacity=".6"/>',
+  basket: '<path d="M14 30 h36 l-4 20 a4 4 0 0 1 -4 3 H22 a4 4 0 0 1 -4 -3Z" fill="'+C.brown+'"/><path d="M18 20 a14 14 0 0 1 28 0" fill="none" stroke="'+C.brownD+'" stroke-width="4"/><path d="M20 34 h24 M22 42 h20" stroke="'+C.brownD+'" stroke-width="2" opacity=".6"/><rect x="14" y="28" width="36" height="6" rx="3" fill="'+C.brownD+'"/>',
+  ant: '<circle cx="18" cy="34" r="6" fill="'+C.ink+'"/><circle cx="30" cy="34" r="5" fill="'+C.ink+'"/><circle cx="44" cy="34" r="7" fill="'+C.ink+'"/><g stroke="'+C.ink+'" stroke-width="2" stroke-linecap="round"><path d="M30 34 l-6 10M30 34 l0 12M30 34 l6 10M30 34 l-6 -10M30 34 l6 -10"/></g><path d="M48 30 l4 -5M46 28 l3 -6" stroke="'+C.ink+'" stroke-width="2" stroke-linecap="round"/>',
+  library: '<rect x="12" y="16" width="12" height="36" rx="2" fill="'+C.coral+'"/><rect x="26" y="16" width="12" height="36" rx="2" fill="'+C.sage+'"/><rect x="40" y="16" width="12" height="36" rx="2" fill="'+C.yellow+'"/><rect x="14" y="22" width="8" height="4" fill="#fff" opacity=".6"/><rect x="28" y="22" width="8" height="4" fill="#fff" opacity=".6"/><rect x="42" y="22" width="8" height="4" fill="#fff" opacity=".6"/>',
+  worried: '<circle cx="32" cy="32" r="20" fill="'+C.yellow+'"/><circle cx="25" cy="28" r="2.4" fill="'+C.ink+'"/><circle cx="39" cy="28" r="2.4" fill="'+C.ink+'"/><path d="M24 42 q8 -6 16 0" stroke="'+C.ink+'" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+  return: '<path d="M40 20 a16 16 0 1 0 12 16" fill="none" stroke="'+C.forest+'" stroke-width="5" stroke-linecap="round"/><path d="M40 12 v10 h-10Z" fill="'+C.forest+'"/>',
+  fox: '<path d="M32 50 L18 30 Q16 20 24 22 L32 30 L40 22 Q48 20 46 30Z" fill="'+C.coralD+'"/><path d="M24 22 L20 14 L28 20Z" fill="'+C.coralD+'"/><path d="M40 22 L44 14 L36 20Z" fill="'+C.coralD+'"/><path d="M32 40 L24 32 h16Z" fill="'+C.paper+'"/><circle cx="27" cy="32" r="2" fill="'+C.ink+'"/><circle cx="37" cy="32" r="2" fill="'+C.ink+'"/><circle cx="32" cy="40" r="2" fill="'+C.ink+'"/>',
+  boat: '<path d="M12 38 h40 l-6 12 a4 4 0 0 1 -4 3 H22 a4 4 0 0 1 -4 -3Z" fill="'+C.coralD+'"/><rect x="30" y="14" width="3" height="24" fill="'+C.brownD+'"/><path d="M33 16 l14 18 h-14Z" fill="'+C.sky+'"/><path d="M30 16 l-12 18 h12Z" fill="'+C.paper+'"/>',
+  flag: '<rect x="18" y="12" width="4" height="40" rx="2" fill="'+C.brownD+'"/><path d="M22 14 h24 l-6 8 6 8 h-24Z" fill="'+C.coral+'"/>',
+  butterfly: '<path d="M32 18 v28" stroke="'+C.ink+'" stroke-width="3" stroke-linecap="round"/><path d="M32 24 C16 8 8 28 20 34 C10 42 24 50 32 38Z" fill="'+C.coral+'"/><path d="M32 24 C48 8 56 28 44 34 C54 42 40 50 32 38Z" fill="'+C.sky+'"/><circle cx="24" cy="26" r="2.6" fill="#fff"/><circle cx="40" cy="26" r="2.6" fill="#fff"/><path d="M32 18 l-4 -6M32 18 l4 -6" stroke="'+C.ink+'" stroke-width="2" stroke-linecap="round"/>',
+  wing: '<path d="M40 46 C10 42 12 14 34 18 C30 26 34 30 44 28 C42 36 46 40 52 38 C50 46 46 48 40 46Z" fill="'+C.sky+'"/><path d="M22 24 q8 6 6 16" stroke="'+C.skyD+'" stroke-width="2.4" fill="none"/>',
+  hand: '<path d="M24 52 V32 a3 3 0 0 1 6 0 v-6 a3 3 0 0 1 6 0 v4 a3 3 0 0 1 6 0 v4 a3 3 0 0 1 6 0 v14 a10 10 0 0 1 -10 10 h-6 a8 8 0 0 1 -8 -8Z" fill="'+C.coral+'"/><path d="M18 34 l6 4" stroke="'+C.coralD+'" stroke-width="4" stroke-linecap="round"/>',
+  cheer: '<circle cx="32" cy="34" r="16" fill="'+C.yellow+'"/><circle cx="26" cy="31" r="2.4" fill="'+C.ink+'"/><circle cx="38" cy="31" r="2.4" fill="'+C.ink+'"/><path d="M24 38 q8 8 16 0" stroke="'+C.ink+'" stroke-width="2.8" fill="none" stroke-linecap="round"/><g stroke="'+C.coralD+'" stroke-width="3" stroke-linecap="round"><path d="M12 16 l4 4M52 16 l-4 4M32 8 v5"/></g>'
+};
+
+/* badge medallions (viewBox 0 0 64 64) */
+const BADGE_PATHS = {
+  badgeStar: '<circle cx="32" cy="32" r="26" fill="'+C.yellow+'"/><circle cx="32" cy="32" r="26" fill="none" stroke="'+C.yellowD+'" stroke-width="3"/><path d="M32 16 l5 11 12 1 -9 8 3 12 -11 -6 -11 6 3 -12 -9 -8 12 -1Z" fill="#fff"/>',
+  badgeBook: '<circle cx="32" cy="32" r="26" fill="'+C.sage+'"/><circle cx="32" cy="32" r="26" fill="none" stroke="'+C.sageD+'" stroke-width="3"/><path d="M20 22 h11 a2 2 0 0 1 2 2 v18 h-11 a2 2 0 0 0 -2 2Z" fill="#fff"/><path d="M44 22 h-11 a2 2 0 0 0 -2 2 v18 h11 a2 2 0 0 1 2 2Z" fill="#EAF3E6"/>',
+  badgeWord: '<circle cx="32" cy="32" r="26" fill="'+C.coral+'"/><circle cx="32" cy="32" r="26" fill="none" stroke="'+C.coralD+'" stroke-width="3"/><text x="32" y="40" font-size="20" font-family="Georgia,serif" font-weight="700" text-anchor="middle" fill="#fff">Aa</text>',
+  badgeEar: '<circle cx="32" cy="32" r="26" fill="'+C.sky+'"/><circle cx="32" cy="32" r="26" fill="none" stroke="'+C.skyD+'" stroke-width="3"/><path d="M26 40 a8 8 0 1 1 12 -6 c0 5 -5 5 -5 9 a3 3 0 0 1 -6 0" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>',
+  badgeGlass: '<circle cx="32" cy="32" r="26" fill="'+C.forestL+'"/><circle cx="32" cy="32" r="26" fill="none" stroke="'+C.forest+'" stroke-width="3"/><circle cx="29" cy="29" r="9" fill="none" stroke="#fff" stroke-width="3.4"/><path d="M36 36 l7 7" stroke="#fff" stroke-width="4" stroke-linecap="round"/>',
+  badgeCrown: '<circle cx="32" cy="32" r="26" fill="'+C.yellow+'"/><circle cx="32" cy="32" r="26" fill="none" stroke="'+C.yellowD+'" stroke-width="3"/><path d="M20 40 L18 24 L26 30 L32 20 L38 30 L46 24 L44 40Z" fill="#fff"/>',
+  badgeTrophy: '<circle cx="32" cy="32" r="26" fill="'+C.coralD+'"/><circle cx="32" cy="32" r="26" fill="none" stroke="#C9603F" stroke-width="3"/><path d="M24 20 h16 v6 a8 8 0 0 1 -16 0Z" fill="#fff"/><path d="M40 21 h5 a5 5 0 0 1 -5 6M24 21 h-5 a5 5 0 0 0 5 6" fill="none" stroke="#fff" stroke-width="3"/><rect x="29" y="34" width="6" height="6" fill="#fff"/><rect x="24" y="40" width="16" height="4" rx="2" fill="#fff"/>'
+};
+
+function icon(name, cls) {
+  var inner = ICON_PATHS[name] || BADGE_PATHS[name] || '<circle cx="32" cy="32" r="18" fill="'+C.sage+'"/>';
+  return svg(inner, "0 0 64 64", 'class="' + (cls || "icon-svg") + '"');
+}
+function badge(name) {
+  var inner = BADGE_PATHS[name] || BADGE_PATHS.badgeStar;
+  return svg(inner, "0 0 64 64", 'class="badge-svg"');
+}
+
+/* -------- hero scenes (viewBox 0 0 420 260) -------------- */
+function scene(bg, inner) {
+  var frame = '<rect x="0" y="0" width="420" height="260" rx="26" fill="'+bg+'"/>' +
+    '<circle cx="60" cy="46" r="26" fill="#ffffff" opacity=".30"/>' +
+    '<circle cx="92" cy="52" r="20" fill="#ffffff" opacity=".22"/>';
+  return svg(frame + inner, "0 0 420 260", 'class="hero-svg" preserveAspectRatio="xMidYMid meet"');
+}
+const HERO = {
+  otter: function(){ return scene(C.sky,
+    '<path d="M0 180 Q210 150 420 180 V260 H0Z" fill="'+C.skyD+'"/>'+
+    '<path d="M0 200 Q210 175 420 200 V260 H0Z" fill="#4E97C0"/>'+
+    '<g transform="translate(150 96)">'+ICON_PATHS.otter.replace(/cx="(\d+)"/g,function(m,n){return 'cx="'+n+'"'})+'</g>'+
+    '<g transform="translate(250 150) scale(1.4)">'+ICON_PATHS.ball+'</g>'+
+    '<g transform="translate(300 60) scale(0.9)">'+ICON_PATHS.sun+'</g>'); },
+  backpack: function(){ return scene(C.coral,
+    '<rect x="0" y="196" width="420" height="64" fill="'+C.coralD+'"/>'+
+    '<g transform="translate(120 60) scale(1.8)">'+ICON_PATHS.backpack+'</g>'+
+    '<g transform="translate(276 150)">'+ICON_PATHS.apple+'</g>'+
+    '<g transform="translate(60 150)">'+ICON_PATHS.book+'</g>'); },
+  turtle: function(){ return scene(C.sage,
+    '<path d="M0 190 Q210 168 420 190 V260 H0Z" fill="'+C.sageD+'"/>'+
+    '<g transform="translate(70 150)">'+ICON_PATHS.tree+'</g>'+
+    '<g transform="translate(150 96) scale(1.9)">'+ICON_PATHS.turtle+'</g>'+
+    '<g transform="translate(300 150)">'+ICON_PATHS.leaf+'</g>'); },
+  playground: function(){ return scene(C.yellow,
+    '<rect x="0" y="200" width="420" height="60" fill="'+C.sageD+'"/>'+
+    '<g transform="translate(40 88) scale(1.5)">'+ICON_PATHS.slide+'</g>'+
+    '<g transform="translate(230 84) scale(1.5)">'+ICON_PATHS.swing+'</g>'+
+    '<g transform="translate(300 40)">'+ICON_PATHS.sun+'</g>'+
+    '<g transform="translate(180 168)">'+ICON_PATHS.ball+'</g>'); },
+  lunchbox: function(){ return scene(C.coral,
+    '<rect x="0" y="196" width="420" height="64" fill="'+C.coralD+'"/>'+
+    '<g transform="translate(40 150)">'+ICON_PATHS.desk+'</g>'+
+    '<g transform="translate(150 82) scale(1.9)">'+ICON_PATHS.lunchbox+'</g>'+
+    '<g transform="translate(300 150)">'+ICON_PATHS.glass+'</g>'); },
+  garden: function(){ return scene(C.sage,
+    '<path d="M0 190 Q210 168 420 190 V260 H0Z" fill="#8B5E3C"/>'+
+    '<g transform="translate(60 120) scale(1.3)">'+ICON_PATHS.flower+'</g>'+
+    '<g transform="translate(180 120) scale(1.3)">'+ICON_PATHS.sprout+'</g>'+
+    '<g transform="translate(280 96) scale(1.6)">'+ICON_PATHS.wateringcan+'</g>'+
+    '<g transform="translate(330 40)">'+ICON_PATHS.sun+'</g>'); },
+  rain: function(){ return scene(C.skyD,
+    '<rect x="0" y="200" width="420" height="60" fill="#4E97C0"/>'+
+    '<g transform="translate(150 70) scale(1.8)">'+ICON_PATHS.umbrella+'</g>'+
+    '<g transform="translate(60 60) scale(1.2)">'+ICON_PATHS.rain+'</g>'+
+    '<g transform="translate(300 60) scale(1.2)">'+ICON_PATHS.rain+'</g>'+
+    '<g transform="translate(180 176)">'+ICON_PATHS.boot+'</g>'); },
+  fort: function(){ return scene(C.yellow,
+    '<rect x="0" y="200" width="420" height="60" fill="'+C.coralD+'"/>'+
+    '<g transform="translate(130 70) scale(2)">'+ICON_PATHS.fort+'</g>'+
+    '<g transform="translate(60 150)">'+ICON_PATHS.pillow+'</g>'+
+    '<g transform="translate(300 150)">'+ICON_PATHS.book+'</g>'); },
+  picnic: function(){ return scene(C.sage,
+    '<path d="M0 188 Q210 164 420 188 V260 H0Z" fill="'+C.sageD+'"/>'+
+    '<g transform="translate(50 118) scale(1.3)">'+ICON_PATHS.tree+'</g>'+
+    '<g transform="translate(160 90) scale(1.7)">'+ICON_PATHS.basket+'</g>'+
+    '<g transform="translate(300 170) scale(1.1)">'+ICON_PATHS.ant+'</g>'+
+    '<g transform="translate(330 44)">'+ICON_PATHS.sun+'</g>'); },
+  library: function(){ return scene(C.coral,
+    '<rect x="0" y="200" width="420" height="60" fill="'+C.coralD+'"/>'+
+    '<g transform="translate(120 66) scale(2)">'+ICON_PATHS.library+'</g>'+
+    '<g transform="translate(300 150)">'+ICON_PATHS.fox+'</g>'); },
+  boat: function(){ return scene(C.sky,
+    '<path d="M0 176 Q210 150 420 176 V260 H0Z" fill="'+C.skyD+'"/>'+
+    '<path d="M0 206 Q210 182 420 206 V260 H0Z" fill="#4E97C0"/>'+
+    '<g transform="translate(120 96) scale(1.8)">'+ICON_PATHS.boat+'</g>'+
+    '<g transform="translate(300 150) scale(0.9)">'+ICON_PATHS.flag+'</g>'); },
+  butterfly: function(){ return scene(C.sky,
+    '<path d="M0 194 Q210 170 420 194 V260 H0Z" fill="'+C.sageD+'"/>'+
+    '<g transform="translate(130 60) scale(2)">'+ICON_PATHS.butterfly+'</g>'+
+    '<g transform="translate(60 150)">'+ICON_PATHS.flower+'</g>'+
+    '<g transform="translate(300 150)">'+ICON_PATHS.flower+'</g>'); }
+};
+function heroScene(name) { return (HERO[name] || HERO.otter)(); }
+
+/* big welcome illustration */
+function welcomeHero() {
+  return svg(
+    '<rect x="0" y="0" width="420" height="300" rx="30" fill="'+C.sky+'"/>'+
+    '<circle cx="66" cy="56" r="30" fill="#fff" opacity=".3"/>'+
+    '<circle cx="104" cy="64" r="22" fill="#fff" opacity=".22"/>'+
+    '<g transform="translate(300 40)">'+ICON_PATHS.sun+'</g>'+
+    '<path d="M0 214 Q210 184 420 214 V300 H0Z" fill="'+C.sageD+'"/>'+
+    '<path d="M0 240 Q210 214 420 240 V300 H0Z" fill="'+C.sage+'"/>'+
+    '<g transform="translate(150 96) scale(1.7)">'+ICON_PATHS.otter+'</g>'+
+    '<g transform="translate(60 150) scale(1.1)">'+ICON_PATHS.tree+'</g>'+
+    '<g transform="translate(300 150) scale(1.15)">'+ICON_PATHS.book+'</g>'+
+    '<g transform="translate(250 210) scale(0.9)">'+ICON_PATHS.butterfly+'</g>',
+    "0 0 420 300", 'class="welcome-hero-svg" preserveAspectRatio="xMidYMid meet"');
+}
+
+
+/* ============================================================
+   Little Readers: Read, Tap & Play  —  Application
+   Created by Bright EngMath.  Story Pack 1.
+   A dependency-free component runtime keeps the whole product
+   in one offline file. Content lives in content.js; artwork in
+   illustrations.js. UI + logic live here.
+   ============================================================ */
+(function(){
+"use strict";
+
+/* ---------------- tiny hyperscript ---------------- */
+function h(tag, props){
+  var e = document.createElement(tag), a = arguments;
+  props = props || {};
+  for(var k in props){
+    var v = props[k];
+    if(v==null || v===false) continue;
+    if(k==="class") e.className = v;
+    else if(k==="html") e.innerHTML = v;
+    else if(k==="style" && typeof v==="object"){ for(var s in v) e.style[s]=v[s]; }
+    else if(k==="dataset"){ for(var d in v) e.dataset[d]=v[d]; }
+    else if(k.length>2 && k.slice(0,2)==="on" && typeof v==="function"){ e.addEventListener(k.slice(2).toLowerCase(), v); }
+    else if(v===true) e.setAttribute(k,"");
+    else e.setAttribute(k, v);
+  }
+  for(var i=2;i<a.length;i++) add(e, a[i]);
+  return e;
+}
+function add(p, c){
+  if(c==null || c===false || c==="") return;
+  if(Array.isArray(c)){ for(var i=0;i<c.length;i++) add(p,c[i]); return; }
+  if(c instanceof Node){ p.appendChild(c); return; }
+  p.appendChild(document.createTextNode(String(c)));
+}
+function raw(markup){ var s=document.createElement("span"); s.className="ico-wrap"; s.innerHTML=markup; return s; }
+function shuffle(arr){ var a=arr.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; } return a; }
+
+/* ---------------- persistent state ---------------- */
+var LS_KEY = "brightengmath_littlereaders_v1";
+function defaults(){
+  return {
+    version:1, studentName:"",
+    settings:{ sound:true, rate:0.9, textScale:1, reducedMotion:false },
+    teacher:{ unlockAll:false, showFeedback:true },
+    progress:{ stories:{}, badges:[], vocabPlayed:0, listeningCorrect:0, evidenceFound:0 }
+  };
+}
+var state = load();
+function load(){
+  try{ var raw=localStorage.getItem(LS_KEY); if(raw){ var s=JSON.parse(raw); return merge(defaults(), s); } }catch(e){}
+  return defaults();
+}
+function merge(base, over){
+  for(var k in over){
+    if(over[k] && typeof over[k]==="object" && !Array.isArray(over[k]) && base[k]) merge(base[k], over[k]);
+    else base[k]=over[k];
+  }
+  return base;
+}
+var saveTimer=null;
+function save(quiet){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){}
+  if(!quiet){ clearTimeout(saveTimer); flash(icon("badgeBook")+"", "Progress saved"); }
+}
+
+/* ---------------- audio (SpeechSynthesis) ---------------- */
+var SS = ("speechSynthesis" in window) && (typeof window.SpeechSynthesisUtterance !== "undefined");
+var Speech = {
+  on:function(){ return state.settings.sound && SS; },
+  cancel:function(){ if(SS) try{ window.speechSynthesis.cancel(); }catch(e){} },
+  speak:function(text, opts){
+    opts = opts||{};
+    if(!this.on()){ if(opts.onend) setTimeout(opts.onend, 120); return null; }
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+    var u = new SpeechSynthesisUtterance(text);
+    u.rate = opts.rate!=null ? opts.rate : state.settings.rate;
+    u.pitch = 1.06; u.lang = "en-US";
+    if(opts.onend) u.onend = opts.onend;
+    try{ window.speechSynthesis.speak(u); }catch(e){ if(opts.onend) setTimeout(opts.onend,120); }
+    return u;
+  }
+};
+var Reader = {
+  playing:false, paused:false, idx:0, sentences:[],
+  start:function(sentences){
+    this.stop(); this.sentences=sentences; this.idx=0; this.playing=true; this.paused=false; this._next(); syncAudioBtns();
+  },
+  _next:function(){
+    var self=this;
+    if(!self.playing || self.idx>=self.sentences.length){ self.playing=false; highlight(-1); syncAudioBtns(); return; }
+    var i=self.idx; highlight(i);
+    if(Speech.on()){
+      Speech.speak(self.sentences[i], { onend:function(){ if(!self.playing) return; self.idx++; self._next(); } });
+    } else {
+      var words = self.sentences[i].split(" ").length;
+      self._t = setTimeout(function(){ if(!self.playing) return; self.idx++; self._next(); }, 400+words*230);
+    }
+  },
+  pauseToggle:function(){
+    if(!this.playing) return;
+    if(this.paused){ if(SS) window.speechSynthesis.resume(); this.paused=false; }
+    else { if(SS) window.speechSynthesis.pause(); this.paused=true; }
+    syncAudioBtns();
+  },
+  stop:function(){ this.playing=false; this.paused=false; if(this._t) clearTimeout(this._t); Speech.cancel(); highlight(-1); syncAudioBtns(); }
+};
+function highlight(i){
+  var nodes = document.querySelectorAll(".passage .sent");
+  for(var n=0;n<nodes.length;n++) nodes[n].classList.toggle("reading", n===i);
+}
+function syncAudioBtns(){
+  var pt=document.getElementById("btn-play"); if(pt){ pt.querySelector(".lbl").textContent = Reader.playing ? (Reader.paused?"Resume":"Pause") : "Read to me"; }
+}
+function stopAllAudio(){ Reader.stop(); Speech.cancel(); }
+function sayWord(text){
+  Speech.speak(text, { rate: Math.max(0.7, state.settings.rate-0.05) });
+}
+
+/* ---------------- runtime (non-persistent) view state ---------------- */
+var app = {
+  route:"welcome",
+  story:null, step:"intro",
+  qStates:null, qIndex:0,
+  modal:null,
+  classroom:null,         // {storyId, index, picked, showAnswer, showEvidence, quick}
+  teacherStory:null
+};
+
+/* ---------------- helpers ---------------- */
+function storyById(id){ for(var i=0;i<STORIES.length;i++) if(STORIES[i].id===id) return STORIES[i]; return null; }
+function storiesByLevel(l){ return STORIES.filter(function(s){ return s.level===l; }); }
+function completedCount(){ var n=0, st=state.progress.stories; for(var k in st){ if(st[k].completed) n++; } return n; }
+function totalStars(){ var n=0, st=state.progress.stories; for(var k in st){ n+=st[k].stars||0; } return n; }
+function levelCompleted(l){ var arr=storiesByLevel(l), n=0; arr.forEach(function(s){ if(state.progress.stories[s.id] && state.progress.stories[s.id].completed) n++; }); return n; }
+function isUnlocked(story){
+  if(state.teacher.unlockAll) return true;
+  if(story.level===1) return true;
+  if(story.level===2) return levelCompleted(1)>=1;
+  if(story.level===3) return levelCompleted(2)>=1;
+  return true;
+}
+var LEVEL_META = {
+  1:{name:"Level 1 · Picture Readers", blurb:"Short sentences with strong picture clues."},
+  2:{name:"Level 2 · Sentence Detectives", blurb:"Find the clues in longer, connected stories."},
+  3:{name:"Level 3 · Mini Story Adventures", blurb:"A beginning, middle and end — with real thinking."}
+};
+
+/* ---------------- rendering root ---------------- */
+function render(){
+  var root = document.getElementById("app");
+  root.innerHTML = "";
+  if(app.classroom){ root.appendChild(viewClassroom()); }
+  else {
+    root.appendChild(viewTopbar());
+    var shell = h("main", {class:"app-shell"});
+    var v;
+    switch(app.route){
+      case "welcome": v=viewWelcome(); break;
+      case "library": v=viewLibrary(); break;
+      case "reading": v=viewReading(); break;
+      case "rewards": v=viewRewards(); break;
+      case "results": v=viewResults(); break;
+      case "teacher": v=viewTeacher(); break;
+      case "settings": v=viewSettings(); break;
+      case "certificate": v=viewCertificate(); break;
+      default: v=viewWelcome();
+    }
+    shell.appendChild(v);
+    shell.appendChild(viewFooter());
+    root.appendChild(shell);
+  }
+  if(app.modal) root.appendChild(viewModal());
+  document.body.scrollTop = 0; document.documentElement.scrollTop = 0;
+}
+function go(route, opts){
+  stopAllAudio();
+  opts = opts||{};
+  app.route = route;
+  if(opts.story!==undefined) app.story = opts.story;
+  if(opts.step) app.step = opts.step;
+  render();
+}
+
+/* ---------------- shared UI ---------------- */
+function brandMark(){ return raw(badge("badgeStar")); }
+function navBtn(label, route, cls){
+  return h("button",{class:"btn btn-sm "+(cls||"btn-ghost")+(app.route===route?" ":""),
+    onclick:function(){ go(route); }}, label);
+}
+function viewTopbar(){
+  return h("header",{class:"topbar"},
+    h("button",{class:"brand",onclick:function(){ go("welcome"); },"aria-label":"Little Readers home"},
+      h("span",{class:"mark"}, raw(icon("badgeStar"))),
+      h("span",{class:"titles"},
+        h("span",{class:"t1"},"Little Readers"),
+        h("span",{class:"t2"},"Read, Tap & Play · Bright EngMath"))),
+    h("nav",{class:"topnav","aria-label":"Main"},
+      navBtn("Library","library","btn-green"),
+      navBtn("Rewards","rewards"),
+      navBtn("My Results","results"),
+      navBtn("Teacher","teacher"),
+      soundToggleBtn(),
+      h("button",{class:"btn btn-icon btn-ghost","aria-label":"Settings",title:"Settings",
+        onclick:function(){ go("settings"); }}, raw(icon("badgeCrown")))
+    )
+  );
+}
+function soundToggleBtn(){
+  return h("button",{class:"btn btn-icon "+(state.settings.sound?"btn-yellow":"btn-ghost"),
+    "aria-label":state.settings.sound?"Sound on":"Sound off", title:"Toggle sound",
+    onclick:function(){ state.settings.sound=!state.settings.sound; if(!state.settings.sound) stopAllAudio(); save(true); render(); }},
+    raw(state.settings.sound?icon("badgeEar"):iconMuted()));
+}
+function iconMuted(){ return '<svg viewBox="0 0 64 64" class="icon-svg" aria-hidden="true"><circle cx="32" cy="32" r="26" fill="#D9D2C2"/><path d="M22 40 a8 8 0 1 1 12 -6 c0 5 -5 5 -5 9" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><path d="M18 20 L46 46" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>'; }
+
+function starRating(n, big){
+  var wrap=h("span",{class:"stars"+(big?" big":""),role:"img","aria-label":n+" of 3 stars"});
+  for(var i=0;i<3;i++){
+    var on = i<n;
+    var s=raw('<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 8 l7 15 16 2 -12 11 4 16 -15 -8 -15 8 4 -16 -12 -11 16 -2Z"/></svg>');
+    s.firstChild.classList.add(on?"star-on":"star-off");
+    wrap.appendChild(s);
+  }
+  return wrap;
+}
+function viewFooter(){
+  return h("footer",{class:"site-footer"},
+    h("div",null, h("b",null,"Little Readers: Read, Tap & Play")),
+    h("div",null,"Created with care by Bright EngMath"),
+    h("div",null, h("span",{class:"ver"},"Story Pack 1 · v1.0"))
+  );
+}
+
+/* toast */
+function flash(iconHtml, text){
+  var old=document.querySelector(".toast"); if(old) old.remove();
+  var t=h("div",{class:"toast"}, raw(iconHtml), h("span",null,text));
+  t.querySelector("svg") && (t.querySelector("svg").style.width="20px", t.querySelector("svg").style.height="20px");
+  document.body.appendChild(t);
+  setTimeout(function(){ if(t.parentNode) t.remove(); }, 1900);
+}
+
+/* modal */
+function openModal(cfg){ app.modal=cfg; render(); }
+function closeModal(){ app.modal=null; render(); }
+function viewModal(){
+  var m=app.modal;
+  return h("div",{class:"modal-back",onclick:function(e){ if(e.target.classList.contains("modal-back")) closeModal(); }},
+    h("div",{class:"modal",role:"dialog","aria-modal":"true"},
+      h("h3",null,m.title),
+      h("p",{style:{color:"var(--muted)"}}, m.body),
+      h("div",{class:"m-actions"},
+        h("button",{class:"btn btn-ghost",onclick:closeModal}, m.cancelText||"Cancel"),
+        h("button",{class:"btn "+(m.danger?"btn-primary":"btn-green"),onclick:function(){ var f=m.onConfirm; closeModal(); f&&f(); }}, m.confirmText||"OK")
+      )
+    )
+  );
+}
+
+/* ============================================================
+   WELCOME
+   ============================================================ */
+function viewWelcome(){
+  return h("section",{class:"view"},
+    h("div",{class:"welcome paper-grain"},
+      h("div",null,
+        h("div",{class:"kicker"},"A Bright EngMath Reading Product"),
+        h("h1",null,"Little Readers"),
+        h("p",{class:"subtitle"},"Read, tap and play your way through 12 gentle stories. Perfect for young readers just starting out in English."),
+        h("div",{class:"cta-row"},
+          h("button",{class:"btn btn-primary btn-lg",onclick:function(){ go("library"); }}, raw(icon("badgeBook")), h("span",null,"Start Reading")),
+          h("button",{class:"btn btn-sky btn-lg",onclick:function(){ go("teacher"); }}, raw(icon("badgeCrown")), h("span",null,"Teacher Mode"))
+        ),
+        h("div",{class:"mini-features"},
+          h("span",null, raw(icon("badgeEar")), "Read-aloud audio"),
+          h("span",null, raw(icon("badgeStar")), "Stars & badges"),
+          h("span",null, raw(icon("badgeGlass")), "Find-the-clue games")
+        ),
+        h("div",{style:{marginTop:"18px"}}, soundLine())
+      ),
+      h("div",null, raw(welcomeHero()))
+    )
+  );
+}
+function soundLine(){
+  return h("label",{class:"pill pill-sage",style:{cursor:"pointer"}},
+    h("input",{type:"checkbox",checked:state.settings.sound, style:{marginRight:"6px"},
+      onchange:function(e){ state.settings.sound=e.target.checked; if(!state.settings.sound) stopAllAudio(); save(true); }}),
+    "Sound "+(state.settings.sound?"on":"off"));
+}
+
+/* ============================================================
+   STORY LIBRARY
+   ============================================================ */
+function viewLibrary(){
+  var wrap=h("section",{class:"view"},
+    h("div",{class:"section-title"}, h("h2",null,"Story Library"),
+      h("span",{class:"pill pill-yellow"}, totalStars()+" stars"),
+      h("span",{class:"pill pill-sage"}, completedCount()+" / 12 stories")));
+  [1,2,3].forEach(function(l){
+    var block=h("div",{class:"level-block level-"+l},
+      h("div",{class:"level-head"},
+        h("div",{class:"level-badge"}, "L"+l),
+        h("div",{class:"meta"}, h("h3",null,LEVEL_META[l].name), h("p",null,LEVEL_META[l].blurb))));
+    var grid=h("div",{class:"story-grid"});
+    storiesByLevel(l).forEach(function(s){ grid.appendChild(storyCard(s)); });
+    block.appendChild(grid);
+    wrap.appendChild(block);
+  });
+  if(!state.teacher.unlockAll && (levelCompleted(1)<1)){
+    wrap.appendChild(h("p",{class:"empty",style:{marginTop:"8px"}},"Tip: finish a Level 1 story to open Level 2. Teachers can open everything from Teacher Mode."));
+  }
+  return wrap;
+}
+function storyCard(s){
+  var prog = state.progress.stories[s.id];
+  var unlocked = isUnlocked(s);
+  var card=h("button",{class:"story-card paper-grain"+(unlocked?"":" locked"),
+    onclick:function(){ if(unlocked) openStory(s); else flash(icon("badgeCrown"),"Open in Teacher Mode"); },
+    "aria-label":s.title+(unlocked?"":" (locked)")});
+  var thumb=h("div",{class:"thumb"}, raw(heroScene(s.hero)));
+  if(prog && prog.completed) thumb.appendChild(h("span",{class:"done-tag"},"Done"));
+  if(!unlocked) thumb.appendChild(h("span",{class:"lock-tag"}, raw(iconLock()), "Locked"));
+  card.appendChild(thumb);
+  card.appendChild(h("div",{class:"body"},
+    h("h4",null,s.title),
+    h("div",{class:"cardfoot"},
+      h("span",{class:"who"}, s.character),
+      starRating(prog?prog.stars:0))));
+  return card;
+}
+function iconLock(){ return '<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h1zm2 0h6V8a3 3 0 0 0-6 0v2z" fill="#fff"/></svg>'; }
+
+function openStory(s){
+  app.story=s; app.step="intro"; app.qStates=null; app.qIndex=0;
+  go("reading");
+}
+
+/* ============================================================
+   READING FLOW
+   ============================================================ */
+var STEPS = [["intro","Story"],["read","Read & Listen"],["vocab","Word Explorer"],["questions","Questions"],["complete","Complete"]];
+function stepTrack(){
+  var track=h("div",{class:"step-track"});
+  var curI = STEPS.map(function(x){return x[0];}).indexOf(app.step);
+  STEPS.forEach(function(st, i){
+    var cls="step-chip"+(i===curI?" active":(i<curI?" done":""));
+    track.appendChild(h("div",{class:cls}, h("span",{class:"n"}, i<curI?"✓":(i+1)), st[1]));
+  });
+  return track;
+}
+function viewReading(){
+  var s=app.story;
+  var wrap=h("section",{class:"view reader-wrap"});
+  wrap.appendChild(h("div",{style:{display:"flex",gap:"10px",flexWrap:"wrap",alignItems:"center"}},
+    h("button",{class:"btn btn-sm btn-ghost",onclick:function(){ go("library"); }},"← Library"),
+    h("span",{class:"pill pill-sky"},"Level "+s.level),
+    h("h2",{style:{margin:"0 0 0 4px",fontSize:"1.4rem"}}, s.title)));
+  wrap.appendChild(stepTrack());
+  if(app.step==="intro") wrap.appendChild(stepIntro(s));
+  else if(app.step==="read") wrap.appendChild(stepRead(s));
+  else if(app.step==="vocab") wrap.appendChild(stepVocab(s));
+  else if(app.step==="questions") wrap.appendChild(stepQuestions(s));
+  else if(app.step==="complete") wrap.appendChild(stepComplete(s));
+  return wrap;
+}
+function stepIntro(s){
+  var keyWords = s.vocab.slice(0,3);
+  return h("div",{class:"panel paper-grain"},
+    h("div",{class:"two-col"},
+      h("div",{class:"reader-hero"}, raw(heroScene(s.hero))),
+      h("div",null,
+        h("h2",{style:{fontSize:"1.8rem"}}, s.title),
+        h("p",{style:{color:"var(--muted)",fontSize:"1.05rem"}},"A story about "+s.character+". Let's read together!"),
+        h("h4",{style:{marginTop:"16px"}},"Key words"),
+        h("div",{style:{display:"flex",gap:"10px",flexWrap:"wrap"}},
+          keyWords.map(function(w){ return h("span",{class:"pill pill-yellow",style:{fontSize:"1rem"}}, w.word); })),
+        h("div",{style:{display:"flex",gap:"12px",marginTop:"20px",flexWrap:"wrap"}},
+          h("button",{class:"btn btn-green",onclick:function(){
+              var words = keyWords.map(function(w){return w.word;}).join(", ");
+              state.progress.vocabPlayed += keyWords.length; save(true); evaluateBadges();
+              Speech.speak(words, {rate:0.85});
+            }}, raw(icon("badgeEar")), h("span",null,"Listen to the words")),
+          h("button",{class:"btn btn-primary",onclick:function(){ app.step="read"; render(); }}, "Start the story →"))
+      )
+    )
+  );
+}
+function stepRead(s){
+  var passage=h("p",{class:"passage"});
+  s.sentences.forEach(function(sent, i){ passage.appendChild(h("span",{class:"sent",dataset:{i:i}}, sent+" ")); });
+  var bar=h("div",{class:"audio-bar no-print"},
+    h("button",{id:"btn-play",class:"btn btn-sky",onclick:function(){
+        if(!Reader.playing){ Reader.start(s.sentences); } else { Reader.pauseToggle(); } }},
+      raw(icon("badgeEar")), h("span",{class:"lbl"},"Read to me")),
+    h("button",{class:"btn btn-ghost",title:"Stop",onclick:function(){ Reader.stop(); }},"■ Stop"),
+    h("button",{class:"btn btn-ghost",title:"Replay",onclick:function(){ Reader.start(s.sentences); }},"↻ Replay"),
+    h("span",{class:"grow"}),
+    h("div",{class:"rate-ctl"},"Speed",
+      h("button",{class:"btn btn-icon btn-ghost btn-sm",onclick:function(){ state.settings.rate=Math.max(0.6, +(state.settings.rate-0.1).toFixed(2)); save(true); flash(icon("badgeEar"),"Speed "+state.settings.rate+"x"); }},"–"),
+      h("b",null, state.settings.rate.toFixed(1)+"x"),
+      h("button",{class:"btn btn-icon btn-ghost btn-sm",onclick:function(){ state.settings.rate=Math.min(1.3, +(state.settings.rate+0.1).toFixed(2)); save(true); flash(icon("badgeEar"),"Speed "+state.settings.rate+"x"); }},"+")),
+    h("div",{class:"textsize-ctl"},"Text",
+      h("button",{class:"btn btn-icon btn-ghost btn-sm",onclick:function(){ setTextScale(state.settings.textScale-0.1); }},"A−"),
+      h("button",{class:"btn btn-icon btn-ghost btn-sm",onclick:function(){ setTextScale(state.settings.textScale+0.1); }},"A+"))
+  );
+  if(!SS) bar.appendChild(h("span",{class:"pill pill-coral"},"Audio not available on this browser"));
+  return h("div",{class:"panel paper-grain"},
+    bar,
+    h("div",{style:{marginTop:"18px"}}, passage),
+    h("div",{class:"q-actions"},
+      h("button",{class:"btn btn-ghost",onclick:function(){ app.step="intro"; render(); }},"← Back"),
+      h("button",{class:"btn btn-primary",onclick:function(){ stopAllAudio(); app.step="vocab"; render(); }},"Explore words →"))
+  );
+}
+function setTextScale(v){
+  v=Math.max(0.85, Math.min(1.4, +v.toFixed(2)));
+  state.settings.textScale=v; document.documentElement.style.setProperty("--text-scale", v); save(true);
+}
+function stepVocab(s){
+  var grid=h("div",{class:"vocab-grid"});
+  s.vocab.forEach(function(w){
+    grid.appendChild(h("div",{class:"vocab-card paper-grain"},
+      h("div",{style:{display:"flex",gap:"12px",alignItems:"center"}},
+        h("div",{class:"vpic"}, raw(icon(w.icon))),
+        h("div",null, h("div",{class:"word"}, w.word),
+          h("button",{class:"btn btn-sm btn-sky",style:{marginTop:"4px"},onclick:function(){
+              state.progress.vocabPlayed++; save(true); evaluateBadges(); sayWord(w.word+". "+w.example);
+            }}, raw(icon("badgeEar")), h("span",null,"Say it")))),
+      h("div",{class:"mean"}, w.meaning),
+      h("div",{class:"exa"}, "“"+w.example+"”")));
+  });
+  return h("div",{class:"panel paper-grain"},
+    h("h3",null,"Word Explorer"),
+    h("p",{style:{color:"var(--muted)",marginTop:"-6px"}},"Tap “Say it” to hear each word and an example."),
+    grid,
+    h("div",{class:"q-actions"},
+      h("button",{class:"btn btn-ghost",onclick:function(){ app.step="read"; render(); }},"← Re-read"),
+      h("button",{class:"btn btn-primary",onclick:function(){ startQuestions(s); }},"Start questions →"))
+  );
+}
+
+/* ------------- questions ------------- */
+function startQuestions(s){
+  app.qStates = s.questions.map(function(q){ return newQState(q); });
+  app.qIndex=0; app.step="questions"; render();
+}
+function newQState(q){
+  var st={ attempts:0, solved:false, revealed:false, outcome:null, wrong:[], lastPick:null };
+  if(q.type==="sequence"){ st.order = shuffle(q.items.map(function(_,i){return i;})); if(sameOrder(st.order)) st.order = st.order.reverse(); st.sel=null; }
+  if(q.type==="match"){ st.words=shuffle(q.pairs.map(function(p,i){return i;})); st.pics=shuffle(q.pairs.map(function(p,i){return i;})); st.selWord=null; st.matched={}; st.wrong2=0; }
+  if(q.type==="sort"){ st.pool=shuffle(q.items.map(function(_,i){return i;})); st.selTok=null; st.placed={}; st.wrong2=0; }
+  return st;
+}
+function sameOrder(o){ for(var i=0;i<o.length;i++) if(o[i]!==i) return false; return true; }
+function curQ(){ return app.story.questions[app.qIndex]; }
+function curQS(){ return app.qStates[app.qIndex]; }
+
+function stepQuestions(s){
+  var q=curQ(), qs=curQS(), i=app.qIndex, total=s.questions.length;
+  var shell=h("div",{class:"q-shell paper-grain"});
+  shell.appendChild(h("div",{class:"q-top"},
+    h("span",{class:"q-count"},"Question "+(i+1)+" of "+total),
+    h("div",{class:"q-progress"}, h("i",{style:{width:(((i+(qs.solved||qs.revealed?1:0))/total)*100)+"%"}})),
+    h("span",{class:"pill pill-sage q-skill"}, q.skill)));
+  shell.appendChild(h("div",{class:"q-prompt"}, q.prompt));
+  if(q.type==="listen") shell.appendChild(listenControls(q));
+  shell.appendChild(renderQuestionBody(q, qs));
+  if(qs.solved || qs.revealed) shell.appendChild(feedbackPanel(q, qs));
+  var actions=h("div",{class:"q-actions"});
+  actions.appendChild(h("button",{class:"btn btn-ghost",onclick:function(){
+      if(i>0){ app.qIndex--; render(); } else { app.step="vocab"; render(); } }}, i>0?"← Previous":"← Words"));
+  if(qs.solved || qs.revealed){
+    if(i<total-1) actions.appendChild(h("button",{class:"btn btn-primary",onclick:function(){ app.qIndex++; render(); }},"Next question →"));
+    else actions.appendChild(h("button",{class:"btn btn-green",onclick:function(){ finalizeStory(s); }},"Finish story →"));
+  }
+  shell.appendChild(actions);
+  return shell;
+}
+function listenControls(q){
+  return h("div",{class:"audio-bar no-print",style:{marginBottom:"14px"}},
+    h("button",{class:"btn btn-sky",onclick:function(){ Speech.speak(q.speak, {rate:state.settings.rate}); }}, raw(icon("badgeEar")), h("span",null,"Play the sentence")),
+    h("button",{class:"btn btn-ghost",onclick:function(){ Speech.speak(q.speak,{rate:state.settings.rate}); }},"↻ Replay"),
+    h("span",{class:"grow"}),
+    h("span",{class:"pill pill-yellow"},"Listen, then choose"));
+}
+function feedbackPanel(q, qs){
+  if(qs.solved){
+    var msgs=["Great reading!","You found the clue!","That's right!","Well done!","Super work!"];
+    var m = msgs[Math.floor(app.qIndex)%msgs.length];
+    return h("div",{class:"feedback good"}, h("div",{class:"fic"},"✓"),
+      h("div",{class:"ftext"}, h("b",null,m+" "), q.explain));
+  }
+  return h("div",{class:"feedback show"}, h("div",{class:"fic"},"i"),
+    h("div",{class:"ftext"}, h("b",null,"Here's the answer. "), q.explain,
+      (q.evidence!=null||q.answer!=null&&q.type==="evidence")?evidenceHint(q):null));
+}
+function evidenceHint(q){
+  var idx = q.type==="evidence" ? q.answer : q.evidence;
+  if(idx==null) return null;
+  return h("div",{style:{marginTop:"8px"}},
+    h("span",{class:"pill pill-sage"},"Clue in the story: "),
+    h("span",{style:{fontStyle:"italic",marginLeft:"6px"}}, "“"+app.story.sentences[idx]+"”"));
+}
+
+/* choice-type answer (picture / mc / tf / listen) */
+function answerChoice(q, qs, chosenIndex, isCorrect){
+  if(qs.solved||qs.revealed) return;
+  qs.attempts++; qs.lastPick=chosenIndex;
+  if(isCorrect){
+    qs.solved=true; qs.outcome = qs.attempts===1?"first":"second";
+    afterSolve(q, qs);
+  } else {
+    qs.wrong.push(chosenIndex);
+    if(qs.attempts>=2){ qs.revealed=true; qs.outcome="revealed"; }
+  }
+  render();
+}
+function afterSolve(q, qs){
+  if(q.type==="listen"){ state.progress.listeningCorrect++; save(true); }
+  if(q.type==="evidence"){ state.progress.evidenceFound++; save(true); }
+  evaluateBadges();
+  if(!state.settings.reducedMotion){ /* subtle pop handled by CSS */ }
+}
+
+function renderQuestionBody(q, qs){
+  switch(q.type){
+    case "picture": return choiceGrid(q, qs, true);
+    case "mc": case "listen": return choiceGrid(q, qs, false);
+    case "tf": return tfBody(q, qs);
+    case "evidence": return evidenceBody(q, qs);
+    case "sequence": return sequenceBody(q, qs);
+    case "match": return matchBody(q, qs);
+    case "sort": return sortBody(q, qs);
+    default: return h("div",null,"—");
+  }
+}
+function choiceGrid(q, qs, pic){
+  var grid=h("div",{class:"opt-grid "+(pic?"cols-3":"stack")});
+  q.options.forEach(function(opt, idx){
+    var cls="opt"+(pic?" pic":"");
+    var done=qs.solved||qs.revealed;
+    if(done && idx===q.answer) cls+= qs.solved?" correct":" reveal";
+    else if(qs.wrong.indexOf(idx)>=0) cls+=" wrong dim";
+    else if(done) cls+=" dim";
+    var body = pic ? [raw(icon(opt.icon)), h("span",null,opt.label)] : [h("span",null,opt)];
+    grid.appendChild(h("button",{class:cls, disabled:done,
+      onclick:function(){ answerChoice(q, qs, idx, idx===q.answer); }}, body));
+  });
+  return grid;
+}
+function tfBody(q, qs){
+  var done=qs.solved||qs.revealed;
+  function tb(val,label,cls,ic){
+    var isAns = (val===q.answer);
+    var c="opt tf-btn "+cls;
+    if(done && isAns) c+= qs.solved?" correct":" reveal";
+    else if(done) c+=" dim";
+    else if(qs.wrong.indexOf(val?1:0)>=0) c+=" wrong dim";
+    return h("button",{class:c,disabled:done,onclick:function(){ answerChoice(q,qs,val?1:0, val===q.answer); }},
+      h("span",{class:"tf-ic"},ic), h("span",null,label));
+  }
+  return h("div",{class:"tf-row"}, tb(true,"True","tf-true","✓"), tb(false,"False","tf-false","✕"));
+}
+function evidenceBody(q, qs){
+  var done=qs.solved||qs.revealed;
+  var p=h("p",{class:"passage selectable"});
+  app.story.sentences.forEach(function(sent, i){
+    var cls="sent";
+    if(done && i===q.answer) cls+=" evidence";
+    else if(qs.wrong.indexOf(i)>=0) cls+=" picked";
+    p.appendChild(h("span",{class:cls,dataset:{i:i},role:"button",tabindex: done?-1:0,
+      onclick:function(){ if(!done) answerChoice(q,qs,i,i===q.answer); },
+      onkeydown:function(e){ if(!done&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); answerChoice(q,qs,i,i===q.answer); } }
+    }, sent+" "));
+  });
+  return h("div",null, h("p",{style:{color:"var(--muted)",marginTop:0}},"Tap the sentence with the answer."), p);
+}
+function sequenceBody(q, qs){
+  var done=qs.solved||qs.revealed;
+  var list=h("div",{class:"seq-list"});
+  qs.order.forEach(function(itemIdx, pos){
+    var cls="seq-item";
+    if(done){ cls += (itemIdx===pos)?" correct":" wrong"; }
+    var row=h("div",{class:cls},
+      h("span",{class:"ord"}, pos+1),
+      h("span",{class:"txt"}, q.items[itemIdx]));
+    if(!done){
+      row.appendChild(h("span",{class:"seq-move"},
+        h("button",{"aria-label":"Move up",disabled:pos===0,onclick:function(){ moveSeq(qs,pos,-1); }},"▲"),
+        h("button",{"aria-label":"Move down",disabled:pos===qs.order.length-1,onclick:function(){ moveSeq(qs,pos,1); }},"▼")));
+    }
+    list.appendChild(row);
+  });
+  var box=h("div",null,
+    h("p",{style:{color:"var(--muted)",marginTop:0}},"Use ▲ ▼ to put the events in order, then check."),
+    list);
+  if(!done){
+    box.appendChild(h("div",{style:{marginTop:"14px"}},
+      h("button",{class:"btn btn-green",onclick:function(){ checkSequence(q,qs); }},"Check my order")));
+  }
+  return box;
+}
+function moveSeq(qs, pos, dir){
+  var n=pos+dir; if(n<0||n>=qs.order.length) return;
+  var t=qs.order[pos]; qs.order[pos]=qs.order[n]; qs.order[n]=t; render();
+}
+function checkSequence(q, qs){
+  qs.attempts++;
+  var ok=true; for(var i=0;i<qs.order.length;i++) if(qs.order[i]!==i){ ok=false; break; }
+  if(ok){ qs.solved=true; qs.outcome=qs.attempts===1?"first":"second"; afterSolve(q,qs); }
+  else if(qs.attempts>=2){ qs.revealed=true; qs.outcome="revealed"; qs.order=q.items.map(function(_,i){return i;}); }
+  else { flash(icon("badgeGlass"),"Not yet — try again"); }
+  render();
+}
+function matchBody(q, qs){
+  var done=qs.solved;
+  var left=h("div",{class:"match-col"}, h("h4",null,"Words"));
+  qs.words.forEach(function(pi){
+    var matched = qs.matched["w"+pi];
+    var cls="chip-word"+(matched?" matched":"")+(qs.selWord===pi?" sel":"");
+    left.appendChild(h("button",{class:cls,disabled:matched||done,
+      onclick:function(){ qs.selWord = qs.selWord===pi?null:pi; render(); }}, q.pairs[pi].word));
+  });
+  var right=h("div",{class:"match-col"}, h("h4",null,"Pictures"));
+  qs.pics.forEach(function(pi){
+    var matched = qs.matched["p"+pi];
+    var cls="chip-pic"+(matched?" matched":"");
+    right.appendChild(h("button",{class:cls,disabled:matched||done,
+      onclick:function(){ tryMatch(q,qs,pi); }}, raw(icon(q.pairs[pi].icon))));
+  });
+  return h("div",null,
+    h("p",{style:{color:"var(--muted)",marginTop:0}},"Tap a word, then tap its picture."),
+    h("div",{class:"match-wrap"}, left, right));
+}
+function tryMatch(q, qs, picIdx){
+  if(qs.selWord==null){ flash(icon("badgeWord"),"Pick a word first"); return; }
+  var w=qs.selWord;
+  if(q.pairs[w].icon===q.pairs[picIdx].icon){
+    qs.matched["w"+w]=true; qs.matched["p"+picIdx]=true; qs.selWord=null;
+    var all=q.pairs.every(function(_,i){ return qs.matched["w"+i]; });
+    if(all){ qs.solved=true; qs.outcome=qs.wrong2>0?"second":"first"; afterSolve(q,qs); }
+  } else {
+    qs.wrong2++; qs.attempts++; qs.selWord=null; flash(icon("badgeGlass"),"Try another one");
+  }
+  render();
+}
+function sortBody(q, qs){
+  var done=qs.solved;
+  var pool=h("div",{class:"sort-pool"});
+  qs.pool.forEach(function(ti){
+    if(qs.placed[ti]) return;
+    var cls="sort-token"+(qs.selTok===ti?" sel":"");
+    pool.appendChild(h("button",{class:cls,disabled:done,onclick:function(){ qs.selTok=qs.selTok===ti?null:ti; render(); }}, q.items[ti].text));
+  });
+  var cats=h("div",{class:"sort-cats"});
+  q.categories.forEach(function(cat){
+    var col=h("div",{class:"sort-cat"+(qs.selTok!=null?" hi":""),role:"button",tabindex:0,
+      onclick:function(){ placeSort(q,qs,cat); },
+      onkeydown:function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); placeSort(q,qs,cat);} }},
+      h("h4",null,cat));
+    q.items.forEach(function(it, ti){
+      if(qs.placed[ti]===cat) col.appendChild(h("span",{class:"sort-token small correct",style:{display:"inline-block",margin:"3px"}}, it.text));
+    });
+    cats.appendChild(col);
+  });
+  return h("div",null,
+    h("p",{style:{color:"var(--muted)",marginTop:0}},"Tap a word, then tap Who, What or Where."),
+    pool, cats);
+}
+function placeSort(q, qs, cat){
+  if(qs.selTok==null){ flash(icon("badgeWord"),"Pick a word first"); return; }
+  var ti=qs.selTok;
+  if(q.items[ti].cat===cat){
+    qs.placed[ti]=cat; qs.selTok=null;
+    var all=q.items.every(function(_,i){ return qs.placed[i]; });
+    if(all){ qs.solved=true; qs.outcome=qs.wrong2>0?"second":"first"; afterSolve(q,qs); }
+  } else {
+    qs.wrong2++; qs.attempts++; qs.selTok=null; flash(icon("badgeGlass"),"Not that box — try again");
+  }
+  render();
+}
+
+/* ------------- finalize + complete ------------- */
+function finalizeStory(s){
+  stopAllAudio();
+  var outcomes = app.qStates.map(function(q){ return q.outcome||"revealed"; });
+  var first = outcomes.filter(function(o){ return o==="first"; }).length;
+  var correct = outcomes.filter(function(o){ return o!=="revealed"; }).length;
+  var stars = first>=5 ? 3 : (first>=3 ? 2 : 1);
+  var skill={};
+  s.questions.forEach(function(q, i){
+    var g=SKILL_GROUP[q.skill]||"Details";
+    if(!skill[g]) skill[g]={c:0,t:0};
+    skill[g].t++; if(outcomes[i]!=="revealed") skill[g].c++;
+  });
+  var prev=state.progress.stories[s.id];
+  state.progress.stories[s.id]={
+    completed:true,
+    stars: Math.max(stars, prev?prev.stars:0),
+    lastStars: stars, correct:correct, total:s.questions.length,
+    outcomes:outcomes, skill:skill
+  };
+  save(true);
+  evaluateBadges();
+  app.step="complete"; render();
+}
+function stepComplete(s){
+  var prog=state.progress.stories[s.id];
+  var wrap=h("div",{class:"panel paper-grain complete"});
+  if(!state.settings.reducedMotion) wrap.appendChild(confetti());
+  wrap.appendChild(h("h2",{style:{fontSize:"2rem"}},"Story complete!"));
+  wrap.appendChild(h("p",{style:{color:"var(--muted)",marginTop:"-6px"}}, s.title));
+  wrap.appendChild(h("div",{class:"big-stars"}, starRating(prog.lastStars, true)));
+  wrap.appendChild(h("div",{class:"score-num"}, prog.correct+" / "+prog.total));
+  wrap.appendChild(h("p",{style:{color:"var(--muted)"}},"questions correct"));
+  Speech.on() && Speech.speak(prog.lastStars===3?"Perfect reading! Three stars!":"Well done! Story complete.", {rate:0.9});
+  /* review */
+  var review=h("div",{class:"review-list"});
+  s.questions.forEach(function(q, i){
+    var ok = prog.outcomes[i]!=="revealed";
+    review.appendChild(h("div",{class:"review-item"},
+      h("span",{class:"rmark "+(ok?"ok":"no")}, ok?"✓":"!"),
+      h("div",{class:"rq"}, h("div",null, q.prompt),
+        h("small",null, ok?("Correct · "+q.skill):("Practice this · "+q.explain)))));
+  });
+  wrap.appendChild(h("h3",{style:{marginTop:"18px",textAlign:"left"}},"Look back at your answers"));
+  wrap.appendChild(review);
+  var next = nextStory(s);
+  wrap.appendChild(h("div",{class:"q-actions",style:{justifyContent:"center",marginTop:"22px"}},
+    h("button",{class:"btn btn-ghost",onclick:function(){ openStory(s); }},"↻ Read again"),
+    h("button",{class:"btn btn-sky",onclick:function(){ go("rewards"); }},"See my badges"),
+    next ? h("button",{class:"btn btn-primary",onclick:function(){ openStory(next); }},"Next story →")
+         : h("button",{class:"btn btn-green",onclick:function(){ go("certificate"); }},"Get my certificate →")));
+  return wrap;
+}
+function nextStory(s){
+  var idx=STORIES.indexOf(s);
+  for(var i=idx+1;i<STORIES.length;i++){ if(isUnlocked(STORIES[i])) return STORIES[i]; }
+  return null;
+}
+function confetti(){
+  var box=h("div",{class:"confetti"});
+  var cols=["#F0A088","#9CC29A","#9BC9E4","#F4C95D","#E27E63"];
+  for(var i=0;i<34;i++){
+    box.appendChild(h("i",{style:{left:(Math.random()*100)+"%",background:cols[i%cols.length],
+      animationDuration:(1.6+Math.random()*1.4)+"s",animationDelay:(Math.random()*0.5)+"s",
+      transform:"rotate("+(Math.random()*360)+"deg)"}}));
+  }
+  return box;
+}
+
+/* ------------- badges ------------- */
+function evaluateBadges(){
+  var earned=state.progress.badges, newly=[];
+  function grant(id){ if(earned.indexOf(id)<0){ earned.push(id); newly.push(id); } }
+  var cc=completedCount();
+  if(cc>=1) grant("first_story");
+  if(cc>=3) grant("careful_reader");
+  if(cc>=12) grant("reading_champion");
+  if(state.progress.vocabPlayed>=15) grant("word_explorer");
+  if(state.progress.listeningCorrect>=5) grant("listening_star");
+  if(state.progress.evidenceFound>=5) grant("story_detective");
+  var st=state.progress.stories; for(var k in st){ if(st[k].stars>=3){ grant("perfect_reader"); break; } }
+  save(true);
+  if(newly.length){
+    var b=BADGES.filter(function(x){return x.id===newly[0];})[0];
+    flash(badge(b.icon), "Badge earned: "+b.name);
+  }
+}
+
+/* ============================================================
+   REWARD SHELF
+   ============================================================ */
+function viewRewards(){
+  var wrap=h("section",{class:"view"},
+    h("div",{class:"section-title"}, h("h2",null,"Reward Shelf")));
+  wrap.appendChild(h("div",{class:"reward-stats"},
+    stat(totalStars(),"Stars earned"),
+    stat(completedCount()+" / 12","Stories finished"),
+    stat(state.progress.badges.length+" / "+BADGES.length,"Badges collected")));
+  var grid=h("div",{class:"badge-grid"});
+  BADGES.forEach(function(b){
+    var got=state.progress.badges.indexOf(b.id)>=0;
+    grid.appendChild(h("div",{class:"badge-card paper-grain"+(got?"":" locked")},
+      h("div",{class:"badge-holder"}, raw(badge(b.icon))),
+      h("div",{class:"bname"}, b.name),
+      h("div",{class:"bdesc"}, b.desc),
+      got?h("div",{class:"earned"},"★ Earned"):h("div",{class:"bdesc"},"Keep reading!")));
+  });
+  wrap.appendChild(grid);
+  if(completedCount()===0) wrap.appendChild(h("p",{class:"empty"},"Finish your first story to start your badge collection!"));
+  return wrap;
+}
+function stat(num, lbl){ return h("div",{class:"stat"}, h("div",{class:"num"},num), h("div",{class:"lbl"},lbl)); }
+
+/* ============================================================
+   STUDENT RESULTS
+   ============================================================ */
+function aggregateSkills(){
+  var agg={}; SKILLS.forEach(function(s){ agg[s]={c:0,t:0}; });
+  var st=state.progress.stories;
+  for(var k in st){ var sk=st[k].skill||{}; for(var g in sk){ if(agg[g]){ agg[g].c+=sk[g].c; agg[g].t+=sk[g].t; } } }
+  return agg;
+}
+function viewResults(){
+  var st=state.progress.stories, done=completedCount();
+  var wrap=h("section",{class:"view"},
+    h("div",{class:"section-title"}, h("h2",null,"My Results"),
+      h("button",{class:"btn btn-sm btn-ghost no-print",onclick:function(){ window.print(); }},"🖨 Print report")));
+  if(done===0){ wrap.appendChild(h("p",{class:"empty"},"No results yet. Finish a story to see your reading skills grow here.")); return wrap; }
+  var totalQ=0, totalC=0;
+  for(var k in st){ totalQ+=st[k].total; totalC+=st[k].correct; }
+  wrap.appendChild(h("div",{class:"reward-stats print-area"},
+    stat(Math.round(totalC/totalQ*100)+"%","Overall score"),
+    stat(done+" / 12","Stories completed"),
+    stat(totalC+" / "+totalQ,"Correct answers")));
+  var agg=aggregateSkills();
+  var grid=h("div",{class:"report-grid print-area"});
+  SKILLS.forEach(function(sk){
+    var d=agg[sk], pct=d.t?Math.round(d.c/d.t*100):0;
+    var band=pct>=80?"g":(pct>=50?"y":"c");
+    grid.appendChild(h("div",{class:"skill-row"},
+      h("div",{class:"sr-top"}, h("span",null,sk), h("span",null, d.t?pct+"%":"—")),
+      h("div",{class:"bar "+band}, h("i",{style:{width:pct+"%"}})),
+      h("small",{style:{color:"var(--muted)"}}, d.t? (d.c+" of "+d.t+" correct") : "Not practiced yet")));
+  });
+  wrap.appendChild(h("h3",{style:{marginTop:"8px"}},"Reading skills"));
+  wrap.appendChild(grid);
+  /* questions needing practice */
+  var practice=[];
+  STORIES.forEach(function(s){
+    var p=st[s.id]; if(!p) return;
+    s.questions.forEach(function(q,i){ if(p.outcomes[i]==="revealed") practice.push({s:s,q:q}); });
+  });
+  wrap.appendChild(h("h3",{style:{marginTop:"20px"}},"Questions to practice again"));
+  if(practice.length===0) wrap.appendChild(h("p",{style:{color:"var(--ok)",fontWeight:"800"}},"None — wonderful work! Every question was answered."));
+  else { var pl=h("div",{class:"review-list"}); practice.slice(0,12).forEach(function(p){
+      pl.appendChild(h("div",{class:"review-item"}, h("span",{class:"rmark no"},"!"),
+        h("div",{class:"rq"}, h("div",null,p.q.prompt), h("small",null,p.s.title+" · "+p.q.skill)))); });
+    wrap.appendChild(pl);
+  }
+  return wrap;
+}
+
+/* ============================================================
+   TEACHER DASHBOARD
+   ============================================================ */
+function viewTeacher(){
+  var wrap=h("section",{class:"view"},
+    h("div",{class:"section-title"}, h("h2",null,"Teacher Dashboard"),
+      h("span",{class:"pill pill-sky"},"Classroom tools")));
+  var sel = app.teacherStory ? storyById(app.teacherStory) : STORIES[0];
+  var left=h("div",{class:"panel paper-grain"},
+    h("h3",null,"Choose a story"),
+    h("p",{style:{color:"var(--muted)",marginTop:"-6px"}},"Pick a story, then start Classroom Mode for the projector."),
+    teacherStoryList(sel));
+  left.appendChild(h("div",{style:{display:"flex",gap:"12px",marginTop:"16px",flexWrap:"wrap"}},
+    h("button",{class:"btn btn-primary btn-lg",onclick:function(){ startClassroom(sel.id,false); }}, raw(icon("badgeCrown")), h("span",null,"Start Classroom Mode")),
+    h("button",{class:"btn btn-sky",onclick:function(){ startClassroom(sel.id,true); }},"Quick-play (no name)")));
+
+  var right=h("div",{class:"panel paper-grain"},
+    h("h3",null,"Class settings"),
+    toggleRow("Unlock all stories","Open every level for the whole class.", state.teacher.unlockAll, function(){ state.teacher.unlockAll=!state.teacher.unlockAll; save(true); render(); }),
+    toggleRow("Show answer feedback","Reveal the correct answer and clue after two tries.", state.teacher.showFeedback, function(){ state.teacher.showFeedback=!state.teacher.showFeedback; save(true); render(); }),
+    toggleRow("Sound / read-aloud","Turn classroom audio on or off.", state.settings.sound, function(){ state.settings.sound=!state.settings.sound; if(!state.settings.sound) stopAllAudio(); save(true); render(); }),
+    h("div",{style:{display:"flex",flexDirection:"column",gap:"10px",marginTop:"16px"}},
+      h("button",{class:"btn btn-green btn-block",onclick:function(){ go("results"); }},"View student results"),
+      h("button",{class:"btn btn-ghost btn-block",onclick:function(){ window.print(); }},"🖨 Print progress report"),
+      h("button",{class:"btn btn-ghost btn-block",onclick:confirmReset},"↺ Reset student progress")));
+  wrap.appendChild(h("div",{class:"teacher-grid"}, left, right));
+  return wrap;
+}
+function teacherStoryList(sel){
+  var list=h("div",{class:"teacher-story-list"});
+  var colors={1:"var(--sky-d)",2:"var(--sage-d)",3:"var(--coral-d)"};
+  STORIES.forEach(function(s){
+    var p=state.progress.stories[s.id];
+    list.appendChild(h("div",{class:"tsl-item"+(sel.id===s.id?" sel":""),role:"button",tabindex:0,
+      onclick:function(){ app.teacherStory=s.id; render(); },
+      onkeydown:function(e){ if(e.key==="Enter"){ app.teacherStory=s.id; render(); } }},
+      h("span",{class:"lv",style:{background:colors[s.level]}},"L"+s.level),
+      h("span",{style:{flex:1,fontWeight:"700"}}, s.title),
+      starRating(p?p.stars:0)));
+  });
+  return list;
+}
+function toggleRow(title, sub, on, fn){
+  return h("div",{class:"toggle-row"},
+    h("div",{class:"lbl"}, h("b",null,title), h("small",{style:{color:"var(--muted)"}},sub)),
+    h("button",{class:"switch"+(on?" on":""),role:"switch","aria-checked":on?"true":"false","aria-label":title,onclick:fn}));
+}
+function confirmReset(){
+  openModal({ title:"Reset all progress?", danger:true,
+    body:"This clears every star, badge, result and completed story. This cannot be undone.",
+    confirmText:"Yes, reset everything", cancelText:"Keep my progress",
+    onConfirm:function(){ var name=state.studentName; state=defaults(); state.studentName=name; save(true);
+      document.documentElement.style.setProperty("--text-scale",1); applySettings(); flash(icon("badgeStar"),"Progress reset"); go("welcome"); } });
+}
+
+/* ============================================================
+   CLASSROOM MODE (projector)
+   ============================================================ */
+function startClassroom(storyId, quick){
+  app.classroom={ storyId:storyId, index:0, picked:null, showAnswer:false, showEvidence:false, quick:quick };
+  requestFullscreen();
+  render();
+}
+function exitClassroom(){ stopAllAudio(); if(document.fullscreenElement) document.exitFullscreen&&document.exitFullscreen(); app.classroom=null; render(); }
+function viewClassroom(){
+  var cr=app.classroom, s=storyById(cr.storyId), q=s.questions[cr.index], total=s.questions.length;
+  var el=h("div",{class:"classroom"});
+  el.appendChild(h("div",{class:"cr-top"},
+    h("span",{class:"cr-title"}, s.title),
+    h("span",{class:"pill pill-sky"},"Question "+(cr.index+1)+" of "+total),
+    h("span",{class:"pill pill-sage"}, q.skill),
+    h("span",{style:{flex:1}}),
+    h("button",{class:"btn btn-ghost",onclick:exitClassroom},"✕ Exit")));
+  var body=h("div",{class:"cr-body"});
+  body.appendChild(h("div",{class:"q-prompt"}, q.prompt));
+  if(q.type==="listen") body.appendChild(h("div",{style:{textAlign:"center",marginBottom:"16px"}},
+    h("button",{class:"btn btn-sky btn-lg",onclick:function(){ Speech.speak(q.speak); }},"▶ Play the sentence")));
+  body.appendChild(classroomAnswers(s,q,cr));
+  if(cr.showEvidence && (q.evidence!=null || q.type==="evidence")){
+    var ei = q.type==="evidence"? q.answer : q.evidence;
+    body.appendChild(h("div",{class:"feedback show",style:{maxWidth:"800px",margin:"18px auto 0"}},
+      h("div",{class:"fic"},"i"), h("div",{class:"ftext"}, h("b",null,"Clue: "), "“"+s.sentences[ei]+"”")));
+  }
+  if(cr.showAnswer) body.appendChild(h("div",{class:"feedback good",style:{maxWidth:"800px",margin:"14px auto 0"}},
+    h("div",{class:"fic"},"✓"), h("div",{class:"ftext"}, h("b",null,"Answer. "), q.explain)));
+  el.appendChild(body);
+  el.appendChild(h("div",{class:"cr-controls"},
+    h("button",{class:"btn btn-ghost btn-lg",disabled:cr.index===0,onclick:function(){ crGo(-1); }},"◀ Back"),
+    h("button",{class:"btn btn-sky btn-lg",onclick:function(){ crReplay(s,q); }},"↻ Replay audio"),
+    h("button",{class:"btn btn-yellow btn-lg",onclick:function(){ cr.showEvidence=!cr.showEvidence; render(); }},"Show clue"),
+    h("button",{class:"btn btn-green btn-lg",onclick:function(){ cr.showAnswer=true; render(); }},"Show answer"),
+    h("button",{class:"btn btn-ghost btn-lg",onclick:function(){ cr.picked=null; cr.showAnswer=false; cr.showEvidence=false; render(); }},"Reset"),
+    h("button",{class:"btn btn-primary btn-lg",disabled:cr.index===total-1,onclick:function(){ crGo(1); }},"Next ▶")));
+  return el;
+}
+function crReplay(s,q){ if(q.type==="listen") Speech.speak(q.speak); else Speech.speak(q.prompt); }
+function crGo(d){ var cr=app.classroom, s=storyById(cr.storyId); var n=cr.index+d; if(n<0||n>=s.questions.length) return; cr.index=n; cr.picked=null; cr.showAnswer=false; cr.showEvidence=false; stopAllAudio(); render(); }
+function classroomAnswers(s,q,cr){
+  if(q.type==="mc"||q.type==="listen"||q.type==="picture"){
+    var pic=q.type==="picture";
+    var grid=h("div",{class:"opt-grid "+(pic?"cols-3":"stack"),style:{maxWidth:"900px",margin:"0 auto"}});
+    q.options.forEach(function(opt,idx){
+      var cls="opt"+(pic?" pic":"");
+      if(cr.showAnswer && idx===q.answer) cls+=" correct";
+      else if(cr.picked===idx && idx!==q.answer && cr.showAnswer) cls+=" wrong";
+      else if(cr.picked===idx) cls+=" reveal";
+      grid.appendChild(h("button",{class:cls,onclick:function(){ cr.picked=idx; render(); }},
+        pic?[raw(icon(opt.icon)),h("span",null,opt.label)]:[h("span",null,opt)]));
+    });
+    return grid;
+  }
+  if(q.type==="tf"){
+    return h("div",{class:"tf-row",style:{maxWidth:"700px",margin:"0 auto"}},
+      ["True","False"].map(function(lbl,idx){
+        var val=idx===0; var cls="opt tf-btn "+(val?"tf-true":"tf-false");
+        if(cr.showAnswer && val===q.answer) cls+=" correct";
+        else if(cr.picked===idx) cls+=" reveal";
+        return h("button",{class:cls,onclick:function(){ cr.picked=idx; render(); }},
+          h("span",{class:"tf-ic"}, val?"✓":"✕"), h("span",null,lbl));
+      }));
+  }
+  if(q.type==="evidence"){
+    var p=h("p",{class:"passage selectable",style:{maxWidth:"900px",margin:"0 auto"}});
+    s.sentences.forEach(function(sent,i){
+      var cls="sent"; if(cr.showAnswer && i===q.answer) cls+=" evidence"; else if(cr.picked===i) cls+=" picked";
+      p.appendChild(h("span",{class:cls,role:"button",tabindex:0,onclick:function(){ cr.picked=i; render(); }}, sent+" "));
+    });
+    return p;
+  }
+  if(q.type==="sequence"){
+    var box=h("div",{class:"seq-list",style:{maxWidth:"760px",margin:"0 auto"}});
+    var order = cr.showAnswer ? q.items.map(function(t,i){return i;}) : (cr._shuf||(cr._shuf=shuffle(q.items.map(function(t,i){return i;}))));
+    order.forEach(function(itemIdx,pos){
+      box.appendChild(h("div",{class:"seq-item"+(cr.showAnswer?" correct":"")},
+        h("span",{class:"ord"}, cr.showAnswer?(pos+1):"?"), h("span",{class:"txt"}, q.items[itemIdx])));
+    });
+    return box;
+  }
+  if(q.type==="match"){
+    var wrap=h("div",{class:"match-wrap",style:{maxWidth:"800px",margin:"0 auto"}});
+    var lc=h("div",{class:"match-col"}, h("h4",null,"Words"));
+    q.pairs.forEach(function(p){ lc.appendChild(h("div",{class:"chip-word"+(cr.showAnswer?" matched":"")}, p.word)); });
+    var rc=h("div",{class:"match-col"}, h("h4",null,"Pictures"));
+    q.pairs.forEach(function(p){ rc.appendChild(h("div",{class:"chip-pic"+(cr.showAnswer?" matched":"")}, raw(icon(p.icon)))); });
+    wrap.appendChild(lc); wrap.appendChild(rc); return wrap;
+  }
+  if(q.type==="sort"){
+    var cats=h("div",{class:"sort-cats",style:{maxWidth:"820px",margin:"0 auto"}});
+    q.categories.forEach(function(cat){
+      var col=h("div",{class:"sort-cat"}, h("h4",null,cat));
+      if(cr.showAnswer) q.items.forEach(function(it){ if(it.cat===cat) col.appendChild(h("span",{class:"sort-token small correct",style:{margin:"3px",display:"inline-block"}}, it.text)); });
+      cats.appendChild(col);
+    });
+    return h("div",null, h("div",{class:"sort-pool",style:{justifyContent:"center"}}, q.items.map(function(it){ return h("span",{class:"sort-token"}, it.text); })), cats);
+  }
+  return h("div",null);
+}
+
+/* ============================================================
+   CERTIFICATE
+   ============================================================ */
+function viewCertificate(){
+  var done=completedCount();
+  var dateStr=new Date().toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
+  var wrap=h("section",{class:"view cert-page"},
+    h("div",{class:"section-title no-print"}, h("h2",null,"Completion Certificate"),
+      h("button",{class:"btn btn-sm btn-ghost",onclick:function(){ go("library"); }},"← Library")));
+  wrap.appendChild(h("div",{class:"certificate print-area"},
+    h("div",{class:"cert-inner"},
+      h("div",{class:"cert-medal"}, raw(badge("badgeTrophy"))),
+      h("div",{class:"cert-kicker"},"Little Readers"),
+      h("div",{class:"cert-title"},"Reading Champion"),
+      h("p",{style:{color:"var(--muted)",margin:"0"}},"This certificate is proudly presented to"),
+      h("input",{class:"name-input",type:"text",value:state.studentName||"",placeholder:"Type your name",
+        "aria-label":"Student name",
+        oninput:function(e){ state.studentName=e.target.value; },
+        onchange:function(e){ state.studentName=e.target.value; save(true); }}),
+      h("div",{class:"cert-row"},
+        h("div",{class:"ci"}, h("div",{class:"n"}, done+" / 12"), h("div",{class:"l"},"Stories completed")),
+        h("div",{class:"ci"}, h("div",{class:"n"}, totalStars()), h("div",{class:"l"},"Stars earned")),
+        h("div",{class:"ci"}, h("div",{class:"n"}, state.progress.badges.length), h("div",{class:"l"},"Badges")) ),
+      h("p",{style:{color:"var(--muted)"}},"for wonderful reading, listening and clue-finding."),
+      h("div",{class:"cert-sign"},
+        h("div",null, dateStr, h("div",{style:{fontSize:".75rem"}},"Date")),
+        h("div",{style:{textAlign:"right"}}, "Bright EngMath", h("div",{style:{fontSize:".75rem"}},"Little Readers Story Pack 1")))
+    )));
+  wrap.appendChild(h("div",{class:"q-actions no-print",style:{justifyContent:"center"}},
+    h("button",{class:"btn btn-primary btn-lg",onclick:function(){ save(true); window.print(); }},"🖨 Print certificate")));
+  if(done<12) wrap.appendChild(h("p",{class:"empty no-print"},"Finish all 12 stories to earn the full Reading Champion certificate. You have "+done+" so far!"));
+  return wrap;
+}
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+function viewSettings(){
+  var s=state.settings;
+  var wrap=h("section",{class:"view"},
+    h("div",{class:"section-title"}, h("h2",null,"Settings")));
+  var grid=h("div",{class:"settings-grid"});
+  grid.appendChild(setRow("Sound","Turn all audio on or off.",
+    h("button",{class:"switch"+(s.sound?" on":""),role:"switch","aria-checked":s.sound,onclick:function(){ s.sound=!s.sound; if(!s.sound) stopAllAudio(); save(true); render(); }})));
+  grid.appendChild(setRow("Read-aloud speed","How fast the voice reads.",
+    seg([["0.7","Slow",0.7],["0.9","Normal",0.9],["1.1","Fast",1.1]], s.rate, function(v){ s.rate=v; save(true); render(); })));
+  grid.appendChild(setRow("Text size","Make the words bigger or smaller.",
+    seg([["0.9","Small",0.9],["1","Medium",1],["1.15","Large",1.15],["1.3","X-Large",1.3]], s.textScale, function(v){ setTextScale(v); render(); })));
+  grid.appendChild(setRow("Reduced motion","Turn off animations and confetti.",
+    h("button",{class:"switch"+(s.reducedMotion?" on":""),role:"switch","aria-checked":s.reducedMotion,onclick:function(){ s.reducedMotion=!s.reducedMotion; applySettings(); save(true); render(); }})));
+  grid.appendChild(setRow("Fullscreen","Best for classroom projectors.",
+    h("button",{class:"btn btn-sky",onclick:toggleFullscreen}, document.fullscreenElement?"Exit fullscreen":"Go fullscreen")));
+  grid.appendChild(setRow("Reset progress","Clear all stars, badges and results.",
+    h("button",{class:"btn btn-primary",onclick:confirmReset},"Reset progress")));
+  wrap.appendChild(grid);
+  return wrap;
+}
+function setRow(title, sub, control){
+  return h("div",{class:"set-row"},
+    h("div",{class:"lbl"}, h("b",null,title), h("small",null,sub)), control);
+}
+function seg(opts, cur, fn){
+  var box=h("div",{class:"seg"});
+  opts.forEach(function(o){ box.appendChild(h("button",{class:(Math.abs(cur-o[2])<0.001?"on":""),onclick:function(){ fn(o[2]); }}, o[1])); });
+  return box;
+}
+
+/* ---------------- system ---------------- */
+function applySettings(){
+  document.documentElement.style.setProperty("--text-scale", state.settings.textScale||1);
+  document.body.classList.toggle("reduce-motion", !!state.settings.reducedMotion);
+}
+function requestFullscreen(){ var el=document.documentElement; if(el.requestFullscreen) el.requestFullscreen().catch(function(){}); }
+function toggleFullscreen(){ if(document.fullscreenElement){ document.exitFullscreen&&document.exitFullscreen(); } else requestFullscreen(); setTimeout(render,120); }
+window.addEventListener("beforeunload", stopAllAudio);
+document.addEventListener("keydown", function(e){ if(e.key==="Escape" && app.classroom) exitClassroom(); });
+
+/* ---------------- boot ---------------- */
+function boot(){
+  applySettings();
+  var loader=document.getElementById("loader");
+  render();
+  if(loader){ loader.style.opacity="0"; setTimeout(function(){ loader.style.display="none"; }, 420); }
+}
+if(document.readyState!=="loading") boot(); else document.addEventListener("DOMContentLoaded", boot);
+
+})();
+
+</script>
+</body>
+</html>
