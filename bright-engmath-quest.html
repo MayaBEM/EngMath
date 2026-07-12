@@ -1,0 +1,2131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<title>Bright EngMath: The English Entrance Quest</title>
+<meta name="description" content="A story-driven English entrance-exam practice game for Grade 6 students preparing for Grade 7 / Mathayom 1." />
+<style>
+/* ==========================================================================
+   BRIGHT ENGMATH — THE ENGLISH ENTRANCE QUEST
+   Single-file interactive learning game. No backend, no external libraries.
+   ========================================================================== */
+
+:root{
+  --ivory:#faf6ec;
+  --ivory-2:#f4edda;
+  --paper:#fffdf7;
+  --sky:#8ecae6;
+  --sky-deep:#4e97b8;
+  --sage:#9bbf9b;
+  --sage-deep:#5f8f66;
+  --gold:#e8c15a;
+  --gold-deep:#c99a25;
+  --coral:#ef8354;
+  --coral-deep:#d9633a;
+  --navy:#243a5e;
+  --navy-soft:#3d557d;
+  --lavender:#c8bfe7;
+  --lavender-deep:#8f80c4;
+  --line:#e6dcc2;
+  --ok:#4c9a63;
+  --ok-bg:#e4f2e6;
+  --bad:#cf5b48;
+  --bad-bg:#f9e6e0;
+  --shadow:0 10px 30px -12px rgba(36,58,94,.28);
+  --shadow-sm:0 4px 14px -6px rgba(36,58,94,.28);
+  --radius:22px;
+  --radius-sm:14px;
+  --font:'Trebuchet MS','Segoe UI',system-ui,-apple-system,sans-serif;
+  --serif:Georgia,'Times New Roman',serif;
+  --sp:clamp(16px,4vw,28px);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--font);
+  color:var(--navy);
+  background:
+    radial-gradient(1200px 600px at 12% -8%, #fef6de 0%, rgba(254,246,222,0) 60%),
+    radial-gradient(1000px 700px at 108% 6%, #e8f4f9 0%, rgba(232,244,249,0) 55%),
+    radial-gradient(900px 700px at 50% 120%, #eaf3ea 0%, rgba(234,243,234,0) 60%),
+    var(--ivory);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.55;
+}
+button{font-family:inherit;cursor:pointer}
+img{max-width:100%}
+h1,h2,h3,h4{line-height:1.15;margin:0 0 .4em;color:var(--navy)}
+p{margin:0 0 .8em}
+a{color:var(--sky-deep)}
+:focus-visible{outline:3px solid var(--sky-deep);outline-offset:2px;border-radius:6px}
+
+/* ---------- Layout scaffolding ---------- */
+#app{min-height:100vh;display:flex;flex-direction:column}
+.screen{
+  flex:1;width:100%;max-width:1080px;margin:0 auto;
+  padding:var(--sp);
+  animation:fadeUp .5s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.center{display:flex;flex-direction:column;align-items:center;text-align:center}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  max-width:1080px;margin:0 auto;width:100%;
+  padding:14px var(--sp) 0;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:bold;letter-spacing:.3px}
+.brand .mark{
+  width:38px;height:38px;border-radius:11px;flex:none;
+  background:linear-gradient(135deg,var(--gold),var(--coral));
+  display:grid;place-items:center;box-shadow:var(--shadow-sm);
+}
+.brand .name{font-size:1.05rem}
+.brand .name small{display:block;font-size:.62rem;font-weight:normal;color:var(--navy-soft);letter-spacing:1.5px;text-transform:uppercase}
+.topbar-actions{display:flex;gap:8px;align-items:center}
+
+/* ---------- Buttons ---------- */
+.btn{
+  border:none;border-radius:999px;padding:13px 26px;font-size:1rem;font-weight:bold;
+  color:#fff;background:linear-gradient(135deg,var(--coral),var(--coral-deep));
+  box-shadow:0 8px 18px -8px rgba(217,99,58,.7);
+  transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+  display:inline-flex;align-items:center;gap:9px;justify-content:center;
+}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.04)}
+.btn:active{transform:translateY(1px) scale(.98)}
+.btn.secondary{background:linear-gradient(135deg,var(--sky),var(--sky-deep));box-shadow:0 8px 18px -8px rgba(78,151,184,.7)}
+.btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-deep));box-shadow:0 8px 18px -8px rgba(201,154,37,.7)}
+.btn.sage{background:linear-gradient(135deg,var(--sage),var(--sage-deep));box-shadow:0 8px 18px -8px rgba(95,143,102,.7)}
+.btn.ghost{
+  background:var(--paper);color:var(--navy);border:2px solid var(--line);
+  box-shadow:var(--shadow-sm);
+}
+.btn.ghost:hover{border-color:var(--sky)}
+.btn.lg{padding:16px 34px;font-size:1.12rem}
+.btn.sm{padding:9px 16px;font-size:.85rem}
+.btn.block{display:flex;width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;filter:none}
+.iconbtn{
+  width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:var(--paper);
+  display:grid;place-items:center;color:var(--navy);box-shadow:var(--shadow-sm);
+  transition:transform .12s, border-color .12s;
+}
+.iconbtn:hover{transform:translateY(-2px);border-color:var(--sky)}
+.iconbtn.on{border-color:var(--sage);color:var(--sage-deep)}
+
+/* ---------- Cards ---------- */
+.card{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:clamp(18px,3.5vw,30px);position:relative;
+}
+.card.pad-sm{padding:16px 18px}
+.paper-texture:before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background-image:radial-gradient(rgba(36,58,94,.035) 1px,transparent 1px);
+  background-size:9px 9px;opacity:.6;
+}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:bold;
+  padding:5px 11px;border-radius:999px;background:var(--ivory-2);color:var(--navy-soft);
+  border:1px solid var(--line);letter-spacing:.4px;text-transform:uppercase;
+}
+.chip.sage{background:var(--ok-bg);color:var(--sage-deep);border-color:#cfe6d3}
+.chip.sky{background:#e2f1f8;color:var(--sky-deep);border-color:#c9e6f1}
+.chip.gold{background:#fbf1d4;color:var(--gold-deep);border-color:#f0e2b5}
+.chip.coral{background:var(--bad-bg);color:var(--coral-deep);border-color:#f4d6c9}
+.chip.lav{background:#efeaf9;color:var(--lavender-deep);border-color:#e0d8f2}
+
+/* ---------- Landing ---------- */
+.hero{
+  display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(20px,4vw,44px);align-items:center;
+  margin-top:8px;
+}
+.hero-copy h1{
+  font-size:clamp(2rem,5.4vw,3.3rem);letter-spacing:-.5px;
+  background:linear-gradient(120deg,var(--navy),var(--sky-deep) 55%,var(--sage-deep));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-copy .tagline{font-size:clamp(1.05rem,2.4vw,1.35rem);font-weight:bold;color:var(--coral-deep);margin-bottom:.2em}
+.hero-copy .lead{font-size:1.05rem;color:var(--navy-soft);max-width:46ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.hero-stage{position:relative;min-height:340px;display:grid;place-items:center}
+.hero-scene{width:100%;max-width:440px}
+.float{animation:float 6s ease-in-out infinite}
+.float.d1{animation-delay:-1.5s}
+.float.d2{animation-delay:-3s}
+.float.d3{animation-delay:-4.5s}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(2deg)}}
+.feature-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:34px}
+.feature{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);
+  padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm);
+  min-width:180px;flex:1 1 180px;max-width:260px;
+}
+.feature .fi{width:40px;height:40px;flex:none;border-radius:11px;display:grid;place-items:center;background:var(--ivory-2)}
+.feature b{display:block;font-size:.95rem}
+.feature span{font-size:.8rem;color:var(--navy-soft)}
+
+/* ---------- Setup ---------- */
+.setup-grid{display:grid;grid-template-columns:1fr;gap:20px;max-width:640px;margin:0 auto}
+.field label{display:block;font-weight:bold;margin-bottom:8px}
+.input{
+  width:100%;padding:14px 16px;border-radius:var(--radius-sm);border:2px solid var(--line);
+  background:var(--paper);font-size:1.05rem;color:var(--navy);
+}
+.input:focus{border-color:var(--sky);outline:none}
+.avatars{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:12px}
+.avatar-opt{
+  background:var(--paper);border:2px solid var(--line);border-radius:var(--radius-sm);
+  padding:10px 6px 8px;text-align:center;transition:transform .12s,border-color .12s,box-shadow .12s;
+}
+.avatar-opt:hover{transform:translateY(-3px);border-color:var(--sky)}
+.avatar-opt.sel{border-color:var(--coral);box-shadow:0 0 0 4px rgba(239,131,84,.18)}
+.avatar-opt .an{font-size:.78rem;font-weight:bold;margin-top:4px;display:block}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;background:var(--paper);border:2px solid var(--line);border-radius:var(--radius-sm);padding:12px 16px}
+.switch{width:54px;height:30px;border-radius:999px;background:var(--line);border:none;position:relative;transition:background .2s}
+.switch:after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .2s}
+.switch.on{background:var(--sage)}
+.switch.on:after{left:27px}
+
+/* ---------- Quest map ---------- */
+.map-wrap{position:relative;margin-top:10px}
+.map-head{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.crystal-tray{display:flex;gap:8px;align-items:center}
+.crystal-slot{width:34px;height:44px;position:relative;opacity:.35;transition:opacity .4s, transform .4s}
+.crystal-slot.filled{opacity:1;animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(.4)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+.map-track{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.node{
+  position:relative;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px 16px;text-align:center;box-shadow:var(--shadow-sm);
+  transition:transform .15s, box-shadow .15s;overflow:hidden;
+}
+.node .scene{height:120px;display:grid;place-items:center;margin-bottom:8px}
+.node.unlocked{cursor:pointer}
+.node.unlocked:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.node.locked{filter:grayscale(.55);opacity:.75}
+.node.current{border-color:var(--coral);box-shadow:0 0 0 3px rgba(239,131,84,.22),var(--shadow)}
+.node h3{font-size:1rem;margin-bottom:4px}
+.node .sub{font-size:.76rem;color:var(--navy-soft);min-height:2.2em}
+.node-badge{position:absolute;top:10px;right:10px}
+.progress{height:10px;border-radius:999px;background:var(--ivory-2);overflow:hidden;margin-top:10px;border:1px solid var(--line)}
+.progress > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--sage),var(--sage-deep));transition:width .8s ease}
+.next-hint{margin-top:16px;display:flex;gap:12px;align-items:center;background:#fff6e6;border:1px dashed var(--gold-deep);border-radius:var(--radius-sm);padding:12px 16px}
+
+/* ---------- Learning page ---------- */
+.lesson-hd{display:flex;gap:16px;align-items:center;margin-bottom:8px}
+.example-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:14px 0}
+.ex-card{background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px}
+.ex-card h4{font-size:.9rem;margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.hl-sub{background:#e2f1f8;border-bottom:2px solid var(--sky-deep);padding:0 3px;border-radius:4px}
+.hl-verb{background:var(--ok-bg);border-bottom:2px solid var(--sage-deep);padding:0 3px;border-radius:4px}
+.hl-key{background:#fbf1d4;border-bottom:2px solid var(--gold-deep);padding:0 3px;border-radius:4px}
+.hl-err{background:var(--bad-bg);border-bottom:2px solid var(--bad);padding:0 3px;border-radius:4px;text-decoration:line-through}
+.tipbox{display:flex;gap:12px;padding:13px 16px;border-radius:var(--radius-sm);margin:10px 0}
+.tipbox.tip{background:var(--ok-bg);border:1px solid #cfe6d3}
+.tipbox.warn{background:#fdf0e2;border:1px solid #f3ddc0}
+.tipbox .ti{flex:none}
+.mini{background:var(--paper);border:2px solid var(--line);border-radius:var(--radius-sm);padding:16px;margin-top:14px}
+.mini .opts{display:grid;gap:8px;margin-top:10px}
+.mini-opt{text-align:left;background:var(--ivory);border:2px solid var(--line);border-radius:12px;padding:11px 14px;font-size:.95rem;transition:border-color .12s,background .12s}
+.mini-opt:hover{border-color:var(--sky)}
+.mini-opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.mini-opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.mini-fb{margin-top:10px;font-size:.9rem;font-weight:bold}
+
+/* ---------- Quiz ---------- */
+.quiz-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.qmeta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.qbar{height:12px;border-radius:999px;background:var(--ivory-2);overflow:hidden;border:1px solid var(--line);margin:12px 0 4px}
+.qbar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--sky),var(--sky-deep));transition:width .5s ease}
+.q-stage{display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:start;margin-top:14px}
+.q-pip{position:sticky;top:12px}
+.speech{position:relative;background:var(--ivory);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:.82rem;color:var(--navy-soft);margin-top:8px}
+.speech:before{content:"";position:absolute;top:-8px;left:26px;border:7px solid transparent;border-bottom-color:var(--ivory)}
+.passage{background:var(--ivory);border:1px solid var(--line);border-left:5px solid var(--sky);border-radius:14px;padding:14px 16px;margin-bottom:14px;font-size:.96rem}
+.passage.notice{border-left-color:var(--coral);background:#fff7f2}
+.passage.email{border-left-color:var(--lavender-deep);background:#f7f4fc;font-family:var(--serif)}
+.passage h4{font-size:.78rem;text-transform:uppercase;letter-spacing:1px;color:var(--navy-soft);margin-bottom:6px}
+.q-instruction{font-size:.82rem;color:var(--navy-soft);font-weight:bold;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:clamp(1.05rem,2.6vw,1.28rem);font-weight:bold;margin-bottom:14px}
+.options{display:grid;gap:10px}
+.opt{
+  display:flex;gap:12px;align-items:flex-start;text-align:left;
+  background:var(--paper);border:2px solid var(--line);border-radius:var(--radius-sm);
+  padding:13px 15px;font-size:1rem;transition:border-color .12s,background .12s,transform .1s;
+}
+.opt:hover:not(.locked){border-color:var(--sky);transform:translateX(2px)}
+.opt .key{width:30px;height:30px;border-radius:9px;flex:none;display:grid;place-items:center;font-weight:bold;background:var(--ivory-2);border:1px solid var(--line)}
+.opt.sel{border-color:var(--coral);background:#fff3ec}
+.opt.sel .key{background:var(--coral);color:#fff;border-color:var(--coral)}
+.opt.correct{border-color:var(--ok);background:var(--ok-bg)}
+.opt.correct .key{background:var(--ok);color:#fff;border-color:var(--ok)}
+.opt.incorrect{border-color:var(--bad);background:var(--bad-bg)}
+.opt.incorrect .key{background:var(--bad);color:#fff;border-color:var(--bad)}
+.opt.locked{cursor:default}
+.opt.dim{opacity:.55}
+.quiz-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:center}
+.explain{
+  margin-top:14px;border-radius:var(--radius-sm);padding:16px;border:1px solid var(--line);
+  animation:fadeUp .35s ease both;
+}
+.explain.good{background:var(--ok-bg);border-color:#cfe6d3}
+.explain.bad{background:#fdf1ec;border-color:#f4d6c9}
+.explain h4{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.explain .why{margin:6px 0}
+.explain .tiptag{margin-top:8px;font-size:.9rem;background:#fff;border:1px dashed var(--gold-deep);border-radius:10px;padding:9px 12px}
+.hintbox{margin-top:12px;background:#fbf4dd;border:1px dashed var(--gold-deep);border-radius:12px;padding:11px 14px;font-size:.92rem;animation:fadeUp .3s ease both}
+
+.shake{animation:shake .45s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.sparkle-layer{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.spark{position:absolute;width:12px;height:12px;color:var(--gold);animation:spark .8s ease-out forwards}
+@keyframes spark{0%{transform:scale(0) rotate(0);opacity:1}100%{transform:scale(1.3) rotate(140deg) translateY(-40px);opacity:0}}
+
+/* ---------- World complete & results ---------- */
+.reward-scene{display:grid;place-items:center;margin:6px auto 4px;max-width:260px}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:16px 0}
+.stat{background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px;text-align:center}
+.stat b{display:block;font-size:1.6rem;color:var(--navy)}
+.stat span{font-size:.78rem;color:var(--navy-soft)}
+.skill-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+.skill-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.skill-list li{display:flex;gap:8px;align-items:flex-start;font-size:.9rem;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 11px}
+.stars{display:flex;gap:6px;justify-content:center;margin:8px 0}
+.star{width:38px;height:38px;color:var(--line)}
+.star.on{color:var(--gold);animation:pop .5s ease both}
+.cat-bar{margin:10px 0}
+.cat-bar .lab{display:flex;justify-content:space-between;font-size:.9rem;font-weight:bold;margin-bottom:5px}
+.cat-bar .track{height:14px;border-radius:999px;background:var(--ivory-2);overflow:hidden;border:1px solid var(--line)}
+.cat-bar .track > i{display:block;height:100%;border-radius:999px;transition:width 1s ease}
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-top:10px}
+.badge{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 10px;text-align:center;position:relative}
+.badge.locked{opacity:.42;filter:grayscale(.7)}
+.badge .bn{font-size:.82rem;font-weight:bold;margin-top:6px}
+.badge .bd{font-size:.68rem;color:var(--navy-soft)}
+
+/* ---------- Review ---------- */
+.rev-item{border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:12px;background:var(--paper)}
+.rev-item.correct{border-left:5px solid var(--ok)}
+.rev-item.wrong{border-left:5px solid var(--bad)}
+.rev-q{font-weight:bold;margin:6px 0}
+.rev-row{font-size:.92rem;margin:3px 0}
+.rev-row .tag{font-weight:bold}
+
+/* ---------- Modal ---------- */
+.overlay{position:fixed;inset:0;background:rgba(36,58,94,.5);display:grid;place-items:center;padding:18px;z-index:60;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--paper);border-radius:var(--radius);max-width:600px;width:100%;max-height:88vh;overflow:auto;box-shadow:var(--shadow);border:1px solid var(--line);animation:fadeUp .3s ease both}
+.modal .mhd{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:1}
+.modal .mbody{padding:20px 22px}
+.modal h3{margin:0}
+.close-x{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--ivory);font-size:1.1rem;line-height:1}
+.tg-list{display:grid;gap:10px;margin:10px 0}
+.tg-list .row{display:flex;gap:12px;align-items:flex-start;background:var(--ivory);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:.92rem}
+
+/* ---------- Loading ---------- */
+#loader{position:fixed;inset:0;background:var(--ivory);display:grid;place-items:center;z-index:100;transition:opacity .5s ease}
+.loader-inner{text-align:center}
+.loader-ring{width:64px;height:64px;margin:16px auto;border-radius:50%;border:5px solid var(--line);border-top-color:var(--coral);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-bar{width:220px;height:8px;border-radius:999px;background:var(--ivory-2);overflow:hidden;margin:14px auto 0;border:1px solid var(--line)}
+.loader-bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--coral));animation:load 1.6s ease forwards}
+@keyframes load{to{width:100%}}
+
+/* ---------- Footer ---------- */
+footer{
+  text-align:center;padding:22px var(--sp);color:var(--navy-soft);font-size:.8rem;
+  border-top:1px solid var(--line);margin-top:20px;
+}
+footer b{color:var(--navy)}
+footer .fnote{margin-top:4px;font-size:.72rem;opacity:.85}
+
+/* ---------- Toast ---------- */
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(30px);
+  background:var(--navy);color:#fff;padding:12px 20px;border-radius:999px;font-size:.9rem;font-weight:bold;
+  box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.35s;z-index:70;display:flex;gap:8px;align-items:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ---------- Responsive ---------- */
+@media(max-width:820px){
+  .hero{grid-template-columns:1fr;text-align:center}
+  .hero-copy .lead{margin-left:auto;margin-right:auto}
+  .hero-cta{justify-content:center}
+  .map-track{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  .q-stage{grid-template-columns:1fr}
+  .q-pip{position:static;display:flex;gap:12px;align-items:center;justify-content:center}
+  .q-pip .speech{margin-top:0;flex:1}
+  .q-pip .speech:before{display:none}
+  .skill-cols{grid-template-columns:1fr}
+  .map-track{grid-template-columns:1fr}
+  .brand .name small{display:none}
+}
+
+/* ---------- Reduced motion ---------- */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+  .float{animation:none}
+}
+.no-motion .float{animation:none !important}
+.no-motion *{animation-duration:.001ms !important;transition-duration:.05ms !important}
+</style>
+</head>
+<body>
+
+<div id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <svg width="90" height="90" viewBox="0 0 120 120" aria-hidden="true">
+      <defs>
+        <linearGradient id="lgc" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#e8c15a"/><stop offset="1" stop-color="#ef8354"/>
+        </linearGradient>
+      </defs>
+      <polygon points="60,14 96,44 82,100 38,100 24,44" fill="url(#lgc)" opacity=".9"/>
+      <polygon points="60,14 82,100 60,72" fill="#fff" opacity=".25"/>
+    </svg>
+    <div class="loader-ring"></div>
+    <p style="font-weight:bold;margin:6px 0 0">Preparing your quest…</p>
+    <div class="loader-bar"><i></i></div>
+    <p id="loadMsg" style="font-size:.8rem;color:#3d557d">Waking up Pip the Book Guardian…</p>
+  </div>
+</div>
+
+<div id="app"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =======================================================================
+   DATA — 30 original questions, worlds, lessons, badges
+   ======================================================================= */
+"use strict";
+
+const STORAGE_KEY = "brightengmath_quest_v1";
+
+/* ---- Questions (0-based, grouped 10 per world) ---- */
+const QUESTIONS = [
+  {
+    "id": 1,
+    "cat": "Vocabulary",
+    "skill": "Vocabulary in context",
+    "diff": "Easy–Medium",
+    "instruction": "Choose the word that best completes the sentence.",
+    "text": "The museum guide asked visitors to remain ______ during the tour so they would not disturb other people.",
+    "choices": [
+      "loud",
+      "silent",
+      "hungry",
+      "tall"
+    ],
+    "answer": 1,
+    "why": "“Silent” means making no sound, which fits a tour where you should not disturb others.",
+    "wrong": {
+      "0": "“Loud” is the opposite of what a quiet tour needs.",
+      "2": "“Hungry” describes wanting food, not noise.",
+      "3": "“Tall” describes height, not behaviour."
+    },
+    "tip": "Read the whole sentence and look for clue words. Here, “not disturb other people” signals quietness."
+  },
+  {
+    "id": 2,
+    "cat": "Vocabulary",
+    "skill": "Vocabulary in context",
+    "diff": "Medium",
+    "instruction": "Choose the word that best completes the sentence.",
+    "text": "After running the whole marathon, Nina felt completely ______ and needed to rest for a long time.",
+    "choices": [
+      "patient",
+      "cheerful",
+      "curious",
+      "exhausted"
+    ],
+    "answer": 3,
+    "why": "“Exhausted” means extremely tired, which matches running a marathon and needing rest.",
+    "wrong": {
+      "0": "“Patient” means able to wait calmly.",
+      "1": "“Cheerful” means happy, which does not explain needing rest.",
+      "2": "“Curious” means wanting to learn something."
+    },
+    "tip": "Match the feeling to the cause. Hard physical effort usually leads to tiredness."
+  },
+  {
+    "id": 3,
+    "cat": "Vocabulary",
+    "skill": "Vocabulary in context",
+    "diff": "Medium",
+    "instruction": "Choose the word that best completes the sentence.",
+    "text": "The young scientist made an important ______ that could change the way doctors treat illness.",
+    "choices": [
+      "apology",
+      "mistake",
+      "discovery",
+      "delay"
+    ],
+    "answer": 2,
+    "why": "A “discovery” is something new that is found, which fits changing how doctors work.",
+    "wrong": {
+      "0": "An “apology” is saying sorry.",
+      "1": "A “mistake” is an error and would not be described as important in a good way here.",
+      "3": "A “delay” means something is late."
+    },
+    "tip": "Positive clue words like “important” and “change the way doctors treat illness” point to a helpful new finding."
+  },
+  {
+    "id": 4,
+    "cat": "Vocabulary",
+    "skill": "Vocabulary in context",
+    "diff": "Easy–Medium",
+    "instruction": "Choose the word that best completes the sentence.",
+    "text": "Please ______ your seatbelt before the plane takes off.",
+    "choices": [
+      "fasten",
+      "open",
+      "break",
+      "paint"
+    ],
+    "answer": 0,
+    "why": "You “fasten” a seatbelt, meaning to close and secure it.",
+    "wrong": {
+      "1": "“Open” a seatbelt is the opposite of what safety requires.",
+      "2": "“Break” means to damage it.",
+      "3": "“Paint” has nothing to do with seatbelts."
+    },
+    "tip": "Some words go together as fixed phrases: “fasten your seatbelt” is one to remember."
+  },
+  {
+    "id": 5,
+    "cat": "Vocabulary",
+    "skill": "Vocabulary in context",
+    "diff": "Medium",
+    "instruction": "Choose the word that best completes the sentence.",
+    "text": "The old wooden bridge had become too ______ to cross, so the city closed it for repairs.",
+    "choices": [
+      "polite",
+      "delicious",
+      "gentle",
+      "dangerous"
+    ],
+    "answer": 3,
+    "why": "“Dangerous” means likely to cause harm, which is why the bridge was closed.",
+    "wrong": {
+      "0": "“Polite” describes good manners.",
+      "1": "“Delicious” describes tasty food.",
+      "2": "“Gentle” means soft or kind."
+    },
+    "tip": "The result (“closed it for repairs”) tells you the bridge was unsafe."
+  },
+  {
+    "id": 6,
+    "cat": "Vocabulary",
+    "skill": "Synonyms",
+    "diff": "Easy–Medium",
+    "instruction": "Choose the word that is closest in meaning to the word in capitals.",
+    "text": "ENORMOUS",
+    "choices": [
+      "tiny",
+      "huge",
+      "narrow",
+      "empty"
+    ],
+    "answer": 1,
+    "why": "“Enormous” and “huge” both mean very large in size.",
+    "wrong": {
+      "0": "“Tiny” means very small — the opposite.",
+      "2": "“Narrow” means not wide.",
+      "3": "“Empty” means containing nothing."
+    },
+    "tip": "A synonym has the same meaning. Picture the word: “enormous” is about great size."
+  },
+  {
+    "id": 7,
+    "cat": "Vocabulary",
+    "skill": "Antonyms",
+    "diff": "Medium",
+    "instruction": "Choose the word that is OPPOSITE in meaning to the word in capitals.",
+    "text": "ANCIENT",
+    "choices": [
+      "modern",
+      "historic",
+      "dusty",
+      "famous"
+    ],
+    "answer": 0,
+    "why": "“Ancient” means very old, so its opposite is “modern”, meaning new or recent.",
+    "wrong": {
+      "1": "“Historic” is close in meaning to ancient, not opposite.",
+      "2": "“Dusty” describes covered in dust.",
+      "3": "“Famous” means well known."
+    },
+    "tip": "For antonyms, find the word that means the reverse — old versus new."
+  },
+  {
+    "id": 8,
+    "cat": "Vocabulary",
+    "skill": "Synonyms",
+    "diff": "Medium",
+    "instruction": "Choose the word that is closest in meaning to the word in capitals.",
+    "text": "BRAVE",
+    "choices": [
+      "fearful",
+      "generous",
+      "courageous",
+      "quiet"
+    ],
+    "answer": 2,
+    "why": "“Brave” and “courageous” both describe someone who is not afraid to face danger.",
+    "wrong": {
+      "0": "“Fearful” means full of fear — the opposite.",
+      "1": "“Generous” means willing to give.",
+      "3": "“Quiet” means making little noise."
+    },
+    "tip": "Longer words can be synonyms too: “courageous” comes from the word “courage”."
+  },
+  {
+    "id": 9,
+    "cat": "Vocabulary",
+    "skill": "Antonyms",
+    "diff": "Medium",
+    "instruction": "Choose the word that is OPPOSITE in meaning to the word in capitals.",
+    "text": "GENEROUS",
+    "choices": [
+      "kind",
+      "cheerful",
+      "friendly",
+      "stingy"
+    ],
+    "answer": 3,
+    "why": "“Generous” means willing to share; “stingy” means unwilling to share or give — the opposite.",
+    "wrong": {
+      "0": "“Kind” is similar to generous, not opposite.",
+      "1": "“Cheerful” means happy.",
+      "2": "“Friendly” is a positive trait, not the opposite of generous."
+    },
+    "tip": "Watch out for distractors that are also positive words. Only “stingy” reverses the meaning."
+  },
+  {
+    "id": 10,
+    "cat": "Vocabulary",
+    "skill": "Word usage",
+    "diff": "Medium–Challenging",
+    "instruction": "Choose the word that best completes the sentence.",
+    "text": "Anna enjoys a wide ______ of hobbies, from painting to rock climbing.",
+    "choices": [
+      "amount",
+      "range",
+      "number",
+      "piece"
+    ],
+    "answer": 1,
+    "why": "A “wide range of hobbies” is the natural phrase for many different kinds of activities.",
+    "wrong": {
+      "0": "“Amount” is used for things you cannot count, like water.",
+      "2": "“Number of hobbies” is possible but does not fit “wide ______ of”.",
+      "3": "“Piece” refers to a part of one thing."
+    },
+    "tip": "Collocations matter: we say a “wide range of” things when we mean great variety."
+  },
+  {
+    "id": 11,
+    "cat": "Grammar",
+    "skill": "Subject–verb agreement",
+    "diff": "Medium–Challenging",
+    "instruction": "Choose the correct answer to complete the sentence.",
+    "text": "Neither the teacher nor the students ______ ready for the surprise test.",
+    "choices": [
+      "was",
+      "is",
+      "were",
+      "be"
+    ],
+    "answer": 2,
+    "why": "With “neither…nor…”, the verb agrees with the nearer subject. “Students” is plural, so we use “were”.",
+    "wrong": {
+      "0": "“Was” is singular and does not agree with the plural “students”.",
+      "1": "“Is” is singular and also present tense, which does not fit.",
+      "3": "“Be” is the base form and cannot stand alone here."
+    },
+    "tip": "In “neither A nor B”, look at the subject closest to the verb to decide singular or plural."
+  },
+  {
+    "id": 12,
+    "cat": "Grammar",
+    "skill": "First conditional",
+    "diff": "Medium",
+    "instruction": "Choose the correct answer to complete the sentence.",
+    "text": "If it ______ tomorrow, we will cancel the picnic.",
+    "choices": [
+      "rains",
+      "rained",
+      "will rain",
+      "raining"
+    ],
+    "answer": 0,
+    "why": "In the first conditional (if + present simple, will + verb), the “if” part uses the present simple: “rains”.",
+    "wrong": {
+      "1": "“Rained” is past tense and does not fit a future plan.",
+      "2": "We do not use “will” in the “if” part of a first conditional.",
+      "3": "“Raining” needs a helping verb like “is”."
+    },
+    "tip": "Real future condition: If + present simple, … will + base verb."
+  },
+  {
+    "id": 13,
+    "cat": "Grammar",
+    "skill": "Relative pronouns",
+    "diff": "Medium",
+    "instruction": "Choose the correct answer to complete the sentence.",
+    "text": "This is the most interesting book ______ I have ever read.",
+    "choices": [
+      "who",
+      "where",
+      "what",
+      "that"
+    ],
+    "answer": 3,
+    "why": "“That” is the relative pronoun used for things, like a book.",
+    "wrong": {
+      "0": "“Who” is used for people, not objects.",
+      "1": "“Where” refers to places.",
+      "2": "“What” is not used to join this kind of relative clause."
+    },
+    "tip": "Use “who” for people and “that/which” for things."
+  },
+  {
+    "id": 14,
+    "cat": "Grammar",
+    "skill": "Comparatives / adverbs",
+    "diff": "Medium",
+    "instruction": "Choose the correct answer to complete the sentence.",
+    "text": "My sister sings ______ than anyone else in our school choir.",
+    "choices": [
+      "beautifully",
+      "more beautifully",
+      "most beautifully",
+      "beautiful"
+    ],
+    "answer": 1,
+    "why": "To compare two sides with a long adverb, use “more + adverb + than”: “more beautifully than”.",
+    "wrong": {
+      "0": "“Beautifully” alone is not comparative.",
+      "2": "“Most beautifully” is the superlative (for three or more), not used with “than”.",
+      "3": "“Beautiful” is an adjective, but we need an adverb to describe “sings”."
+    },
+    "tip": "“than” signals a comparison of two things → use the comparative form."
+  },
+  {
+    "id": 15,
+    "cat": "Grammar",
+    "skill": "Past perfect",
+    "diff": "Medium–Challenging",
+    "instruction": "Choose the correct answer to complete the sentence.",
+    "text": "By the time we arrived at the cinema, the film ______.",
+    "choices": [
+      "had already started",
+      "has already started",
+      "already started",
+      "starts"
+    ],
+    "answer": 0,
+    "why": "The past perfect “had already started” shows the film started before we arrived — an earlier past action.",
+    "wrong": {
+      "1": "“Has already started” is present perfect and does not match the past “arrived”.",
+      "2": "“Already started” alone lacks the helping verb needed to show the earlier action.",
+      "3": "“Starts” is present simple and does not fit the past situation."
+    },
+    "tip": "For an action finished before another past action, use “had + past participle”."
+  },
+  {
+    "id": 16,
+    "cat": "Grammar",
+    "skill": "Present continuous",
+    "diff": "Easy–Medium",
+    "instruction": "Choose the correct answer to complete the sentence.",
+    "text": "Be quiet, please! The baby ______ right now.",
+    "choices": [
+      "slept",
+      "sleeps",
+      "is sleeping",
+      "sleep"
+    ],
+    "answer": 2,
+    "why": "“Right now” signals the present continuous: “is sleeping” for an action happening at this moment.",
+    "wrong": {
+      "0": "“Slept” is past tense.",
+      "1": "“Sleeps” is present simple, used for habits, not for right now.",
+      "3": "“Sleep” does not agree with the singular subject “baby”."
+    },
+    "tip": "Time words like “now” and “at the moment” usually mean present continuous (am/is/are + -ing)."
+  },
+  {
+    "id": 17,
+    "cat": "Grammar",
+    "skill": "Prepositions of time",
+    "diff": "Medium",
+    "instruction": "Choose the pair of words that best completes the sentence.",
+    "text": "The meeting is planned ______ 3 o'clock ______ Monday afternoon.",
+    "choices": [
+      "at … in",
+      "on … at",
+      "in … on",
+      "at … on"
+    ],
+    "answer": 3,
+    "why": "We use “at” for clock times (at 3 o'clock) and “on” for days (on Monday).",
+    "wrong": {
+      "0": "“In” is not used before a day like Monday.",
+      "1": "“On … at” reverses the correct prepositions.",
+      "2": "“In” is used for months and years, not clock times."
+    },
+    "tip": "Remember: at (time) → at 3 o'clock; on (days) → on Monday; in (long periods) → in July."
+  },
+  {
+    "id": 18,
+    "cat": "Grammar",
+    "skill": "Conjunctions",
+    "diff": "Easy–Medium",
+    "instruction": "Choose the correct answer to complete the sentence.",
+    "text": "We wanted to play football outside, ______ it was raining heavily.",
+    "choices": [
+      "but",
+      "so",
+      "because",
+      "and"
+    ],
+    "answer": 0,
+    "why": "“But” shows a contrast: we wanted to play, yet the rain stopped us.",
+    "wrong": {
+      "1": "“So” shows a result, which does not fit before the reason.",
+      "2": "“Because” gives a reason but makes the sentence read oddly here.",
+      "3": "“And” simply adds information without showing the contrast."
+    },
+    "tip": "“But” connects two ideas that clash or surprise each other."
+  },
+  {
+    "id": 19,
+    "cat": "Grammar",
+    "skill": "Subject–verb agreement",
+    "diff": "Medium",
+    "instruction": "Choose the correct answer to complete the sentence.",
+    "text": "Each of the players ______ a numbered uniform during the match.",
+    "choices": [
+      "wear",
+      "wears",
+      "are wearing",
+      "were"
+    ],
+    "answer": 1,
+    "why": "“Each” is singular, so it takes the singular verb “wears”.",
+    "wrong": {
+      "0": "“Wear” is plural and does not agree with the singular “each”.",
+      "2": "“Are wearing” is plural.",
+      "3": "“Were” is plural and past tense."
+    },
+    "tip": "Words like “each”, “every”, and “everyone” are singular and take a singular verb."
+  },
+  {
+    "id": 20,
+    "cat": "Grammar",
+    "skill": "Present perfect",
+    "diff": "Medium",
+    "instruction": "Choose the correct answer to complete the sentence.",
+    "text": "My family ______ in this town since 2015.",
+    "choices": [
+      "are living",
+      "lived",
+      "live",
+      "have lived"
+    ],
+    "answer": 3,
+    "why": "“Since 2015” describes something that started in the past and continues now — the present perfect “have lived”.",
+    "wrong": {
+      "0": "“Are living” does not fit “since 2015”.",
+      "1": "“Lived” (past simple) suggests it is finished, but “since” shows it continues.",
+      "2": "“Live” does not work with “since”."
+    },
+    "tip": "“Since” + a starting point often signals the present perfect (have/has + past participle)."
+  },
+  {
+    "id": 21,
+    "cat": "Conversation",
+    "skill": "Everyday responses",
+    "diff": "Easy–Medium",
+    "instruction": "Choose the best response to complete the conversation.",
+    "dialogue": [
+      [
+        "Anna",
+        "Would you like some more cake?"
+      ],
+      [
+        "You",
+        "______"
+      ]
+    ],
+    "text": "Which reply best completes the conversation?",
+    "choices": [
+      "No, thank you. I'm full.",
+      "You're welcome.",
+      "Never mind.",
+      "It doesn't matter."
+    ],
+    "answer": 0,
+    "why": "“No, thank you. I'm full.” politely refuses more cake and gives a reason.",
+    "wrong": {
+      "1": "“You're welcome” is a reply to “thank you”, not to an offer.",
+      "2": "“Never mind” dismisses a problem, not an offer of food.",
+      "3": "“It doesn't matter” does not answer whether you want cake."
+    },
+    "tip": "An offer (“Would you like…?”) needs an accept or a polite refusal as the reply."
+  },
+  {
+    "id": 22,
+    "cat": "Conversation",
+    "skill": "Apologies",
+    "diff": "Medium",
+    "instruction": "Choose the best response to complete the conversation.",
+    "dialogue": [
+      [
+        "Ben",
+        "I'm really sorry I broke your pen."
+      ],
+      [
+        "Mia",
+        "______"
+      ]
+    ],
+    "text": "Which reply best completes the conversation?",
+    "choices": [
+      "Yes, please.",
+      "Congratulations!",
+      "That's all right. Don't worry about it.",
+      "The same to you."
+    ],
+    "answer": 2,
+    "why": "“That's all right. Don't worry about it.” is the natural, kind way to accept an apology.",
+    "wrong": {
+      "0": "“Yes, please” answers an offer.",
+      "1": "“Congratulations!” is for good news, not an apology.",
+      "3": "“The same to you” replies to a greeting or wish."
+    },
+    "tip": "When someone apologises, we usually reassure them that it is okay."
+  },
+  {
+    "id": 23,
+    "cat": "Conversation",
+    "skill": "Asking for information",
+    "diff": "Easy–Medium",
+    "instruction": "Choose the best question to complete the conversation.",
+    "dialogue": [
+      [
+        "Traveller",
+        "______"
+      ],
+      [
+        "Local",
+        "It's a quarter past seven."
+      ]
+    ],
+    "text": "Which question best completes the conversation?",
+    "choices": [
+      "How old are you?",
+      "What time is it?",
+      "Where is the station?",
+      "Whose bag is this?"
+    ],
+    "answer": 1,
+    "why": "The answer “a quarter past seven” tells the time, so the question must be “What time is it?”.",
+    "wrong": {
+      "0": "“How old are you?” would be answered with an age.",
+      "2": "“Where is the station?” asks about a place.",
+      "3": "“Whose bag is this?” asks about an owner."
+    },
+    "tip": "Work backwards from the answer to find the matching question."
+  },
+  {
+    "id": 24,
+    "cat": "Conversation",
+    "skill": "Functional language",
+    "diff": "Medium–Challenging",
+    "instruction": "Choose the best response to complete the conversation.",
+    "dialogue": [
+      [
+        "Waiter",
+        "Are you ready to order?"
+      ],
+      [
+        "Customer",
+        "______"
+      ]
+    ],
+    "text": "Which reply best completes the conversation?",
+    "choices": [
+      "You can pay at the counter.",
+      "Table for two, please.",
+      "Enjoy your meal.",
+      "I'll have the grilled chicken, please."
+    ],
+    "answer": 3,
+    "why": "When the waiter asks if you are ready to order, you name the food you want: “I'll have the grilled chicken, please.”",
+    "wrong": {
+      "0": "“You can pay at the counter” is about paying, not ordering.",
+      "1": "“Table for two, please” is said when you first arrive, before ordering.",
+      "2": "“Enjoy your meal” is what the waiter says to you."
+    },
+    "tip": "Match the reply to the exact stage of the situation — here, choosing food to order."
+  },
+  {
+    "id": 25,
+    "cat": "Reading",
+    "skill": "Main idea",
+    "diff": "Medium",
+    "passage": {
+      "type": "notice",
+      "title": "School Library Notice",
+      "body": "The school library will be closed from Monday to Wednesday next week for the installation of new bookshelves. Students who wish to borrow books should do so before this Friday. Any books currently on loan must be returned by this Friday to avoid late fees. The library will reopen on Thursday morning. We are sorry for any inconvenience.\n— The Library Team"
+    },
+    "instruction": "Read the notice and answer the question.",
+    "text": "What is the main purpose of this notice?",
+    "choices": [
+      "To introduce a new librarian",
+      "To invite students to a book fair",
+      "To announce that the library will be closed for a short time",
+      "To sell the library's old books"
+    ],
+    "answer": 2,
+    "why": "The whole notice explains that the library will close for a few days and gives related instructions, so its main purpose is to announce a temporary closure.",
+    "wrong": {
+      "0": "No new librarian is mentioned.",
+      "1": "No book fair is mentioned.",
+      "3": "The notice never talks about selling books."
+    },
+    "tip": "The main idea is what the whole text is mostly about, not one small detail."
+  },
+  {
+    "id": 26,
+    "cat": "Reading",
+    "skill": "Supporting detail",
+    "diff": "Medium",
+    "passage": {
+      "type": "notice",
+      "title": "School Library Notice",
+      "body": "The school library will be closed from Monday to Wednesday next week for the installation of new bookshelves. Students who wish to borrow books should do so before this Friday. Any books currently on loan must be returned by this Friday to avoid late fees. The library will reopen on Thursday morning. We are sorry for any inconvenience.\n— The Library Team"
+    },
+    "instruction": "Read the notice and answer the question.",
+    "text": "According to the notice, when will the library reopen?",
+    "choices": [
+      "Thursday",
+      "Wednesday",
+      "Monday",
+      "Friday"
+    ],
+    "answer": 0,
+    "why": "The notice states clearly: “The library will reopen on Thursday morning.”",
+    "wrong": {
+      "1": "Wednesday is the last day of the closure.",
+      "2": "Monday is the first day it is closed.",
+      "3": "Friday is the deadline to borrow or return books, not the reopening day."
+    },
+    "tip": "For detail questions, find the exact sentence in the text that gives the answer."
+  },
+  {
+    "id": 27,
+    "cat": "Reading",
+    "skill": "Inference",
+    "diff": "Medium–Challenging",
+    "passage": {
+      "type": "notice",
+      "title": "School Library Notice",
+      "body": "The school library will be closed from Monday to Wednesday next week for the installation of new bookshelves. Students who wish to borrow books should do so before this Friday. Any books currently on loan must be returned by this Friday to avoid late fees. The library will reopen on Thursday morning. We are sorry for any inconvenience.\n— The Library Team"
+    },
+    "instruction": "Read the notice and answer the question.",
+    "text": "Which statement is most likely true, based on the notice?",
+    "choices": [
+      "The new bookshelves are already broken",
+      "The library is closing down forever",
+      "Late fees have been cancelled for everyone",
+      "Students will not be able to borrow books on Tuesday next week"
+    ],
+    "answer": 3,
+    "why": "The library is closed Monday to Wednesday, so Tuesday falls within the closure — students could not borrow books that day.",
+    "wrong": {
+      "0": "The shelves are being installed, with no mention of being broken.",
+      "1": "It reopens Thursday, so it is not closing forever.",
+      "2": "The notice warns about late fees, so they still apply."
+    },
+    "tip": "An inference is a smart guess that the text supports but does not say word for word."
+  },
+  {
+    "id": 28,
+    "cat": "Reading",
+    "skill": "Supporting detail",
+    "diff": "Easy–Medium",
+    "passage": {
+      "type": "email",
+      "title": "An Email from Leo",
+      "body": "Hi Daniel,\n\nThank you for inviting me to your birthday party on Saturday. I would love to come, but I have a dentist appointment in the morning. I should be free by 2 p.m., so I will try to arrive at about three o'clock. Can I bring my cousin Mia? She has just moved to our town and does not know many people yet.\n\nLet me know if that is okay.\n\nYour friend,\nLeo"
+    },
+    "instruction": "Read the email and answer the question.",
+    "text": "Why might Leo arrive at the party later than the other guests?",
+    "choices": [
+      "He does not enjoy parties",
+      "He has a dentist appointment in the morning",
+      "He is going away on holiday",
+      "He has forgotten the date"
+    ],
+    "answer": 1,
+    "why": "Leo explains he has a dentist appointment in the morning and will only be free by 2 p.m., so he plans to arrive around three.",
+    "wrong": {
+      "0": "He says he “would love to come”, so he does enjoy the party.",
+      "2": "No holiday is mentioned.",
+      "3": "He clearly knows the party is on Saturday."
+    },
+    "tip": "Look for the reason the writer gives, often signalled by words like “but” and “because”."
+  },
+  {
+    "id": 29,
+    "cat": "Reading",
+    "skill": "Reference words",
+    "diff": "Medium",
+    "passage": {
+      "type": "email",
+      "title": "An Email from Leo",
+      "body": "Hi Daniel,\n\nThank you for inviting me to your birthday party on Saturday. I would love to come, but I have a dentist appointment in the morning. I should be free by 2 p.m., so I will try to arrive at about three o'clock. Can I bring my cousin Mia? She has just moved to our town and does not know many people yet.\n\nLet me know if that is okay.\n\nYour friend,\nLeo"
+    },
+    "instruction": "Read the email and answer the question.",
+    "text": "In the sentence “She has just moved to our town…”, the word “She” refers to ______.",
+    "choices": [
+      "Leo",
+      "Daniel",
+      "Mia",
+      "the dentist"
+    ],
+    "answer": 2,
+    "why": "“She” points back to the noun just before it — “my cousin Mia” — so “She” refers to Mia.",
+    "wrong": {
+      "0": "Leo is the writer and is called “I” in the email.",
+      "1": "Daniel is the reader, called “you”.",
+      "3": "The dentist is only mentioned as an appointment, not as “she”."
+    },
+    "tip": "A reference word like “she”, “it”, or “they” usually points to the nearest matching noun before it."
+  },
+  {
+    "id": 30,
+    "cat": "Reading",
+    "skill": "Vocabulary in context",
+    "diff": "Medium–Challenging",
+    "passage": {
+      "type": "email",
+      "title": "An Email from Leo",
+      "body": "Hi Daniel,\n\nThank you for inviting me to your birthday party on Saturday. I would love to come, but I have a dentist appointment in the morning. I should be free by 2 p.m., so I will try to arrive at about three o'clock. Can I bring my cousin Mia? She has just moved to our town and does not know many people yet.\n\nLet me know if that is okay.\n\nYour friend,\nLeo"
+    },
+    "instruction": "Read the email and answer the question.",
+    "text": "In the sentence “I should be free by 2 p.m.”, the word “free” is closest in meaning to ______.",
+    "choices": [
+      "available",
+      "costing no money",
+      "empty",
+      "escaped"
+    ],
+    "answer": 0,
+    "why": "Here “free” means not busy — Leo will be available by 2 p.m. after his appointment.",
+    "wrong": {
+      "1": "“Costing no money” is another meaning of “free”, but it does not fit talking about time.",
+      "2": "“Empty” describes a container with nothing inside.",
+      "3": "“Escaped” means got away from somewhere."
+    },
+    "tip": "Many words have several meanings. Use the surrounding sentence to choose the right one."
+  }
+];
+
+/* ---- Worlds ---- */
+const WORLDS = [
+  { id:1, name:"Vocabulary Village", short:"Vocabulary",
+    focus:"Word meaning, context clues, synonyms and antonyms.",
+    theme:"sage", color:"#5f8f66", range:[0,10] },
+  { id:2, name:"Grammar Garden", short:"Grammar",
+    focus:"Tenses, agreement, prepositions, conjunctions and sentence structure.",
+    theme:"sky", color:"#4e97b8", range:[10,20] },
+  { id:3, name:"Reading Castle", short:"Reading & Conversation",
+    focus:"Conversations, comprehension, main idea, inference and reference words.",
+    theme:"gold", color:"#c99a25", range:[20,30] }
+];
+
+/* ---- Result categories (independent of worlds) ---- */
+const CATEGORIES = [
+  { key:"Vocabulary", label:"Vocabulary", color:"#5f8f66" },
+  { key:"Grammar", label:"Grammar", color:"#4e97b8" },
+  { key:"Conversation", label:"Conversation", color:"#8f80c4" },
+  { key:"Reading", label:"Reading", color:"#c99a25" }
+];
+
+/* ---- Badges ---- */
+const BADGES = [
+  { id:"word_wizard", name:"Word Wizard", desc:"Score 8+ in Vocabulary Village", icon:"star" },
+  { id:"grammar_guardian", name:"Grammar Guardian", desc:"Score 8+ in Grammar Garden", icon:"leaf" },
+  { id:"reading_detective", name:"Reading Detective", desc:"Score 8+ in Reading Castle", icon:"glass" },
+  { id:"perfect_world", name:"Perfect World", desc:"Get 10/10 in any world", icon:"crown" },
+  { id:"never_give_up", name:"Never Give Up", desc:"Finish all three worlds", icon:"heart" },
+  { id:"exam_hero", name:"Entrance Exam Hero", desc:"Score 27+ out of 30", icon:"trophy" }
+];
+
+/* ---- Avatars ---- */
+const AVATARS = ["fox","owl","cat","panda","robot","star"];
+
+/* ---- Lessons (learning pages) ---- */
+const LESSONS = {
+  1:{ title:"Vocabulary Village",
+    intro:"Words are the treasure of this village. In the exam you must pick the exact word that fits a sentence, and know synonyms (same meaning) and antonyms (opposite meaning).",
+    examples:[
+      {h:"Context clues", b:"She was <b>thirsty</b>, so she drank a glass of water.", note:"The clue “drank water” tells you the word means needing a drink."},
+      {h:"Synonym (same)", b:"<span class='hl-key'>happy</span> = <span class='hl-key'>glad</span> = <span class='hl-key'>cheerful</span>", note:"Synonyms can replace each other with almost the same meaning."},
+      {h:"Antonym (opposite)", b:"<span class='hl-key'>hot</span> ↔ <span class='hl-key'>cold</span>", note:"Antonyms are opposites. Read the question carefully — “opposite” or “same”?"}
+    ],
+    tip:"Read the FULL sentence first. Clue words around the gap tell you the meaning you need.",
+    mistake:"Do not pick a word just because it looks familiar. Check that it truly fits the sentence.",
+    mini:[
+      { q:"The path was so ______ that we could not see where to step.", opts:["dark","tasty","loud","friendly"], a:0, fb:"“Dark” fits “could not see”." },
+      { q:"Choose the SYNONYM of “quick”.", opts:["slow","fast","heavy","late"], a:1, fb:"“Quick” and “fast” mean the same." }
+    ]},
+  2:{ title:"Grammar Garden",
+    intro:"Grammar keeps sentences growing correctly. Watch your tenses, make subjects and verbs agree, and use the right little words (prepositions and conjunctions).",
+    examples:[
+      {h:"Present simple vs continuous", b:"I <span class='hl-verb'>walk</span> to school every day.<br>Look! I <span class='hl-verb'>am walking</span> now.", note:"“Every day” = habit (simple). “Now” = happening (continuous)."},
+      {h:"Subject–verb agreement", b:"She <span class='hl-verb'>likes</span> tea. They <span class='hl-verb'>like</span> tea.", note:"Singular subject → verb + s. Plural subject → no s."},
+      {h:"Prepositions of time", b:"<span class='hl-key'>at</span> 5 o'clock · <span class='hl-key'>on</span> Monday · <span class='hl-key'>in</span> July", note:"at = time, on = day, in = month/year."}
+    ],
+    tip:"Look for time words (now, every day, yesterday, since) — they tell you the tense to use.",
+    mistake:"“Each”, “every”, and “everyone” are singular. Say “Everyone <b>is</b> here”, not “are”.",
+    mini:[
+      { q:"They ______ football every weekend.", opts:["plays","play","is playing","played"], a:1, fb:"Plural “they” + habit → “play”." },
+      { q:"The train arrives ______ 9 a.m.", opts:["in","on","at","by"], a:2, fb:"Use “at” for clock times." }
+    ]},
+  3:{ title:"Reading Castle",
+    intro:"In the castle you become a detective. Read short conversations and passages, then find the main idea, the details, and clues hidden between the lines.",
+    examples:[
+      {h:"Main idea", b:"Ask: “What is the whole text mostly about?”", note:"Not one tiny detail — the big picture."},
+      {h:"Inference", b:"“Mia put up her umbrella.” → It is probably <b>raining</b>.", note:"A clever guess the text supports without saying directly."},
+      {h:"Reference words", b:"Tom lost his hat. <span class='hl-key'>It</span> was blue.", note:"“It” points back to “his hat”."}
+    ],
+    tip:"For conversations, work backwards: the reply must match the question or offer.",
+    mistake:"Do not choose an answer just because the words appear in the text. It must actually answer the question.",
+    mini:[
+      { q:"A: “Thank you for your help.”  B: “______”", opts:["You're welcome.","Good night.","Yes, please.","Not at all bad."], a:0, fb:"We reply to thanks with “You're welcome.”" },
+      { q:"“The players were exhausted after the game.” This suggests the game was ______.", opts:["boring","tiring","short","funny"], a:1, fb:"“Exhausted” shows the game was very tiring." }
+    ]}
+};
+
+/* =======================================================================
+   STATE
+   ======================================================================= */
+function freshState(){
+  return {
+    nickname:"", avatar:"fox", sound:true, reducedMotion:false,
+    xp:0, streak:0, bestStreak:0,
+    worlds:{ 1:blankWorld(), 2:blankWorld(), 3:blankWorld() },
+    badges:[],
+    finished:false,
+    screen:"landing"
+  };
+}
+function blankWorld(){ return { completed:false, answers:Array(10).fill(null), score:0 }; }
+
+let S = load() || freshState();
+
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    const d = JSON.parse(raw);
+    // basic shape safety
+    if(!d.worlds) return null;
+    [1,2,3].forEach(w=>{ if(!d.worlds[w]) d.worlds[w]=blankWorld(); if(!Array.isArray(d.worlds[w].answers)||d.worlds[w].answers.length!==10) d.worlds[w].answers=Array(10).fill(null); });
+    if(!Array.isArray(d.badges)) d.badges=[];
+    return d;
+  }catch(e){ return null; }
+}
+function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); }catch(e){} }
+
+/* =======================================================================
+   HELPERS
+   ======================================================================= */
+const $ = sel => document.querySelector(sel);
+const app = () => document.getElementById("app");
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function worldOf(id){ return WORLDS.find(w=>w.id===id); }
+function worldQuestions(id){ const w=worldOf(id); return QUESTIONS.slice(w.range[0],w.range[1]); }
+function worldUnlocked(id){ if(id===1) return true; return S.worlds[id-1].completed; }
+function totalAnswered(){ let n=0;[1,2,3].forEach(w=>S.worlds[w].answers.forEach(a=>{if(a!==null)n++}));return n; }
+function totalScore(){ let n=0;[1,2,3].forEach(w=>{n+=S.worlds[w].score});return n; }
+function allDone(){ return S.worlds[1].completed && S.worlds[2].completed && S.worlds[3].completed; }
+function worldPct(id){ const a=S.worlds[id].answers.filter(x=>x!==null).length; return Math.round(a/10*100); }
+
+function toast(msg,icon){
+  const t=$("#toast"); t.innerHTML=(icon?icon:"")+"<span>"+esc(msg)+"</span>"; t.classList.add("show");
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+/* ---- Sound (WebAudio, no files) ---- */
+let AC=null;
+function ac(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return AC; }
+function beep(type){
+  if(!S.sound) return; const ctx=ac(); if(!ctx) return;
+  if(ctx.state==="suspended") ctx.resume();
+  const seq = {
+    click:[[520,.05,.12]],
+    correct:[[660,0,.001],[880,.09,.14],[1180,.18,.16]],
+    wrong:[[300,0,.18],[220,.12,.2]],
+    unlock:[[523,0,.1],[659,.1,.1],[784,.2,.16]],
+    win:[[523,0,.12],[659,.12,.12],[784,.24,.12],[1046,.36,.22]]
+  }[type]||[[500,0,.1]];
+  seq.forEach(([f,delay,dur])=>{
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type= type==="wrong"?"sawtooth":"sine"; o.frequency.value=f;
+    o.connect(g); g.connect(ctx.destination);
+    const t0=ctx.currentTime+delay;
+    g.gain.setValueAtTime(0,t0); g.gain.linearRampToValueAtTime(.16,t0+.02);
+    g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+    o.start(t0); o.stop(t0+dur+.02);
+  });
+}
+
+/* =======================================================================
+   SVG ART — icons, Pip character, scenes, avatars
+   ======================================================================= */
+function icon(name,size,color){
+  size=size||22; color=color||"currentColor";
+  const p={
+    sound:'<path d="M4 9v6h4l5 4V5L8 9H4z" fill="'+color+'"/><path d="M16 8a5 5 0 010 8" stroke="'+color+'" stroke-width="2" fill="none" stroke-linecap="round"/>',
+    mute:'<path d="M4 9v6h4l5 4V5L8 9H4z" fill="'+color+'"/><path d="M16 9l5 6M21 9l-5 6" stroke="'+color+'" stroke-width="2" stroke-linecap="round"/>',
+    play:'<path d="M8 5v14l11-7z" fill="'+color+'"/>',
+    book:'<path d="M4 5c3-1.5 6-1.5 8 0 2-1.5 5-1.5 8 0v13c-3-1.5-6-1.5-8 0-2-1.5-5-1.5-8 0V5z" fill="none" stroke="'+color+'" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 5v13" stroke="'+color+'" stroke-width="1.8"/>',
+    map:'<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z" fill="none" stroke="'+color+'" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="'+color+'" stroke-width="1.6"/>',
+    lock:'<rect x="5" y="10" width="14" height="10" rx="2.5" fill="none" stroke="'+color+'" stroke-width="1.8"/><path d="M8 10V7a4 4 0 018 0v3" fill="none" stroke="'+color+'" stroke-width="1.8"/>',
+    check:'<path d="M5 12l4 4 10-10" fill="none" stroke="'+color+'" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
+    x:'<path d="M6 6l12 12M18 6L6 18" stroke="'+color+'" stroke-width="2.4" stroke-linecap="round"/>',
+    star:'<path d="M12 3l2.6 5.6L20 9.3l-4 4 1 6-5-2.8L7 19.3l1-6-4-4 5.4-.7L12 3z" fill="'+color+'"/>',
+    starline:'<path d="M12 3l2.6 5.6L20 9.3l-4 4 1 6-5-2.8L7 19.3l1-6-4-4 5.4-.7L12 3z" fill="none" stroke="'+color+'" stroke-width="1.8" stroke-linejoin="round"/>',
+    crystal:'<path d="M12 2l6 6-6 14L6 8l6-6z" fill="'+color+'"/><path d="M6 8h12M12 2v20" stroke="#fff" stroke-width="1" opacity=".5"/>',
+    leaf:'<path d="M5 19C5 11 11 5 19 5c0 8-6 14-14 14z" fill="'+color+'"/><path d="M12 12L5 19" stroke="#fff" stroke-width="1.2" opacity=".6"/>',
+    glass:'<circle cx="10" cy="10" r="6" fill="none" stroke="'+color+'" stroke-width="2"/><path d="M14.5 14.5L20 20" stroke="'+color+'" stroke-width="2.4" stroke-linecap="round"/>',
+    bulb:'<path d="M9 18h6M10 21h4" stroke="'+color+'" stroke-width="1.8" stroke-linecap="round"/><path d="M12 3a6 6 0 00-4 10c1 1 1 2 1 3h6c0-1 0-2 1-3a6 6 0 00-4-10z" fill="none" stroke="'+color+'" stroke-width="1.8"/>',
+    heart:'<path d="M12 20S4 14 4 8.5A3.5 3.5 0 0112 5a3.5 3.5 0 018 3.5C20 14 12 20 12 20z" fill="'+color+'"/>',
+    crown:'<path d="M4 8l4 4 4-6 4 6 4-4v10H4V8z" fill="'+color+'"/>',
+    trophy:'<path d="M8 4h8v4a4 4 0 01-8 0V4z" fill="'+color+'"/><path d="M12 12v4M9 20h6M8 5H5v1a3 3 0 003 3M16 5h3v1a3 3 0 01-3 3" fill="none" stroke="'+color+'" stroke-width="1.6"/>',
+    print:'<rect x="6" y="3" width="12" height="6" fill="none" stroke="'+color+'" stroke-width="1.8"/><rect x="4" y="9" width="16" height="8" rx="2" fill="none" stroke="'+color+'" stroke-width="1.8"/><rect x="7" y="14" width="10" height="6" fill="none" stroke="'+color+'" stroke-width="1.8"/>',
+    hint:'<circle cx="12" cy="12" r="9" fill="none" stroke="'+color+'" stroke-width="1.8"/><path d="M12 11v5" stroke="'+color+'" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="8" r="1.2" fill="'+color+'"/>',
+    exit:'<path d="M14 4h4a2 2 0 012 2v12a2 2 0 01-2 2h-4" fill="none" stroke="'+color+'" stroke-width="1.8"/><path d="M10 8l-4 4 4 4M6 12h10" fill="none" stroke="'+color+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+    back:'<path d="M15 6l-6 6 6 6" fill="none" stroke="'+color+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+    refresh:'<path d="M20 12a8 8 0 10-2.3 5.6M20 12v-5M20 12h-5" fill="none" stroke="'+color+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+    teacher:'<circle cx="12" cy="7" r="3" fill="none" stroke="'+color+'" stroke-width="1.8"/><path d="M5 20a7 7 0 0114 0" fill="none" stroke="'+color+'" stroke-width="1.8"/>',
+    flag:'<path d="M6 3v18" stroke="'+color+'" stroke-width="1.8" stroke-linecap="round"/><path d="M6 4h11l-2 3 2 3H6z" fill="'+color+'"/>'
+  }[name]||"";
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" aria-hidden="true">'+p+'</svg>';
+}
+
+/* Pip the book guardian — states: happy, thinking, surprised, encouraging, celebrating, reading */
+function pip(state,size){
+  state=state||"happy"; size=size||120;
+  let eyes,mouth,extra="",arms="";
+  const cheek='<circle cx="41" cy="70" r="4" fill="#f2a9a0" opacity=".7"/><circle cx="79" cy="70" r="4" fill="#f2a9a0" opacity=".7"/>';
+  switch(state){
+    case "happy":
+      eyes='<circle cx="48" cy="62" r="5.5" fill="#243a5e"/><circle cx="72" cy="62" r="5.5" fill="#243a5e"/><circle cx="46.5" cy="60" r="1.8" fill="#fff"/><circle cx="70.5" cy="60" r="1.8" fill="#fff"/>';
+      mouth='<path d="M52 74 q8 8 16 0" fill="none" stroke="#243a5e" stroke-width="3" stroke-linecap="round"/>'; break;
+    case "thinking":
+      eyes='<circle cx="48" cy="62" r="5" fill="#243a5e"/><circle cx="72" cy="60" r="5" fill="#243a5e"/>';
+      mouth='<path d="M54 76 q6 -3 12 0" fill="none" stroke="#243a5e" stroke-width="3" stroke-linecap="round"/>';
+      extra='<circle cx="92" cy="40" r="4" fill="#8ecae6"/><circle cx="100" cy="30" r="6" fill="#8ecae6"/>'; break;
+    case "surprised":
+      eyes='<circle cx="48" cy="62" r="7" fill="#fff" stroke="#243a5e" stroke-width="2.5"/><circle cx="48" cy="62" r="3.2" fill="#243a5e"/><circle cx="72" cy="62" r="7" fill="#fff" stroke="#243a5e" stroke-width="2.5"/><circle cx="72" cy="62" r="3.2" fill="#243a5e"/>';
+      mouth='<ellipse cx="60" cy="77" rx="5" ry="6" fill="#243a5e"/>'; break;
+    case "encouraging":
+      eyes='<path d="M42 62 q6 -6 12 0" fill="none" stroke="#243a5e" stroke-width="3" stroke-linecap="round"/><path d="M66 62 q6 -6 12 0" fill="none" stroke="#243a5e" stroke-width="3" stroke-linecap="round"/>';
+      mouth='<path d="M50 74 q10 9 20 0" fill="none" stroke="#243a5e" stroke-width="3" stroke-linecap="round"/>';
+      arms='<path d="M28 82 q-8 -6 -6 -16" fill="none" stroke="#c99a25" stroke-width="5" stroke-linecap="round"/>'; break;
+    case "celebrating":
+      eyes='<path d="M43 63 q5 -7 11 -1" fill="none" stroke="#243a5e" stroke-width="3" stroke-linecap="round"/><path d="M67 62 q5 -7 11 -1" fill="none" stroke="#243a5e" stroke-width="3" stroke-linecap="round"/>';
+      mouth='<path d="M50 72 q10 12 20 0" fill="none" stroke="#243a5e" stroke-width="3.2" stroke-linecap="round"/>';
+      extra='<path d="M96 24l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#e8c15a"/><path d="M20 30l1.5 4 4 1.5-4 1.5L20 42l-1.5-4-4-1.5 4-1.5z" fill="#ef8354"/>';
+      arms='<path d="M26 74 q-10 -8 -8 -20" fill="none" stroke="#c99a25" stroke-width="5" stroke-linecap="round"/><path d="M94 74 q10 -8 8 -20" fill="none" stroke="#c99a25" stroke-width="5" stroke-linecap="round"/>'; break;
+    case "reading":
+      eyes='<path d="M43 64 q5 4 11 0" fill="none" stroke="#243a5e" stroke-width="3" stroke-linecap="round"/><path d="M66 64 q5 4 11 0" fill="none" stroke="#243a5e" stroke-width="3" stroke-linecap="round"/>';
+      mouth='<path d="M55 76 q5 3 10 0" fill="none" stroke="#243a5e" stroke-width="2.6" stroke-linecap="round"/>';
+      extra='<rect x="40" y="86" width="40" height="18" rx="3" fill="#fffdf7" stroke="#c99a25" stroke-width="2"/><path d="M60 88v14" stroke="#c99a25" stroke-width="1.6"/>'; break;
+  }
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 120 120" class="pip" aria-label="Pip the book guardian">'
+    + '<ellipse cx="60" cy="110" rx="30" ry="6" fill="#243a5e" opacity=".08"/>'
+    + arms
+    // book body
+    + '<path d="M24 40 q0 -8 8 -8 h56 q8 0 8 8 v46 q0 8 -8 8 h-56 q-8 0 -8 -8 z" fill="#f6d98a" stroke="#c99a25" stroke-width="3"/>'
+    + '<path d="M60 32 v62" stroke="#c99a25" stroke-width="3"/>'
+    + '<path d="M24 40 q0 -8 8 -8 h28 v62 h-28 q-8 0 -8 8 z" fill="#fbe9b6" opacity=".7"/>'
+    // pages hint
+    + '<path d="M30 46h20M30 52h16" stroke="#c99a25" stroke-width="2" stroke-linecap="round" opacity=".5"/>'
+    + '<path d="M70 46h20M74 52h16" stroke="#c99a25" stroke-width="2" stroke-linecap="round" opacity=".5"/>'
+    + cheek + eyes + mouth + extra
+    // little crystal on top
+    + '<path d="M60 20l5 6-5 8-5-8z" fill="#8ecae6" stroke="#4e97b8" stroke-width="1.5"/>'
+    + '</svg>';
+}
+
+/* World scene illustrations */
+function scene(kind,w){
+  w=w||220;
+  const base='width="'+w+'" viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg"';
+  if(kind==="village") return '<svg '+base+'><rect width="220" height="150" rx="16" fill="#eaf3ea"/><path d="M0 120q55-20 110 0t110 0v30H0z" fill="#cfe6d1"/><g><rect x="40" y="70" width="46" height="46" rx="4" fill="#f6d98a" stroke="#c99a25" stroke-width="2"/><path d="M36 72l27-20 27 20z" fill="#ef8354"/><rect x="56" y="92" width="14" height="24" fill="#c99a25"/></g><g><rect x="120" y="80" width="42" height="38" rx="4" fill="#9bbf9b" stroke="#5f8f66" stroke-width="2"/><path d="M116 82l25-18 25 18z" fill="#5f8f66"/></g><circle cx="180" cy="40" r="16" fill="#e8c15a" opacity=".8"/><path d="M20 40l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#fff" opacity=".8"/></svg>';
+  if(kind==="garden") return '<svg '+base+'><rect width="220" height="150" rx="16" fill="#e6f2f7"/><path d="M0 118q55-18 110 0t110 0v32H0z" fill="#bfe0cf"/><g stroke="#5f8f66" stroke-width="4" stroke-linecap="round"><path d="M60 118V78"/><path d="M110 120V70"/><path d="M160 118V84"/></g><circle cx="60" cy="72" r="14" fill="#ef8354"/><circle cx="110" cy="62" r="16" fill="#c8bfe7"/><circle cx="160" cy="78" r="13" fill="#e8c15a"/><circle cx="60" cy="72" r="5" fill="#fff"/><circle cx="110" cy="62" r="5" fill="#fff"/><circle cx="160" cy="78" r="5" fill="#fff"/><circle cx="185" cy="38" r="15" fill="#8ecae6" opacity=".7"/></svg>';
+  if(kind==="castle") return '<svg '+base+'><rect width="220" height="150" rx="16" fill="#f3eee1"/><path d="M0 122h220v28H0z" fill="#e3d6b3"/><g fill="#c8bfe7" stroke="#8f80c4" stroke-width="2"><rect x="70" y="60" width="80" height="62"/><rect x="60" y="72" width="24" height="50"/><rect x="136" y="72" width="24" height="50"/></g><path d="M60 72v-10h6v6h6v-6h6v6h6v-10" fill="none" stroke="#8f80c4" stroke-width="3"/><path d="M136 72v-10h6v6h6v-6h6v6h6v-10" fill="none" stroke="#8f80c4" stroke-width="3"/><path d="M100 122V96a10 10 0 0120 0v26z" fill="#8f80c4"/><path d="M110 46l4 8-4 6-4-6z" fill="#8ecae6" stroke="#4e97b8" stroke-width="1.5"/><circle cx="40" cy="40" r="12" fill="#e8c15a" opacity=".8"/></svg>';
+  if(kind==="chamber") return '<svg '+base+'><rect width="220" height="150" rx="16" fill="#efe9f7"/><circle cx="110" cy="80" r="60" fill="#e0d8f2"/><path d="M110 30l22 26-22 60-22-60z" fill="#8ecae6" stroke="#4e97b8" stroke-width="3"/><path d="M88 56h44M110 30v86" stroke="#fff" stroke-width="1.5" opacity=".6"/><g fill="#e8c15a"><path d="M50 40l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/><path d="M170 46l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/><path d="M160 100l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/></g></svg>';
+  return "";
+}
+
+/* Avatars */
+function avatar(kind,size){
+  size=size||60;
+  const b='width="'+size+'" height="'+size+'" viewBox="0 0 80 80"';
+  const face={
+    fox:'<circle cx="40" cy="42" r="26" fill="#ef8354"/><path d="M18 26l8 16 8-10z" fill="#ef8354"/><path d="M62 26l-8 16-8-10z" fill="#ef8354"/><path d="M28 50q12 12 24 0" fill="#fff"/><circle cx="32" cy="42" r="3.5" fill="#243a5e"/><circle cx="48" cy="42" r="3.5" fill="#243a5e"/><circle cx="40" cy="52" r="3" fill="#243a5e"/>',
+    owl:'<circle cx="40" cy="42" r="26" fill="#8f80c4"/><circle cx="31" cy="40" r="9" fill="#fff"/><circle cx="49" cy="40" r="9" fill="#fff"/><circle cx="31" cy="40" r="4" fill="#243a5e"/><circle cx="49" cy="40" r="4" fill="#243a5e"/><path d="M36 48l4 5 4-5z" fill="#e8c15a"/><path d="M22 22l8 8M58 22l-8 8" stroke="#8f80c4" stroke-width="5" stroke-linecap="round"/>',
+    cat:'<circle cx="40" cy="44" r="25" fill="#8ecae6"/><path d="M20 24l4 16 10-8z" fill="#8ecae6"/><path d="M60 24l-4 16-10-8z" fill="#8ecae6"/><circle cx="32" cy="44" r="3.5" fill="#243a5e"/><circle cx="48" cy="44" r="3.5" fill="#243a5e"/><path d="M40 50v4M34 54h12" stroke="#243a5e" stroke-width="2" stroke-linecap="round"/><path d="M18 46h10M52 46h10" stroke="#243a5e" stroke-width="1.6"/>',
+    panda:'<circle cx="40" cy="44" r="25" fill="#fff" stroke="#243a5e" stroke-width="2"/><circle cx="24" cy="24" r="9" fill="#243a5e"/><circle cx="56" cy="24" r="9" fill="#243a5e"/><ellipse cx="31" cy="44" rx="7" ry="9" fill="#243a5e"/><ellipse cx="49" cy="44" rx="7" ry="9" fill="#243a5e"/><circle cx="31" cy="44" r="3" fill="#fff"/><circle cx="49" cy="44" r="3" fill="#fff"/><circle cx="40" cy="54" r="3" fill="#243a5e"/>',
+    robot:'<rect x="18" y="24" width="44" height="40" rx="10" fill="#9bbf9b"/><circle cx="31" cy="44" r="5" fill="#243a5e"/><circle cx="49" cy="44" r="5" fill="#243a5e"/><path d="M32 56h16" stroke="#243a5e" stroke-width="3" stroke-linecap="round"/><path d="M40 24v-8" stroke="#5f8f66" stroke-width="3"/><circle cx="40" cy="13" r="3" fill="#e8c15a"/>',
+    star:'<path d="M40 10l8 18 20 2-15 14 4 20-17-10-17 10 4-20-15-14 20-2z" fill="#e8c15a"/><circle cx="34" cy="38" r="3" fill="#243a5e"/><circle cx="46" cy="38" r="3" fill="#243a5e"/><path d="M35 46q5 5 10 0" fill="none" stroke="#243a5e" stroke-width="2.4" stroke-linecap="round"/>'
+  }[kind]||"";
+  return '<svg '+b+' aria-hidden="true">'+face+'</svg>';
+}
+
+/* =======================================================================
+   RENDER — top bar & footer
+   ======================================================================= */
+function topbar(showHome){
+  return '<div class="topbar">'
+    + '<div class="brand">'
+      + '<div class="mark">'+icon("book",22,"#fff")+'</div>'
+      + '<div class="name">Bright EngMath<small>English Entrance Quest</small></div>'
+    + '</div>'
+    + '<div class="topbar-actions">'
+      + (showHome?'<button class="iconbtn" title="Quest Map" aria-label="Go to quest map" onclick="go(\'map\')">'+icon("map",20)+'</button>':'')
+      + '<button class="iconbtn '+(S.sound?'on':'')+'" id="soundBtn" title="Sound on/off" aria-label="Toggle sound" onclick="toggleSound()">'+icon(S.sound?"sound":"mute",20)+'</button>'
+    + '</div></div>';
+}
+function footer(){
+  return '<footer><b>Bright EngMath</b> · Created by Bright EngMath'
+    + '<div class="fnote">For educational use only. &copy; Bright EngMath. All rights reserved.</div></footer>';
+}
+
+/* =======================================================================
+   NAVIGATION
+   ======================================================================= */
+function go(screen,arg){
+  S.screen=screen; save();
+  window.scrollTo({top:0,behavior:"auto"});
+  render(arg);
+}
+function render(arg){
+  const s=S.screen;
+  if(s==="landing") return renderLanding();
+  if(s==="setup") return renderSetup();
+  if(s==="map") return renderMap();
+  if(s==="learn") return renderLearn(arg!=null?arg:(S._world||1));
+  if(s==="quiz") return renderQuiz(arg!=null?arg:(S._world||1));
+  if(s==="worldcomplete") return renderWorldComplete(S._world||1);
+  if(s==="results") return renderResults();
+  if(s==="review") return renderReview(arg);
+  renderLanding();
+}
+
+/* =======================================================================
+   SCREEN: LANDING
+   ======================================================================= */
+function renderLanding(){
+  const hasProgress = totalAnswered()>0 && !S.finished;
+  app().innerHTML = topbar(false)
+  + '<div class="screen">'
+    + '<div class="hero">'
+      + '<div class="hero-copy">'
+        + '<div class="tagline">Your English adventure begins here!</div>'
+        + '<h1>The English Entrance Quest</h1>'
+        + '<p class="lead">Travel through three magical worlds, complete 30 entrance-exam challenges, and collect the Crystal of Knowledge. Built for Grade 6 students getting ready for Grade 7 / Mathayom 1.</p>'
+        + '<div class="hero-cta">'
+          + (hasProgress
+              ? '<button class="btn lg" onclick="beep(\'click\');go(\'map\')">'+icon("play",20,"#fff")+' Continue Quest</button>'
+                + '<button class="btn ghost lg" onclick="confirmRestart()">'+icon("refresh",18)+' Start Over</button>'
+              : '<button class="btn lg" onclick="beep(\'click\');startNew()">'+icon("play",20,"#fff")+' Start the Quest</button>')
+          + '<button class="btn secondary" onclick="beep(\'click\');openHowTo()">'+icon("bulb",18,"#fff")+' How to Play</button>'
+          + '<button class="btn gold" onclick="beep(\'click\');openTeacher()">'+icon("teacher",18,"#fff")+' Teacher Guide</button>'
+        + '</div>'
+      + '</div>'
+      + '<div class="hero-stage">'
+        + '<div class="hero-scene">'
+          + '<div style="position:relative">'
+            + '<div class="float d1" style="position:absolute;left:-6%;top:2%">'+icon("book",42,"#5f8f66")+'</div>'
+            + '<div class="float d2" style="position:absolute;right:-2%;top:8%">'+icon("star",34,"#e8c15a")+'</div>'
+            + '<div class="float d3" style="position:absolute;left:4%;bottom:2%">'+icon("crystal",34,"#8ecae6")+'</div>'
+            + '<div class="float" style="position:absolute;right:2%;bottom:6%">'+icon("leaf",30,"#9bbf9b")+'</div>'
+            + '<div class="float" style="text-align:center">'+pip("happy",210)+'</div>'
+          + '</div>'
+        + '</div>'
+      + '</div>'
+    + '</div>'
+    + '<div class="feature-row">'
+      + feature("book","3 Worlds","Vocabulary, Grammar & Reading")
+      + feature("flag","30 Challenges","Exam-style questions with explanations")
+      + feature("crystal","3 Crystals","Collect them all to win")
+      + feature("star","Badges & XP","Progress at your own pace")
+    + '</div>'
+  + '</div>'
+  + footer();
+}
+function feature(ic,t,s){
+  return '<div class="feature"><div class="fi">'+icon(ic,22,"#c99a25")+'</div><div><b>'+t+'</b><span>'+s+'</span></div></div>';
+}
+
+function startNew(){ S._world=1; go("setup"); }
+function confirmRestart(){
+  showModal("Start over?","<p>This will erase your saved progress, scores, and badges, and begin a brand-new quest. This cannot be undone.</p>",
+    '<button class="btn ghost" onclick="closeModal()">Keep My Progress</button><button class="btn" onclick="doReset()">Yes, Start Over</button>');
+}
+function doReset(){ S=freshState(); save(); closeModal(); toast("Progress reset. Fresh quest ready!",icon("refresh",16,"#fff")); go("landing"); }
+
+/* =======================================================================
+   SCREEN: SETUP
+   ======================================================================= */
+let setupDraft={ nickname:S.nickname||"", avatar:S.avatar||"fox", sound:S.sound };
+function renderSetup(){
+  app().innerHTML = topbar(false)
+  + '<div class="screen">'
+    + '<div class="center" style="margin-bottom:14px">'+pip("encouraging",120)
+      + '<h2 style="margin-top:6px">Set Up Your Explorer</h2>'
+      + '<p style="color:var(--navy-soft);max-width:44ch">Pip will guide you on the quest. No email or personal details are needed — just a nickname and an avatar.</p>'
+    + '</div>'
+    + '<div class="card paper-texture setup-grid">'
+      + '<div class="field"><label for="nick">Choose a nickname</label>'
+        + '<input class="input" id="nick" maxlength="16" placeholder="e.g. Star Explorer" value="'+esc(setupDraft.nickname)+'" oninput="setupDraft.nickname=this.value;validateSetup()" aria-describedby="nickhint" />'
+        + '<div id="nickhint" style="font-size:.78rem;color:var(--navy-soft);margin-top:6px">1–16 characters. This only stays on your device.</div>'
+      + '</div>'
+      + '<div class="field"><label>Choose an explorer avatar</label>'
+        + '<div class="avatars" role="radiogroup" aria-label="Avatar">'
+          + AVATARS.map(a=>'<button type="button" role="radio" aria-checked="'+(setupDraft.avatar===a)+'" class="avatar-opt '+(setupDraft.avatar===a?"sel":"")+'" onclick="pickAvatar(\''+a+'\')">'+avatar(a,60)+'<span class="an">'+a.charAt(0).toUpperCase()+a.slice(1)+'</span></button>').join("")
+        + '</div>'
+      + '</div>'
+      + '<div class="field"><label>Sound effects</label>'
+        + '<div class="toggle-row"><span>'+icon(setupDraft.sound?"sound":"mute",20)+' <span style="margin-left:8px">Play gentle sounds while you learn</span></span>'
+        + '<button class="switch '+(setupDraft.sound?"on":"")+'" id="sswitch" role="switch" aria-checked="'+setupDraft.sound+'" aria-label="Sound effects" onclick="toggleSetupSound()"></button></div>'
+      + '</div>'
+      + '<div style="display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap">'
+        + '<button class="btn ghost" onclick="beep(\'click\');go(\'landing\')">'+icon("back",18)+' Back</button>'
+        + '<button class="btn" id="startBtn" onclick="finishSetup()">Start the Adventure '+icon("play",18,"#fff")+'</button>'
+      + '</div>'
+    + '</div>'
+  + '</div>' + footer();
+  validateSetup();
+}
+function pickAvatar(a){ setupDraft.avatar=a; beep("click"); renderSetup(); }
+function toggleSetupSound(){ setupDraft.sound=!setupDraft.sound; S.sound=setupDraft.sound; if(setupDraft.sound)beep("click"); renderSetup(); }
+function validateSetup(){ const b=$("#startBtn"); if(b) b.disabled = setupDraft.nickname.trim().length<1; }
+function finishSetup(){
+  if(setupDraft.nickname.trim().length<1){ toast("Please enter a nickname first"); return; }
+  S.nickname=setupDraft.nickname.trim(); S.avatar=setupDraft.avatar; S.sound=setupDraft.sound;
+  save(); beep("unlock"); go("map");
+}
+
+/* =======================================================================
+   SCREEN: QUEST MAP
+   ======================================================================= */
+function renderMap(){
+  const crystals=[1,2,3].map(w=>S.worlds[w].completed);
+  const filled=crystals.filter(Boolean).length;
+  const nextWorld = [1,2,3].find(w=>worldUnlocked(w) && !S.worlds[w].completed);
+  const overall = Math.round(totalAnswered()/30*100);
+
+  app().innerHTML = topbar(false)
+  + '<div class="screen map-wrap">'
+    + '<div class="map-head">'
+      + '<div style="display:flex;align-items:center;gap:12px">'+avatar(S.avatar,52)
+        + '<div><h2 style="margin:0">Quest Map</h2><div style="color:var(--navy-soft);font-size:.9rem">Welcome back, <b>'+esc(S.nickname||"Explorer")+'</b>!</div></div>'
+      + '</div>'
+      + '<div style="text-align:right">'
+        + '<div class="crystal-tray" aria-label="Crystal pieces collected: '+filled+' of 3">'
+          + crystals.map(f=>'<span class="crystal-slot '+(f?"filled":"")+'">'+icon("crystal",34,f?"#8ecae6":"#c8c2ad")+'</span>').join("")
+        + '</div>'
+        + '<div style="font-size:.8rem;color:var(--navy-soft);margin-top:2px">Crystals: '+filled+' / 3 · XP '+S.xp+'</div>'
+      + '</div>'
+    + '</div>'
+
+    + '<div class="progress" aria-label="Overall progress '+overall+'%"><i style="width:'+overall+'%"></i></div>'
+    + '<div style="font-size:.8rem;color:var(--navy-soft);margin:4px 0 16px">Overall progress: '+overall+'% · '+totalAnswered()+' of 30 questions answered</div>'
+
+    + (allDone()
+        ? '<div class="next-hint">'+icon("crystal",28,"#4e97b8")+'<div><b>All three crystals collected!</b> Enter the Final Crystal Chamber to restore the Crystal of Knowledge and see your results.</div><button class="btn secondary sm" onclick="beep(\'win\');go(\'results\')">Open Results '+icon("play",16,"#fff")+'</button></div>'
+        : (nextWorld?'<div class="next-hint">'+icon("flag",24,"#c99a25")+'<div><b>Next mission:</b> '+worldOf(nextWorld).name+'. '+worldOf(nextWorld).focus+'</div><button class="btn gold sm" onclick="beep(\'click\');enterWorld('+nextWorld+')">Go '+icon("play",16,"#fff")+'</button></div>':''))
+
+    + '<div class="map-track" style="margin-top:16px">'
+      + WORLDS.map(w=>mapNode(w,nextWorld)).join("")
+      + finalNode()
+    + '</div>'
+
+    + '<div style="display:flex;justify-content:center;margin-top:22px">'
+      + '<button class="btn ghost sm" onclick="openTeacher()">'+icon("teacher",16)+' Teacher Guide</button>'
+      + '<button class="btn ghost sm" style="margin-left:10px" onclick="confirmRestart()">'+icon("refresh",16)+' Reset Progress</button>'
+    + '</div>'
+  + '</div>' + footer();
+}
+function mapNode(w,nextWorld){
+  const unlocked=worldUnlocked(w.id), done=S.worlds[w.id].completed, cur=(w.id===nextWorld);
+  const sc={1:"village",2:"garden",3:"castle"}[w.id];
+  const pct=worldPct(w.id);
+  let badge="";
+  if(done) badge='<span class="node-badge chip sage">'+icon("check",14,"#5f8f66")+' Done</span>';
+  else if(!unlocked) badge='<span class="node-badge chip">'+icon("lock",14)+' Locked</span>';
+  else if(cur) badge='<span class="node-badge chip coral">'+icon("flag",14,"#d9633a")+' Next</span>';
+  return '<div class="node '+(unlocked?"unlocked":"locked")+(cur?" current":"")+'" '+(unlocked?'onclick="enterWorld('+w.id+')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')enterWorld('+w.id+')"':'aria-disabled="true"')+'>'
+    + badge
+    + '<div class="scene">'+(unlocked?scene(sc,190):'<div style="opacity:.6">'+icon("lock",54,"#8a8161")+'</div>')+'</div>'
+    + '<h3>'+w.name+'</h3>'
+    + '<div class="sub">'+(unlocked?w.focus:"Complete the previous world to unlock.")+'</div>'
+    + '<div class="progress"><i style="width:'+(unlocked?pct:0)+'%"></i></div>'
+    + '<div style="font-size:.74rem;color:var(--navy-soft);margin-top:6px">'+(done?('Score '+S.worlds[w.id].score+'/10 · '+icon("refresh",12)+' Tap to replay'):(unlocked?(pct>0?pct+'% complete':'10 questions'):'Locked'))+'</div>'
+  + '</div>';
+}
+function finalNode(){
+  const ready=allDone();
+  return '<div class="node '+(ready?"unlocked current":"locked")+'" '+(ready?'onclick="beep(\'win\');go(\'results\')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')go(\'results\')"':'aria-disabled="true"')+'>'
+    + (ready?'<span class="node-badge chip sky">'+icon("star",14,"#4e97b8")+' Final</span>':'<span class="node-badge chip">'+icon("lock",14)+' Locked</span>')
+    + '<div class="scene">'+(ready?scene("chamber",190):'<div style="opacity:.6">'+icon("crystal",54,"#8a8161")+'</div>')+'</div>'
+    + '<h3>Crystal Chamber</h3>'
+    + '<div class="sub">'+(ready?"Restore the Crystal of Knowledge and reveal your final results.":"Collect all three crystals to enter.")+'</div>'
+    + '<div class="progress"><i style="width:'+(ready?100:0)+'%"></i></div>'
+    + '<div style="font-size:.74rem;color:var(--navy-soft);margin-top:6px">'+(ready?"Ready to open":"3 crystals needed")+'</div>'
+  + '</div>';
+}
+function enterWorld(id){
+  if(!worldUnlocked(id)){ toast("Finish the previous world first",icon("lock",16,"#fff")); beep("wrong"); return; }
+  S._world=id; beep("click"); go("learn",id);
+}
+
+/* =======================================================================
+   SCREEN: LEARNING PAGE
+   ======================================================================= */
+function renderLearn(worldId){
+  S._world=worldId; const w=worldOf(worldId); const L=LESSONS[worldId];
+  const sc={1:"village",2:"garden",3:"castle"}[worldId];
+  app().innerHTML = topbar(true)
+  + '<div class="screen">'
+    + '<button class="btn ghost sm" onclick="beep(\'click\');go(\'map\')">'+icon("back",16)+' Quest Map</button>'
+    + '<div class="card paper-texture" style="margin-top:14px">'
+      + '<div class="lesson-hd">'+pip("reading",92)
+        + '<div><span class="chip '+w.theme+'">Learning Lesson</span><h2 style="margin:8px 0 2px">'+L.title+'</h2>'
+        + '<div style="color:var(--navy-soft);font-size:.9rem">'+w.focus+'</div></div>'
+      + '</div>'
+      + '<p style="font-size:1.02rem">'+L.intro+'</p>'
+      + '<div class="example-grid">'
+        + L.examples.map(e=>'<div class="ex-card"><h4>'+icon("star",16,w.color)+' '+e.h+'</h4><div style="font-size:1.02rem;margin-bottom:6px">'+e.b+'</div><div style="font-size:.82rem;color:var(--navy-soft)">'+e.note+'</div></div>').join("")
+      + '</div>'
+      + '<div class="tipbox tip">'+icon("bulb",22,"#5f8f66")+'<div><b>Exam tip:</b> '+L.tip+'</div></div>'
+      + '<div class="tipbox warn">'+icon("hint",22,"#c99a25")+'<div><b>Common mistake:</b> '+L.mistake+'</div></div>'
+
+      + '<h3 style="margin-top:18px">Quick practice (not scored)</h3>'
+      + '<div id="miniWrap">'
+        + L.mini.map((m,i)=>miniCard(worldId,i,m)).join("")
+      + '</div>'
+
+      + '<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:20px">'
+        + '<button class="btn ghost" onclick="beep(\'click\');go(\'map\')">'+icon("back",16)+' Back to Map</button>'
+        + '<button class="btn '+w.theme+'" onclick="beginChallenge('+worldId+')">Begin Challenge '+icon("play",18,"#fff")+'</button>'
+      + '</div>'
+    + '</div>'
+  + '</div>' + footer();
+}
+function miniCard(worldId,i,m){
+  return '<div class="mini" id="mini'+i+'"><b>'+ (i+1) +'. '+m.q+'</b><div class="opts">'
+    + m.opts.map((o,j)=>'<button class="mini-opt" onclick="answerMini('+worldId+','+i+','+j+')">'+String.fromCharCode(65+j)+'. '+o+'</button>').join("")
+    + '</div><div class="mini-fb" id="minifb'+i+'"></div></div>';
+}
+function answerMini(worldId,i,j){
+  const m=LESSONS[worldId].mini[i]; const wrap=$("#mini"+i);
+  const opts=wrap.querySelectorAll(".mini-opt");
+  opts.forEach((el,k)=>{ el.disabled=true; if(k===m.a) el.classList.add("right"); else if(k===j) el.classList.add("wrong"); });
+  const fb=$("#minifb"+i);
+  if(j===m.a){ fb.style.color="var(--ok)"; fb.innerHTML=icon("check",16,"#4c9a63")+" Correct! "+m.fb; beep("correct"); }
+  else{ fb.style.color="var(--bad)"; fb.innerHTML=icon("x",16,"#cf5b48")+" Not quite. "+m.fb; beep("wrong"); }
+}
+function beginChallenge(worldId){ S._world=worldId; S._q=firstUnanswered(worldId); beep("unlock"); go("quiz",worldId); }
+function firstUnanswered(worldId){ const a=S.worlds[worldId].answers; const i=a.findIndex(x=>x===null); return i===-1?0:i; }
+
+/* =======================================================================
+   SCREEN: QUIZ
+   ======================================================================= */
+function renderQuiz(worldId){
+  S._world=worldId; const w=worldOf(worldId);
+  if(S._q==null) S._q=firstUnanswered(worldId);
+  const qi=S._q; const globalIndex=w.range[0]+qi; const q=QUESTIONS[globalIndex];
+  const saved=S.worlds[worldId].answers[qi]; // null or {selected,correct}
+  const answered = saved!==null;
+  const pct=Math.round((qi+(answered?1:0))/10*100);
+  S._sel = answered?saved.selected:(S._sel!=null?S._sel:null);
+
+  let pipState = answered ? (saved.correct?"celebrating":"encouraging") : "thinking";
+
+  app().innerHTML = topbar(true)
+  + '<div class="screen">'
+    + '<div class="quiz-top">'
+      + '<div class="qmeta"><span class="chip '+w.theme+'">'+w.name+'</span>'
+        + '<span class="chip">Question '+(qi+1)+' / 10</span>'
+        + '<span class="chip '+diffChip(q.diff)+'">'+q.diff+'</span>'
+        + '<span class="chip lav">'+q.skill+'</span></div>'
+      + '<button class="btn ghost sm" onclick="confirmExit()">'+icon("exit",16)+' Exit</button>'
+    + '</div>'
+    + '<div class="qbar" aria-label="World progress '+pct+'%"><i style="width:'+pct+'%"></i></div>'
+    + '<div style="display:flex;justify-content:space-between;font-size:.76rem;color:var(--navy-soft)">'
+      + '<span>Streak: '+S.streak+' '+icon("star",12,"#e8c15a")+'</span><span>XP '+S.xp+'</span></div>'
+
+    + '<div class="q-stage">'
+      + '<div class="q-pip">'+pip(pipState,88)
+        + '<div class="speech" id="speech">'+pipLine(answered,saved)+'</div></div>'
+      + '<div style="position:relative"><div class="sparkle-layer" id="sparkles"></div>'
+        + (q.passage?passageBlock(q.passage):"")
+        + (q.dialogue?dialogueBlock(q.dialogue):"")
+        + '<div class="q-instruction">'+q.instruction+'</div>'
+        + '<div class="q-text">'+q.text+'</div>'
+        + '<div class="options" id="options">'
+          + q.choices.map((c,i)=>optionEl(c,i,q,saved)).join("")
+        + '</div>'
+        + '<div id="hintbox"></div>'
+        + '<div id="explainSlot">'+(answered?explainBlock(q,saved):"")+'</div>'
+        + '<div class="quiz-actions">'
+          + (answered
+             ? nextButton(worldId,qi)
+             : '<button class="btn" id="submitBtn" onclick="submitAnswer()" '+(S._sel==null?"disabled":"")+'>Submit Answer '+icon("check",18,"#fff")+'</button>'
+               + '<button class="btn ghost" id="hintBtn" onclick="showHint()">'+icon("hint",16)+' Hint</button>')
+          + '<button class="btn ghost" onclick="confirmExit()" style="margin-left:auto">'+icon("exit",16)+' Save & Exit</button>'
+        + '</div>'
+      + '</div>'
+    + '</div>'
+  + '</div>' + footer();
+}
+function diffChip(d){ if(d.indexOf("Challeng")>-1) return "coral"; if(d.indexOf("Easy")>-1) return "sage"; return "gold"; }
+function pipLine(answered,saved){
+  if(!answered) return "Take your time and read carefully. You've got this!";
+  return saved.correct ? "Brilliant work — that's correct!" : "Good try! Let's learn from this one together.";
+}
+function passageBlock(p){
+  const cls = p.type==="notice"?"notice":(p.type==="email"?"email":"");
+  return '<div class="passage '+cls+'"><h4>'+esc(p.title)+'</h4>'+p.body.split("\n").map(l=>l.trim()===""?"<br>":"<div>"+esc(l)+"</div>").join("")+'</div>';
+}
+function dialogueBlock(d){
+  return '<div class="passage"><h4>Conversation</h4>'+d.map(line=>'<div><b>'+esc(line[0])+':</b> '+esc(line[1])+'</div>').join("")+'</div>';
+}
+function optionEl(c,i,q,saved){
+  let cls="opt";
+  if(saved!==null){
+    cls+=" locked";
+    if(i===q.answer) cls+=" correct";
+    else if(i===saved.selected) cls+=" incorrect";
+    else cls+=" dim";
+  } else if(S._sel===i){ cls+=" sel"; }
+  const key=String.fromCharCode(65+i);
+  const badge = saved!==null ? (i===q.answer?icon("check",18,"#4c9a63"):(i===saved.selected?icon("x",18,"#cf5b48"):"")) : "";
+  return '<button class="'+cls+'" '+(saved!==null?'aria-disabled="true"':'onclick="selectOpt('+i+')"')+'><span class="key">'+key+'</span><span style="flex:1">'+esc(c)+'</span>'+(badge?'<span>'+badge+'</span>':'')+'</button>';
+}
+function selectOpt(i){ S._sel=i; beep("click"); const b=$("#submitBtn"); if(b)b.disabled=false;
+  document.querySelectorAll("#options .opt").forEach((el,k)=>{ el.classList.toggle("sel",k===i); }); }
+function showHint(){
+  const w=worldOf(S._world); const q=QUESTIONS[w.range[0]+S._q];
+  $("#hintbox").innerHTML='<div class="hintbox">'+icon("hint",18,"#c99a25")+' <b>Hint:</b> '+q.tip+'</div>';
+  const hb=$("#hintBtn"); if(hb){hb.disabled=true;hb.style.opacity=".55";}
+  beep("click");
+}
+function submitAnswer(){
+  if(S._sel==null){ toast("Please choose an answer first"); return; }
+  const w=worldOf(S._world); const qi=S._q; const q=QUESTIONS[w.range[0]+qi];
+  const correct = S._sel===q.answer;
+  S.worlds[S._world].answers[qi]={selected:S._sel,correct:correct};
+  if(correct){
+    S.xp+=10; S.streak+=1; S.bestStreak=Math.max(S.bestStreak,S.streak);
+    if(S.streak>0 && S.streak%3===0) S.xp+=5; // streak bonus
+    beep("correct"); sparkle();
+  } else {
+    S.streak=0; S.xp+=2; beep("wrong");
+    const stage=$(".q-stage"); if(stage){ stage.classList.add("shake"); setTimeout(()=>stage.classList.remove("shake"),500); }
+  }
+  save();
+  renderQuiz(S._world);
+}
+function sparkle(){
+  const layer=$("#sparkles"); if(!layer||S.reducedMotion) return;
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  for(let i=0;i<8;i++){
+    const s=document.createElement("div"); s.className="spark";
+    s.style.left=(20+Math.random()*60)+"%"; s.style.top=(30+Math.random()*40)+"%";
+    s.style.animationDelay=(Math.random()*.2)+"s";
+    s.innerHTML=icon("star",12,"#e8c15a"); layer.appendChild(s);
+    setTimeout(()=>s.remove(),1000);
+  }
+}
+function explainBlock(q,saved){
+  const good=saved.correct;
+  let html='<div class="explain '+(good?"good":"bad")+'">'
+    + '<h4>'+(good?icon("check",20,"#4c9a63")+' Correct!':icon("x",20,"#cf5b48")+' Not quite — the answer is '+String.fromCharCode(65+q.answer))+'</h4>';
+  if(!good && q.wrong && q.wrong[saved.selected]!==undefined){
+    html+='<div class="why"><b>Why your choice ('+String.fromCharCode(65+saved.selected)+') is not right:</b> '+q.wrong[saved.selected]+'</div>';
+  }
+  html+='<div class="why"><b>Why '+String.fromCharCode(65+q.answer)+' is correct:</b> '+q.why+'</div>';
+  html+='<div class="tiptag">'+icon("bulb",16,"#c99a25")+' <b>Tip:</b> '+q.tip+'</div>';
+  html+='<div style="margin-top:8px;font-size:.85rem;color:var(--navy-soft)">'+(good?"+10 XP earned":"+2 XP for trying — every attempt helps you learn.")+'</div>';
+  html+='</div>';
+  return html;
+}
+function nextButton(worldId,qi){
+  if(qi<9) return '<button class="btn" onclick="nextQuestion()">Next Question '+icon("play",18,"#fff")+'</button>';
+  return '<button class="btn gold" onclick="finishWorld('+worldId+')">Finish World '+icon("crystal",18,"#fff")+'</button>';
+}
+function nextQuestion(){ S._q+=1; S._sel=null; beep("click"); go("quiz",S._world); }
+function finishWorld(worldId){
+  const w=S.worlds[worldId];
+  w.score=w.answers.filter(a=>a&&a.correct).length;
+  w.completed=true;
+  awardBadges();
+  save(); beep("unlock");
+  go("worldcomplete",worldId);
+}
+function confirmExit(){
+  showModal("Save and leave this world?","<p>Your answers so far are saved automatically. You can come back and continue this world any time from the Quest Map.</p>",
+    '<button class="btn ghost" onclick="closeModal()">Keep Playing</button><button class="btn secondary" onclick="closeModal();go(\'map\')">Save &amp; Exit to Map</button>');
+}
+
+/* =======================================================================
+   BADGES
+   ======================================================================= */
+function awardBadges(){
+  const add=id=>{ if(!S.badges.includes(id)){ S.badges.push(id); } };
+  if(S.worlds[1].completed && S.worlds[1].score>=8) add("word_wizard");
+  if(S.worlds[2].completed && S.worlds[2].score>=8) add("grammar_guardian");
+  if(S.worlds[3].completed && S.worlds[3].score>=8) add("reading_detective");
+  [1,2,3].forEach(w=>{ if(S.worlds[w].completed && S.worlds[w].score===10) add("perfect_world"); });
+  if(allDone()) add("never_give_up");
+  if(allDone() && totalScore()>=27) add("exam_hero");
+}
+
+/* =======================================================================
+   SCREEN: WORLD COMPLETE
+   ======================================================================= */
+function renderWorldComplete(worldId){
+  const w=worldOf(worldId); const data=S.worlds[worldId];
+  const score=data.score, pct=Math.round(score/10*100);
+  const answers=data.answers; const qs=worldQuestions(worldId);
+  const mastered=[], review=[];
+  qs.forEach((q,i)=>{ (answers[i]&&answers[i].correct?mastered:review).push(q.skill); });
+  const uniq=a=>[...new Set(a)];
+  const nextWorld=[1,2,3].find(x=>worldUnlocked(x)&&!S.worlds[x].completed);
+
+  app().innerHTML = topbar(true)
+  + '<div class="screen center">'
+    + '<span class="chip '+w.theme+'">World Complete</span>'
+    + '<div class="reward-scene">'+pip("celebrating",150)+'</div>'
+    + '<h2 style="margin:2px 0">'+w.name+' cleared!</h2>'
+    + '<div style="display:flex;align-items:center;gap:10px;margin:6px 0"><span style="font-size:.9rem;color:var(--navy-soft)">Crystal piece collected</span>'+icon("crystal",30,w.color)+'</div>'
+    + '<div class="card paper-texture" style="max-width:640px;width:100%;text-align:left;margin-top:8px">'
+      + '<div class="stat-grid">'
+        + '<div class="stat"><b>'+score+'/10</b><span>World score</span></div>'
+        + '<div class="stat"><b>'+pct+'%</b><span>Accuracy</span></div>'
+        + '<div class="stat"><b>+'+(score*10)+'</b><span>XP earned</span></div>'
+      + '</div>'
+      + '<div class="skill-cols">'
+        + '<div><h4 style="font-size:.95rem">'+icon("check",16,"#4c9a63")+' Skills mastered</h4><ul class="skill-list">'
+          + (uniq(mastered).length?uniq(mastered).map(s=>'<li>'+icon("star",14,"#5f8f66")+' '+s+'</li>').join(""):'<li>Keep practising to master skills here.</li>')
+        + '</ul></div>'
+        + '<div><h4 style="font-size:.95rem">'+icon("hint",16,"#c99a25")+' Skills to review</h4><ul class="skill-list">'
+          + (uniq(review).length?uniq(review).map(s=>'<li>'+icon("hint",14,"#c99a25")+' '+s+'</li>').join(""):'<li>'+icon("check",14,"#4c9a63")+' None — excellent work!</li>')
+        + '</ul></div>'
+      + '</div>'
+    + '</div>'
+    + '<div class="hero-cta" style="justify-content:center;margin-top:18px">'
+      + '<button class="btn" onclick="beep(\'click\');go(\'review\','+worldId+')">'+icon("book",18,"#fff")+' Review Answers</button>'
+      + '<button class="btn ghost" onclick="replayWorld('+worldId+')">'+icon("refresh",16)+' Try Again</button>'
+      + (allDone()
+          ? '<button class="btn gold" onclick="beep(\'win\');go(\'results\')">See Final Results '+icon("crystal",18,"#fff")+'</button>'
+          : '<button class="btn sage" onclick="beep(\'unlock\');'+(nextWorld?'enterWorld('+nextWorld+')':'go(\'map\')')+'">Continue Adventure '+icon("play",18,"#fff")+'</button>')
+    + '</div>'
+    + '<button class="btn ghost sm" style="margin-top:12px" onclick="go(\'map\')">'+icon("map",16)+' Back to Quest Map</button>'
+  + '</div>' + footer();
+}
+function replayWorld(worldId){
+  showModal("Replay "+worldOf(worldId).name+"?","<p>Your answers for this world will be cleared so you can try all 10 questions again. Your crystal stays collected. Other worlds are not affected.</p>",
+    '<button class="btn ghost" onclick="closeModal()">Cancel</button><button class="btn" onclick="doReplay('+worldId+')">Yes, Try Again</button>');
+}
+function doReplay(worldId){
+  S.worlds[worldId]=blankWorld();
+  // if this world was needed for later unlocks, later worlds remain but map recomputes unlock via completed flags
+  closeModal(); S._world=worldId; S._q=0; S._sel=null; S.finished=false; save(); beep("unlock"); go("learn",worldId);
+}
+
+/* =======================================================================
+   SCREEN: FINAL RESULTS
+   ======================================================================= */
+function computeCategoryScores(){
+  const res={}; CATEGORIES.forEach(c=>res[c.key]={score:0,total:0});
+  QUESTIONS.forEach((q,gi)=>{
+    const wId = gi<10?1:(gi<20?2:3); const qi=gi- (wId-1)*10;
+    const a=S.worlds[wId].answers[qi];
+    res[q.cat].total++;
+    if(a&&a.correct) res[q.cat].score++;
+  });
+  return res;
+}
+function performanceLevel(total){
+  if(total>=27) return {t:"Entrance Exam Champion",c:"#5f8f66",d:"Outstanding! You are exam-ready. Keep this momentum going."};
+  if(total>=23) return {t:"English Quest Master",c:"#4e97b8",d:"Excellent work. A little polish on your weaker areas and you'll shine."};
+  if(total>=18) return {t:"Rising English Explorer",c:"#c99a25",d:"Good progress! Review the areas below and try again to climb higher."};
+  return {t:"Brave Beginner — Keep Practising",c:"#ef8354",d:"A brave first journey! Every explorer starts here. Revisit the lessons and try again — you'll improve fast."};
+}
+function starCount(total){ if(total>=27)return 5; if(total>=23)return 4; if(total>=18)return 3; if(total>=12)return 2; return 1; }
+
+function renderResults(){
+  S.finished=true; save();
+  const total=totalScore(); const pct=Math.round(total/30*100);
+  const cats=computeCategoryScores(); const lvl=performanceLevel(total); const stars=starCount(total);
+  awardBadges(); save();
+
+  // strengths / improve
+  const catArr=CATEGORIES.map(c=>({label:c.label,color:c.color,...cats[c.key]}));
+  const sorted=[...catArr].sort((a,b)=>(b.score/b.total)-(a.score/a.total));
+  const strengths=sorted.filter(c=>c.score/c.total>=0.7).map(c=>c.label);
+  const improve=sorted.filter(c=>c.score/c.total<0.7).map(c=>c.label);
+
+  app().innerHTML = topbar(true)
+  + '<div class="screen center">'
+    + '<span class="chip sky">Crystal of Knowledge Restored</span>'
+    + '<div style="position:relative;margin:8px 0"><div class="float">'+finalCrystalSVG()+'</div></div>'
+    + '<h2 style="margin:0">Congratulations, '+esc(S.nickname||"Explorer")+'!</h2>'
+    + '<div style="display:flex;align-items:center;gap:8px;margin:4px 0">'+avatar(S.avatar,40)+'<span style="color:var(--navy-soft)">You completed all three worlds.</span></div>'
+
+    + '<div class="stars" aria-label="'+stars+' out of 5 stars">'
+      + [0,1,2,3,4].map(i=>'<span class="star '+(i<stars?"on":"")+'" style="animation-delay:'+(i*.12)+'s">'+icon(i<stars?"star":"starline",38,i<stars?"#e8c15a":"#d9cfb4")+'</span>').join("")
+    + '</div>'
+
+    + '<div class="card paper-texture" style="max-width:680px;width:100%;text-align:left">'
+      + '<div class="center" style="margin-bottom:6px">'
+        + '<div style="font-size:2.6rem;font-weight:bold;color:var(--navy)">'+total+' <span style="font-size:1.1rem;color:var(--navy-soft)">/ 30</span></div>'
+        + '<div style="font-size:1.1rem;color:var(--navy-soft)">'+pct+'%</div>'
+        + '<div class="chip" style="background:'+lvl.c+';color:#fff;border:none;margin-top:6px;font-size:.85rem">'+lvl.t+'</div>'
+        + '<p style="margin-top:8px;color:var(--navy-soft);max-width:52ch">'+lvl.d+'</p>'
+      + '</div>'
+
+      + '<h3 style="margin-top:10px">Score by category</h3>'
+      + catArr.map(c=>'<div class="cat-bar"><div class="lab"><span>'+c.label+'</span><span>'+c.score+'/'+c.total+'</span></div><div class="track"><i style="width:'+Math.round(c.score/c.total*100)+'%;background:'+c.color+'"></i></div></div>').join("")
+
+      + '<div class="skill-cols" style="margin-top:14px">'
+        + '<div><h4 style="font-size:.95rem">'+icon("star",16,"#5f8f66")+' Your strengths</h4><ul class="skill-list">'
+          + (strengths.length?strengths.map(s=>'<li>'+icon("check",14,"#4c9a63")+' '+s+'</li>').join(""):'<li>Build strengths by reviewing and replaying worlds.</li>')
+        + '</ul></div>'
+        + '<div><h4 style="font-size:.95rem">'+icon("hint",16,"#c99a25")+' Areas to improve</h4><ul class="skill-list">'
+          + (improve.length?improve.map(s=>'<li>'+icon("hint",14,"#c99a25")+' '+s+'</li>').join(""):'<li>'+icon("check",14,"#4c9a63")+' Balanced across all areas — great job!</li>')
+        + '</ul></div>'
+      + '</div>'
+
+      + '<div class="tipbox tip" style="margin-top:14px">'+icon("bulb",22,"#5f8f66")+'<div><b>Recommended next steps:</b> '+nextSteps(improve)+'</div></div>'
+
+      + '<h3 style="margin-top:14px">Rewards collected</h3>'
+      + '<div class="badges">'+BADGES.map(b=>badgeCard(b)).join("")+'</div>'
+      + '<div style="font-size:.85rem;color:var(--navy-soft);margin-top:10px">Total XP: <b>'+S.xp+'</b> · Best streak: <b>'+S.bestStreak+'</b> '+icon("star",13,"#e8c15a")+' · Crystals: <b>3/3</b></div>'
+    + '</div>'
+
+    + '<div class="hero-cta" style="justify-content:center;margin-top:18px">'
+      + '<button class="btn gold" onclick="printSummary()">'+icon("print",18,"#fff")+' Printable Summary</button>'
+      + '<button class="btn secondary" onclick="beep(\'click\');go(\'review\',\'all\')">'+icon("book",18,"#fff")+' Review All Answers</button>'
+      + '<button class="btn ghost" onclick="confirmRestart()">'+icon("refresh",16)+' Restart Quest</button>'
+    + '</div>'
+    + '<button class="btn ghost sm" style="margin-top:12px" onclick="go(\'map\')">'+icon("map",16)+' Back to Quest Map</button>'
+  + '</div>' + footer();
+  beep("win");
+}
+function nextSteps(improve){
+  if(!improve.length) return "You've mastered every area! Try replaying worlds for a perfect score, or challenge a friend.";
+  const map={Vocabulary:"revisit Vocabulary Village and practise reading whole sentences for context clues",Grammar:"return to Grammar Garden and review tense time-words and subject–verb agreement",Conversation:"reread the conversation examples in Reading Castle and match replies to each situation",Reading:"practise finding the main idea and re-reading passages before choosing an answer"};
+  return "Focus next on "+improve.map(i=>map[i]).join("; ")+".";
+}
+function badgeCard(b){
+  const earned=S.badges.includes(b.id);
+  return '<div class="badge '+(earned?"":"locked")+'"><div>'+icon(b.icon,32,earned?"#c99a25":"#9a9280")+'</div><div class="bn">'+b.name+'</div><div class="bd">'+b.desc+'</div></div>';
+}
+function finalCrystalSVG(){
+  return '<svg width="160" height="160" viewBox="0 0 160 160" aria-hidden="true">'
+    + '<circle cx="80" cy="80" r="60" fill="#e0d8f2" opacity=".7"/>'
+    + '<g class="float d1"><path d="M40 40l2 7 7 2-7 2-2 7-2-7-7-2 7-2z" fill="#e8c15a"/></g>'
+    + '<g class="float d3"><path d="M124 54l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#ef8354"/></g>'
+    + '<path d="M80 24l26 30-26 76-26-76z" fill="#8ecae6" stroke="#4e97b8" stroke-width="3"/>'
+    + '<path d="M54 54h52M80 24v106" stroke="#fff" stroke-width="2" opacity=".55"/>'
+    + '<path d="M80 24l26 30-26 20-26-20z" fill="#aeecf7" opacity=".4"/>'
+    + '</svg>';
+}
+
+/* =======================================================================
+   PRINTABLE SUMMARY
+   ======================================================================= */
+function printSummary(){
+  beep("click");
+  const total=totalScore(); const pct=Math.round(total/30*100);
+  const cats=computeCategoryScores(); const lvl=performanceLevel(total); const stars=starCount(total);
+  const earned=BADGES.filter(b=>S.badges.includes(b.id));
+  const date=new Date().toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
+  const catRows=CATEGORIES.map(c=>'<tr><td>'+c.label+'</td><td style="text-align:center">'+cats[c.key].score+' / '+cats[c.key].total+'</td><td style="text-align:center">'+Math.round(cats[c.key].score/cats[c.key].total*100)+'%</td></tr>').join("");
+  const w=window.open("","_blank","width=820,height=980");
+  if(!w){ toast("Please allow pop-ups to print the summary"); return; }
+  w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Bright EngMath — Result Summary</title>'
+   +'<style>body{font-family:Georgia,serif;color:#243a5e;max-width:720px;margin:0 auto;padding:34px 30px;line-height:1.5}'
+   +'h1{font-size:1.5rem;margin:0}h2{font-size:1rem;border-bottom:2px solid #e6dcc2;padding-bottom:6px;margin-top:24px}'
+   +'.head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #e8c15a;padding-bottom:12px}'
+   +'.brand{font-family:"Trebuchet MS",sans-serif;font-weight:bold;font-size:1.2rem;color:#c99a25}'
+   +'.big{font-size:2.4rem;font-weight:bold}table{width:100%;border-collapse:collapse;margin-top:8px}'
+   +'td,th{border:1px solid #e6dcc2;padding:8px 10px;font-size:.95rem}th{background:#faf6ec;text-align:left}'
+   +'.lvl{display:inline-block;background:'+lvl.c+';color:#fff;padding:4px 12px;border-radius:999px;font-family:sans-serif;font-size:.85rem}'
+   +'.muted{color:#3d557d}.badges{font-family:"Trebuchet MS",sans-serif}.foot{margin-top:30px;border-top:1px solid #e6dcc2;padding-top:10px;font-size:.75rem;color:#3d557d;text-align:center}'
+   +'@media print{body{padding:10px}}</style></head><body>'
+   +'<div class="head"><div><div class="brand">Bright EngMath</div><h1>English Entrance Quest — Result Summary</h1><div class="muted">Grade 6 → Grade 7 / Mathayom 1 practice</div></div>'
+   +'<div style="text-align:right"><div class="muted">Date</div><b>'+date+'</b></div></div>'
+   +'<h2>Student</h2><p><b>Nickname:</b> '+esc(S.nickname||"Explorer")+' &nbsp;·&nbsp; <b>Avatar:</b> '+S.avatar+'</p>'
+   +'<h2>Overall Result</h2><p><span class="big">'+total+'</span> / 30 &nbsp; ('+pct+'%) &nbsp; '+"★".repeat(stars)+"☆".repeat(5-stars)+'</p><p class="lvl">'+lvl.t+'</p><p class="muted">'+lvl.d+'</p>'
+   +'<h2>Score by Category</h2><table><tr><th>Category</th><th style="text-align:center">Score</th><th style="text-align:center">Percent</th></tr>'+catRows+'</table>'
+   +'<h2>Badges Earned ('+earned.length+' / '+BADGES.length+')</h2><p class="badges">'+(earned.length?earned.map(b=>"• "+b.name).join("&nbsp;&nbsp; "):"No badges yet — keep practising!")+'</p>'
+   +'<h2>How to Read This Score</h2><table><tr><th>Range</th><th>Level</th></tr><tr><td>27–30</td><td>Entrance Exam Champion</td></tr><tr><td>23–26</td><td>English Quest Master</td></tr><tr><td>18–22</td><td>Rising English Explorer</td></tr><tr><td>Below 18</td><td>Brave Beginner — Keep Practising</td></tr></table>'
+   +'<p class="muted" style="margin-top:14px">XP: '+S.xp+' &nbsp;·&nbsp; Best streak: '+S.bestStreak+' &nbsp;·&nbsp; Crystals collected: 3 / 3</p>'
+   +'<div class="foot"><b>Bright EngMath</b> · Created by Bright EngMath · For educational use only · &copy; Bright EngMath. All rights reserved.</div>'
+   +'<script>window.onload=function(){setTimeout(function(){window.print();},300);}<\/script>'
+   +'</body></html>');
+  w.document.close();
+}
+
+/* =======================================================================
+   SCREEN: REVIEW
+   ======================================================================= */
+function renderReview(arg){
+  const all = arg==="all";
+  const worldId = all?null:(arg||S._world||1);
+  const list = all?QUESTIONS.map((q,gi)=>({q,gi})) : worldQuestions(worldId).map((q,i)=>({q,gi:worldOf(worldId).range[0]+i}));
+  const title = all?"Review All Answers":"Review — "+worldOf(worldId).name;
+
+  app().innerHTML = topbar(true)
+  + '<div class="screen">'
+    + '<button class="btn ghost sm" onclick="beep(\'click\');go(\''+(all?"results":"worldcomplete")+'\')">'+icon("back",16)+' Back</button>'
+    + '<div style="display:flex;align-items:center;gap:12px;margin:12px 0">'+pip("reading",70)+'<div><h2 style="margin:0">'+title+'</h2><div style="color:var(--navy-soft);font-size:.9rem">Green = you got it right · Red = review this one</div></div></div>'
+    + list.map(({q,gi})=>reviewItem(q,gi)).join("")
+    + '<div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap">'
+      + '<button class="btn ghost" onclick="go(\'map\')">'+icon("map",16)+' Quest Map</button>'
+      + (all?'<button class="btn" onclick="go(\'results\')">'+icon("back",16)+' Back to Results</button>':'')
+    + '</div>'
+  + '</div>' + footer();
+}
+function reviewItem(q,gi){
+  const wId=gi<10?1:(gi<20?2:3); const qi=gi-(wId-1)*10;
+  const a=S.worlds[wId].answers[qi];
+  const answered=a!==null; const correct=answered&&a.correct;
+  const cls = !answered?"":(correct?"correct":"wrong");
+  let head = answered ? (correct?icon("check",16,"#4c9a63")+" Correct":icon("x",16,"#cf5b48")+" Review") : icon("hint",16,"#c99a25")+" Not answered";
+  let body='<div class="rev-item '+cls+'">'
+    + '<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="chip lav">Q'+(gi+1)+' · '+q.skill+'</span><span style="font-weight:bold;font-size:.85rem">'+head+'</span></div>';
+  if(q.passage) body+='<div style="font-size:.82rem;color:var(--navy-soft);margin-top:6px"><b>'+esc(q.passage.title)+'</b> (passage above in the quiz)</div>';
+  if(q.dialogue) body+='<div style="font-size:.85rem;color:var(--navy-soft);margin-top:6px">'+q.dialogue.map(l=>'<div><b>'+esc(l[0])+':</b> '+esc(l[1])+'</div>').join("")+'</div>';
+  body+='<div class="rev-q">'+q.text+'</div>';
+  body+='<div class="rev-row"><span class="tag" style="color:var(--ok)">Correct answer:</span> '+String.fromCharCode(65+q.answer)+'. '+esc(q.choices[q.answer])+'</div>';
+  if(answered && !correct) body+='<div class="rev-row"><span class="tag" style="color:var(--bad)">Your answer:</span> '+String.fromCharCode(65+a.selected)+'. '+esc(q.choices[a.selected])+'</div>';
+  body+='<div class="rev-row" style="margin-top:6px">'+q.why+'</div>';
+  body+='<div class="rev-row" style="margin-top:4px;font-size:.85rem;color:var(--navy-soft)">'+icon("bulb",13,"#c99a25")+' '+q.tip+'</div>';
+  body+='</div>';
+  return body;
+}
+
+/* =======================================================================
+   MODALS: How to Play + Teacher Guide + generic
+   ======================================================================= */
+let modalOpen=false;
+function showModal(title,bodyHTML,footHTML){
+  closeModal();
+  const o=document.createElement("div"); o.className="overlay"; o.id="overlay";
+  o.onclick=e=>{ if(e.target===o) closeModal(); };
+  o.innerHTML='<div class="modal" role="dialog" aria-modal="true" aria-label="'+esc(title)+'">'
+    + '<div class="mhd"><h3>'+title+'</h3><button class="close-x" aria-label="Close" onclick="closeModal()">✕</button></div>'
+    + '<div class="mbody">'+bodyHTML+(footHTML?'<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap">'+footHTML+'</div>':'')+'</div></div>';
+  document.body.appendChild(o); modalOpen=true;
+  document.addEventListener("keydown",escClose);
+}
+function escClose(e){ if(e.key==="Escape") closeModal(); }
+function closeModal(){ const o=$("#overlay"); if(o)o.remove(); modalOpen=false; document.removeEventListener("keydown",escClose); }
+
+function openHowTo(){
+  showModal("How to Play",
+    '<div style="display:flex;gap:14px;align-items:center;margin-bottom:10px">'+pip("happy",70)+'<p style="margin:0">Help Pip restore the <b>Crystal of Knowledge</b> by clearing three worlds of English challenges.</p></div>'
+    +'<div class="tg-list">'
+    +row("map","Travel the Quest Map","Start at Vocabulary Village. Finish a world to unlock the next and collect a crystal piece.")
+    +row("book","Learn first","Each world begins with a short lesson, examples, and quick practice before the real questions.")
+    +row("check","Answer 30 questions","Pick A, B, C, or D and press Submit. You cannot change an answer after submitting.")
+    +row("bulb","Learn from every answer","See why the correct answer is right — and why others are wrong. A hint is always available.")
+    +row("star","Earn XP, streaks & badges","Collect experience points and badges. You compete only against your own best — there is no leaderboard.")
+    +row("crystal","Restore the crystal","Collect all three pieces to open the Final Crystal Chamber and see your full results.")
+    +'</div>'
+    +'<p style="font-size:.85rem;color:var(--navy-soft);margin-top:10px">Your progress saves automatically on this device. No account or email is needed.</p>',
+    '<button class="btn" onclick="closeModal()">Got it!</button>');
+}
+function openTeacher(){
+  showModal("Teacher &amp; Parent Guide",
+    '<p style="margin-top:0">A quick guide to using <b>The English Entrance Quest</b> at home or in class.</p>'
+    +'<div class="tg-list">'
+    +row("teacher","Target level","Grade 6 students preparing for Grade 7 / Mathayom 1 entrance examinations. Difficulty is intermediate: 8 easier, 16 medium, and 6 more challenging questions.")
+    +row("book","Skills covered","Vocabulary in context, synonyms & antonyms, tenses, subject–verb agreement, prepositions, conjunctions, sentence structure, functional conversation, and reading comprehension (main idea, detail, inference, reference words).")
+    +row("flag","Number of questions","30 original multiple-choice questions — 10 per world — each with a full explanation.")
+    +row("star","Suggested time","About 25–40 minutes for a full quest. Worlds can be done one at a time in separate sittings; progress is saved.")
+    +'</div>'
+    +'<h4 style="margin:16px 0 6px">How to interpret scores</h4>'
+    +'<div class="tg-list">'
+    +row("crown","27–30 · Entrance Exam Champion","Confidently exam-ready across all skill areas.")
+    +row("trophy","23–26 · English Quest Master","Strong overall; refine a few weaker skills.")
+    +row("starline","18–22 · Rising English Explorer","Solid foundation; targeted review recommended.")
+    +row("heart","Below 18 · Brave Beginner","Encourage a re-read of the lessons and a second attempt.")
+    +'</div>'
+    +'<h4 style="margin:16px 0 6px">Using it in class</h4>'
+    +'<p style="font-size:.92rem">Project a world on screen and discuss each explanation together, or let students play individually and then compare the category breakdown on the results page. The <b>Review Answers</b> button lets students revisit every question with its explanation, and the <b>Printable Summary</b> gives parents a clear one-page report. Encourage students to replay weaker worlds — the goal is personal improvement, not competition.</p>'
+    +'<p style="font-size:.8rem;color:var(--navy-soft)">For educational use only. Questions are original and not copied from any official examination.</p>',
+    '<button class="btn" onclick="closeModal()">Close</button>');
+}
+function row(ic,t,d){ return '<div class="row">'+icon(ic,22,"#c99a25")+'<div><b>'+t+'</b><div style="font-size:.86rem;color:var(--navy-soft)">'+d+'</div></div></div>'; }
+
+/* =======================================================================
+   SOUND TOGGLE (global)
+   ======================================================================= */
+function toggleSound(){
+  S.sound=!S.sound; save();
+  if(S.sound) beep("click");
+  const b=$("#soundBtn"); if(b){ b.classList.toggle("on",S.sound); b.innerHTML=icon(S.sound?"sound":"mute",20); }
+  toast(S.sound?"Sound on":"Sound off", icon(S.sound?"sound":"mute",16,"#fff"));
+}
+
+/* =======================================================================
+   BOOT
+   ======================================================================= */
+function boot(){
+  // reduced motion preference
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    S.reducedMotion=true; document.body.classList.add("no-motion");
+  }
+  const msgs=["Waking up Pip the Book Guardian…","Polishing the Crystal of Knowledge…","Unrolling the quest map…","Planting the Grammar Garden…"];
+  let mi=0; const lm=$("#loadMsg");
+  const t=setInterval(()=>{ mi=(mi+1)%msgs.length; if(lm) lm.textContent=msgs[mi]; },420);
+  // decide first screen
+  if(!S.nickname && totalAnswered()===0) S.screen="landing";
+  render();
+  setTimeout(()=>{
+    clearInterval(t);
+    const l=$("#loader"); if(l){ l.style.opacity="0"; setTimeout(()=>l.remove(),500); }
+  },1500);
+}
+// resume audio on first interaction (browser policy)
+document.addEventListener("pointerdown",function once(){ ac(); document.removeEventListener("pointerdown",once); });
+window.addEventListener("beforeunload",save);
+boot();
+</script>
+</body>
+</html>
